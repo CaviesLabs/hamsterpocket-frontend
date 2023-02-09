@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: poppins;
+  src: url(../public/assets/fonts/poppins/Poppins-Black.otf);
+}
+
+@font-face {
+  font-family: poppins-bold;
+  src: url(../public/assets/fonts/poppins/Poppins-Bold.otf);
+}
+
+@font-face {
+  font-family: semi-poppins-bold;
+  src: url(../public/assets/fonts/poppins/Poppins-SemiBold.otf);
+}
+
+@font-face {
+  font-family: poppins-medium;
+  src: url(../public/assets/fonts/poppins/Poppins-Medium.otf);
+}
+
+@font-face {
+  font-family: poppins-thin;
+  src: url(../public/assets/fonts/poppins/Poppins-Thin.otf);
+}
+
+@font-face {
+  font-family: poppins-regular;
+  src: url(../public/assets/fonts/poppins/Poppins-Regular.otf);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: semi-poppins-bold;
+  color: #20242D;
+  overflow-x: hidden;
+}
+
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.thin-text {
+  font-family: poppins-thin !important;
+}
+.regular-text {
+  font-family: poppins-regular !important;
+}
+
+.semi-bold {
+  font-family: semi-poppins-bold !important;
+}
+
+.carousel .slide {
+  text-align: initial !important;
+}
+
+.control-next, .control-prev, .carousel-status {
+  display: none !important;
+}
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}
+
+::-webkit-scrollbar {
+  width: 1px;
+  /* height: 2em */
+}
+
+div {
+  /* overflow-x: hidden !important; */
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.hamster-modal > .ant-modal-content {
+  padding: 40px 49px 20px;
+  border-radius: 40px;
+}
+.hamster-modal > .ant-modal-content,
+.hamster-modal .ant-modal-header,
+.hamster-modal .ant-modal-footer {
+  background-color: #F8F9FE;
+}
+.hamster-modal > .ant-modal-content .ant-modal-close {
+  top: 40px;
+  right: 49px;
+}
+.hamster-modal .ant-modal-close-icon {
+  font-size: 24px;
+}
+
+.css-ul1er5 {
+  z-index: 300;
+}
+
+*, *::before, *::after {
+  transition: none!important;
+}
