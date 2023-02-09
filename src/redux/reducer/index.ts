@@ -1,21 +1,19 @@
 import { combineReducers } from "redux";
-// import userReducer from "./user";
-// import userChatReducer from "./user-chat";
-// import nftReducer from "./nft";
-// import hProfileReducer from "./hamster-profile";
-// import hPublicProfileReducer from "./hamster-profile/public-profile";
-// import platformConfigReducer from "./platform-config";
-// import { proposalReducer, proposalsReducer } from "./proposal";
+import hProfieReducer from "./profile";
 import State from "@/src/redux/entities/state";
 
 /**
  * @dev Initialize reducer for app state management.
  */
-const reducer = combineReducers<State>({});
+const reducer = combineReducers<State>({
+  hProfile: hProfieReducer,
+});
 
 /**
  * @dev Declare default state for app.
  */
-export const initState: State = {};
+export const initState: State = {
+  hProfile: null,
+};
 
 export default reducer;

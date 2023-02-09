@@ -1,7 +1,7 @@
 /**
  * @dev Define hamster profile
  */
-export class hProfileDto {
+export class ProfileDto {
   id: string;
   avatar: string;
   walletAddress: string;

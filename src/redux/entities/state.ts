@@ -3,7 +3,7 @@
 // import { NftEntity } from "@/src/dto/nft.dto";
 // import { SwapProposalEntity } from "@/src/entities/proposal.entity";
 // import { PlatformConfigDto } from "@/src/entities/platform-config.entity";
-// import { hProfileDto } from "@/src/dto/hProfile.dto";
+import { ProfileDto } from "@/src/dto/profile.dto";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
 
 /**
@@ -15,7 +15,7 @@ export default interface State {
   // nft: NftEntity[];
   // proposal: ProposalDto;
   // proposals: SwapProposalEntity[];
-  // hProfile: hProfileDto;
+  hProfile: ProfileDto;
   // hPublicProfile: hProfileDto;
   // platformConfig: PlatformConfigDto;
 }

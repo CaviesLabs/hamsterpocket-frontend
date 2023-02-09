@@ -1,5 +1,5 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
+import { SwapProgramProvider } from "@/src/providers/program/swap-program.provider";
 import UtilsProvider from "@/src/utils/utils.provider";
 import { uuid } from "uuidv4";
 
@@ -8,10 +8,10 @@ export class ProgramService {
    * @dev Program provider injected.
    * @private
    */
-  private readonly swapProgramProvider: SwapProgramProviderV0;
+  private readonly swapProgramProvider: SwapProgramProvider;
   private readonly utilsProvider: UtilsProvider;
 
-  constructor(swapProgramProvider: SwapProgramProviderV0) {
+  constructor(swapProgramProvider: SwapProgramProvider) {
     /**
      * @dev Import providers.
      */

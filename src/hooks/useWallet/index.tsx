@@ -18,8 +18,8 @@ import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
 // import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
 import { ProgramService, authService } from "@/src/services";
 import { getWalletName } from "./utils";
-import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
-import { useDispatch } from "react-redux";
+// import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
+// import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { WalletContextState } from "./types";
 
@@ -35,7 +35,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   /** @dev Import providers to use from solana. */
   const solanaWallet = useSolana();
   const walletConnection = useConnection();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   /** @dev Import wallet from Gokki library. */
   const wallet = useConnectedWallet();
@@ -78,7 +78,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     await wallet?.disconnect();
     await solanaWallet?.disconnect();
     await authService?.logout();
-    dispatch(setProfile(null));
+    // dispatch(setProfile(null));
   }, [solanaWallet, wallet]);
 
   /**

@@ -1,7 +1,6 @@
 import { utilsProvider } from "@/src/utils";
-import { useDispatch } from "react-redux";
-import { FC, useEffect } from "react";
-import { getHamsterProfile } from "@/src/redux/actions/hamster-profile/profile.action";
+import { FC } from "react";
+// import { getHamsterProfile } from "@/src/redux/actions/hamster-profile/profile.action";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
@@ -10,7 +9,7 @@ import classnames from "classnames";
 import styles from "./index.module.scss";
 
 const UserProfile: FC = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const wallet = useConnectedWallet();
   const router = useRouter();
   const { disconnect } = useWallet();
@@ -28,9 +27,9 @@ const UserProfile: FC = () => {
   /**
    * @dev Watch changes in wallet and get hamster profile
    */
-  useEffect(() => {
-    dispatch(getHamsterProfile());
-  }, [wallet]);
+  // useEffect(() => {
+  //   dispatch(getHamsterProfile());
+  // }, [wallet]);
 
   return (
     <div

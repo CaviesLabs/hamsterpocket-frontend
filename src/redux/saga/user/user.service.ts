@@ -1,5 +1,5 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { hProfileContactDto } from "@/src/dto/hProfile.dto";
+import { hProfileContactDto } from "@/src/dto/profile.dto";
 
 export class UserService {
   async updateUser(data: hProfileContactDto): Promise<hProfileContactDto> {
