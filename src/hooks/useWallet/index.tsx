@@ -15,7 +15,7 @@ import {
 import web3 from "@solana/web3.js";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
-import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
+// import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
 import { ProgramService, authService } from "@/src/services";
 import { getWalletName } from "./utils";
 import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
@@ -41,7 +41,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const wallet = useConnectedWallet();
 
   /** @dev Program service */
-  const [programService, initProgram] = useState<ProgramService>(null);
+  const [programService] = useState<ProgramService>(null);
   const [solBalance, setSolBalance] = useState(0);
 
   /**
@@ -131,21 +131,21 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     if (wallet?.publicKey?.toString()) {
       try {
-        /**
-         * @dev Initlize swap program service with initlized programProvider.
-         */
-        const program = new ProgramService(
-          new SwapProgramProviderV0(solanaWallet)
-        );
+        // /**
+        //  * @dev Initlize swap program service with initlized programProvider.
+        //  */
+        // const program = new ProgramService(
+        //   new SwapProgramProviderV0(solanaWallet)
+        // );
 
-        /**
-         * @dev Init program into state for usage
-         */
-        initProgram(program);
+        // /**
+        //  * @dev Init program into state for usage
+        //  */
+        // initProgram(program);
 
-        /**
-         * @dev update sol balance if wallet changes.
-         */
+        // /**
+        //  * @dev update sol balance if wallet changes.
+        //  */
         getSolBalance();
       } catch (err: any) {
         console.log(err.message);
