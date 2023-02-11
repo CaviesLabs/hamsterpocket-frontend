@@ -12,8 +12,9 @@ export interface HookState {
 export const useRouter = (): HookState => {
   /**
    * @dev Declare state to detect fist loading page.
+   * @default true
    */
-  const [fistLoading, setFistLoading] = useState(true);
+  const [fistLoading, setFistLoading] = useState(false);
 
   /**
    * @dev Declare state to detect page transition.
@@ -33,14 +34,14 @@ export const useRouter = (): HookState => {
      * @dev When router start changes.
      */
     const handleRouteChange = () => {
-      setTransitionLoading(true);
+      // setTransitionLoading(true);
     };
 
     /**
      * @dev When router complete changes.
      */
     const handleRouteComplete = () => {
-      setTransitionLoading(false);
+      // setTransitionLoading(false);
     };
 
     router.events.on("routeChangeStart", handleRouteChange);

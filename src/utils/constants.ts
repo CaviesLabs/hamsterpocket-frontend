@@ -26,9 +26,9 @@ export const categoryOptions = [
  */
 export const PURPLE_HEADER_PAGES = [
   "proposal",
-  "transaction",
-  "create-proposal",
-  "profile",
+  // "transaction",
+  // "create-proposal",
+  // "profile",
 ];
 
 export const SIGN_MESSAGE =

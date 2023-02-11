@@ -36,7 +36,12 @@ export const useAuth = () => {
 
   /** @dev The function to handle authentication. */
   const handleAuth = async () => {
-    /** @dev Get hamster profile. */
+    /**
+     * @dev
+     * Verify if user already signined with wallet before by fetching profile session,
+     * if have not already sigin, sign in with wallet to Hamster server.
+     * */
+    // handleLogin();
   };
 
   /**

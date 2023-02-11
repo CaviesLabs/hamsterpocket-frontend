@@ -17,7 +17,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     <AuthMiddleware>
       <div className="main-layout">
         <Header />
-        <div className="layout-content">{children}</div>
+        <div className="layout-content min-h-[90.5vh]">{children}</div>
         <Footer />
       </div>
       {fistLoading && (

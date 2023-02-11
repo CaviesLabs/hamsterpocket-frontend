@@ -33,13 +33,27 @@
   src: url(../public/assets/fonts/poppins/Poppins-Regular.otf);
 }
 
-html,
+html {
+  background: black;
+  padding: 0;
+  margin: 0;
+}
+
 body {
   padding: 0;
   margin: 0;
+  width: 100%;
   font-family: semi-poppins-bold;
   color: #20242D;
+  background-image: url(../public/assets/images/app-bg.png);
+  background-position: 0 0;
+  background-size: 100% 100%;
+  background-repeat: repeat-y;
   overflow-x: hidden;
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll; 
+  box-sizing: border-box
 }
 
 
@@ -57,6 +71,9 @@ a {
 }
 .regular-text {
   font-family: poppins-regular !important;
+}
+.normal-text {
+  font-family: poppins-medium !important;
 }
 
 .semi-bold {
@@ -119,4 +136,38 @@ input[type=number] {
 
 *, *::before, *::after {
   transition: none!important;
+}
+
+.banner-title {
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 72px;
+  background: linear-gradient(90deg, #FF3BFF 0%, #ECBFBF 38.02%, #5C24FF 75.83%, #D94FD5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.vpbutton:after {
+  border-radius: 8px !important;
+}
+
+.app-input .container {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.progress-label {
+  position: absolute; 
+  left: 50%; 
+  color: #3c3636;
+  display: none;
+}
+
+.back-button {
+  position: absolute;
+  left: 20px;
+  font-size: 30px;
+  cursor: pointer;
 }

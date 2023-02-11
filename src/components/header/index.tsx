@@ -134,8 +134,8 @@ const Header: FC = () => {
           <div className="float-left logo-wrapper md:mt-0 mt-[0px]">
             <a className="cursor-pointer" onClick={() => router.push("/")}>
               <HamsterboxIcon
-                className={classnames("w-[95px] md:w-[180px] hamsterbox-icon")}
-                color={isScrolled || !isHomepage ? "#07080A" : "white"}
+                className={classnames("w-[160px] md:w-[180px] hamsterbox-icon")}
+                color={"white"}
               />
             </a>
           </div>
@@ -254,6 +254,6 @@ export default Header;
 const StyledHeader = styled.div`
   transition: background-color 0.3s ease;
   &.scrolled-header {
-    background-color: white;
+    background-color: #1a031ac7;
   }
 `;

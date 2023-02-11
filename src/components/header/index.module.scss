@@ -18,7 +18,7 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
     border: 0;
     -webkit-transition: all .35s ease;
     transition: all .35s ease;
-    background: rgba(32, 36, 45, 1);
+    background: rgb(255, 255, 255);
 
     &.middle {
       top: 15px;
@@ -62,7 +62,7 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
 
   .menu-container {
     position: fixed;
-    background: #FFFFFF;
+    background: #242424c7;
     top: 0;
     left: 0;
     width: 100%;

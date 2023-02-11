@@ -3,6 +3,7 @@ require("dotenv").config({
     process.env.NODE_ENV === "production" ? "dev" : process.env.NODE_ENV
   }`,
 });
+
 const withTM = require("next-transpile-modules")(["@hamsterbox/ui-kit"]);
 const withPlugins = require("next-compose-plugins");
 

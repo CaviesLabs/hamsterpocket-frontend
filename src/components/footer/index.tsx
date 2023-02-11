@@ -1,5 +1,6 @@
 import { FC, useMemo } from "react";
 import { useRouter } from "next/router";
+import { HamsterboxIcon, CaviesIcon } from "@/src/components/icons";
 
 interface FooterItem {
   name: string;
@@ -41,10 +42,10 @@ const Footer: FC = () => {
 
   return (
     <div className="footer pb-9">
-      <div className="md:px-[40px] px-[20px] lg:max-w-[1180px] lg:mx-auto">
-        <div className="flex justify-between items-end">
+      <div className="md:px-[40px] px-[20px] lg:max-w-[86rem] lg:mx-auto">
+        <div className="md:flex justify-between items-end">
           <div className="menu-wrapper md:pt-0 pt-[20px]">
-            <ul className="footer-menu w-[100%] flex justify-center flex-wrap md:justify-start">
+            <ul className="footer-menu w-[100%] md:flex justify-center flex-wrap md:justify-start">
               {footers.map((item, index) => (
                 <li
                   key={`footer-item-${index}`}
@@ -63,18 +64,18 @@ const Footer: FC = () => {
           </div>
 
           <div className="relative">
-            <img
-              src="/assets/images/logo.png"
-              className="w-[155px] h-auto  mx-auto cursor-pointer"
-              onClick={() => router.push("/")}
-            />
+            <a onClick={() => router.push("/")}>
+              <HamsterboxIcon
+                className="w-[155px] h-auto  mx-auto cursor-pointer"
+                color="white"
+              />
+            </a>
             <div className="flex mx-auto mt-[14px] justify-center items-start">
-              <div className="top-0 regular-text text-[14px] mr-[5px]">by</div>
+              <div className="top-0 regular-text text-[14px] mr-[5px] text-dark30">
+                by
+              </div>
               <a href="https://cavies.xyz/" target="_blank">
-                <img
-                  src="https://cavies.xyz/assets/images/logo.png"
-                  className="w-[110px] h-auto"
-                />
+                <CaviesIcon className="w-[110px] h-auto" />
               </a>
             </div>
           </div>
