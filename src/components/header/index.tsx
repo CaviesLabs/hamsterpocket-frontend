@@ -134,7 +134,7 @@ const Header: FC = () => {
           <div className="float-left logo-wrapper md:mt-0 mt-[0px]">
             <a className="cursor-pointer" onClick={() => router.push("/")}>
               <HamsterboxIcon
-                className={classnames("w-[160px] md:w-[180px] hamsterbox-icon")}
+                className={classnames("w-[100px] md:w-[180px] hamsterbox-icon")}
                 color={"white"}
               />
             </a>

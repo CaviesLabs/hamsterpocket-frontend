@@ -2,12 +2,12 @@ import { FC } from "react";
 import { NextSeo } from "next-seo";
 
 export const SeoComponent: FC = () => {
-  const siteName = "p2p.hamsterbox.xyz";
+  const siteName = "pocket.hamsterbox.xyz";
   const url = `https://${siteName}/`;
   const title =
-    "Hamsterswap | Trustless P2P Swaps for Digital Collectibles and Assets";
+    "Hamsterpocket | Trustless P2P Swaps for Digital Collectibles and Assets";
   const description =
-    "Hamsterswap provides a trustless peer-to-peer platform for trading digital collectibles and assets, supports both on-chain and off-chain";
+    "Hamsterpocket provides a trustless peer-to-peer platform for trading digital collectibles and assets, supports both on-chain and off-chain";
   const banner = `${url}main-banner.png`;
 
   return (

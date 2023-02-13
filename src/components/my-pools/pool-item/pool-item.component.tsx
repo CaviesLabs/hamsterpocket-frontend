@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { ShareIcon } from "@/src/components/icons";
+import { Button } from "@hamsterbox/ui-kit";
 import ProgressBar from "@ramonak/react-progress-bar";
 
 export const PoolItem: FC = () => {
@@ -37,7 +38,7 @@ export const PoolItem: FC = () => {
             </a>
           </div>
         </div>
-        <div className="float-right md:w-[380px]">
+        <div className="md:float-right md:w-[380px] md:mt-0 mt-[20px]">
           <div className="flex items-center">
             <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
               Buy amount:
@@ -79,6 +80,109 @@ export const PoolItem: FC = () => {
             <p className="text-end text-[14px] text-white regular-text mt-[6px]">
               ~ 593,492,491.38 BLOCK
             </p>
+          </div>
+        </div>
+      </div>
+      <div className="mt-[24px] md:flow-root">
+        <div className="md:float-left">
+          <p className="text-white text-[16px] regular-text">
+            Pool information
+          </p>
+          <div className="flex items-center mt-[5px]">
+            <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              Start date:
+            </p>
+            <p className="text-white text-[16px] normal-text">16/02/2023</p>
+          </div>
+          <div className="flex items-center mt-[5px]">
+            <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              SOL deposited
+            </p>
+            <p className="text-white text-[16px] normal-text">8.7 SOL</p>
+          </div>
+          <div className="flex items-center mt-[5px]">
+            <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              Next buy deposit:
+            </p>
+            <p className="text-white text-[16px] normal-text">1.3 SOL</p>
+          </div>
+        </div>
+        <div className="md:float-right md:mt-0 mt-[20px] md:pr-[20px] pr-0">
+          <p className="text-white text-[16px] regular-text">
+            Pool information
+          </p>
+          <div className="flex items-center mt-[5px]">
+            <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              End date:
+            </p>
+            <p className="text-white text-[16px] normal-text">
+              16/08/2023 <span className="text-dark50 text-[14px]">or</span>
+            </p>
+          </div>
+          <div className="flex mt-[5px]">
+            <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              Buy enough:
+            </p>
+            <div className="text-white text-[16px] normal-text">
+              <p>
+                300 SOL <span className="text-dark50 text-[14px]">or</span>
+              </p>
+              <p>
+                1,000,000,000 BLOCK{" "}
+                <span className="text-dark50 text-[14px]">or</span>
+              </p>
+              <p>
+                10 PAX <span className="text-dark50 text-[14px]">or</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-[24px]">
+        <p className="uppercase text-[16px] text-white">NOTE:</p>
+        <p className="text-[16px] text-white regular-text">
+          If Pool balance is not enough on each pax, the pool will just buy the
+          USDC left
+        </p>
+      </div>
+      <div className="mt-[24px] md:flow-root">
+        <p className="md:float-left text-[16px] text-green uppercase text-normal relative top-[10px]">
+          ACTIVE
+        </p>
+        <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
+          <div className="md:float-right">
+            <Button
+              className="!px-[50px] md:w-auto !w-full"
+              theme={{
+                backgroundColor: "#B998FB",
+                color: "#FFFFFF",
+              }}
+              text="Deposit"
+              width="100%"
+            />
+          </div>
+          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
+            <Button
+              className="!px-[50px] md:w-auto !w-full"
+              theme={{
+                backgroundColor: "#B998FB",
+                color: "#FFFFFF",
+              }}
+              text="Pause"
+              width="100%"
+            />
+          </div>
+          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
+            <Button
+              className="!px-[50px] !border-solid !border-purple !border-[2px]"
+              theme={{
+                backgroundColor: "transparent",
+                color: "#B998FB",
+                hoverColor: "#B998FB",
+              }}
+              text="Close"
+              width="100%"
+            />
           </div>
         </div>
       </div>

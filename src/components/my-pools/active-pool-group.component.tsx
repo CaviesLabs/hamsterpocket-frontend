@@ -32,8 +32,8 @@ export const ActivePoolGroup: FC = () => {
             icon={<SearchIcon />}
           />
         </div>
-        <div className="md:float-right flex md:mt-0 mt-[20px]">
-          <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer">
+        <div className="md:float-right md:flex md:mt-0 mt-[20px]">
+          <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto w-full">
             <p className="text-center text-[14px] normal-text text-dark50">
               Need deposit for next buying
             </p>
@@ -41,7 +41,7 @@ export const ActivePoolGroup: FC = () => {
           </div>
           <Select
             mode="multiple"
-            className="text-center rounded-3xl text-sm h-[44px] px-[80px]"
+            className="text-center rounded-3xl text-sm h-[44px] px-[80px] md:mt-0 mt-[20px]"
             placeholder={
               <div className="w-full regular-text text-center">
                 Pro Advertisers
