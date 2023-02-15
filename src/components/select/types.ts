@@ -1,5 +1,8 @@
 import { ReactNode } from "react";
 
+/**
+ * @dev Option for filter.
+ */
 export type OptionProps = {
   value: string;
   label?: string;
@@ -7,6 +10,9 @@ export type OptionProps = {
   description?: string;
 };
 
+/**
+ * @dev Expose interface of props for select component.
+ */
 export type SelectProps = {
   options: OptionProps[];
   className?: string;
@@ -17,4 +23,15 @@ export type SelectProps = {
   values?: string[];
   onChange?: (v: any) => void;
   onSearch?: (v: any) => void;
+};
+
+/**
+ * @dev Expose interface of props for dropdown component.
+ */
+export type DropdownSelectProps = {
+  handleSelectValue(value: string): void;
+  format?: (value: string) => string;
+  className?: string;
+  value: string;
+  options: string[] | OptionProps[];
 };

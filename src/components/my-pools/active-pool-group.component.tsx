@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useRouter } from "next/router";
 import { Input } from "@hamsterbox/ui-kit";
-import { Select } from "@/src/components/select";
+import { FilterSelect } from "@/src/components/select";
 import { SearchIcon, CircleCheckIcon } from "@/src/components/icons";
 
 export const ActivePoolGroup: FC = () => {
@@ -39,7 +39,7 @@ export const ActivePoolGroup: FC = () => {
             </p>
             <CircleCheckIcon className="absolute left-[15px]" color="#B998FB" />
           </div>
-          <Select
+          <FilterSelect
             mode="multiple"
             className="text-center rounded-3xl text-sm h-[44px] px-[80px] md:mt-0 mt-[20px]"
             placeholder={

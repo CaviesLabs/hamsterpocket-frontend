@@ -1,3 +1,5 @@
+import type { OptionProps } from "@/src/components/select";
+
 /**
  * @dev Define value data to sort NFTs.
  */
@@ -19,6 +21,36 @@ export const categoryOptions = [
   { value: "domain_names", name: "Domain Names" },
   { value: "music", name: "Music" },
   { value: "sports", name: "Sports" },
+];
+
+/**
+ * @dev Define time option to select for buy condition or stop pool condition.
+ */
+export const TIME_CONDITIONS: OptionProps[] = [
+  {
+    value: "Daily",
+  },
+  {
+    value: "Weekly",
+  },
+  {
+    value: "Every 2 Weeks",
+  },
+  {
+    value: "Monthly",
+  },
+  {
+    value: "Every 3 Months",
+  },
+  {
+    value: "Every 6 Months",
+  },
+  {
+    value: "Yearly",
+  },
+  {
+    value: "Custom",
+  },
 ];
 
 /**

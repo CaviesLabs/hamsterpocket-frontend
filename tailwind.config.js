@@ -80,6 +80,7 @@ module.exports = {
         backgroundDark: "#20242D",
         twhite: "#FFFFFF",
         dark10: "#F0F3FA",
+        dark20: "#E2E8F0",
         dark30: "#CBD4E1",
         dark40: "#94A3B8",
         dark50: "#7886A0",

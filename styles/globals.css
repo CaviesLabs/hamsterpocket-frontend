@@ -171,3 +171,40 @@ input[type=number] {
   font-size: 30px;
   cursor: pointer;
 }
+
+.dark-input input {
+  background-color: #20242D !important;
+  color: white;
+}
+
+.ant-picker-panel-container {
+  background: #20242D !important;
+}
+
+.ant-picker-body table th {
+  color: white !important;
+}
+.ant-picker-body table tr td {
+  color: #F0F3FA !important;
+}
+.ant-picker-year-btn {
+  color: #F0F3FA !important;
+}
+.ant-picker-header-super-prev-btn, .ant-picker-header-prev-btn {
+  color: #F0F3FA !important;
+}
+.ant-picker-header-super-next-btn, .ant-picker-header-next-btn {
+  color: #F0F3FA !important;
+}
+.ant-picker-month-btn {
+  color: #F0F3FA !important;
+}
+.ant-picker-input input {
+  color: #F0F3FA !important;
+}
+.ant-dropdown-menu.ant-dropdown-menu-root.ant-dropdown-menu-vertical.ant-dropdown-menu-light {
+  background-color: #20242D !important;
+}
+.h-52.overflow-scroll {
+  border-radius: 16px !important;
+}
