@@ -208,3 +208,10 @@ input[type=number] {
 .h-52.overflow-scroll {
   border-radius: 16px !important;
 }
+
+table tr {
+  border-bottom: solid 1px #4A5469;
+}
+table tr th {
+  text-align: left;
+}
