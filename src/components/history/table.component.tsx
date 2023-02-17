@@ -139,7 +139,7 @@ export default function TableComponent() {
       <table className="table-fixed w-full">
         <thead>
           <tr>
-            <th className="max-w-md pb-4">Poket</th>
+            <th className="max-w-md pb-4">Pocket</th>
             <th>Token</th>
             <th>Type</th>
             <th>SOL amount</th>

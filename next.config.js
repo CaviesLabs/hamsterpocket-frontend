@@ -4,7 +4,10 @@ require("dotenv").config({
   }`,
 });
 
-const withTM = require("next-transpile-modules")(["@hamsterbox/ui-kit"]);
+const withTM = require("next-transpile-modules")([
+  "@hamsterbox/ui-kit",
+  "react-icons",
+]);
 const withPlugins = require("next-compose-plugins");
 
 /** @dev Define NODE_ENV to next config. */
