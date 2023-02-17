@@ -149,6 +149,10 @@ const Header: FC = () => {
                     size="small"
                     text="Connect Wallet"
                     onClick={connectWallet}
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
                   />{" "}
                 </div>
               ) : (
