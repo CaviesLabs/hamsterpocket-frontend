@@ -33,11 +33,25 @@ export const ActivePoolGroup: FC = () => {
           />
         </div>
         <div className="md:float-right md:flex md:mt-0 mt-[20px]">
-          <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto w-full">
-            <p className="text-center text-[14px] normal-text text-dark50">
-              Need deposit for next buying
-            </p>
-            <CircleCheckIcon className="absolute left-[15px]" color="#B998FB" />
+          <div className="flex">
+            <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto">
+              <p className="text-center text-[14px] normal-text text-dark50">
+                Paused only
+              </p>
+              <CircleCheckIcon
+                className="absolute left-[15px]"
+                color="#B998FB"
+              />
+            </div>
+            <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto">
+              <p className="text-center text-[14px] normal-text text-dark50">
+                Need deposit for next buying
+              </p>
+              <CircleCheckIcon
+                className="absolute left-[15px]"
+                color="#B998FB"
+              />
+            </div>
           </div>
           <FilterSelect
             mode="multiple"
