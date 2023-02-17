@@ -1,7 +1,13 @@
 import { FC } from "react";
 import { Button } from "@hamsterbox/ui-kit";
+import { useRouter } from "next/router";
 
 export const BalanceGroup: FC = () => {
+  /**
+   * @dev Inject router module to use.
+   */
+  const router = useRouter();
+
   return (
     <section>
       <p className="text-[24px] text-white">Your balance</p>
@@ -44,6 +50,7 @@ export const BalanceGroup: FC = () => {
                 hoverColor: "#B998FB",
               }}
               text="View Portfolio"
+              onClick={() => router.push("/portfolio")}
             />
           </div>
         </div>
@@ -59,6 +66,7 @@ export const BalanceGroup: FC = () => {
                 }}
                 text="View history"
                 width="100%"
+                onClick={() => router.push("/history")}
               />
             </div>
           </div>

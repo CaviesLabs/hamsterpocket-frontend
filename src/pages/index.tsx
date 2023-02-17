@@ -40,7 +40,7 @@ const Layout: FC = () => {
                     color: "white",
                   }}
                   text="Create a Pocket"
-                  onClick={() => router.push("/my-pools")}
+                  onClick={() => router.push("/create-pocket")}
                 />
               </div>
             </div>

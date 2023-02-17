@@ -1,35 +1,16 @@
-import { utilsProvider } from "@/src/utils";
+import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
 import { FC } from "react";
-// import { getHamsterProfile } from "@/src/redux/actions/hamster-profile/profile.action";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
-import { useMain } from "@/src/hooks/pages/main";
+import { LoggoutIcon } from "@/src/components/icons";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 
 const UserProfile: FC = () => {
-  // const dispatch = useDispatch();
   const wallet = useConnectedWallet();
   const router = useRouter();
   const { disconnect } = useWallet();
-
-  /**
-   * @description
-   * This function will fetch profile from hamster server, that include:
-   * + id
-   * + avatar
-   * + walletAddress
-   * and save it into redux-store
-   */
-  const { hProfile: profile } = useMain();
-
-  /**
-   * @dev Watch changes in wallet and get hamster profile
-   */
-  // useEffect(() => {
-  //   dispatch(getHamsterProfile());
-  // }, [wallet]);
 
   return (
     <div
@@ -40,20 +21,27 @@ const UserProfile: FC = () => {
     >
       <img
         className="w-[20px] md:w-[40px] h-[auto] mr-[10px]"
-        src={profile?.avatar}
+        src={`${AVATAR_ENDPOINT}/${wallet?.publicKey?.toString()}.png`}
         alt="Boring avatar"
       />
-      <span className="text-[7px] md:text-[14px]">
+      <span className="text-[7px] md:text-[14px] text-white">
         {utilsProvider.makeShort(wallet?.publicKey?.toString(), 3)}
       </span>
       <ul className={styles["toggle-container"]}>
         <div className={styles.container}>
           <ul>
-            <li onClick={() => router.push(`/u/${profile.id}/profile`)}>
-              Profile Setting
+            <li
+              onClick={() => router.push(`/my-pockets`)}
+              className="hover:text-purple normal-text"
+            >
+              My pockets
             </li>
-            <li onClick={disconnect} className="text-red300">
-              Disconnect
+            <li
+              onClick={disconnect}
+              className="text-red300 flex items-center normal-text"
+            >
+              <LoggoutIcon />
+              <p className="ml-[5px]">Disconnect</p>
             </li>
           </ul>
         </div>

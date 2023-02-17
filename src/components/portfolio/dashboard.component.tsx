@@ -31,13 +31,13 @@ const options = {
 export default function DashboardComponent() {
   return (
     <div className="mt-12 flex justify-between items-center">
-      <div className="py-3 px-6 bg-dark80 w-1/4 rounded border border-gray-500">
+      <div className="py-3 px-6 bg-dark90 w-1/4 rounded border border-gray-500">
         <div className="text-white normal-text">Total Pockets Balance:</div>
         <div className="flex mt-4">
           <img src="/assets/images/solana-icon.svg" />
           <div className="text-green ml-3">45.19 SOL</div>
         </div>
-        <div className="text-green mt-1 italic">(~ $8,803.24)</div>
+        <div className="text-green mt-1 italic regular-text">(~ $8,803.24)</div>
       </div>
       <div className="flex items-center mr-36">
         <div className="max-w-[190px] relative flex justify-center items-center">

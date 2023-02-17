@@ -7,7 +7,6 @@ import { PURPLE_HEADER_PAGES } from "@/src/utils";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import UserProfile from "@/src/components/header/user-profile";
-import { useMain } from "@/src/hooks/pages/main";
 import { HamsterboxIcon } from "@/src/components/icons";
 import styled from "@emotion/styled";
 
@@ -21,7 +20,6 @@ const Header: FC = () => {
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
   const router = useRouter();
-  const { hProfile } = useMain();
 
   /**
    * Check homepage and display logo on dark theme
@@ -115,6 +113,8 @@ const Header: FC = () => {
     };
   });
 
+  console.log(wallet);
+
   return (
     <StyledHeader
       className={classnames("app-header fixed z-50 w-full", {
@@ -141,7 +141,7 @@ const Header: FC = () => {
           </div>
           <div className="relative flex items-center float-right right-[16px]">
             <div className="float-right relative">
-              {!hProfile ? (
+              {!wallet ? (
                 <div className="relative">
                   {" "}
                   <Button
@@ -194,12 +194,16 @@ const Header: FC = () => {
           >
             {
               <ul className="menu-container float-left">
-                {wallet && hProfile && (
+                {wallet && (
                   <Button
                     className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
-                    text="Create a Proposal"
+                    text="Create a Pocket"
                     size="small"
-                    onClick={() => router.push("/create-proposal")}
+                    onClick={() => router.push("/create-pocket")}
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
                   />
                 )}
               </ul>
