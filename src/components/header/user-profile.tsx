@@ -1,5 +1,5 @@
+import { FC, useMemo } from "react";
 import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
-import { FC } from "react";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
@@ -12,6 +12,14 @@ const UserProfile: FC = () => {
   const router = useRouter();
   const { disconnect } = useWallet();
 
+  /**
+   * @dev Get wallet public key address.
+   */
+  const walletPublicKey = useMemo(
+    () => wallet?.publicKey?.toString(),
+    [wallet]
+  );
+
   return (
     <div
       className={classnames(
@@ -21,11 +29,11 @@ const UserProfile: FC = () => {
     >
       <img
         className="w-[20px] md:w-[40px] h-[auto] mr-[10px]"
-        src={`${AVATAR_ENDPOINT}/${wallet?.publicKey?.toString()}.png`}
+        src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
         alt="Boring avatar"
       />
       <span className="text-[7px] md:text-[14px] text-white">
-        {utilsProvider.makeShort(wallet?.publicKey?.toString(), 3)}
+        {utilsProvider.makeShort(walletPublicKey, 3)}
       </span>
       <ul className={styles["toggle-container"]}>
         <div className={styles.container}>
