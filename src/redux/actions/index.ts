@@ -3,10 +3,12 @@ export const SET_USER_CHATS = "SET_USER_CHATS";
 export const SIGNUP_EMAIL = "SIGNUP_EMAIL";
 
 /**
- * Actions for proposal service
+ * Actions for history service
  */
-export const GET_PROPOSALS = "GET_PROPOSALS";
-export const SET_PROPOSALS = "SET_PROPOSALS";
+export const GET_HISTORY = "GET_HISTORY";
+export const SET_HISTORY = "SET_HISTORY";
+export const GET_HISTORIES = "GET_HISTORIES";
+export const SET_HISTORIES = "SET_HISTORIES";
 
 /**
  * Actions for modify user proposals state.

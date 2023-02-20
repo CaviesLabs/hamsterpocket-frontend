@@ -4,6 +4,7 @@
 // import { SwapProposalEntity } from "@/src/entities/proposal.entity";
 // import { PlatformConfigDto } from "@/src/entities/platform-config.entity";
 import { ProfileDto } from "@/src/dto/profile.dto";
+import { HistoryType } from "@/src/components/history";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
 
 /**
@@ -18,4 +19,6 @@ export default interface State {
   hProfile: ProfileDto;
   // hPublicProfile: hProfileDto;
   // platformConfig: PlatformConfigDto;
+  history: HistoryType;
+  histories: HistoryType[];
 }
