@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import hProfieReducer from "./profile";
 import { historyReducer, historiesReducer } from "./history";
+import { portfoliosReducer } from "./portfolio";
 import State from "@/src/redux/entities/state";
 
 /**
@@ -10,6 +11,7 @@ const reducer = combineReducers<State>({
   hProfile: hProfieReducer,
   history: historyReducer,
   histories: historiesReducer,
+  portfolios: portfoliosReducer,
 });
 
 /**
@@ -19,6 +21,7 @@ export const initState: State = {
   hProfile: null,
   history: null,
   histories: [],
+  portfolios: [],
 };
 
 export default reducer;

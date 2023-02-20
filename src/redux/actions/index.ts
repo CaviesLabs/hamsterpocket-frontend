@@ -11,6 +11,12 @@ export const GET_HISTORIES = "GET_HISTORIES";
 export const SET_HISTORIES = "SET_HISTORIES";
 
 /**
+ * Actions for portfolio service
+ */
+export const GET_PORTFOLIOS = "GET_PORTFOLIOS";
+export const SET_PORTFOLIOS = "SET_PORTFOLIOS";
+
+/**
  * Actions for modify user proposals state.
  */
 export const SET_PROPOSAL = "SET_PROPOSAL";

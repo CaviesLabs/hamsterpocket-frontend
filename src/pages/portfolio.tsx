@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import type { NextPage } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
@@ -8,8 +8,16 @@ import { BreadCrumb } from "@/src/components/bread-crumb";
 import PortfolioController from "@/src/components/portfolio/controller.component";
 import TableComponent from "@/src/components/portfolio/table.component";
 import DashboardComponent from "@/src/components/portfolio/dashboard.component";
+import { useDispatch } from "react-redux";
+import { getPortfolios } from "../redux/actions/portfolio/portfolio.action";
 
 const Layout: FC = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPortfolios({}));
+  }, []);
+
   return (
     <MainLayout>
       <div className={styles.container}>
