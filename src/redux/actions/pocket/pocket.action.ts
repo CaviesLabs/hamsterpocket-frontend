@@ -10,7 +10,8 @@ import {
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
-import { GetPocketsDto, PocketEntity } from "@/src/dto/pocket.dto";
+import { GetPocketsDto } from "@/src/dto/pocket.dto";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 
 /**
  * GET active pocket detail

@@ -6,7 +6,7 @@ import {
   MainProgressTypes,
   PocketEntity,
   PocketStatus,
-} from "@/src/dto/pocket.dto";
+} from "../entities/pocket.entity";
 
 export const StatisticMock: StatisticEntity = {
   users: "6.458",

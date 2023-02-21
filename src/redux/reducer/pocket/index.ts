@@ -5,7 +5,7 @@ import {
   SET_CLOSED_POCKETS,
 } from "@/src/redux/actions";
 import { Action } from "@/src/redux/entities/interfaces/action";
-import { PocketEntity } from "@/src/dto/pocket.dto";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 
 /**
  * @dev List active pockets.

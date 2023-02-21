@@ -6,7 +6,7 @@
 import { ProfileDto } from "@/src/dto/profile.dto";
 import { HistoryType } from "@/src/components/history";
 import { PortfolioType } from "@/src/components/portfolio/types";
-import { PocketEntity } from "@/src/dto/pocket.dto";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
 
 /**
