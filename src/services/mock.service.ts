@@ -1,6 +1,12 @@
 import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { HistoryType, PoolType } from "@/src/components/history";
 import { PortfolioType } from "@/src/components/portfolio/types";
+import {
+  BuyConditionTypes,
+  MainProgressTypes,
+  PocketEntity,
+  PocketStatus,
+} from "@/src/dto/pocket.dto";
 
 export const StatisticMock: StatisticEntity = {
   users: "6.458",
@@ -211,5 +217,98 @@ export const PortfoliosMock: PortfolioType[] = [
     },
     tokenAmount: 3293482.0,
     tokenPrice: 0.0000012,
+  },
+];
+
+export const ActivePocketsMock: PocketEntity[] = [
+  {
+    id: "14623",
+    address: "a11bd...cdasp",
+    ownerAddress: "a11bd...cdasp",
+    name: "Save money for the future",
+    status: PocketStatus["POOL_STATUS::CREATED"],
+    baseTokenAddress: "So11111111111111111111111111111111111111112",
+    targetTokenAddress: "So11111111111111111111111111111111111111112",
+    startTime: new Date("2023-02-20T08:13:13.901Z"),
+    depositedAmount: 8.7,
+    batchVolume: 10,
+    frequency: {},
+    buyCondition: {
+      tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
+      type: BuyConditionTypes.GT,
+      value: [0],
+    },
+    stopConditions: {
+      endTime: new Date("2023-02-20T08:13:13.901Z"),
+      baseTokenReach: 300,
+      targetTokenReach: 1000000000,
+      batchAmountReach: 10,
+    },
+    currentBaseToken: 120,
+    remainingBaseTokenBalance: 180,
+    currentTargetToken: 0,
+    currentBatchAmount: 0,
+    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    progressPercent: 40.11,
+  },
+  {
+    id: "14624",
+    address: "a11bd...cdasp",
+    ownerAddress: "a11bd...cdasp",
+    name: "Pool name here 1",
+    status: PocketStatus["POOL_STATUS::CREATED"],
+    baseTokenAddress: "So11111111111111111111111111111111111111112",
+    targetTokenAddress: "So11111111111111111111111111111111111111112",
+    startTime: new Date("2023-02-20T08:13:13.901Z"),
+    depositedAmount: 8.7,
+    batchVolume: 10,
+    frequency: {},
+    buyCondition: {
+      tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
+      type: BuyConditionTypes.GT,
+      value: [0],
+    },
+    stopConditions: {
+      endTime: new Date("2023-02-20T08:13:13.901Z"),
+      baseTokenReach: 300,
+      targetTokenReach: 1000000000,
+      batchAmountReach: 10,
+    },
+    currentBaseToken: 120,
+    remainingBaseTokenBalance: 180,
+    currentTargetToken: 0,
+    currentBatchAmount: 0,
+    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    progressPercent: 40.11,
+  },
+  {
+    id: "14625",
+    address: "a11bd...cdasp",
+    ownerAddress: "a11bd...cdasp",
+    name: "Pool name here",
+    status: PocketStatus["POOL_STATUS::PAUSED"],
+    baseTokenAddress: "So11111111111111111111111111111111111111112",
+    targetTokenAddress: "So11111111111111111111111111111111111111112",
+    startTime: new Date("2023-02-20T08:13:13.901Z"),
+    depositedAmount: 8.7,
+    batchVolume: 10,
+    frequency: {},
+    buyCondition: {
+      tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
+      type: BuyConditionTypes.GT,
+      value: [0],
+    },
+    stopConditions: {
+      endTime: null,
+      baseTokenReach: 0,
+      targetTokenReach: 0,
+      batchAmountReach: 0,
+    },
+    currentBaseToken: 120,
+    remainingBaseTokenBalance: 180,
+    currentTargetToken: 0,
+    currentBatchAmount: 0,
+    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    progressPercent: 40.11,
   },
 ];
