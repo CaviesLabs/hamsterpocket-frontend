@@ -615,20 +615,20 @@ export const FilterIcon: FC<IconProps> = (props) => (
     <path
       d="M1.86658 4.66663H13.8666"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
     <path
       d="M3.86658 8H11.8666"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
     <path
       d="M6.5332 11.3334H9.19987"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
   </svg>
 );
