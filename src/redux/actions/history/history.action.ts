@@ -6,7 +6,7 @@ import {
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
-import { HistoryType } from "@/src/components/history";
+import { HistoryEntity } from "@/src/components/history";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 
 /**
@@ -15,13 +15,13 @@ import { GetHistoriesDto } from "@/src/dto/history.dto";
  * @description
  * Update history list in redux state
  */
-export const setHistory = (data: HistoryType) => ({
+export const setHistory = (data: HistoryEntity) => ({
   type: SET_HISTORY,
   payload: data,
 });
 
 /**
- * @param {HistoryType[]} data
+ * @param {HistoryEntity[]} data
  * @returns reducer.
  */
 export const getHistories = (data: GetHistoriesDto) => ({
@@ -30,10 +30,10 @@ export const getHistories = (data: GetHistoriesDto) => ({
 });
 
 /**
- * @param {HistoryType[]} data
+ * @param {HistoryEntity[]} data
  * @returns reducer.
  */
-export const setHistories = (data: HistoryType[]) => ({
+export const setHistories = (data: HistoryEntity[]) => ({
   type: SET_HISTORIES,
   payload: data,
 });
@@ -44,7 +44,7 @@ export const setHistories = (data: HistoryType[]) => ({
  */
 export const getHistory = (
   payload?: DetailDto,
-  callback?: CallBackSaga<HistoryType>
+  callback?: CallBackSaga<HistoryEntity>
 ) => ({
   type: GET_HISTORY,
   payload,

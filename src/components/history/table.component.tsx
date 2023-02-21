@@ -1,4 +1,4 @@
-import { PoolType } from "@/src/components/history/types";
+import { PoolType } from "@/src/entities/history.entity";
 import { DATE_TIME_FORMAT } from "@/src/utils";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";

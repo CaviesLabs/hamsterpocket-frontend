@@ -5,7 +5,7 @@ import {
   setHistories,
   setHistory,
 } from "@/src/redux/actions/history/history.action";
-import { HistoryType } from "@/src/components/history";
+import { HistoryEntity } from "@/src/components/history";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 import { DetailDto } from "@/src/dto/detail.dto";
 
@@ -17,9 +17,9 @@ import { DetailDto } from "@/src/dto/detail.dto";
 export function* getHistories({
   payload,
   callback,
-}: SagaPayload<GetHistoriesDto, HistoryType[]>) {
+}: SagaPayload<GetHistoriesDto, HistoryEntity[]>) {
   try {
-    const histories: HistoryType[] = yield call(
+    const histories: HistoryEntity[] = yield call(
       historyService.getHistories,
       payload
     );
@@ -41,9 +41,12 @@ export function* getHistories({
 export function* getHistory({
   payload,
   callback,
-}: SagaPayload<DetailDto, HistoryType>) {
+}: SagaPayload<DetailDto, HistoryEntity>) {
   try {
-    const history: HistoryType = yield call(historyService.getHistory, payload);
+    const history: HistoryEntity = yield call(
+      historyService.getHistory,
+      payload
+    );
 
     yield put(setHistory(history));
 

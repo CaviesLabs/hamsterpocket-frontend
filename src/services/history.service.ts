@@ -1,13 +1,15 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { HistoryType } from "@/src/components/history";
+import { HistoryEntity } from "@/src/components/history";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 import { DetailDto } from "@/src/dto/detail.dto";
 import { HistoriesMock } from "@/src/services/mock.service";
 
 export class HistoryService {
-  public async getHistories(payload: GetHistoriesDto): Promise<HistoryType[]> {
+  public async getHistories(
+    payload: GetHistoriesDto
+  ): Promise<HistoryEntity[]> {
     return networkProvider
-      .request<HistoryType[]>(`/histories`, {
+      .request<HistoryEntity[]>(`/histories`, {
         method: "GET",
         params: payload,
       })
@@ -16,8 +18,8 @@ export class HistoryService {
       });
   }
 
-  public async getHistory(payload: DetailDto): Promise<HistoryType> {
-    return networkProvider.request<HistoryType>(`/histories/${payload.id}`, {
+  public async getHistory(payload: DetailDto): Promise<HistoryEntity> {
+    return networkProvider.request<HistoryEntity>(`/histories/${payload.id}`, {
       method: "GET",
     });
   }

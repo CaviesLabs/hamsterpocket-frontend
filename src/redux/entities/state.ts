@@ -4,7 +4,7 @@
 // import { SwapProposalEntity } from "@/src/entities/proposal.entity";
 // import { PlatformConfigDto } from "@/src/entities/platform-config.entity";
 import { ProfileDto } from "@/src/dto/profile.dto";
-import { HistoryType } from "@/src/components/history";
+import { HistoryEntity } from "@/src/components/history";
 import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
@@ -21,8 +21,8 @@ export default interface State {
   hProfile: ProfileDto;
   // hPublicProfile: hProfileDto;
   // platformConfig: PlatformConfigDto;
-  history: HistoryType;
-  histories: HistoryType[];
+  history: HistoryEntity;
+  histories: HistoryEntity[];
   portfolios: PortfolioEntity[];
   activePocket: PocketEntity;
   closedPocket: PocketEntity;

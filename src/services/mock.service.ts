@@ -1,5 +1,5 @@
 import { StatisticEntity } from "@/src/entities/statistic.entity";
-import { HistoryType, PoolType } from "@/src/components/history";
+import { HistoryEntity, PoolType } from "@/src/components/history";
 import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import {
   BuyConditionTypes,
@@ -14,7 +14,7 @@ export const StatisticMock: StatisticEntity = {
   totalVolume: "35,293.04",
 };
 
-export const HistoriesMock: HistoryType[] = [
+export const HistoriesMock: HistoryEntity[] = [
   {
     id: "199499",
     name: "Name of pocket here, Name of pocket here, Name of pocket here, ",

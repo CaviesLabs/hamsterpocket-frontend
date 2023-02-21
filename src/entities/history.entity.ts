@@ -8,7 +8,7 @@ export enum PoolType {
   WITHDRAW = "WITHDRAW",
 }
 
-export type HistoryType = {
+export type HistoryEntity = {
   id: string;
   name: string;
   token: {
