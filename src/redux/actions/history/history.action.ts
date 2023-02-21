@@ -6,7 +6,7 @@ import {
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
-import { HistoryEntity } from "@/src/components/history";
+import { HistoryEntity } from "@/src/entities/history.entity";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 
 /**

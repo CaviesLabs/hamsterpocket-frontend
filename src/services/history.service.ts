@@ -1,5 +1,5 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { HistoryEntity } from "@/src/components/history";
+import { HistoryEntity } from "@/src/entities/history.entity";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 import { DetailDto } from "@/src/dto/detail.dto";
 import { HistoriesMock } from "@/src/services/mock.service";

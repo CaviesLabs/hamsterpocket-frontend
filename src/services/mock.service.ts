@@ -1,5 +1,5 @@
 import { StatisticEntity } from "@/src/entities/statistic.entity";
-import { HistoryEntity, PoolType } from "@/src/components/history";
+import { HistoryEntity, PoolType } from "@/src/entities/history.entity";
 import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import {
   BuyConditionTypes,

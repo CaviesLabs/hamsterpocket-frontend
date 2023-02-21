@@ -1,6 +1,6 @@
 import { SET_HISTORIES, SET_HISTORY } from "@/src/redux/actions";
 import { Action } from "@/src/redux/entities/interfaces/action";
-import { HistoryEntity } from "@/src/components/history";
+import { HistoryEntity } from "@/src/entities/history.entity";
 
 /**
  * @dev List history by user.

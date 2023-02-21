@@ -5,7 +5,7 @@ import {
   setHistories,
   setHistory,
 } from "@/src/redux/actions/history/history.action";
-import { HistoryEntity } from "@/src/components/history";
+import { HistoryEntity } from "@/src/entities/history.entity";
 import { GetHistoriesDto } from "@/src/dto/history.dto";
 import { DetailDto } from "@/src/dto/detail.dto";
 
