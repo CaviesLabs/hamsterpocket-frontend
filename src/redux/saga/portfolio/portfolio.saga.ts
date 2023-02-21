@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
 import { SagaPayload } from "@/src/redux/entities";
-import { PortfolioType } from "@/src/components/portfolio/types";
+import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import { GetPortfoliosDto } from "@/src/dto/portfolio.dto";
 import { portfolioService } from "@/src/services/portfolio.service";
 import { setPortfolios } from "@/src/redux/actions/portfolio/portfolio.action";
@@ -13,9 +13,9 @@ import { setPortfolios } from "@/src/redux/actions/portfolio/portfolio.action";
 export function* getPortfolios({
   payload,
   callback,
-}: SagaPayload<GetPortfoliosDto, PortfolioType[]>) {
+}: SagaPayload<GetPortfoliosDto, PortfolioEntity[]>) {
   try {
-    const portfolios: PortfolioType[] = yield call(
+    const portfolios: PortfolioEntity[] = yield call(
       portfolioService.getPortfolios,
       payload
     );

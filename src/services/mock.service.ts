@@ -1,6 +1,6 @@
 import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { HistoryType, PoolType } from "@/src/components/history";
-import { PortfolioType } from "@/src/components/portfolio/types";
+import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import {
   BuyConditionTypes,
   MainProgressTypes,
@@ -145,7 +145,7 @@ export const HistoriesMock: HistoryType[] = [
   },
 ];
 
-export const PortfoliosMock: PortfolioType[] = [
+export const PortfoliosMock: PortfolioEntity[] = [
   {
     id: "1",
     token: {

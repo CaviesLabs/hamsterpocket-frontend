@@ -1,14 +1,14 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { PortfoliosMock } from "@/src/services/mock.service";
-import { PortfolioType } from "@/src/components/portfolio/types";
+import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import { GetPortfoliosDto } from "@/src/dto/portfolio.dto";
 
 export class PortfolioService {
   public async getPortfolios(
     payload: GetPortfoliosDto
-  ): Promise<PortfolioType[]> {
+  ): Promise<PortfolioEntity[]> {
     return networkProvider
-      .request<PortfolioType[]>(`/portfolio`, {
+      .request<PortfolioEntity[]>(`/portfolio`, {
         method: "GET",
         params: payload,
       })

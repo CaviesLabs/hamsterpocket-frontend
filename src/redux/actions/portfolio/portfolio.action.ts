@@ -1,9 +1,9 @@
 import { GET_PORTFOLIOS, SET_PORTFOLIOS } from "@/src/redux/actions";
 import { GetPortfoliosDto } from "@/src/dto/portfolio.dto";
-import { PortfolioType } from "@/src/components/portfolio/types";
+import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 
 /**
- * @param {PortfolioType[]} data
+ * @param {PortfolioEntity[]} data
  * @returns reducer.
  */
 export const getPortfolios = (data: GetPortfoliosDto) => ({
@@ -12,10 +12,10 @@ export const getPortfolios = (data: GetPortfoliosDto) => ({
 });
 
 /**
- * @param {PortfolioType[]} data
+ * @param {PortfolioEntity[]} data
  * @returns reducer.
  */
-export const setPortfolios = (data: PortfolioType[]) => ({
+export const setPortfolios = (data: PortfolioEntity[]) => ({
   type: SET_PORTFOLIOS,
   payload: data,
 });

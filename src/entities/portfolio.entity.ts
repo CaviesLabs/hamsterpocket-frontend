@@ -1,4 +1,4 @@
-export type PortfolioType = {
+export type PortfolioEntity = {
   id: string;
   token: {
     name: string;

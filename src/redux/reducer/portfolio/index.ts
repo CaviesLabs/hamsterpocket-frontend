@@ -1,14 +1,14 @@
 import { SET_PORTFOLIOS } from "@/src/redux/actions";
 import { Action } from "@/src/redux/entities/interfaces/action";
-import { PortfolioType } from "@/src/components/portfolio/types";
+import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 
 /**
  * @dev List history by user.
- * @param {PortfolioType} state
+ * @param {PortfolioEntity} state
  * @param {Action} action
  */
 export const portfoliosReducer = (
-  state: PortfolioType[] = [],
+  state: PortfolioEntity[] = [],
   action: Action
 ) => {
   if (action.type === SET_PORTFOLIOS) {
