@@ -8,7 +8,7 @@ export class PortfolioService {
     payload: GetPortfoliosDto
   ): Promise<PortfolioType[]> {
     return networkProvider
-      .request<PortfolioType[]>(`/portfolios`, {
+      .request<PortfolioType[]>(`/portfolio`, {
         method: "GET",
         params: payload,
       })
