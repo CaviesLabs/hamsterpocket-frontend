@@ -6,6 +6,7 @@
 import { ProfileDto } from "@/src/dto/profile.dto";
 import { HistoryType } from "@/src/components/history";
 import { PortfolioType } from "@/src/components/portfolio/types";
+import { PocketEntity } from "@/src/dto/pocket.dto";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
 
 /**
@@ -23,4 +24,8 @@ export default interface State {
   history: HistoryType;
   histories: HistoryType[];
   portfolios: PortfolioType[];
+  activePocket: PocketEntity;
+  closedPocket: PocketEntity;
+  activePockets: PocketEntity[];
+  closedPockets: PocketEntity[];
 }

@@ -56,3 +56,8 @@ export interface PocketEntity {
   mainProgressBy: MainProgressTypes;
   progressPercent: number;
 }
+
+/**
+ * @dev Define list pocket dto
+ */
+export class GetPocketsDto {}
