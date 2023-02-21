@@ -1,5 +1,4 @@
-import { FC } from "react";
-import type { NextPage } from "next";
+import type { InferGetStaticPropsType } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
@@ -7,8 +6,14 @@ import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
+import { statisticService } from "@/src/services/statistic.service";
+import { StatisticEntity } from "@/src/entities/statistic.entity";
 
-const Layout: FC = () => {
+type LayoutProps = {
+  data: StatisticEntity;
+};
+const Layout = (props: LayoutProps) => {
+  const { data } = props;
   // const proposals = useSelector((state: any) => state.proposals);
   const {} = useMain();
 
@@ -62,7 +67,7 @@ const Layout: FC = () => {
             <div className="grid md:grid-cols-3 gap-3 pt-[50px]">
               <div>
                 <p className="text-center text-green text-[32px] normal-text">
-                  6,458
+                  {data.users}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Users
@@ -70,7 +75,7 @@ const Layout: FC = () => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] normal-text">
-                  17,934
+                  {data.pockets}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Pockets
@@ -78,7 +83,7 @@ const Layout: FC = () => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] normal-text">
-                  $ 35,293.04
+                  $ {data.totalVolume}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Total Volume
@@ -92,12 +97,30 @@ const Layout: FC = () => {
   );
 };
 
-const Home: NextPage = () => {
+function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <DashboardPageProvider>
-      <Layout />
+      <Layout data={props.statistic} />
     </DashboardPageProvider>
   );
-};
+}
+
+/**
+ * @dev This function gets called at build time on server-side.
+ * It won't be called on client-side, so you can even do
+ * direct database queries.
+ */
+export async function getStaticProps() {
+  // Call an external API endpoint to get statistic.
+  const res = await statisticService.getStatistic();
+
+  // By returning { props: { statistic } }, the Home component
+  // will receive `statistic` as a prop at build time
+  return {
+    props: {
+      statistic: res,
+    },
+  };
+}
 
 export default Home;

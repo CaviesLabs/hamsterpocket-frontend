@@ -532,7 +532,7 @@ export const CaviesIcon: FC<IconProps> = (props) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_1931_79877)">
+    <g clipPath="url(#clip0_1931_79877)">
       <path
         d="M12.9479 17.0821C11.9628 17.7747 10.7916 18.1412 9.59423 18.1314C8.67068 18.1211 7.76292 17.8863 6.94665 17.4466C6.13037 17.0069 5.42922 16.3751 4.90166 15.6038C3.60402 15.7756 2.33837 16.1412 1.14551 16.6886C2.19111 18.7766 3.94253 20.4103 6.07763 21.2892C7.18239 21.7467 8.36231 21.9873 9.55504 21.9982C11.972 22.0107 14.3048 21.0958 16.0882 19.436C15.1595 18.5002 14.1016 17.7073 12.9479 17.0821Z"
         fill="#735CF7"
@@ -615,20 +615,20 @@ export const FilterIcon: FC<IconProps> = (props) => (
     <path
       d="M1.86658 4.66663H13.8666"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
     <path
       d="M3.86658 8H11.8666"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
     <path
       d="M6.5332 11.3334H9.19987"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
     />
   </svg>
 );

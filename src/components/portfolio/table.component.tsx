@@ -1,81 +1,9 @@
-import { PortfolioDto } from "@/src/components/portfolio/types";
 import { MdOpenInNew } from "react-icons/all";
+import { useSelector } from "react-redux";
+import State from "@/src/redux/entities/state";
 
 export default function TableComponent() {
-  const historiesData: PortfolioDto[] = [
-    {
-      id: "1",
-      token: {
-        name: "RAY",
-        fullname: "Raydium",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-    {
-      id: "2",
-      token: {
-        name: "ETH",
-        fullname: "Etherium",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency/256/Ethereum-icon.png",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-    {
-      id: "3",
-      token: {
-        name: "ENS",
-        fullname: "Ethereum Name Service",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://img.freepik.com/premium-vector/ens-ethereum-name-service-token-symbol-cryptocurrency-logo-circle-coin-icon-isolated-white-background_337410-1834.jpg",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-    {
-      id: "4",
-      token: {
-        name: "BNB",
-        fullname: "Binance",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Binance-Coin-BNB-icon.png",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-    {
-      id: "5",
-      token: {
-        name: "RAY",
-        fullname: "Raydium",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-    {
-      id: "1",
-      token: {
-        name: "RAY",
-        fullname: "Raydium",
-        address: "NFTUk...Mb7Nk",
-        image:
-          "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-      },
-      tokenAmount: 3293482.0,
-      tokenPrice: 0.0000012,
-    },
-  ];
+  const portfoliosData = useSelector((state: State) => state.portfolios);
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
@@ -88,7 +16,7 @@ export default function TableComponent() {
           </tr>
         </thead>
         <tbody className="normal-text">
-          {historiesData.map((h) => (
+          {portfoliosData.map((h) => (
             <tr key={h.id} className="">
               <td className="pr-10 py-4 flex">
                 <div className="bg-gray-600 p-2 rounded-full">
