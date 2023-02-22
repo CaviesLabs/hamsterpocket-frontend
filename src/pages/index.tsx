@@ -26,8 +26,8 @@ const Layout = (props: LayoutProps) => {
     <MainLayout>
       <div className={styles.container}>
         <LayoutSection className="pt-[60px] pb-[100px]">
-          <section className="md:flex md:items-center">
-            <div className="w-full md:w-[60%] md:pr-[150px] mt-[60px] md:mt-0">
+          <section className="md:flex md:justify-center md:items-center">
+            <div className="w-full md:w-[50%] mt-[60px] md:mt-0">
               <h1 className="banner-title">Self-Managed DCA Vault</h1>
               <h2 className="text-[48px] text-white normal-text relative top-[-20px]">
                 HamsterPocket
@@ -49,7 +49,7 @@ const Layout = (props: LayoutProps) => {
                 />
               </div>
             </div>
-            <div className="w-full md:w-[40%] md:pt-[90px]">
+            <div className="w-full md:w-[30%] md:pt-[90px]">
               <img
                 src="/assets/images/banner-icon.png"
                 alt="Image"
@@ -57,14 +57,14 @@ const Layout = (props: LayoutProps) => {
               />
             </div>
           </section>
-          <section className="pt-[50px]">
+          <section className="pt-[50px] max-w-2xl mx-auto">
             <p className="text-center text-purple normal-text text-[24px]">
               Achievements
             </p>
             <p className="text-center text-white text-[32px] normal-text">
-              Some text here about numbers
+              HamsterPocket provides the most flexible DCA strategies to users
             </p>
-            <div className="grid md:grid-cols-3 gap-3 pt-[50px]">
+            <div className="grid md:grid-cols-3 gap-3 pt-5">
               <div>
                 <p className="text-center text-green text-[32px] normal-text">
                   {data.users}
