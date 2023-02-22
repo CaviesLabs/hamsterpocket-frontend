@@ -27,15 +27,15 @@ const Layout = (props: LayoutProps) => {
       <div className={styles.container}>
         <LayoutSection className="pt-[60px] pb-[100px]">
           <section className="md:flex md:items-center">
-            <div className="w-full md:w-[60%] md:pr-[200px] mt-[60px] md:mt-0">
-              <h1 className="banner-title text-center">Amazing DCA Tool</h1>
-              <h2 className="text-[48px] text-white text-center normal-text relative top-[-20px]">
+            <div className="w-full md:w-[60%] md:pr-[150px] mt-[60px] md:mt-0">
+              <h1 className="banner-title">Self-Managed DCA Vault</h1>
+              <h2 className="text-[48px] text-white normal-text relative top-[-20px]">
                 HamsterPocket
               </h2>
-              <p className="max-w-[498px] mx-auto text-white text-center text-[20px] mt-[15px] regular-text">
-                The purpose of lorem ipsum is to create a natural looking block
-                of text (sentence, paragraph, page, etc.) that doesn't distract
-                from the layout.
+              <p className="max-w-[498px] pr-10 text-white text-center text-[20px] mt-[15px] regular-text">
+                HamsterPocket allows users to create and manage their own
+                dollar-cost averaging pools (“pockets”) that will automatically
+                execute the chosen strategies over time.
               </p>
               <div className="text-center mt-[34px]">
                 <Button
