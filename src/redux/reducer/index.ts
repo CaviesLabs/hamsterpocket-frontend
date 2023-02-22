@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import hProfieReducer from "./profile";
+import hProfileReducer from "./profile";
 import { historyReducer, historiesReducer } from "./history";
 import {
   activePocketReducer,
@@ -7,17 +7,18 @@ import {
   closedPocketReducer,
   closedPocketsReducer,
 } from "./pocket";
-import { portfoliosReducer } from "./portfolio";
+import { portfoliosReducer, portfolioStatisticReducer } from "./portfolio";
 import State from "@/src/redux/entities/state";
 
 /**
  * @dev Initialize reducer for app state management.
  */
 const reducer = combineReducers<State>({
-  hProfile: hProfieReducer,
+  hProfile: hProfileReducer,
   history: historyReducer,
   histories: historiesReducer,
   portfolios: portfoliosReducer,
+  portfolioStatistic: portfolioStatisticReducer,
   activePocket: activePocketReducer,
   closedPocket: closedPocketReducer,
   activePockets: activePocketsReducer,
@@ -32,6 +33,7 @@ export const initState: State = {
   history: null,
   histories: [],
   portfolios: [],
+  portfolioStatistic: null,
   activePocket: null,
   closedPocket: null,
   activePockets: [],

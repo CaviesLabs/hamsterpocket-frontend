@@ -5,7 +5,10 @@
 // import { PlatformConfigDto } from "@/src/entities/platform-config.entity";
 import { ProfileDto } from "@/src/dto/profile.dto";
 import { HistoryEntity } from "@/src/entities/history.entity";
-import { PortfolioEntity } from "@/src/entities/portfolio.entity";
+import {
+  PortfolioEntity,
+  PortfolioStatisticEntity,
+} from "@/src/entities/portfolio.entity";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 // import { ProposalDto } from "@/src/dto/proposal.dto";
 
@@ -24,6 +27,7 @@ export default interface State {
   history: HistoryEntity;
   histories: HistoryEntity[];
   portfolios: PortfolioEntity[];
+  portfolioStatistic: PortfolioStatisticEntity;
   activePocket: PocketEntity;
   closedPocket: PocketEntity;
   activePockets: PocketEntity[];

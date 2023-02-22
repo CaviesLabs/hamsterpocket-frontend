@@ -47,7 +47,7 @@ export const PoolItem = (props: PoolItemProps) => {
             </a>
           </div>
         </div>
-        <div className="md:float-right md:w-[380px] md:mt-0 mt-[20px]">
+        <div className="md:float-right md:w-96 md:mt-0 mt-[20px]">
           <div className="flex">
             <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
               Strategy
