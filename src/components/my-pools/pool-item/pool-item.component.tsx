@@ -1,17 +1,26 @@
-import { FC } from "react";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import ProgressBar from "@ramonak/react-progress-bar";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import classnames from "classnames";
+import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
 
-export const PoolItem: FC = () => {
+type PoolItemProps = {
+  data: PocketEntity;
+};
+export const PoolItem = (props: PoolItemProps) => {
+  const { data } = props;
+
+  const isPaused = data.status === PocketStatus["POOL_STATUS::PAUSED"];
+
   return (
     <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
       <div className="flow-root">
         <p className="text-[24px] text-white normal-text float-left">
-          Save money for the future
+          {data.name}
         </p>
         <p className="float-right text-dark50 text-[16px] regular-text relative top-[6px]">
-          #14623
+          #{data.id}
         </p>
       </div>
       <div className="flow-root mt-[24px]">
@@ -138,16 +147,15 @@ export const PoolItem: FC = () => {
           </div>
         </div>
       </div>
-      <div className="mt-[24px]">
-        <p className="uppercase text-[16px] text-white">NOTE:</p>
-        <p className="text-[16px] text-white regular-text">
-          If Pool balance is not enough on each pax, the pool will just buy the
-          USDC left
-        </p>
-      </div>
+      <PocketNote status={data.status} />
       <div className="mt-[24px] md:flow-root">
-        <p className="md:float-left text-[16px] text-green uppercase text-normal relative top-[10px]">
-          ACTIVE
+        <p
+          className={classnames(
+            "md:float-left text-[16px] uppercase text-normal relative top-[10px]",
+            isPaused ? "text-orange-500" : "text-green"
+          )}
+        >
+          {isPaused ? "PAUSED" : "ACTIVE"}
         </p>
         <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
           <div className="md:float-right">
@@ -162,15 +170,27 @@ export const PoolItem: FC = () => {
             />
           </div>
           <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
-            <Button
-              className="!px-[50px] md:w-auto !w-full"
-              theme={{
-                backgroundColor: "#B998FB",
-                color: "#FFFFFF",
-              }}
-              text="Pause"
-              width="100%"
-            />
+            {isPaused ? (
+              <Button
+                className="!px-[50px] md:w-auto"
+                theme={{
+                  backgroundColor: "#B998FB",
+                  color: "#FFFFFF",
+                }}
+                text="Continue"
+                width="100%"
+              />
+            ) : (
+              <Button
+                className="!px-[50px] md:w-auto"
+                theme={{
+                  backgroundColor: "#B998FB",
+                  color: "#FFFFFF",
+                }}
+                text="Pause"
+                width="100%"
+              />
+            )}
           </div>
           <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
             <Button
