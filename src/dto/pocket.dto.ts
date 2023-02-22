@@ -7,5 +7,5 @@ export interface PocketDto {}
  */
 export class GetPocketsDto {
   ownerAddress: string;
-  statuses?: [PocketStatus];
+  statuses?: PocketStatus[];
 }
