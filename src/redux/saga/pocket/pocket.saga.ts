@@ -15,13 +15,12 @@ export function* getActivePockets({
   callback,
 }: SagaPayload<GetPocketsDto, PocketEntity[]>) {
   try {
-    // @ts-ignore
     const pockets: PocketEntity[] = yield call(poolService.getPockets, {
+      ownerAddress: payload.ownerAddress,
       statuses: [
         PocketStatus["POOL_STATUS::ACTIVE"],
         PocketStatus["POOL_STATUS::CREATED"],
       ],
-      ...payload,
     });
 
     yield put(setActivePockets(pockets));
