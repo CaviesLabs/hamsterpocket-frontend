@@ -31,7 +31,7 @@ export const PoolItem = (props: PoolItemProps) => {
             </div>
             <div className="pl-[20px]">
               <p className="text-white text-[18px] normal-text uppercase">
-                block
+                block // targetTokenAddress
               </p>
               <p className="text-white text-[14px] normal-text">Blockasset</p>
             </div>
@@ -54,7 +54,8 @@ export const PoolItem = (props: PoolItemProps) => {
             </p>
             <div>
               <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-                10 SOL every 15 days
+                10 //batchVolume SOL //targetTokenAddress every 15 days //
+                luxon(frequency)
               </p>
               <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">
                 {"BLOCK <= $0.051706"}
@@ -110,7 +111,9 @@ export const PoolItem = (props: PoolItemProps) => {
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
               Outstanding deposit:
             </p>
-            <p className="text-white text-[16px] normal-text">1.3 SOL</p>
+            <p className="text-white text-[16px] normal-text">
+              1.3 SOL // remainingBaseTokenBalance
+            </p>
           </div>
         </div>
         <div className="md:mt-0 mt-[20px] md:pr-[20px] pr-0 w-96">
