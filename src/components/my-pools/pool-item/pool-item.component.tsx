@@ -48,26 +48,23 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
         </div>
         <div className="md:float-right md:w-[380px] md:mt-0 mt-[20px]">
-          <div className="flex items-center">
+          <div className="flex">
             <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
-              Buy amount:
+              Strategy
             </p>
-            <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-              10 SOL every 15 days
-            </p>
-          </div>
-          <div className="flex items-center mt-[18px]">
-            <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
-              Condition:
-            </p>
-            <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-              {"BLOCK <= $0.051706"}
-            </p>
+            <div>
+              <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
+                10 SOL every 15 days
+              </p>
+              <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">
+                {"BLOCK <= $0.051706"}
+              </p>
+            </div>
           </div>
         </div>
       </div>
       <div className="mt-[24px]">
-        <p className="text-white text-[16px] regular-text">Progress</p>
+        <p className="text-dark40 text-[16px] font-bold">Progress</p>
         <ProgressBar
           completed={(4000 / 8200) * 100}
           bgColor="#735CF7"
@@ -92,10 +89,10 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-[24px] md:flow-root">
-        <div className="md:float-left">
-          <p className="text-white text-[16px] regular-text">
-            Pool information
+      <div className="mt-[24px] flex justify-between flex-row">
+        <div>
+          <p className="text-dark40 text-[16px] font-bold">
+            Pocket information
           </p>
           <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
@@ -105,33 +102,25 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
           <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              SOL deposited
+              Total deposited
             </p>
             <p className="text-white text-[16px] normal-text">8.7 SOL</p>
           </div>
           <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Next buy deposit:
+              Outstanding deposit:
             </p>
             <p className="text-white text-[16px] normal-text">1.3 SOL</p>
           </div>
         </div>
-        <div className="md:float-right md:mt-0 mt-[20px] md:pr-[20px] pr-0">
-          <p className="text-white text-[16px] regular-text">
-            Pool information
-          </p>
+        <div className="md:mt-0 mt-[20px] md:pr-[20px] pr-0 w-96">
+          <p className="text-dark40 text-[16px] font-bold">End Conditions</p>
           <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              End date:
-            </p>
             <p className="text-white text-[16px] normal-text">
               16/08/2023 <span className="text-dark50 text-[14px]">or</span>
             </p>
           </div>
           <div className="flex mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Buy enough:
-            </p>
             <div className="text-white text-[16px] normal-text">
               <p>
                 300 SOL <span className="text-dark50 text-[14px]">or</span>
