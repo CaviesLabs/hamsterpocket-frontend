@@ -11,7 +11,7 @@ type PoolItemProps = {
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
 
-  const isPaused = data.status === PocketStatus["POOL_STATUS::PAUSED"];
+  const isPaused = data.status === PocketStatus.PAUSED;
 
   return (
     <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">

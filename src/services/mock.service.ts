@@ -2,8 +2,8 @@ import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { HistoryEntity, PoolType } from "@/src/entities/history.entity";
 import { PortfolioEntity } from "@/src/entities/portfolio.entity";
 import {
-  BuyConditionTypes,
-  MainProgressTypes,
+  PriceConditionType,
+  MainProgressBy,
   PocketEntity,
   PocketStatus,
 } from "../entities/pocket.entity";
@@ -226,7 +226,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     address: "a11bd...cdasp",
     ownerAddress: "a11bd...cdasp",
     name: "Save money for the future",
-    status: PocketStatus["POOL_STATUS::ACTIVE"],
+    status: PocketStatus.ACTIVE,
     baseTokenAddress: "So11111111111111111111111111111111111111112",
     targetTokenAddress: "So11111111111111111111111111111111111111112",
     startTime: new Date("2023-02-20T08:13:13.901Z"),
@@ -235,20 +235,22 @@ export const ActivePocketsMock: PocketEntity[] = [
     frequency: {},
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
-      type: BuyConditionTypes.GT,
+      type: PriceConditionType.GT,
       value: [0],
     },
-    stopConditions: {
-      endTime: new Date("2023-02-20T08:13:13.901Z"),
-      baseTokenReach: 300,
-      targetTokenReach: 1000000000,
-      batchAmountReach: 10,
-    },
+    stopConditions: [
+      {
+        endTime: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenReach: 300,
+        targetTokenReach: 1000000000,
+        batchAmountReach: 10,
+      },
+    ],
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
     currentBatchAmount: 0,
-    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    mainProgressBy: MainProgressBy.END_TIME,
     progressPercent: 40.11,
   },
   {
@@ -256,7 +258,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     address: "a11bd...cdasp",
     ownerAddress: "a11bd...cdasp",
     name: "Pool name here 1",
-    status: PocketStatus["POOL_STATUS::ACTIVE"],
+    status: PocketStatus.ACTIVE,
     baseTokenAddress: "So11111111111111111111111111111111111111112",
     targetTokenAddress: "So11111111111111111111111111111111111111112",
     startTime: new Date("2023-02-20T08:13:13.901Z"),
@@ -265,20 +267,22 @@ export const ActivePocketsMock: PocketEntity[] = [
     frequency: {},
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
-      type: BuyConditionTypes.GT,
+      type: PriceConditionType.GT,
       value: [0],
     },
-    stopConditions: {
-      endTime: new Date("2023-02-20T08:13:13.901Z"),
-      baseTokenReach: 300,
-      targetTokenReach: 1000000000,
-      batchAmountReach: 10,
-    },
+    stopConditions: [
+      {
+        endTime: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenReach: 300,
+        targetTokenReach: 1000000000,
+        batchAmountReach: 10,
+      },
+    ],
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
     currentBatchAmount: 0,
-    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    mainProgressBy: MainProgressBy.END_TIME,
     progressPercent: 40.11,
   },
   {
@@ -286,7 +290,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     address: "a11bd...cdasp",
     ownerAddress: "a11bd...cdasp",
     name: "Pool name here",
-    status: PocketStatus["POOL_STATUS::PAUSED"],
+    status: PocketStatus.PAUSED,
     baseTokenAddress: "So11111111111111111111111111111111111111112",
     targetTokenAddress: "So11111111111111111111111111111111111111112",
     startTime: new Date("2023-02-20T08:13:13.901Z"),
@@ -295,20 +299,22 @@ export const ActivePocketsMock: PocketEntity[] = [
     frequency: {},
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
-      type: BuyConditionTypes.GT,
+      type: PriceConditionType.GT,
       value: [0],
     },
-    stopConditions: {
-      endTime: null,
-      baseTokenReach: 0,
-      targetTokenReach: 0,
-      batchAmountReach: 0,
-    },
+    stopConditions: [
+      {
+        endTime: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenReach: 0,
+        targetTokenReach: 0,
+        batchAmountReach: 0,
+      },
+    ],
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
     currentBatchAmount: 0,
-    mainProgressBy: MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"],
+    mainProgressBy: MainProgressBy.END_TIME,
     progressPercent: 40.11,
   },
 ];

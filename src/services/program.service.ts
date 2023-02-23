@@ -1,7 +1,7 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { SwapProgramProvider } from "@/src/providers/program/swap-program.provider";
 import UtilsProvider from "@/src/utils/utils.provider";
-import { uuid } from "uuidv4";
+import { Keypair } from "@solana/web3.js";
 
 export class ProgramService {
   /**
@@ -53,7 +53,7 @@ export class ProgramService {
    * @static
    * @returns {string}
    */
-  public static generateUID() {
-    return uuid().slice(0, 10);
+  public static generatePocketId() {
+    return Keypair.generate().publicKey.toString().slice(0, 24);
   }
 }

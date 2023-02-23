@@ -17,10 +17,7 @@ export function* getActivePockets({
   try {
     const pockets: PocketEntity[] = yield call(poolService.getPockets, {
       ownerAddress: payload.ownerAddress,
-      statuses: [
-        PocketStatus["POOL_STATUS::ACTIVE"],
-        PocketStatus["POOL_STATUS::CREATED"],
-      ],
+      statuses: [PocketStatus.ACTIVE, PocketStatus.CREATED],
     });
 
     yield put(setActivePockets(pockets));

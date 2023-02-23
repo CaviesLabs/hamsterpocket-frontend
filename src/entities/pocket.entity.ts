@@ -1,56 +1,94 @@
+import { Type } from "class-transformer";
+import { DurationObjectUnits } from "luxon";
+import "reflect-metadata";
+
 export enum PocketStatus {
-  "POOL_STATUS::CREATED" = "POOL_STATUS::CREATED",
-  "POOL_STATUS::ACTIVE" = "POOL_STATUS::ACTIVE",
-  "POOL_STATUS::PAUSED" = "POOL_STATUS::PAUSED",
-  "POOL_STATUS::CLOSED" = "POOL_STATUS::CLOSED",
-  "POOL_STATUS::ENDED" = "POOL_STATUS::ENDED",
+  CREATED = "POOL_STATUS::CREATED",
+  ACTIVE = "POOL_STATUS::ACTIVE",
+  PAUSED = "POOL_STATUS::PAUSED",
+  CLOSED = "POOL_STATUS::CLOSED",
+  ENDED = "POOL_STATUS::ENDED",
 }
 
-export enum BuyConditionTypes {
-  "GT" = "GT",
-  "GTE" = "GTE",
-  "LT" = "LT",
-  "LTE" = "LTE",
-  "EQ" = "EQ",
-  "NEQ" = "NEQ",
-  "BW" = "BW",
-  "NBW" = "NBW",
+export enum PriceConditionType {
+  GT = "GT",
+  GTE = "GTE",
+  LT = "LT",
+  LTE = "LTE",
+  /** Equal */
+  EQ = "EQ",
+  /** Not Equal */
+  NEQ = "NEQ",
+  /** Between */
+  BW = "BW",
+  /** Not Between */
+  NBW = "NBW",
 }
 
-export enum MainProgressTypes {
-  "MAIN_PROGRESS_BY::END_TIME" = "MAIN_PROGRESS_BY::END_TIME",
-  "MAIN_PROGRESS_BY::BASE_TOKEN" = "MAIN_PROGRESS_BY::BASE_TOKEN",
-  "MAIN_PROGRESS_BY::TARGET_TOKEN" = "MAIN_PROGRESS_BY::TARGET_TOKEN",
-  "MAIN_PROGRESS_BY::BATCH_AMOUNT" = "MAIN_PROGRESS_BY::BATCH_AMOUNT",
+export enum MainProgressBy {
+  END_TIME = "MAIN_PROGRESS_BY::END_TIME",
+  BASE_TOKEN = "MAIN_PROGRESS_BY::BASE_TOKEN",
+  TARGET_TOKEN = "MAIN_PROGRESS_BY::TARGET_TOKEN",
+  BATCH_AMOUNT = "MAIN_PROGRESS_BY::BATCH_AMOUNT",
 }
 
-export interface PocketEntity {
+export class BuyCondition {
+  tokenAddress: string;
+
+  type: PriceConditionType;
+
+  value: number[];
+}
+
+export class StopConditions {
+  endTime?: Date;
+
+  baseTokenReach?: number;
+
+  targetTokenReach?: number;
+
+  batchAmountReach?: number;
+}
+
+export class PocketEntity {
   id: string;
+
   address: string;
+
   ownerAddress: string;
+
   name: string;
+
   status: PocketStatus;
+
   baseTokenAddress: string;
+
   targetTokenAddress: string;
+
   startTime: Date;
+
   depositedAmount: number;
+
   batchVolume: number;
-  frequency: any;
-  buyCondition: {
-    tokenAddress: string;
-    type: BuyConditionTypes;
-    value: number[];
-  };
-  stopConditions: {
-    endTime: Date;
-    baseTokenReach: number;
-    targetTokenReach: number;
-    batchAmountReach: number;
-  };
+
+  frequency: DurationObjectUnits;
+
+  @Type(() => BuyCondition)
+  buyCondition: BuyCondition | undefined;
+
+  @Type(() => StopConditions)
+  stopConditions: StopConditions[] | [];
+
+  /** Progression fields */
   currentBaseToken: number;
+
   remainingBaseTokenBalance: number;
+
   currentTargetToken: number;
+
   currentBatchAmount: number;
-  mainProgressBy: MainProgressTypes;
+
+  mainProgressBy: MainProgressBy | undefined;
+
   progressPercent: number;
 }
