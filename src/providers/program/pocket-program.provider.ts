@@ -25,7 +25,7 @@ export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
 /**
  * @dev Swap Program Provider acts as an interface to interact with hamsterswap program on solana.
  */
-export class SwapProgramProvider {
+export class PocketProgramProvider {
   private readonly idl: SwapIdl = IDL;
   private readonly rpcEndpoint: string;
   private readonly programId: string;

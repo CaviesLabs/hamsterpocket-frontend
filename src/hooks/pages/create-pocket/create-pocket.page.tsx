@@ -15,24 +15,17 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState(0);
 
-  /**
-   * @dev The function to modify stop conditions.
-   */
+  /** @dev The function to modify stop conditions. */
   const handleModifyStopConditions = useCallback(
     (excuted = false, key: string, value: any) => {
       setStopConditions((prev) => {
-        /**
-         * @dev Reset conditions arrays by removing asset.
-         */
+        /** @dev Reset conditions arrays by removing asset. */
         const newConditions = prev.filter((item) => {
           return !Object.keys(item).includes(key);
         });
 
         /** @dev Add condition. */
-        if (excuted) {
-          newConditions.push({ [key]: value });
-        }
-
+        excuted && newConditions.push({ [key]: value });
         return newConditions;
       });
     },

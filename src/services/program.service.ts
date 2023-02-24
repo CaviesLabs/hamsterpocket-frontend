@@ -1,5 +1,5 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { SwapProgramProvider } from "@/src/providers/program/pocket-program.provider";
+import { PocketProgramProvider } from "@/src/providers/program";
 import UtilsProvider from "@/src/utils/utils.provider";
 import { Keypair } from "@solana/web3.js";
 
@@ -8,14 +8,14 @@ export class ProgramService {
    * @dev Program provider injected.
    * @private
    */
-  private readonly swapProgramProvider: SwapProgramProvider;
+  private readonly pocketProgramProvider: PocketProgramProvider;
   private readonly utilsProvider: UtilsProvider;
 
-  constructor(swapProgramProvider: SwapProgramProvider) {
+  constructor(swapProgramProvider: PocketProgramProvider) {
     /**
      * @dev Import providers.
      */
-    this.swapProgramProvider = swapProgramProvider;
+    this.pocketProgramProvider = swapProgramProvider;
     this.utilsProvider = new UtilsProvider();
   }
 

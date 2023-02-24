@@ -15,7 +15,7 @@ import {
 import web3 from "@solana/web3.js";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
-// import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
+import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { ProgramService, authService } from "@/src/services";
 import { getWalletName } from "./utils";
 // import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
@@ -133,12 +133,10 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     if (wallet?.publicKey?.toString()) {
       try {
-        // /**
-        //  * @dev Initlize swap program service with initlized programProvider.
-        //  */
-        // const program = new ProgramService(
-        //   new SwapProgramProviderV0(solanaWallet)
-        // );
+        /** @dev Initlize swap program service with initlized programProvider. */
+        const program = new ProgramService(
+          new PocketProgramProvider(solanaWallet)
+        );
 
         // /**
         //  * @dev Init program into state for usage
