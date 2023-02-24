@@ -12,13 +12,18 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const [whitelist, setWhitelist] = useState<WhitelistObj>(null);
 
   useEffect(() => {
-    whitelistService.getWhitelist().then((result) => {
-      const res: WhitelistObj = {};
-      result.forEach((_) => {
-        res[_.address] = _;
-      });
-      setWhitelist(res);
-    });
+    (async () => {
+      try {
+        const result = await whitelistService.getWhitelist();
+        const res: WhitelistObj = {};
+        result.forEach((_) => {
+          res[_.address] = _;
+        });
+        setWhitelist(res);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   return (
