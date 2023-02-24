@@ -5,11 +5,11 @@ import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 /** @dev Initiize context. */
 export const WhitelistContext = createContext<any>(null);
 
-type WhitelistObj = {
+export type WhitelistObj = {
   [key: string]: WhitelistEntity;
 };
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
-  const [whitelist, setWhitelist] = useState<any>(null);
+  const [whitelist, setWhitelist] = useState<WhitelistObj>(null);
 
   useEffect(() => {
     whitelistService.getWhitelist().then((result) => {

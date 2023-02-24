@@ -22,7 +22,7 @@ const Layout: FC = () => {
         ownerAddress: wallet,
       })
     );
-  }, []);
+  }, [wallet]);
   const {} = useMain();
 
   return (

@@ -73,6 +73,7 @@ export const SIGN_MESSAGE =
   "Your authentication status will reset after 24 hours.";
 
 export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm (UTC)";
+export const DATE_FORMAT = "YYYY-MM-DD";
 
 export const WSOL_ADDRESS = "So11111111111111111111111111111111111111112";
 export const BONK_ADDRESS = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
