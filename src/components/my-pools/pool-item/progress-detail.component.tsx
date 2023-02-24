@@ -1,6 +1,6 @@
-import { MainProgressTypes, PocketEntity } from "@/src/entities/pocket.entity";
+import { MainProgressBy, PocketEntity } from "@/src/entities/pocket.entity";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
-const { DateTime } = require("luxon");
+// import { DateTime } from "luxon";
 
 type PoolItemEndConditionProps = {
   targetToken: WhitelistEntity;
@@ -9,53 +9,45 @@ type PoolItemEndConditionProps = {
 
 export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
   const { data, targetToken } = props;
-  if (
-    data.mainProgressBy === MainProgressTypes["MAIN_PROGRESS_BY::BASE_TOKEN"]
-  ) {
+  if (data.mainProgressBy === MainProgressBy.BASE_TOKEN) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{data.depositedAmount}</span>/
-          {data.stopConditions.baseTokenReach} SOL
+          {data.stopConditions[0]?.baseTokenReach} SOL
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.currentTargetToken} {targetToken.symbol}
+          ~ {data.currentTargetToken} {targetToken?.symbol}
         </p>
       </>
     );
-  } else if (
-    data.mainProgressBy === MainProgressTypes["MAIN_PROGRESS_BY::TARGET_TOKEN"]
-  ) {
+  } else if (data.mainProgressBy === MainProgressBy.TARGET_TOKEN) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{data.currentTargetToken}</span>
-          /{data.stopConditions.targetTokenReach} {targetToken.symbol}
+          /{data.stopConditions[0]?.targetTokenReach} {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {data.depositedAmount} SOL
         </p>
       </>
     );
-  } else if (
-    data.mainProgressBy === MainProgressTypes["MAIN_PROGRESS_BY::END_TIME"]
-  ) {
+  } else if (data.mainProgressBy === MainProgressBy.END_TIME) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
-          {DateTime(data.startTime).toDuration()}
+          {/* {new DateTime(data.startTime).toDuration()} */}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.currentTargetToken} {targetToken.symbol} (
+          ~ {data.currentTargetToken} {targetToken?.symbol} (
           {data.currentBaseToken} SOL)
         </p>
       </>
     );
-  } else if (
-    data.mainProgressBy === MainProgressTypes["MAIN_PROGRESS_BY::BATCH_AMOUNT"]
-  ) {
+  } else if (data.mainProgressBy === MainProgressBy.BATCH_AMOUNT) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">

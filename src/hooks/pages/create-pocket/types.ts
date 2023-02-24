@@ -107,11 +107,11 @@ export interface CreatePocketContextState {
    */
   setDepositedAmount(v: number): void;
 
-  // /**
-  //  * @dev Arrays of conditions that the pool will pause if the market siutuation match one in conditions.
-  //  * @type {StopConditions[]}
-  //  */
-  // stopConditions: StopConditions[];
+  /**
+   * @dev The function to modify arrays of conditions that the pool will pause if the market siutuation match one in conditions.
+   * @param {StopConditions[]}
+   */
+  handleModifyStopConditions(excuted: boolean, key: string, value: any): void;
 }
 
 /** @dev Create context */

@@ -64,7 +64,7 @@ export const PoolItem = (props: PoolItemProps) => {
             </p>
             <div>
               <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-                {data.batchVolume} {targetToken.symbol} every 15 days
+                {data.batchVolume} {targetToken?.symbol} every 15 days
                 {/*{luxon(data.frequency)}*/}
               </p>
               <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">

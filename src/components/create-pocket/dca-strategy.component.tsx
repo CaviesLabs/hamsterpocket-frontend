@@ -48,7 +48,11 @@ export const DCAStrategy: FC = () => {
             toggle={() => setBuyConditionDisplayed(!buyConditionDisplayed)}
           />
           <BatchOption />
-          <FrequencyOption />
+          <div className="grid md:grid-cols-5 gap-3">
+            <div className="col-span-1">
+              <FrequencyOption />
+            </div>
+          </div>
         </div>
       </section>
       <DepositAmount />

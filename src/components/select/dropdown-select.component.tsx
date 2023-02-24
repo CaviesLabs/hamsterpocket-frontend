@@ -58,7 +58,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
         <div className="h-52 overflow-scroll">{menu}</div>
       )}
     >
-      <div className="flex items-center w-40 rounded-[16px]">
+      <div className="flex items-center w-full rounded-[16px]">
         <Input
           disabled={true}
           bordered={false}

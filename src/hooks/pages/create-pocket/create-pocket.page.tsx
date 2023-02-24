@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
@@ -12,8 +12,35 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [frequency, setFrequency] = useState<DurationObjectUnits>(null);
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
-  const [stopConditions] = useState<StopConditions[]>([]);
+  const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState(0);
+
+  /**
+   * @dev The function to modify stop conditions.
+   */
+  const handleModifyStopConditions = useCallback(
+    (excuted = false, key: string, value: any) => {
+      setStopConditions((prev) => {
+        /**
+         * @dev Reset conditions arrays by removing asset.
+         */
+        const newConditions = prev.filter((item) => {
+          return !Object.keys(item).includes(key);
+        });
+
+        /** @dev Add condition. */
+        if (excuted) {
+          newConditions.push({ [key]: value });
+        }
+
+        console.log("set", excuted, key, value, prev);
+        console.log({ newConditions });
+
+        return newConditions;
+      });
+    },
+    [stopConditions]
+  );
 
   return (
     <CreatePocketContext.Provider
@@ -35,6 +62,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         setFrequency,
         setBuyCondition,
         setDepositedAmount,
+        handleModifyStopConditions,
       }}
     >
       {props.children}
