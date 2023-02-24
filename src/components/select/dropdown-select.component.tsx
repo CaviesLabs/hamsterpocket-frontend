@@ -7,7 +7,7 @@ import classnames from "classnames";
 export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
   return (
     <Dropdown
-      overlayStyle={{ height: "40px" }}
+      overlayStyle={{ height: "63px" }}
       className={classnames("!bg-dark90", props.className)}
       menu={{
         items: props.options.map((item) => {
@@ -38,11 +38,19 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
         <Input
           disabled={true}
           bordered={false}
-          className="text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[56px]"
-          value={useMemo(
-            () => (props.format ? props.format(props.value) : props.value),
-            [props.value]
-          )}
+          className="text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full"
+          value={useMemo(() => {
+            if (props.format) {
+              return props.format(props.value);
+            } else if (typeof props.options[0] === "string") {
+              return props.value;
+            }
+
+            const cur = (props.options as any).find(
+              (item: any) => item.value === props.value
+            );
+            return cur?.label || cur?.value;
+          }, [props.value])}
           onChange={(e) => props.handleSelectValue(e.target.value)}
         />
         <ChevronDownIcon className="w-5 text-gray-500 mr-3" />

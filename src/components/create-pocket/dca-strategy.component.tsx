@@ -1,12 +1,22 @@
-import { FC } from "react";
-import { Button } from "@hamsterbox/ui-kit";
+import { FC, useState } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
-import { PlusIcon } from "@/src/components/icons";
 import { DatetimePicker } from "@/src/components/datetime-picker";
-import { DropdownSelect } from "@/src/components/select";
-import { TIME_CONDITIONS } from "@/src/utils";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { BuyCondition } from "./buy-condition.component";
+import { BatchOption } from "./each-batch.component";
+import { FrequencyOption } from "./frequency.component copy";
 
 export const DCAStrategy: FC = () => {
+  /**
+   * @dev Injected context.
+   */
+  const { setStartAt } = useCreatePocketPage();
+
+  /**
+   * @dev Buy condition display.
+   */
+  const [buyConditionDisplayed, setBuyConditionDisplayed] = useState(false);
+
   return (
     <>
       <section>
@@ -20,7 +30,7 @@ export const DCAStrategy: FC = () => {
         </div>
         <div className="mt-[24px] md:grid md:grid-cols-5 gap-3">
           <div className="md:col-span-2">
-            <DatetimePicker onChange={(e) => console.log(e)} />
+            <DatetimePicker onChange={(v) => setStartAt(v)} />
           </div>
         </div>
       </section>
@@ -33,47 +43,12 @@ export const DCAStrategy: FC = () => {
             Set the conditions that must be met before each batch of tokens
             purchase is executed
           </p>
-          <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
-            <div className="md:col-span-2">
-              <p className="text-dark10 text-[14px] normal-text">
-                Amount each batch
-                <span className="text-red300 relative top-[-2px] right-[-2px]">
-                  *
-                </span>
-              </p>
-              <CurrencyInput />
-            </div>
-          </div>
-          <div className="mt-[24px] ">
-            <p className="text-dark10 text-[14px] normal-text">
-              Frequency
-              <span className="text-red300 relative top-[-2px] right-[-2px]">
-                *
-              </span>
-            </p>
-            <DropdownSelect
-              className="mt-[10px] !min-w-[250px]"
-              handleSelectValue={(val) => console.log(val)}
-              value={"Daily"}
-              options={TIME_CONDITIONS}
-            />
-          </div>
-          <div className="mt-[24px] ">
-            <p className="text-dark10 text-[14px] normal-text">
-              Buy at market price if
-            </p>
-            <Button
-              size="small"
-              text="Add condition"
-              className="!rounded-[100px] after:!rounded-[100px] !px-4 mt-[10px]"
-              theme={{
-                backgroundColor: "#7A6DFF",
-                color: "#FFFFFF",
-              }}
-              icon={<PlusIcon />}
-              // onClick={() => setIsAddSol(true)}
-            />
-          </div>
+          <BuyCondition
+            buyConditionDisplayed={buyConditionDisplayed}
+            toggle={() => setBuyConditionDisplayed(!buyConditionDisplayed)}
+          />
+          <BatchOption />
+          <FrequencyOption />
         </div>
       </section>
       <section>

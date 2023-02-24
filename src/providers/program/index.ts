@@ -1,5 +1,5 @@
-export * from "./swap-program.provider";
-import { SwapProgramProvider } from "./swap-program.provider";
+export * from "./pocket-program.provider";
+import { SwapProgramProvider } from "./pocket-program.provider";
 
 /** @dev Declare global @var {SwapProgramProvider}. */
 let swapProgramProvider: SwapProgramProvider;

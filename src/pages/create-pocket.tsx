@@ -2,7 +2,7 @@ import { FC } from "react";
 import type { NextPage } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
-import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
+import { CreatePocketProvider } from "@/src/hooks/pages/create-pocket";
 import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { BreadCrumb } from "@/src/components/bread-crumb";
@@ -131,9 +131,9 @@ const Layout: FC = () => {
 
 const CreatePoolPage: NextPage = () => {
   return (
-    <DashboardPageProvider>
+    <CreatePocketProvider>
       <Layout />
-    </DashboardPageProvider>
+    </CreatePocketProvider>
   );
 };
 

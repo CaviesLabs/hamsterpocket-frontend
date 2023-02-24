@@ -113,8 +113,6 @@ const Header: FC = () => {
     };
   });
 
-  console.log(wallet);
-
   return (
     <StyledHeader
       className={classnames("app-header fixed z-50 w-full", {

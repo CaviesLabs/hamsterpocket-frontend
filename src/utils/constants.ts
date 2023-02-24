@@ -1,4 +1,5 @@
 import type { OptionProps } from "@/src/components/select";
+import { PriceConditionType } from "@/src/entities/pocket.entity";
 
 /**
  * @dev Define value data to sort NFTs.
@@ -50,6 +51,44 @@ export const TIME_CONDITIONS: OptionProps[] = [
   },
   {
     value: "Custom",
+  },
+];
+
+/**
+ * @dev Define time option to select for buy condition or stop pool condition.
+ */
+export const PRICE_CONDITIONS: OptionProps[] = [
+  {
+    value: PriceConditionType.GT,
+    label: "Greater than",
+  },
+  {
+    value: PriceConditionType.GTE,
+    label: "Greater than or equal to",
+  },
+  {
+    value: PriceConditionType.LT,
+    label: "Less than",
+  },
+  {
+    value: PriceConditionType.LTE,
+    label: "Less than or equal to",
+  },
+  {
+    value: PriceConditionType.EQ,
+    label: "Is equal to",
+  },
+  {
+    value: PriceConditionType.NEQ,
+    label: "Is not equal to",
+  },
+  {
+    value: PriceConditionType.BW,
+    label: "Is between",
+  },
+  {
+    value: PriceConditionType.NBW,
+    label: "Is not between",
   },
 ];
 

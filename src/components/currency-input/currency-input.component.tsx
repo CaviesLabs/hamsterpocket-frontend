@@ -1,9 +1,10 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import { Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
 import { TokenItem } from "./token-select-item.component";
-import { WSOL_ADDRESS } from "@/src/utils/constants";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
+import classNames from "classnames";
+import { WSOL_ADDRESS } from "@/src/utils";
 
 const allowCurrencies = [
   {
@@ -13,6 +14,7 @@ const allowCurrencies = [
     name: "Solana",
     type: "token",
     decimals: 9,
+    symbol: "SOL",
   },
   {
     id: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
@@ -20,6 +22,7 @@ const allowCurrencies = [
     name: "Bonk",
     type: "token",
     decimals: 5,
+    symbol: "BONK",
   },
   {
     id: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
@@ -28,10 +31,34 @@ const allowCurrencies = [
     name: "USD Coin",
     type: "token",
     decimals: 6,
+    symbol: "USDC",
   },
 ];
 
-export const CurrencyInput: FC = () => {
+export type CurrencyInputProps = {
+  onAddressSelect?: (address: string) => void;
+  onAmountChange?: (amount: number) => void;
+  placeholder?: string;
+  addressSelected?: string;
+
+  /**
+   * @dev Overwrite style.
+   */
+  className?: string;
+  dropdownBadgeClassname?: string;
+
+  /**
+   * @dev This props equal True if user want show currency badge only.
+   */
+  currencyBadgeOnly?: boolean | false;
+
+  /**
+   * @dev Restrict disable dropdown to select token.
+   */
+  disableDropdown?: boolean;
+};
+
+export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   /**
    * @dev The condition to display filter for user to select which token want to excute.
    */
@@ -40,7 +67,9 @@ export const CurrencyInput: FC = () => {
   /**
    * @dev The token address which user select.
    */
-  const [addressSelected, setAddressSelected] = useState(WSOL_ADDRESS);
+  const [addressSelected, setAddressSelected] = useState(
+    !props.currencyBadgeOnly ? WSOL_ADDRESS : ""
+  );
 
   /**
    * @dev reference to the button
@@ -52,32 +81,58 @@ export const CurrencyInput: FC = () => {
     setDropdown(false);
   });
 
+  useEffect(
+    () => props.addressSelected && setAddressSelected(props.addressSelected),
+    [props.addressSelected]
+  );
+
   return (
     <div className="relative">
       <Input
         data-dropdown-toggle="dropdown"
         size="large"
-        className="rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input"
-        placeholder="Enter SOL amount"
+        className={classNames(
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white",
+          props.className
+        )}
+        placeholder={
+          props.currencyBadgeOnly
+            ? addressSelected
+              ? ""
+              : props.placeholder
+            : props.placeholder
+        }
         prefix={
           <img
-            className="w-10 h-10"
-            src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png"
+            className={classNames("w-10 h-10", {
+              invisible: !addressSelected,
+            })}
+            src={
+              allowCurrencies.find((item) => item.id === addressSelected)?.image
+            }
           />
         }
         type="number"
-        value={0}
-        onChange={(val) => console.log(val)}
+        onChange={(val) => {
+          props.onAmountChange &&
+            props.onAmountChange(parseFloat(val.target.value));
+        }}
+        disabled={props.currencyBadgeOnly}
       />
       <p
-        className="absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white"
+        className={classNames(
+          "absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white",
+          props.dropdownBadgeClassname
+        )}
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        SOL
-        <DropdownIcon className="float-right ml-[5px]" />
+        {allowCurrencies.find((item) => item.id === addressSelected)?.symbol}
+        {!props.disableDropdown && (
+          <DropdownIcon className="float-right ml-[5px]" />
+        )}
       </p>
-      {dropDown && (
+      {!props?.disableDropdown && dropDown && (
         <div
           ref={ref}
           className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80"
@@ -94,6 +149,7 @@ export const CurrencyInput: FC = () => {
                 onClick={(address) => {
                   setDropdown(false);
                   setAddressSelected(address);
+                  props.onAddressSelect && props.onAddressSelect(address);
                 }}
                 check={item.id === addressSelected}
               />

@@ -176,6 +176,9 @@ input[type=number] {
   background-color: #20242D !important;
   color: white;
 }
+.dark-input input::placeholder  {
+  color: white;
+}
 
 .ant-picker-panel-container {
   background: #20242D !important;

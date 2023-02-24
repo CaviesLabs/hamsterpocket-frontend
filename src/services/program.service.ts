@@ -1,5 +1,5 @@
 import { networkProvider } from "@/src/providers/network.provider";
-import { SwapProgramProvider } from "@/src/providers/program/swap-program.provider";
+import { SwapProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import UtilsProvider from "@/src/utils/utils.provider";
 import { Keypair } from "@solana/web3.js";
 
