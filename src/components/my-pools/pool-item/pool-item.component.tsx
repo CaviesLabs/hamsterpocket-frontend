@@ -4,12 +4,21 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
+import { useContext } from "react";
+import { WhitelistContext } from "@/src/hooks/useWhitelist";
+import { DATE_FORMAT, utilsProvider } from "@/src/utils";
+import luxon from "luxon";
+import dayjs from "dayjs";
+import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
+import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
 
 type PoolItemProps = {
   data: PocketEntity;
 };
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
+  const { whitelist } = useContext(WhitelistContext);
+  const targetToken = whitelist?.[data.targetTokenAddress];
 
   const isPaused = data.status === PocketStatus.PAUSED;
 
@@ -31,15 +40,17 @@ export const PoolItem = (props: PoolItemProps) => {
             </div>
             <div className="pl-[20px]">
               <p className="text-white text-[18px] normal-text uppercase">
-                block
+                {targetToken?.symbol}
               </p>
-              <p className="text-white text-[14px] normal-text">Blockasset</p>
+              <p className="text-white text-[14px] normal-text">
+                {targetToken?.name}
+              </p>
             </div>
           </div>
           <div className="flex items-center float-right relative top-[5px]">
             <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px]">
               <p className="text-dark50 text-[14px] normal-text">
-                a11bd...cdasp
+                {utilsProvider.makeShort(data.targetTokenAddress)}
               </p>
             </div>
             <a href="" className="ml-[10px]">
@@ -47,105 +58,75 @@ export const PoolItem = (props: PoolItemProps) => {
             </a>
           </div>
         </div>
-        <div className="md:float-right md:w-[380px] md:mt-0 mt-[20px]">
-          <div className="flex items-center">
+        <div className="md:float-right md:w-96 md:mt-0 mt-[20px]">
+          <div className="flex">
             <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
-              Buy amount:
+              Strategy
             </p>
-            <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-              10 SOL every 15 days
-            </p>
-          </div>
-          <div className="flex items-center mt-[18px]">
-            <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
-              Condition:
-            </p>
-            <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-              {"BLOCK <= $0.051706"}
-            </p>
+            <div>
+              <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
+                {data.batchVolume} {targetToken.symbol} every 15 days
+                {/*{luxon(data.frequency)}*/}
+              </p>
+              <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">
+                {"BLOCK <= $0.051706"}
+              </p>
+            </div>
           </div>
         </div>
       </div>
       <div className="mt-[24px]">
-        <p className="text-white text-[16px] regular-text">Progress</p>
+        <p className="text-dark40 text-[16px] font-bold">Progress</p>
         <ProgressBar
-          completed={(4000 / 8200) * 100}
+          completed={data.progressPercent}
           bgColor="#735CF7"
           baseBgColor="#94A3B8"
-          customLabel={`${400}/8200`}
+          customLabel={`${data.progressPercent * 100}%`}
           labelAlignment="center"
           labelClassName="progress-label app-font"
           className="mt-[10px]"
           height="10px"
         />
         <div className="flow-root mt-[10px]">
-          <p className="float-left text-green text-[14px] regular-text">40%</p>
+          <p className="float-left text-green text-[14px] regular-text">
+            {data.progressPercent}%
+          </p>
           <div className="float-right">
-            <p className="text-end text-[14px] text-white regular-text">
-              Bought:
-              <span className="text-green ml-[5px]">120</span>
-              /300SOL
-            </p>
-            <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-              ~ 593,492,491.38 BLOCK
-            </p>
+            <ProgressDetailComponent targetToken={targetToken} data={data} />
           </div>
         </div>
       </div>
-      <div className="mt-[24px] md:flow-root">
-        <div className="md:float-left">
-          <p className="text-white text-[16px] regular-text">
-            Pool information
+      <div className="mt-[24px] flex justify-between flex-row">
+        <div>
+          <p className="text-dark40 text-[16px] font-bold">
+            Pocket information
           </p>
           <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
               Start date:
             </p>
-            <p className="text-white text-[16px] normal-text">16/02/2023</p>
-          </div>
-          <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              SOL deposited
+            <p className="text-white text-[16px] normal-text">
+              {dayjs(data.startTime).format(DATE_FORMAT)}
             </p>
-            <p className="text-white text-[16px] normal-text">8.7 SOL</p>
           </div>
           <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Next buy deposit:
-            </p>
-            <p className="text-white text-[16px] normal-text">1.3 SOL</p>
-          </div>
-        </div>
-        <div className="md:float-right md:mt-0 mt-[20px] md:pr-[20px] pr-0">
-          <p className="text-white text-[16px] regular-text">
-            Pool information
-          </p>
-          <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              End date:
+              Total deposited
             </p>
             <p className="text-white text-[16px] normal-text">
-              16/08/2023 <span className="text-dark50 text-[14px]">or</span>
+              {data.currentBaseToken} SOL
             </p>
           </div>
-          <div className="flex mt-[5px]">
+          <div className="flex items-center mt-[5px]">
             <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Buy enough:
+              Outstanding deposit:
             </p>
-            <div className="text-white text-[16px] normal-text">
-              <p>
-                300 SOL <span className="text-dark50 text-[14px]">or</span>
-              </p>
-              <p>
-                1,000,000,000 BLOCK{" "}
-                <span className="text-dark50 text-[14px]">or</span>
-              </p>
-              <p>
-                10 PAX <span className="text-dark50 text-[14px]">or</span>
-              </p>
-            </div>
+            <p className="text-white text-[16px] normal-text">
+              {data.remainingBaseTokenBalance} SOL
+            </p>
           </div>
         </div>
+        <PoolItemEndConditionComponent targetToken={targetToken} data={data} />
       </div>
       <PocketNote status={data.status} />
       <div className="mt-[24px] md:flow-root">

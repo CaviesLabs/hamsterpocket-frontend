@@ -147,76 +147,64 @@ export const HistoriesMock: HistoryEntity[] = [
 
 export const PortfoliosMock: PortfolioEntity[] = [
   {
-    id: "1",
-    token: {
-      name: "RAY",
-      fullname: "Raydium",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "RAY",
+    tokenName: "Raydium",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
+    total: 3293482.0,
+    value: 0.0000012,
   },
   {
-    id: "2",
-    token: {
-      name: "ETH",
-      fullname: "Etherium",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency/256/Ethereum-icon.png",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "ETH",
+    tokenName: "Etherium",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency/256/Ethereum-icon.png",
+    total: 3293482.0,
+    value: 0.0000012,
   },
   {
-    id: "3",
-    token: {
-      name: "ENS",
-      fullname: "Ethereum Name Service",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://img.freepik.com/premium-vector/ens-ethereum-name-service-token-symbol-cryptocurrency-logo-circle-coin-icon-isolated-white-background_337410-1834.jpg",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "ENS",
+    tokenName: "Ethereum Name Service",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://img.freepik.com/premium-vector/ens-ethereum-name-service-token-symbol-cryptocurrency-logo-circle-coin-icon-isolated-white-background_337410-1834.jpg",
+    total: 3293482.0,
+    value: 0.0000012,
   },
   {
-    id: "4",
-    token: {
-      name: "BNB",
-      fullname: "Binance",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Binance-Coin-BNB-icon.png",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "BNB",
+    tokenName: "Binance",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Binance-Coin-BNB-icon.png",
+    total: 3293482.0,
+    value: 0.0000012,
   },
   {
-    id: "5",
-    token: {
-      name: "RAY",
-      fullname: "Raydium",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "RAY",
+    tokenName: "Raydium",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
+    total: 3293482.0,
+    value: 0.0000012,
   },
   {
-    id: "1",
-    token: {
-      name: "RAY",
-      fullname: "Raydium",
-      address: "NFTUk...Mb7Nk",
-      image:
-        "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
-    },
-    tokenAmount: 3293482.0,
-    tokenPrice: 0.0000012,
+    tokenSymbol: "RAY",
+    tokenName: "Raydium",
+    ownerAddress: "NFTUk...Mb7Nk",
+    tokenAddress: "NFTUk...Mb7Nk",
+    image:
+      "https://thegivingblock.com/wp-content/uploads/2022/04/Raydium-RAY-coin.png",
+    total: 3293482.0,
+    value: 0.0000012,
   },
 ];
 

@@ -34,6 +34,7 @@ import {
  */
 import "flowbite";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { WhitelistProvider } from "@/src/hooks/useWhitelist";
 
 const store = makeStore();
 
@@ -104,7 +105,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               >
                 <WalletProvider>
                   <MainProvider>
-                    <AppComponent {...{ Component, pageProps }} />
+                    <WhitelistProvider>
+                      <AppComponent {...{ Component, pageProps }} />
+                    </WhitelistProvider>
                   </MainProvider>
                 </WalletProvider>
               </WalletKitProvider>

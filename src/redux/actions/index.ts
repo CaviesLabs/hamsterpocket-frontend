@@ -15,6 +15,8 @@ export const SET_HISTORIES = "SET_HISTORIES";
  */
 export const GET_PORTFOLIOS = "GET_PORTFOLIOS";
 export const SET_PORTFOLIOS = "SET_PORTFOLIOS";
+export const GET_PORTFOLIO_STATISTIC = "GET_PORTFOLIO_STATISTIC";
+export const SET_PORTFOLIO_STATISTIC = "SET_PORTFOLIO_STATISTIC";
 
 /**
  * Actions for modify user proposals state.

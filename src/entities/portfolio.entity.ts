@@ -1,11 +1,21 @@
+type TopTokenEntity = {
+  symbol: string;
+  percent: number;
+};
+
+export type PortfolioStatisticEntity = {
+  totalPoolsBalance: number;
+  totalPoolsBalanceValue: number;
+  topTokens: TopTokenEntity[];
+};
+
 export type PortfolioEntity = {
-  id: string;
-  token: {
-    name: string;
-    fullname: string;
-    address: string;
-    image: string;
-  };
-  tokenAmount: number;
-  tokenPrice: number;
+  tokenName: string;
+  tokenSymbol: string;
+  ownerAddress: string;
+  tokenAddress: string;
+  value: number;
+  total: number;
+
+  image?: string; // for developing
 };

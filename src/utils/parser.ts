@@ -17,3 +17,16 @@ export const completedOrderPercent = (completedOrders = 0, orders = 0) => {
 export const solAmount = (amount: string | number, decimal: number) => {
   return parseInt(amount.toString()) / Math.pow(10, decimal);
 };
+
+export const stringToColour = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  let colour = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += ("00" + value.toString(16)).substr(-2);
+  }
+  return colour;
+};

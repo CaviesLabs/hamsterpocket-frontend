@@ -122,7 +122,9 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     /**
      * @dev Force to connect first.
      */
-    solanaWallet?.wallet?.adapter?.connect();
+    solanaWallet?.wallet?.adapter?.connect().catch((e) => {
+      console.log("connect wallet Error:", e);
+    });
   }, [wallet, solanaWallet]);
 
   /**
