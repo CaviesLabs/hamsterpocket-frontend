@@ -1,10 +1,30 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Dropdown, Input } from "antd";
 import { DropdownSelectProps } from "./types";
 import { ChevronDownIcon } from "@/src/components/icons";
 import classnames from "classnames";
 
 export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
+  /**
+   * @dev Local value.
+   */
+  const [currentValue, setCurrentValue] = useState("");
+
+  /**
+   * @dev Update local value with global value.
+   */
+  useEffect(() => setCurrentValue(props.value), [props.value]);
+
+  /**
+   * @dev Initilize default local value.
+   */
+  useEffect(() => {
+    if (props.autoValue) {
+      const slot: any = props.options[0];
+      setCurrentValue(slot?.value || slot);
+    }
+  }, []);
+
   return (
     <Dropdown
       overlayStyle={{ height: "63px" }}
@@ -20,7 +40,11 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
             label: (
               <div
                 className="w-full px-4 py-2 text-sm text-gray-700 text-center relative left-[-10px] regular-text !text-dark10"
-                onClick={() => props.handleSelectValue(data?.value || data)}
+                onClick={() => {
+                  const value = data?.value || data;
+                  props.handleSelectValue(value);
+                  setCurrentValue(value);
+                }}
               >
                 {data?.label || data?.value || data}
               </div>
@@ -40,18 +64,24 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
           bordered={false}
           className="text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full"
           value={useMemo(() => {
-            if (props.format) {
-              return props.format(props.value);
-            } else if (typeof props.options[0] === "string") {
-              return props.value;
+            if (!props.autoValue) {
+              if (props.format) {
+                return props.format(props.value);
+              } else if (typeof props.options[0] === "string") {
+                return props.value;
+              }
             }
 
             const cur = (props.options as any).find(
-              (item: any) => item.value === props.value
+              (item: any) =>
+                item.value === (props.autoValue ? currentValue : props.value)
             );
             return cur?.label || cur?.value;
-          }, [props.value])}
-          onChange={(e) => props.handleSelectValue(e.target.value)}
+          }, [props.value, currentValue])}
+          onChange={(e) => {
+            props.handleSelectValue(e.target.value);
+            setCurrentValue(e.target.value);
+          }}
         />
         <ChevronDownIcon className="w-5 text-gray-500 mr-3" />
       </div>

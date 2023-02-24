@@ -54,6 +54,12 @@ export interface CreatePocketContextState {
   stopConditions: StopConditions[];
 
   /**
+   * @dev The amount of base token which user want to deposit into pool.
+   * @type {number}
+   */
+  depositedAmount: number;
+
+  /**
    * @dev The function to modify pocket name state.
    * @param {String}
    */
@@ -94,6 +100,12 @@ export interface CreatePocketContextState {
    * @param {BuyCondition}
    */
   setBuyCondition(v: BuyCondition): void;
+
+  /**
+   * @dev The function to modify deposited amount.
+   * @param {number}
+   */
+  setDepositedAmount(v: number): void;
 
   // /**
   //  * @dev Arrays of conditions that the pool will pause if the market siutuation match one in conditions.

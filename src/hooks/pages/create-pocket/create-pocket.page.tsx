@@ -13,6 +13,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [frequency, setFrequency] = useState<DurationObjectUnits>(null);
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions] = useState<StopConditions[]>([]);
+  const [depositedAmount, setDepositedAmount] = useState(0);
 
   return (
     <CreatePocketContext.Provider
@@ -25,6 +26,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         frequency,
         buyCondition,
         stopConditions,
+        depositedAmount,
         setPocketName,
         setBaseTokenAddress,
         setTargetTokenAddress,
@@ -32,6 +34,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         setStartAt,
         setFrequency,
         setBuyCondition,
+        setDepositedAmount,
       }}
     >
       {props.children}

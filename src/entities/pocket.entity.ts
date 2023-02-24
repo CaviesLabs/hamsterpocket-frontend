@@ -25,6 +25,23 @@ export enum PriceConditionType {
   NBW = "NBW",
 }
 
+export enum FrequencyConditionType {
+  /** Daily */
+  DAILY = "Daily",
+  /** Weekly */
+  WEEKLY = "Weekly",
+  /** Every 2 Weeks */
+  E2W = "Every 2 Weeks",
+  /** Monthly */
+  MONTHLY = "Monthly",
+  /** Every 3 Months */
+  E3M = "Every 3 Months",
+  /** Every 6 Months */
+  E6M = "Every 6 Months",
+  /** Yearly */
+  YEARLY = "Yearly",
+}
+
 export enum MainProgressBy {
   END_TIME = "MAIN_PROGRESS_BY::END_TIME",
   BASE_TOKEN = "MAIN_PROGRESS_BY::BASE_TOKEN",

@@ -7,7 +7,6 @@ import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
 import { useContext } from "react";
 import { WhitelistContext } from "@/src/hooks/useWhitelist";
 import { DATE_FORMAT, utilsProvider } from "@/src/utils";
-import luxon from "luxon";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";

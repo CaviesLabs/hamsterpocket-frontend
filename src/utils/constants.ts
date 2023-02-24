@@ -1,5 +1,8 @@
 import type { OptionProps } from "@/src/components/select";
-import { PriceConditionType } from "@/src/entities/pocket.entity";
+import {
+  PriceConditionType,
+  FrequencyConditionType,
+} from "@/src/entities/pocket.entity";
 
 /**
  * @dev Define value data to sort NFTs.
@@ -29,28 +32,32 @@ export const categoryOptions = [
  */
 export const TIME_CONDITIONS: OptionProps[] = [
   {
-    value: "Daily",
+    label: "Daily",
+    value: FrequencyConditionType.DAILY,
   },
   {
-    value: "Weekly",
+    label: "Weekly",
+    value: FrequencyConditionType.WEEKLY,
   },
   {
-    value: "Every 2 Weeks",
+    label: "Every 2 Weeks",
+    value: FrequencyConditionType.E2W,
   },
   {
-    value: "Monthly",
+    label: "Monthly",
+    value: FrequencyConditionType.MONTHLY,
   },
   {
-    value: "Every 3 Months",
+    label: "Every 3 Months",
+    value: FrequencyConditionType.E3M,
   },
   {
-    value: "Every 6 Months",
+    label: "Every 6 Months",
+    value: FrequencyConditionType.E6M,
   },
   {
-    value: "Yearly",
-  },
-  {
-    value: "Custom",
+    label: "Yearly",
+    value: FrequencyConditionType.YEARLY,
   },
 ];
 
