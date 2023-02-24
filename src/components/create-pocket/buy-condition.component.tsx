@@ -6,6 +6,7 @@ import { WSOL_ADDRESS, PRICE_CONDITIONS } from "@/src/utils";
 import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { motion } from "framer-motion";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -29,7 +30,7 @@ export const BuyCondition: FC<{
   }, [props.buyConditionDisplayed]);
 
   return (
-    <div className="mt-[24px] ">
+    <motion.div animate={{ x: 0 }} initial={{ x: -100 }} className="mt-[24px] ">
       <p className="text-dark10 text-[14px] normal-text">
         Buy at market price if
       </p>
@@ -91,6 +92,6 @@ export const BuyCondition: FC<{
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
