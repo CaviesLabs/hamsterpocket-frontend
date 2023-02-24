@@ -33,9 +33,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           newConditions.push({ [key]: value });
         }
 
-        console.log("set", excuted, key, value, prev);
-        console.log({ newConditions });
-
         return newConditions;
       });
     },
