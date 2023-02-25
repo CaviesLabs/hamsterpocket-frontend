@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useCallback } from "react";
+import { FC } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
@@ -8,23 +8,6 @@ export const DepositAmount: FC = () => {
    * @dev Injected context.
    */
   const { baseTokenAddress, setDepositedAmount } = useCreatePocketPage();
-
-  /** @dev Local curent value in number type. */
-  const [curVal, setCurVal] = useState(0);
-
-  const handleUpdateValInContext = useCallback(
-    (decimals: number) => {
-      setDepositedAmount(new BN(curVal * Math.pow(10, decimals)));
-    },
-    [curVal]
-  );
-
-  /**
-   * @dev Update deposit amount in context state when basetoken decimals change.
-   */
-  useEffect(() => {
-    handleUpdateValInContext(baseTokenAddress[1]);
-  }, [baseTokenAddress]);
 
   return (
     <section>
@@ -47,7 +30,7 @@ export const DepositAmount: FC = () => {
               addressSelected={baseTokenAddress[0]?.toBase58().toString()}
               disableDropdown={true}
               onAmountChange={(val) => {
-                setCurVal(val);
+                console.log(val, baseTokenAddress[1]);
                 setDepositedAmount(
                   new BN(val * Math.pow(10, baseTokenAddress[1]))
                 );

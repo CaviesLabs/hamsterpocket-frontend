@@ -28,9 +28,9 @@ export interface CreatePocketContextState {
 
   /**
    * @dev Amout of each batch to buy.
-   * @type {BN}
+   * @type {number}
    */
-  batchVolume: BN;
+  batchVolume: number;
 
   /**
    * @dev The date of pool will start.
@@ -88,9 +88,9 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The function to modify amout of each batch to buy.
-   * @param {BN}
+   * @param {number}
    */
-  setBatchVolume(v: BN): void;
+  setBatchVolume(v: number): void;
 
   /**
    * @dev The function to modify date of pool will start.

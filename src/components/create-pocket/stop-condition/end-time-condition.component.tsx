@@ -3,6 +3,7 @@ import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { DatetimePicker } from "@/src/components/datetime-picker";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { motion, AnimatePresence } from "framer-motion";
+import { BN } from "@project-serum/anchor";
 
 export const EndTimeCondition: FC<{
   displyed: boolean;
@@ -21,13 +22,17 @@ export const EndTimeCondition: FC<{
   /**
    * @dev Current value.
    */
-  const [currentValue, setCurrentValue] = useState<Date>();
+  const [currentValue, setCurrentValue] = useState<Date>(new Date());
 
   /**
    * @dev Watch changes in excuted boolean condition.
    */
   useEffect(() => {
-    handleModifyStopConditions(executed, "endTime", currentValue);
+    handleModifyStopConditions(
+      executed,
+      "endTime",
+      new BN(currentValue.getTime().toString())
+    );
   }, [executed, currentValue]);
 
   return (

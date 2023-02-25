@@ -1,3 +1,6 @@
+import { DurationObjectUnits } from "luxon";
+import { BN } from "@project-serum/anchor";
+
 /** @dev Export date arrays/ */
 export const TIME_ARRAYS = Array.from(Array(24).keys())
   .map((item) => {
@@ -10,14 +13,6 @@ export const TIME_ARRAYS = Array.from(Array(24).keys())
   })
   .flat(1);
 
-export const completedOrderPercent = (completedOrders = 0, orders = 0) => {
-  return ((completedOrders * 100) / (orders || 1)).toFixed(2);
-};
-
-export const solAmount = (amount: string | number, decimal: number) => {
-  return parseInt(amount.toString()) / Math.pow(10, decimal);
-};
-
 export const stringToColour = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -29,4 +24,28 @@ export const stringToColour = (str: string) => {
     colour += ("00" + value.toString(16)).substr(-2);
   }
   return colour;
+};
+
+/**
+ * @dev The function to convert frequency time to hours.
+ * @param {DurationObjectUnits} duration Root duration which user selected.
+ * */
+export const convertDurationsTimeToHours = (
+  duration: DurationObjectUnits
+): { hours: BN } => {
+  /** @dev Initilize duration result. */
+  const swapDuration = (val: number) => ({
+    hours: new BN(val),
+  });
+
+  /** @dev Condition for each  */
+  if (duration.hours) {
+    return swapDuration(duration.hours);
+  } else if (duration.weeks) {
+    return swapDuration(duration.weeks * 7 * 24);
+  } else if (duration.months) {
+    return swapDuration(duration.months * 30 * 24);
+  } else if (duration.years) {
+    return swapDuration(duration.years * 365 * 24);
+  }
 };

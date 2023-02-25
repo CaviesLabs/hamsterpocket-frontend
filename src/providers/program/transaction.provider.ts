@@ -50,7 +50,9 @@ export class TransactionProvider {
     /**
      * @dev Send a raw transaction.
      */
-    return this.connection.sendRawTransaction(rawTx.serialize());
+    return this.connection.sendRawTransaction(rawTx.serialize(), {
+      preflightCommitment: "finalized",
+    });
   }
 
   /**

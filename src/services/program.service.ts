@@ -36,19 +36,21 @@ export class ProgramService {
   ): Promise<any> {
     console.log({ createPocketDto });
     console.log("creating");
-    // /**
-    //  * @dev Call to HamsterBox server to initialize the proposal.
-    //  */
-    // const response = await networkProvider.request<PocketEntity>("/pool", {
-    //   method: "POST",
-    //   data: {
-    //     ...createPocketDto,
-    //     ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
-    //   },
-    // });
+    /** @dev Call to HamsterBox server to initialize the proposal. */
+    const response = await networkProvider.request("/pool", {
+      method: "POST",
+      data: {
+        ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
+        targetTokenAddress: createPocketDto.targetTokenAddress
+          ?.toBase58()
+          ?.toString(),
+        baseTokenAddress: createPocketDto.baseTokenAddress
+          ?.toBase58()
+          ?.toString(),
+      },
+    });
 
-    // console.log(response);
-
+    console.log(response);
     return await this.pocketProgramProvider.createProposal(
       walletProvider,
       createPocketDto

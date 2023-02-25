@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
+import { PublicKey } from "@solana/web3.js";
 import "reflect-metadata";
 
 export enum PocketStatus {
@@ -12,18 +13,18 @@ export enum PocketStatus {
 }
 
 export enum PriceConditionType {
-  GT = "GT",
-  GTE = "GTE",
-  LT = "LT",
-  LTE = "LTE",
+  GT = "gt",
+  GTE = "gte",
+  LT = "lt",
+  LTE = "lte",
   /** Equal */
-  EQ = "EQ",
+  EQ = "eq",
   /** Not Equal */
-  NEQ = "NEQ",
+  NEQ = "neq",
   /** Between */
-  BW = "BW",
+  BW = "bw",
   /** Not Between */
-  NBW = "NBW",
+  NBW = "nbw",
 }
 
 export enum FrequencyConditionType {
@@ -56,11 +57,34 @@ export class BuyCondition {
   value: BN;
 }
 
+export class BuyConditionOnChain {
+  tokenAddress: PublicKey;
+  condition: {
+    [key: string]: {
+      value: BN;
+    };
+  };
+}
+
 export class StopConditions {
   endTime?: Date;
   baseTokenReach?: number;
   targetTokenReach?: number;
   batchAmountReach?: number;
+}
+export class StopConditionsOnChain {
+  endTime?: {
+    value: BN;
+  };
+  baseTokenReach?: {
+    value: BN;
+  };
+  targetTokenReach?: {
+    value: BN;
+  };
+  batchAmountReach?: {
+    value: BN;
+  };
 }
 
 export class PocketEntity {
@@ -86,8 +110,8 @@ export class PocketEntity {
 
   frequency: DurationObjectUnits;
 
-  @Type(() => BuyCondition)
-  buyCondition: BuyCondition | undefined;
+  @Type(() => BuyConditionOnChain)
+  buyCondition: BuyConditionOnChain | undefined;
 
   @Type(() => StopConditions)
   stopConditions: StopConditions[] | [];

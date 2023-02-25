@@ -5,6 +5,7 @@ import {
   PublicKey,
   TransactionInstruction,
   SystemProgram,
+  // LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
 import {
@@ -167,6 +168,15 @@ export class InstructionProvider {
       batchVolume: createPocketDto.batchVolume,
       name: createPocketDto.name,
       frequency: { hours: new anchor.BN(1) },
+      // targetTokenAddress: createPocketDto.targetTokenAddress,
+      // baseTokenAddress: createPocketDto.baseTokenAddress,
+      // stopConditions: [],
+      // buyCondition: null,
+      // startAt: new anchor.BN(new Date().getTime().toString()),
+      // batchVolume: new anchor.BN((LAMPORTS_PER_SOL * 10).toString()),
+      // name: "pocket name",
+      // frequency: { hours: new anchor.BN(1) },
+      side: { buy: {} },
     };
 
     /**

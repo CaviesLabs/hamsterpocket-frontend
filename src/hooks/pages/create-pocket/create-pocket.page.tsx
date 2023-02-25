@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ReactNode, useCallback, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
@@ -7,7 +8,7 @@ import { CreatePocketContext } from "./types";
 import { BN } from "@project-serum/anchor";
 import { ProgramService } from "@/src/services/program.service";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { WSOL_ADDRESS } from "@/src/utils";
+import { WSOL_ADDRESS, convertDurationsTimeToHours } from "@/src/utils";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -17,7 +18,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [targetTokenAddress, setTargetTokenAddress] = useState<
     [PublicKey, number]
   >([new PublicKey(WSOL_ADDRESS), 9]);
-  const [batchVolume, setBatchVolume] = useState<BN>(new BN(0));
+  const [batchVolume, setBatchVolume] = useState<number>(0);
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [frequency, setFrequency] = useState<DurationObjectUnits>(null);
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
@@ -52,31 +53,28 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       setProcessing(true);
 
       if (!solanaWallet) return;
-      // const response = await programService.createPocket(solanaWallet, {
-      //   id: ProgramService.generatePocketId(),
-      //   name: pocketName,
-      //   baseTokenAddress: baseTokenAddress[0],
-      //   targetTokenAddress: targetTokenAddress[0],
-      //   // stopConditions: [],
-      //   buyCondition: null,
-      //   startAt: new BN(startAt.getTime().toString()),
-      //   // batchVolume: new BN((LAMPORTS_PER_SOL * 10).toString()),
-      //   frequency: { hours: new BN(1) },
-      //   batchVolume: new BN(batchVolume),
-      //   // frequency,
-      //   // buyCondition,
-      //   stopConditions,
-      // });
       const response = await programService.createPocket(solanaWallet, {
         id: ProgramService.generatePocketId(),
-        targetTokenAddress: targetTokenAddress[0],
+        name: pocketName,
         baseTokenAddress: baseTokenAddress[0],
-        stopConditions: [],
-        buyCondition: null,
-        startAt: new BN(new Date().getTime().toString()),
-        batchVolume: new BN((LAMPORTS_PER_SOL * 10).toString()),
-        name: "pocket name",
-        frequency: { hours: new BN(1) },
+        targetTokenAddress: targetTokenAddress[0],
+        startAt: new BN(startAt.getTime().toString()),
+        frequency: convertDurationsTimeToHours(frequency),
+        batchVolume: new BN(batchVolume * Math.pow(10, targetTokenAddress[1])),
+        depositedAmount,
+        buyCondition: {
+          tokenAddress: new PublicKey(buyCondition.tokenAddress),
+          condition: {
+            [buyCondition.type]: {
+              value: buyCondition.value,
+            },
+          },
+        },
+        stopConditions: stopConditions.map((item) => ({
+          [Object.keys(item)[0]]: {
+            value: (item as any)[Object.keys(item)[0] as string],
+          },
+        })),
       });
 
       console.log(response);
@@ -96,6 +94,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     frequency,
     buyCondition,
     stopConditions,
+    depositedAmount,
   ]);
 
   return (

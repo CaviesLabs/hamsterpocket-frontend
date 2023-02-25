@@ -135,7 +135,7 @@ export class PocketProgramProvider {
      */
     const [pocketRegistry, pocketRegistryBump] =
       await PublicKey.findProgramAddress(
-        [anchor.utils.bytes.utf8.encode("SEED::SWAP::PLATFORM")],
+        [anchor.utils.bytes.utf8.encode("SEED::POCKET::PLATFORM")],
         this.program.programId
       );
 
@@ -159,7 +159,7 @@ export class PocketProgramProvider {
 
     // find the swap account
     const [pocketAccountPublicKey] = PublicKey.findProgramAddressSync(
-      [anchor.utils.bytes.utf8.encode("SEED::SWAP::PLATFORM")],
+      [anchor.utils.bytes.utf8.encode("SEED::POCKET::PLATFORM")],
       program.programId
     );
 
@@ -179,6 +179,7 @@ export class PocketProgramProvider {
     try {
       console.log("Pocket ID: ", createPocketDto.id);
       console.log("Params to create pocket: ", createPocketDto);
+      console.log(createPocketDto.depositedAmount.toNumber() / Math.pow(10, 9));
       /**
        * @dev Find pocket account.
        */
@@ -213,9 +214,12 @@ export class PocketProgramProvider {
        */
       instructions = [
         ...instructions,
-        // createTokenVaultInstruction,
-        // ...wrapSolInstructions,
-        // ins,
+        ...(await this.depositAsset(
+          walletProvider,
+          pocketAccount,
+          createPocketDto.baseTokenAddress,
+          createPocketDto.depositedAmount
+        )),
       ].filter((item) => item !== null);
 
       /**
@@ -243,8 +247,9 @@ export class PocketProgramProvider {
    */
   public async depositAsset(
     walletProvider: WalletProvider,
+    pocketAccount: PublicKey,
     tokenAddress: PublicKey,
-    pocketAccount: PublicKey
+    depositedAmount: anchor.BN
   ): Promise<TransactionInstruction[]> {
     /** @dev Instruction to create associated token account if doest exists. */
     const associatedInstruction =
@@ -275,7 +280,7 @@ export class PocketProgramProvider {
       try {
         const [ins1, ins2] = await this.instructionProvider.wrapSol(
           walletProvider.publicKey,
-          new anchor.BN(0.5 * 10)
+          depositedAmount
         );
 
         ins1 && wrapSolInstructions.push(ins1);
@@ -292,7 +297,7 @@ export class PocketProgramProvider {
       pocketAccount,
       tokenAddress,
       tokenVault,
-      new anchor.BN(0.5 * 10)
+      depositedAmount
     );
 
     return [

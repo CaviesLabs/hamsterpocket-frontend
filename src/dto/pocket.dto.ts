@@ -4,7 +4,10 @@ import { PublicKey } from "@solana/web3.js";
 import { IsString } from "class-validator";
 import { Type } from "class-transformer";
 // import { DurationObjectUnits } from "luxon";
-import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
+import {
+  BuyConditionOnChain,
+  StopConditionsOnChain,
+} from "@/src/entities/pocket.entity";
 
 export interface PocketDto {}
 
@@ -70,13 +73,19 @@ export class CreatePocketDto {
 
   /**
    * @dev Buy condition.
-   * @type {BuyCondition}
+   * @type {BuyConditionOnChain}
    */
-  buyCondition: BuyCondition;
+  buyCondition: BuyConditionOnChain;
 
   /**
    * @dev Arrays of conditions that the pool will pause if the market siutuation match one in conditions.
-   * @type {StopConditions[]}
+   * @type {StopConditionsOnChain[]}
    */
-  stopConditions: StopConditions[];
+  stopConditions: StopConditionsOnChain[];
+
+  /**
+   * @dev Amount of base token to deposit.
+   * @type {BN}
+   */
+  depositedAmount: BN;
 }

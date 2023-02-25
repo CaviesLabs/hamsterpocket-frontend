@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { BN } from "@project-serum/anchor";
 
 export const BatchOption: FC = () => {
   /**
@@ -21,9 +20,7 @@ export const BatchOption: FC = () => {
         <CurrencyInput
           addressSelected={targetTokenAddress[0]?.toBase58().toString()}
           disableDropdown={true}
-          onAmountChange={(val) =>
-            setBatchVolume(new BN(val * Math.pow(10, targetTokenAddress[1])))
-          }
+          onAmountChange={(val) => setBatchVolume(val)}
         />
       </div>
     </div>
