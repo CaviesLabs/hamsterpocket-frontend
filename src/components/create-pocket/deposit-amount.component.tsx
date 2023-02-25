@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { BN } from "@project-serum/anchor";
 
 export const DepositAmount: FC = () => {
   /**
@@ -30,10 +29,7 @@ export const DepositAmount: FC = () => {
               addressSelected={baseTokenAddress[0]?.toBase58().toString()}
               disableDropdown={true}
               onAmountChange={(val) => {
-                console.log(val, baseTokenAddress[1]);
-                setDepositedAmount(
-                  new BN(val * Math.pow(10, baseTokenAddress[1]))
-                );
+                setDepositedAmount(val);
               }}
             />
           </div>

@@ -3,6 +3,7 @@ import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
 import { BN } from "@project-serum/anchor";
+import { ErrorValidateContext } from "./useValidate";
 
 /** @dev Export state contained in page interface */
 export interface CreatePocketContextState {
@@ -58,15 +59,25 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The amount of base token which user want to deposit into pool.
-   * @type {BN}
+   * @type {number}
    */
-  depositedAmount: BN;
+  depositedAmount: number;
 
   /**
    * @dev The value is true if user click create pocket.
    * @type {boolean}
    */
   processing: boolean;
+
+  /**
+   * @dev The value present if user click create pocket.
+   */
+  createdEnable: boolean;
+
+  /**
+   * @dev Contains error messages.
+   */
+  errorMsgs: ErrorValidateContext;
 
   /**
    * @dev The function to modify pocket name state.
@@ -114,7 +125,7 @@ export interface CreatePocketContextState {
    * @dev The function to modify deposited amount.
    * @param {number}
    */
-  setDepositedAmount(v: BN): void;
+  setDepositedAmount(v: number): void;
 
   /**
    * @dev The function to modify arrays of conditions that the pool will pause if the market siutuation match one in conditions.
@@ -126,6 +137,11 @@ export interface CreatePocketContextState {
    * @dev The function to execute pocket creation.
    */
   handleCreatePocket(): Promise<void>;
+
+  /**
+   * @dev The function to update error messageses.
+   */
+  setErrorMsgs(v: ErrorValidateContext): void;
 }
 
 /** @dev Create context */

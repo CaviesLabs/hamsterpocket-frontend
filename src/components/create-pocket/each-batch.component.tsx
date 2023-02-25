@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { ErrorLabel } from "@/src/components/error-label";
 
 export const BatchOption: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { targetTokenAddress, setBatchVolume } = useCreatePocketPage();
+  const { targetTokenAddress, setBatchVolume, errorMsgs } =
+    useCreatePocketPage();
 
   return (
     <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
@@ -18,10 +20,13 @@ export const BatchOption: FC = () => {
           </span>
         </p>
         <CurrencyInput
-          addressSelected={targetTokenAddress[0]?.toBase58().toString()}
+          addressSelected={targetTokenAddress?.[0]?.toBase58().toString()}
           disableDropdown={true}
           onAmountChange={(val) => setBatchVolume(val)}
         />
+        {errorMsgs?.batchVolume && (
+          <ErrorLabel message={errorMsgs.batchVolume} />
+        )}
       </div>
     </div>
   );

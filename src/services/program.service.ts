@@ -2,10 +2,9 @@ import { networkProvider } from "@/src/providers/network.provider";
 import { PocketProgramProvider } from "@/src/providers/program";
 import { Keypair } from "@solana/web3.js";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
-// import { PocketEntity } from "@/src/entities/pocket.entity";
 import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import UtilsProvider from "@/src/utils/utils.provider";
-// import { uuid } from "uuidv4";
+
 export class ProgramService {
   /**
    * @dev Program provider injected.
@@ -34,10 +33,9 @@ export class ProgramService {
     walletProvider: WalletProvider,
     createPocketDto: CreatePocketDto
   ): Promise<any> {
-    console.log({ createPocketDto });
-    console.log("creating");
+    console.log("creating", { createPocketDto });
     /** @dev Call to HamsterBox server to initialize the proposal. */
-    const response = await networkProvider.request("/pool", {
+    await networkProvider.request("/pool", {
       method: "POST",
       data: {
         ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
@@ -50,7 +48,6 @@ export class ProgramService {
       },
     });
 
-    console.log(response);
     return await this.pocketProgramProvider.createProposal(
       walletProvider,
       createPocketDto

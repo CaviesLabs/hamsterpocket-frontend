@@ -3,6 +3,8 @@ import { PlusIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import { EndTimeCondition } from "./end-time-condition.component";
 import { TargetAmountCondition } from "./target-amount-condition.component";
+import { ErrorLabel } from "@/src/components/error-label";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
 export const StopCondition: FC = () => {
   /**
@@ -15,11 +17,19 @@ export const StopCondition: FC = () => {
    */
   const [targetAmountDisplayed, setTargetAmountDisplayed] = useState(false);
 
+  /**
+   * @dev Injected context.
+   */
+  const { errorMsgs } = useCreatePocketPage();
+
   return (
     <section>
       <p className="mt-[48px] text-[24px] text-white normal-text">
         Pocket end condition
       </p>
+      {errorMsgs?.stopConditions && (
+        <ErrorLabel message={errorMsgs.stopConditions} />
+      )}
       <div className="mt-[16px]">
         <p className="text-dark20 text-[14px] normal-text italic">
           When one of the conditions below is met, the Pocket will stop running

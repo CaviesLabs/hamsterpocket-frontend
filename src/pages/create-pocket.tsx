@@ -1,9 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import type { NextPage } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { CreatePocketProvider } from "@/src/hooks/pages/create-pocket";
-import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { BreadCrumb } from "@/src/components/bread-crumb";
 import { Button } from "@hamsterbox/ui-kit";
@@ -14,11 +13,18 @@ import {
   StopCondition,
 } from "@/src/components/create-pocket";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { useValidate } from "@/src/hooks/pages/create-pocket/useValidate";
 
 const Layout: FC = () => {
-  // const proposals = useSelector((state: any) => state.proposals);
-  const {} = useMain();
-  const { handleCreatePocket, processing } = useCreatePocketPage();
+  /** @dev Injected context to use. */
+  const { handleCreatePocket, setErrorMsgs, processing } =
+    useCreatePocketPage();
+
+  /** @dev Validate all properties if each is not valid. */
+  const { errors } = useValidate();
+
+  /** @dev Update error messages in context when having changes. */
+  useEffect(() => setErrorMsgs(errors), [errors, setErrorMsgs]);
 
   return (
     <MainLayout>

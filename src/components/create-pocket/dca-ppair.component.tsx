@@ -53,7 +53,7 @@ export const DCAPPair: FC = () => {
             <CurrencyInput
               placeholder="Select token"
               currencyBadgeOnly={true}
-              addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
+              addressSelected={targetTokenAddress?.[0]?.toBase58()?.toString()}
               onAddressSelect={(address, decimals) =>
                 setTargetTokenAddress([new PublicKey(address), decimals])
               }

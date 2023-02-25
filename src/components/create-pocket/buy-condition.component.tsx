@@ -8,7 +8,7 @@ import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { motion } from "framer-motion";
 import { BN } from "@project-serum/anchor";
-import {} from "@/src/utils";
+import { ErrorLabel } from "@/src/components/error-label";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -17,7 +17,7 @@ export const BuyCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { buyCondition, setBuyCondition } = useCreatePocketPage();
+  const { buyCondition, errorMsgs, setBuyCondition } = useCreatePocketPage();
   const [decimals, setDecimals] = useState(9); // Default decimal of native SOL.
 
   /**
@@ -37,6 +37,9 @@ export const BuyCondition: FC<{
       <p className="text-dark10 text-[14px] normal-text">
         Buy at market price if
       </p>
+      {errorMsgs?.buyCondition && (
+        <ErrorLabel message={errorMsgs.buyCondition} />
+      )}
       {!props.buyConditionDisplayed ? (
         <Button
           size="small"

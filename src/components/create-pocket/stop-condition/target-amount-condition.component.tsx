@@ -12,7 +12,7 @@ export const TargetAmountCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, handleModifyStopConditions } =
+  const { targetTokenAddress, handleModifyStopConditions } =
     useCreatePocketPage();
 
   /**
@@ -32,7 +32,7 @@ export const TargetAmountCondition: FC<{
     handleModifyStopConditions(
       executed,
       "targetTokenReach",
-      new BN(currentValue * Math.pow(10, baseTokenAddress[1]))
+      new BN(currentValue * Math.pow(10, targetTokenAddress[1]))
     );
   }, [executed, currentValue]);
 
@@ -50,7 +50,7 @@ export const TargetAmountCondition: FC<{
         </div>
         <div className="col-span-8">
           <CurrencyInput
-            addressSelected={baseTokenAddress[0]?.toBase58().toString()}
+            addressSelected={targetTokenAddress[0]?.toBase58().toString()}
             disableDropdown={true}
             onAmountChange={(val) => setCurrentValue(val)}
           />

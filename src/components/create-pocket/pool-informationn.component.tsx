@@ -1,12 +1,13 @@
 import { FC } from "react";
 import { Input } from "@hamsterbox/ui-kit";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { ErrorLabel } from "@/src/components/error-label";
 
 export const PoolInformation: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { setPocketName, pocketName } = useCreatePocketPage();
+  const { setPocketName, pocketName, errorMsgs } = useCreatePocketPage();
 
   return (
     <section>
@@ -28,6 +29,7 @@ export const PoolInformation: FC = () => {
           onValueChange={(v) => setPocketName(v)}
         />
       </div>
+      {errorMsgs?.pocketName && <ErrorLabel message={errorMsgs.pocketName} />}
     </section>
   );
 };

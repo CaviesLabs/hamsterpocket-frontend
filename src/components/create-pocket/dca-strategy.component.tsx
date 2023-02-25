@@ -10,7 +10,7 @@ export const DCAStrategy: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { setStartAt } = useCreatePocketPage();
+  const { setStartAt, setBuyCondition } = useCreatePocketPage();
 
   /**
    * @dev Buy condition display.
@@ -45,7 +45,10 @@ export const DCAStrategy: FC = () => {
           </p>
           <BuyCondition
             buyConditionDisplayed={buyConditionDisplayed}
-            toggle={() => setBuyConditionDisplayed(!buyConditionDisplayed)}
+            toggle={() => {
+              setBuyCondition(null);
+              setBuyConditionDisplayed(!buyConditionDisplayed);
+            }}
           />
           <BatchOption />
           <div className="grid md:grid-cols-5 gap-3">
