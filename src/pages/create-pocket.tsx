@@ -13,10 +13,12 @@ import {
   DCAStrategy,
   StopCondition,
 } from "@/src/components/create-pocket";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
 const Layout: FC = () => {
   // const proposals = useSelector((state: any) => state.proposals);
   const {} = useMain();
+  const { handleCreatePocket } = useCreatePocketPage();
 
   return (
     <MainLayout>
@@ -35,6 +37,7 @@ const Layout: FC = () => {
               <Button
                 className="float-right !px-[50px] md:w-auto !w-full"
                 text="Create pocket"
+                onClick={() => handleCreatePocket()}
               />
             </div>
             <div className="float-right">

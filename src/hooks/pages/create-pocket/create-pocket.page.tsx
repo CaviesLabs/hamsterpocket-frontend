@@ -2,7 +2,10 @@ import { ReactNode, useCallback, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
+import { useWallet } from "@/src/hooks/useWallet";
 import { CreatePocketContext } from "./types";
+import { BN } from "@project-serum/anchor";
+import { ProgramService } from "@/src/services/program.service";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -14,6 +17,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState(0);
+
+  /** @dev Inject wallet provider. */
+  const { solanaWallet, programService } = useWallet();
 
   /** @dev The function to modify stop conditions. */
   const handleModifyStopConditions = useCallback(
@@ -31,6 +37,24 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     },
     [stopConditions]
   );
+
+  /** @dev The function to execute pocket creation. */
+  const handleCreatePocket = useCallback(async () => {
+    if (!solanaWallet) return;
+    const response = await programService.createPocket(solanaWallet, {
+      id: ProgramService.generatePocketId(),
+      name: pocketName,
+      baseTokenAddress,
+      targetTokenAddress,
+      batchVolume: new BN(batchVolume),
+      startAt,
+      frequency,
+      buyCondition,
+      stopConditions,
+    });
+
+    console.log(response);
+  }, [solanaWallet]);
 
   return (
     <CreatePocketContext.Provider
@@ -53,6 +77,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         setBuyCondition,
         setDepositedAmount,
         handleModifyStopConditions,
+        handleCreatePocket,
       }}
     >
       {props.children}

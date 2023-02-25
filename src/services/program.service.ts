@@ -1,8 +1,11 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { PocketProgramProvider } from "@/src/providers/program";
-import UtilsProvider from "@/src/utils/utils.provider";
 import { Keypair } from "@solana/web3.js";
-
+import { CreatePocketDto } from "@/src/dto/pocket.dto";
+import { PocketEntity } from "@/src/entities/pocket.entity";
+import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
+import UtilsProvider from "@/src/utils/utils.provider";
+// import { uuid } from "uuidv4";
 export class ProgramService {
   /**
    * @dev Program provider injected.
@@ -17,6 +20,36 @@ export class ProgramService {
      */
     this.pocketProgramProvider = swapProgramProvider;
     this.utilsProvider = new UtilsProvider();
+  }
+
+  /**
+   * @dev The function to create pocket onchain & ofchain.
+   * Step 1: Create a empty pocket offchain to Hamster server.
+   * Step 2: Create pocket onchain.
+   * Step 3: Sync pocket after creation.
+   * @param {WalletProvider}
+   * @param {CreatePocketDto}
+   */
+  public async createPocket(
+    walletProvider: WalletProvider,
+    createPocketDto: CreatePocketDto
+  ): Promise<any> {
+    console.log({ createPocketDto });
+    /**
+     * @dev Call to HamsterBox server to initialize the proposal.
+     */
+    const response = await networkProvider.requestWithCredentials<PocketEntity>(
+      "/proposal",
+      {
+        method: "POST",
+        data: {
+          ...createPocketDto,
+          ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
+        },
+      }
+    );
+
+    console.log(response);
   }
 
   /**
@@ -54,6 +87,7 @@ export class ProgramService {
    * @returns {string}
    */
   public static generatePocketId() {
+    // return uuid().slice(0, 10);
     return Keypair.generate().publicKey.toString().slice(0, 24);
   }
 }

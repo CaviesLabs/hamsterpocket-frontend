@@ -41,7 +41,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const wallet = useConnectedWallet();
 
   /** @dev Program service */
-  const [programService] = useState<ProgramService>(null);
+  const [programService, initProgram] = useState<ProgramService>(null);
   const [solBalance, setSolBalance] = useState(0);
 
   /**
@@ -138,14 +138,10 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
           new PocketProgramProvider(solanaWallet)
         );
 
-        // /**
-        //  * @dev Init program into state for usage
-        //  */
-        // initProgram(program);
+        /** @dev Init program into state for usage. */
+        initProgram(program);
 
-        // /**
-        //  * @dev update sol balance if wallet changes.
-        //  */
+        /** @dev update sol balance if wallet changes. */
         getSolBalance();
       } catch (err: any) {
         console.log(err.message);

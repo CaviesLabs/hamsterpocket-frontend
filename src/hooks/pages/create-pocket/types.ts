@@ -112,6 +112,11 @@ export interface CreatePocketContextState {
    * @param {StopConditions[]}
    */
   handleModifyStopConditions(excuted: boolean, key: string, value: any): void;
+
+  /**
+   * @dev The function to execute pocket creation.
+   */
+  handleCreatePocket(): Promise<void>;
 }
 
 /** @dev Create context */
