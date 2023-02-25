@@ -32,9 +32,9 @@ export const DCAPPair: FC = () => {
             </p>
             <CurrencyInput
               placeholder="Enter SOL amount"
-              addressSelected={baseTokenAddress?.toBase58()?.toString()}
-              onAddressSelect={(address) =>
-                setBaseTokenAddress(new PublicKey(address))
+              addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
+              onAddressSelect={(address, decimals) =>
+                setBaseTokenAddress([new PublicKey(address), decimals])
               }
             />
           </div>
@@ -53,9 +53,9 @@ export const DCAPPair: FC = () => {
             <CurrencyInput
               placeholder="Select token"
               currencyBadgeOnly={true}
-              addressSelected={targetTokenAddress?.toBase58()?.toString()}
-              onAddressSelect={(address) =>
-                setTargetTokenAddress(new PublicKey(address))
+              addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
+              onAddressSelect={(address, decimals) =>
+                setTargetTokenAddress([new PublicKey(address), decimals])
               }
             />
           </div>

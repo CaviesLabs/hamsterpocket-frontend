@@ -18,7 +18,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 const Layout: FC = () => {
   // const proposals = useSelector((state: any) => state.proposals);
   const {} = useMain();
-  const { handleCreatePocket } = useCreatePocketPage();
+  const { handleCreatePocket, processing } = useCreatePocketPage();
 
   return (
     <MainLayout>
@@ -37,6 +37,7 @@ const Layout: FC = () => {
               <Button
                 className="float-right !px-[50px] md:w-auto !w-full"
                 text="Create pocket"
+                loading={processing}
                 onClick={() => handleCreatePocket()}
               />
             </div>

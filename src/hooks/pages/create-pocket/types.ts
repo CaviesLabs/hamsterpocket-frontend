@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
+import { BN } from "@project-serum/anchor";
 
 /** @dev Export state contained in page interface */
 export interface CreatePocketContextState {
@@ -13,21 +14,23 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The token which user want to use to DCA.
-   * @type {PublicKey}
+   * @type {PublicKey} mintAcount
+   * @type {number} decimals
    */
-  baseTokenAddress: PublicKey;
+  baseTokenAddress: [PublicKey, number];
 
   /**
    * @dev The token which user want to DCA.
-   * @type {PublicKey}
+   * @type {PublicKey} mintAcount
+   * @type {number} decimals
    */
-  targetTokenAddress: PublicKey;
+  targetTokenAddress: [PublicKey, number];
 
   /**
    * @dev Amout of each batch to buy.
-   * @type {number}
+   * @type {BN}
    */
-  batchVolume: number;
+  batchVolume: BN;
 
   /**
    * @dev The date of pool will start.
@@ -55,9 +58,15 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The amount of base token which user want to deposit into pool.
-   * @type {number}
+   * @type {BN}
    */
-  depositedAmount: number;
+  depositedAmount: BN;
+
+  /**
+   * @dev The value is true if user click create pocket.
+   * @type {boolean}
+   */
+  processing: boolean;
 
   /**
    * @dev The function to modify pocket name state.
@@ -67,21 +76,21 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The function to modify token which user want to use to DCA.
-   * @param {PublicKey}
+   * @param {[PublicKey, number]} [mintAcccount, decimals]
    */
-  setBaseTokenAddress(v: PublicKey): void;
+  setBaseTokenAddress(v: [PublicKey, number]): void;
 
   /**
    * @dev The function to modify token which user want to DCA.
-   * @param {PublicKey}
+   * @param {[PublicKey, number]} [mintAcccount, decimals]
    */
-  setTargetTokenAddress(v: PublicKey): void;
+  setTargetTokenAddress(v: [PublicKey, number]): void;
 
   /**
    * @dev The function to modify amout of each batch to buy.
-   * @param {number}
+   * @param {BN}
    */
-  setBatchVolume(v: number): void;
+  setBatchVolume(v: BN): void;
 
   /**
    * @dev The function to modify date of pool will start.
@@ -105,7 +114,7 @@ export interface CreatePocketContextState {
    * @dev The function to modify deposited amount.
    * @param {number}
    */
-  setDepositedAmount(v: number): void;
+  setDepositedAmount(v: BN): void;
 
   /**
    * @dev The function to modify arrays of conditions that the pool will pause if the market siutuation match one in conditions.

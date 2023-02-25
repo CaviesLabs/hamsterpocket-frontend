@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
 import { DurationObjectUnits } from "luxon";
+import { BN } from "@project-serum/anchor";
 import "reflect-metadata";
 
 export enum PocketStatus {
@@ -51,19 +52,14 @@ export enum MainProgressBy {
 
 export class BuyCondition {
   tokenAddress: string;
-
   type: PriceConditionType;
-
-  value: number[];
+  value: BN;
 }
 
 export class StopConditions {
   endTime?: Date;
-
   baseTokenReach?: number;
-
   targetTokenReach?: number;
-
   batchAmountReach?: number;
 }
 

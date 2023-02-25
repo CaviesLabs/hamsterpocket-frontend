@@ -3,7 +3,7 @@ import { PocketStatus } from "@/src/entities/pocket.entity";
 import { PublicKey } from "@solana/web3.js";
 import { IsString } from "class-validator";
 import { Type } from "class-transformer";
-import { DurationObjectUnits } from "luxon";
+// import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
 
 export interface PocketDto {}
@@ -59,14 +59,14 @@ export class CreatePocketDto {
    * @dev The date of pool will start.
    * @type {Date}
    */
-  @Type(() => Date)
-  startAt: Date;
+  @Type(() => BN)
+  startAt: BN;
 
   /**
    * @dev Fequency option to DCA token by amount which set in batch volume.
    * @type {DurationObjectUnits}
    */
-  frequency: DurationObjectUnits;
+  frequency: any;
 
   /**
    * @dev Buy condition.

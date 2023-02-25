@@ -156,6 +156,7 @@ export class InstructionProvider {
     /**
      * @dev Custom data to create.
      */
+    console.log({ createPocketDto });
     const data: any = {
       id: createPocketDto.id,
       targetTokenAddress: createPocketDto.targetTokenAddress,

@@ -209,75 +209,13 @@ export class PocketProgramProvider {
       }
 
       /**
-       * @dev Now deposit base token amount to pool to DCA.
-       */
-      /** @dev Instruction to create associated token account if doest exists. */
-      const associatedInstruction =
-        await this.instructionProvider.getOrCreateProposalTokenAccount(
-          walletProvider.publicKey,
-          createPocketDto.baseTokenAddress
-        );
-
-      /**
-       * @dev Add to arrays to process if valid.
-       */
-      if (associatedInstruction) {
-        instructions.push(associatedInstruction);
-      }
-
-      /**
-       * @dev Handle to wrap sol to wsol if offered item is SOL currency.
-       */
-      const wrapSolInstructions = [];
-      if (
-        createPocketDto.baseTokenAddress.toBase58().toString() === WSOL_ADDRESS
-      ) {
-        try {
-          const [ins1, ins2] = await this.instructionProvider.wrapSol(
-            walletProvider.publicKey,
-            new anchor.BN(0.5 * 10)
-          );
-
-          ins1 && wrapSolInstructions.push(ins1);
-          ins2 && wrapSolInstructions.push(ins2);
-        } catch (err) {
-          console.log("Error when wrap sol", err);
-        }
-      }
-
-      /** @dev Find token vault */
-      const tokenVault = await this.instructionProvider.findTokenVaultAccount(
-        pocketAccount,
-        createPocketDto.baseTokenAddress
-      );
-
-      /** @dev Create token vault if not already exists .*/
-      const createTokenVaultInstruction =
-        await this.instructionProvider.createTokenVaultAccount(
-          walletProvider.publicKey,
-          pocketAccount,
-          createPocketDto.baseTokenAddress
-        );
-
-      /**
-       * @dev Try to create a instruction to deposit token.
-       */
-      const ins = await this.instructionProvider.depositAsset(
-        walletProvider.publicKey,
-        pocketAccount,
-        createPocketDto.baseTokenAddress,
-        tokenVault,
-        new anchor.BN(0.5 * 10)
-      );
-
-      /**
        * @dev Add to instructions if valid.
        */
       instructions = [
         ...instructions,
-        ...wrapSolInstructions,
-        createTokenVaultInstruction,
-        ins,
+        // createTokenVaultInstruction,
+        // ...wrapSolInstructions,
+        // ins,
       ].filter((item) => item !== null);
 
       /**
@@ -297,6 +235,72 @@ export class PocketProgramProvider {
       console.error("Error", err.message);
       throw err;
     }
+  }
+
+  /**
+   * @dev Deposit asset to pool.
+   * @param {PublicKey} tokenAddress
+   */
+  public async depositAsset(
+    walletProvider: WalletProvider,
+    tokenAddress: PublicKey,
+    pocketAccount: PublicKey
+  ): Promise<TransactionInstruction[]> {
+    /** @dev Instruction to create associated token account if doest exists. */
+    const associatedInstruction =
+      await this.instructionProvider.getOrCreateProposalTokenAccount(
+        walletProvider.publicKey,
+        tokenAddress
+      );
+
+    /** @dev Find token vault */
+    const tokenVault = await this.instructionProvider.findTokenVaultAccount(
+      pocketAccount,
+      tokenAddress
+    );
+
+    /** @dev Create token vault if not already exists .*/
+    const createTokenVaultInstruction =
+      await this.instructionProvider.createTokenVaultAccount(
+        walletProvider.publicKey,
+        pocketAccount,
+        tokenAddress
+      );
+
+    /**
+     * @dev Handle to wrap sol to wsol if offered item is SOL currency.
+     */
+    const wrapSolInstructions = [];
+    if (tokenAddress.toBase58().toString() === WSOL_ADDRESS) {
+      try {
+        const [ins1, ins2] = await this.instructionProvider.wrapSol(
+          walletProvider.publicKey,
+          new anchor.BN(0.5 * 10)
+        );
+
+        ins1 && wrapSolInstructions.push(ins1);
+        ins2 && wrapSolInstructions.push(ins2);
+      } catch (err) {
+        console.log("Error when wrap sol", err);
+      }
+    }
+    /**
+     * @dev Try to create a instruction to deposit token.
+     */
+    const ins = await this.instructionProvider.depositAsset(
+      walletProvider.publicKey,
+      pocketAccount,
+      tokenAddress,
+      tokenVault,
+      new anchor.BN(0.5 * 10)
+    );
+
+    return [
+      associatedInstruction,
+      createTokenVaultInstruction,
+      ...wrapSolInstructions,
+      ins,
+    ];
   }
 
   /**

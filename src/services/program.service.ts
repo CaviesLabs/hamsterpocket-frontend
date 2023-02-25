@@ -2,7 +2,7 @@ import { networkProvider } from "@/src/providers/network.provider";
 import { PocketProgramProvider } from "@/src/providers/program";
 import { Keypair } from "@solana/web3.js";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
-import { PocketEntity } from "@/src/entities/pocket.entity";
+// import { PocketEntity } from "@/src/entities/pocket.entity";
 import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import UtilsProvider from "@/src/utils/utils.provider";
 // import { uuid } from "uuidv4";
@@ -35,21 +35,24 @@ export class ProgramService {
     createPocketDto: CreatePocketDto
   ): Promise<any> {
     console.log({ createPocketDto });
-    /**
-     * @dev Call to HamsterBox server to initialize the proposal.
-     */
-    const response = await networkProvider.requestWithCredentials<PocketEntity>(
-      "/proposal",
-      {
-        method: "POST",
-        data: {
-          ...createPocketDto,
-          ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
-        },
-      }
-    );
+    console.log("creating");
+    // /**
+    //  * @dev Call to HamsterBox server to initialize the proposal.
+    //  */
+    // const response = await networkProvider.request<PocketEntity>("/pool", {
+    //   method: "POST",
+    //   data: {
+    //     ...createPocketDto,
+    //     ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
+    //   },
+    // });
 
-    console.log(response);
+    // console.log(response);
+
+    return await this.pocketProgramProvider.createProposal(
+      walletProvider,
+      createPocketDto
+    );
   }
 
   /**

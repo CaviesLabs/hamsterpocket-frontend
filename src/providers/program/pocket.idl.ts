@@ -289,7 +289,7 @@ export type PocketIdl = {
         },
         {
           name: "openOrders";
-          isMut: false;
+          isMut: true;
           isSigner: false;
         },
         {
@@ -572,10 +572,6 @@ export type PocketIdl = {
           {
             name: "name";
             type: "string";
-          },
-          {
-            name: "marketKey";
-            type: "publicKey";
           },
           {
             name: "baseTokenAddress";
@@ -1375,7 +1371,7 @@ export const IDL: PocketIdl = {
         },
         {
           name: "openOrders",
-          isMut: false,
+          isMut: true,
           isSigner: false,
         },
         {
@@ -1658,10 +1654,6 @@ export const IDL: PocketIdl = {
           {
             name: "name",
             type: "string",
-          },
-          {
-            name: "marketKey",
-            type: "publicKey",
           },
           {
             name: "baseTokenAddress",

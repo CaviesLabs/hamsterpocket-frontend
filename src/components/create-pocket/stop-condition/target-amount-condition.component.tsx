@@ -3,6 +3,7 @@ import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { motion } from "framer-motion";
+import { BN } from "@project-serum/anchor";
 
 export const TargetAmountCondition: FC<{
   displyed: boolean;
@@ -28,7 +29,11 @@ export const TargetAmountCondition: FC<{
    * @dev Watch changes in excuted boolean condition.
    */
   useEffect(() => {
-    handleModifyStopConditions(executed, "targetTokenReach", currentValue);
+    handleModifyStopConditions(
+      executed,
+      "targetTokenReach",
+      new BN(currentValue * Math.pow(10, baseTokenAddress[1]))
+    );
   }, [executed, currentValue]);
 
   return (
@@ -45,7 +50,7 @@ export const TargetAmountCondition: FC<{
         </div>
         <div className="col-span-8">
           <CurrencyInput
-            addressSelected={baseTokenAddress?.toBase58().toString()}
+            addressSelected={baseTokenAddress[0]?.toBase58().toString()}
             disableDropdown={true}
             onAmountChange={(val) => setCurrentValue(val)}
           />

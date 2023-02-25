@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button, Input } from "@hamsterbox/ui-kit";
 import { PlusIcon, DeleteIconCircle } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
@@ -7,6 +7,8 @@ import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { motion } from "framer-motion";
+import { BN } from "@project-serum/anchor";
+import {} from "@/src/utils";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -16,6 +18,7 @@ export const BuyCondition: FC<{
    * @dev Injected context.
    */
   const { buyCondition, setBuyCondition } = useCreatePocketPage();
+  const [decimals, setDecimals] = useState(9); // Default decimal of native SOL.
 
   /**
    * @dev Initialize buy condition when click add condition button.
@@ -25,7 +28,7 @@ export const BuyCondition: FC<{
     setBuyCondition({
       tokenAddress: WSOL_ADDRESS,
       type: PriceConditionType.GT,
-      value: [0],
+      value: new BN(0 * Math.pow(10, decimals)),
     });
   }, [props.buyConditionDisplayed]);
 
@@ -57,9 +60,10 @@ export const BuyCondition: FC<{
             <CurrencyInput
               currencyBadgeOnly={true}
               addressSelected={buyCondition?.tokenAddress || WSOL_ADDRESS}
-              onAddressSelect={(val) =>
-                setBuyCondition({ ...buyCondition, tokenAddress: val })
-              }
+              onAddressSelect={(val, decimals) => {
+                setBuyCondition({ ...buyCondition, tokenAddress: val });
+                setDecimals(decimals);
+              }}
               className="!mt-0"
               dropdownBadgeClassname="!top-[23px]"
             />
@@ -81,11 +85,15 @@ export const BuyCondition: FC<{
             <Input
               containerClassName="app-input w-full !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
-              value={`$${buyCondition?.value[0]}`}
+              value={`$ ${
+                buyCondition?.value.toNumber() / Math.pow(10, decimals)
+              }`}
               onValueChange={(val) => {
                 setBuyCondition({
                   ...buyCondition,
-                  value: [parseFloat(val.slice(1)) || 0],
+                  value: new BN(
+                    (parseFloat(val.slice(1)) || 0) * Math.pow(10, decimals)
+                  ),
                 });
               }}
             />

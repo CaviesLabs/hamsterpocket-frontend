@@ -36,7 +36,7 @@ const allowCurrencies = [
 ];
 
 export type CurrencyInputProps = {
-  onAddressSelect?: (address: string) => void;
+  onAddressSelect?: (address: string, decimals?: number) => void;
   onAmountChange?: (amount: number) => void;
   placeholder?: string;
   addressSelected?: string;
@@ -144,12 +144,14 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
                 name={item.name}
                 iconUrl={item.image}
                 address={item.id}
+                decimal={item.decimals}
                 balance={"0"}
                 addInOwner={false}
-                onClick={(address) => {
+                onClick={(address, decimals) => {
                   setDropdown(false);
                   setAddressSelected(address);
-                  props.onAddressSelect && props.onAddressSelect(address);
+                  props.onAddressSelect &&
+                    props.onAddressSelect(address, decimals);
                 }}
                 check={item.id === addressSelected}
               />
