@@ -6,10 +6,10 @@ type PocketNoteProps = {
 };
 export const PocketNote = (props: PocketNoteProps) => {
   const { status } = props;
-  const isActive = status === PocketStatus["POOL_STATUS::ACTIVE"];
-  const isPaused = status === PocketStatus["POOL_STATUS::PAUSED"];
-  const isClosed = status === PocketStatus["POOL_STATUS::CLOSED"];
-  const isEnded = status === PocketStatus["POOL_STATUS::ENDED"];
+  const isActive = status === PocketStatus.ACTIVE;
+  const isPaused = status === PocketStatus.PAUSED;
+  const isClosed = status === PocketStatus.CLOSED;
+  const isEnded = status === PocketStatus.ENDED;
   const noteText = isActive
     ? "If Pool balance is not enough on each batch, the pool will just buy the SOL balance left"
     : isPaused

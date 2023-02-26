@@ -2,7 +2,6 @@ import { createContext, useContext } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
-import { BN } from "@project-serum/anchor";
 import { ErrorValidateContext } from "./useValidate";
 
 /** @dev Export state contained in page interface */

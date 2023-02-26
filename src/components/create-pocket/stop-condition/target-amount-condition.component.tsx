@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { BN } from "@project-serum/anchor";
 
 export const TargetAmountCondition: FC<{
@@ -37,7 +37,8 @@ export const TargetAmountCondition: FC<{
   }, [executed, currentValue]);
 
   return (
-    <motion.div animate={{ x: 0 }} initial={{ x: -100 }} className="mt-[24px] ">
+    <div className="mt-[24px] ">
+      {/*  animate={{ x: 0 }} initial={{ x: -100 }} */}
       <p className="text-dark10 text-[14px] normal-text">
         Tokens bought
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
@@ -67,6 +68,6 @@ export const TargetAmountCondition: FC<{
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
