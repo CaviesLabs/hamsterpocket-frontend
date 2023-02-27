@@ -110,8 +110,8 @@ export class PocketEntity {
 
   frequency: DurationObjectUnits;
 
-  @Type(() => BuyConditionOnChain)
-  buyCondition: BuyConditionOnChain | undefined;
+  @Type(() => BuyCondition)
+  buyCondition: BuyCondition | undefined;
 
   @Type(() => StopConditions)
   stopConditions: StopConditions[] | [];

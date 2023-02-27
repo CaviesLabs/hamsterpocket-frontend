@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import dayjs from "dayjs";
 import { DATE_FORMAT } from "@/src/utils";
@@ -17,7 +18,7 @@ export const PoolItemEndConditionComponent = (
       <p className="text-dark40 text-[16px] font-bold">End Conditions</p>
       <div className="flex mt-[5px]">
         <div className="text-white text-[16px] normal-text">
-          {data.stopConditions.endTime && (
+          {/* {data.stopConditions.endTime && (
             <p>
               {dayjs(data.stopConditions.endTime).format(DATE_FORMAT)}{" "}
               <span className="text-dark50 text-[14px]">or</span>
@@ -37,7 +38,7 @@ export const PoolItemEndConditionComponent = (
           )}
           {data.stopConditions.batchAmountReach && (
             <p>{data.stopConditions.batchAmountReach} PAX </p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
