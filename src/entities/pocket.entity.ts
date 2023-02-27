@@ -67,9 +67,9 @@ export class BuyConditionOnChain {
 }
 
 export class StopConditions {
-  endTime?: Date;
-  baseTokenReach?: number;
-  targetTokenReach?: number;
+  endTimeReach?: Date;
+  baseTokenAmountReach?: number;
+  targetTokenAmountReach?: number;
   batchAmountReach?: number;
 }
 export class StopConditionsOnChain {

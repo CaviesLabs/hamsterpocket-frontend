@@ -31,7 +31,7 @@ export const TargetAmountCondition: FC<{
   useEffect(() => {
     handleModifyStopConditions(
       executed,
-      "targetTokenReach",
+      "targetTokenAmountReach",
       new BN(currentValue * Math.pow(10, targetTokenAddress[1]))
     );
   }, [executed, currentValue]);

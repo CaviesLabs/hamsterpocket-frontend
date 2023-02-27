@@ -274,7 +274,7 @@ export type PocketIdl = {
         },
         {
           name: "pocket";
-          isMut: true;
+          isMut: false;
           isSigner: false;
         },
         {
@@ -822,8 +822,12 @@ export type PocketIdl = {
         kind: "enum";
         variants: [
           {
-            name: "EndTime";
+            name: "EndTimeReach";
             fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
               {
                 name: "value";
                 type: "u64";
@@ -831,8 +835,12 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "BaseTokenReach";
+            name: "BaseTokenAmountReach";
             fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
               {
                 name: "value";
                 type: "u64";
@@ -840,8 +848,12 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "TargetTokenReach";
+            name: "TargetTokenAmountReach";
             fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
               {
                 name: "value";
                 type: "u64";
@@ -851,6 +863,10 @@ export type PocketIdl = {
           {
             name: "BatchAmountReach";
             fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
               {
                 name: "value";
                 type: "u64";
@@ -870,6 +886,26 @@ export type PocketIdl = {
           },
           {
             name: "Sell";
+          }
+        ];
+      };
+    },
+    {
+      name: "MainProgressBy";
+      type: {
+        kind: "enum";
+        variants: [
+          {
+            name: "EndTimeReach";
+          },
+          {
+            name: "BaseTokenAmountReach";
+          },
+          {
+            name: "TargetTokenAmountReach";
+          },
+          {
+            name: "BatchAmountReach";
           }
         ];
       };
@@ -1356,7 +1392,7 @@ export const IDL: PocketIdl = {
         },
         {
           name: "pocket",
-          isMut: true,
+          isMut: false,
           isSigner: false,
         },
         {
@@ -1904,8 +1940,12 @@ export const IDL: PocketIdl = {
         kind: "enum",
         variants: [
           {
-            name: "EndTime",
+            name: "EndTimeReach",
             fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
               {
                 name: "value",
                 type: "u64",
@@ -1913,8 +1953,12 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "BaseTokenReach",
+            name: "BaseTokenAmountReach",
             fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
               {
                 name: "value",
                 type: "u64",
@@ -1922,8 +1966,12 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "TargetTokenReach",
+            name: "TargetTokenAmountReach",
             fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
               {
                 name: "value",
                 type: "u64",
@@ -1933,6 +1981,10 @@ export const IDL: PocketIdl = {
           {
             name: "BatchAmountReach",
             fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
               {
                 name: "value",
                 type: "u64",
@@ -1952,6 +2004,26 @@ export const IDL: PocketIdl = {
           },
           {
             name: "Sell",
+          },
+        ],
+      },
+    },
+    {
+      name: "MainProgressBy",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "EndTimeReach",
+          },
+          {
+            name: "BaseTokenAmountReach",
+          },
+          {
+            name: "TargetTokenAmountReach",
+          },
+          {
+            name: "BatchAmountReach",
           },
         ],
       },

@@ -16,6 +16,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       try {
         const result = await whitelistService.getWhitelist();
         const res: WhitelistObj = {};
+        console.log(result);
         result.forEach((_) => {
           res[_.address] = _;
         });

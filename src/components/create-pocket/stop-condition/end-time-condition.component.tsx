@@ -30,7 +30,7 @@ export const EndTimeCondition: FC<{
   useEffect(() => {
     handleModifyStopConditions(
       executed,
-      "endTime",
+      "endTimeReach",
       new BN(currentValue.getTime().toString())
     );
   }, [executed, currentValue]);

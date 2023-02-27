@@ -16,6 +16,5 @@ export type PortfolioEntity = {
   tokenAddress: string;
   value: number;
   total: number;
-
   image?: string; // for developing
 };
