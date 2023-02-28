@@ -229,9 +229,9 @@ export const ActivePocketsMock: PocketEntity[] = [
     },
     stopConditions: [
       {
-        endTime: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenReach: 300,
-        targetTokenReach: 1000000000,
+        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenAmountReach: 300,
+        targetTokenAmountReach: 1000000000,
         batchAmountReach: 10,
       },
     ],
@@ -261,9 +261,9 @@ export const ActivePocketsMock: PocketEntity[] = [
     },
     stopConditions: [
       {
-        endTime: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenReach: 300,
-        targetTokenReach: 1000000000,
+        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenAmountReach: 300,
+        targetTokenAmountReach: 1000000000,
         batchAmountReach: 10,
       },
     ],
@@ -293,9 +293,9 @@ export const ActivePocketsMock: PocketEntity[] = [
     },
     stopConditions: [
       {
-        endTime: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenReach: 0,
-        targetTokenReach: 0,
+        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
+        baseTokenAmountReach: 0,
+        targetTokenAmountReach: 0,
         batchAmountReach: 0,
       },
     ],

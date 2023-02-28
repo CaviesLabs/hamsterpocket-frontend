@@ -15,7 +15,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{data.depositedAmount}</span>/
-          {data.stopConditions[0]?.baseTokenReach} SOL
+          {data.stopConditions[0]?.baseTokenAmountReach} SOL
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {data.currentTargetToken} {targetToken?.symbol}
@@ -28,7 +28,8 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{data.currentTargetToken}</span>
-          /{data.stopConditions[0]?.targetTokenReach} {targetToken?.symbol}
+          /{data.stopConditions[0]?.targetTokenAmountReach}{" "}
+          {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {data.depositedAmount} SOL
