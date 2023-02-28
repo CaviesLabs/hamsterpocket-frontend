@@ -131,22 +131,37 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @dev Initilize when wallet changed.
    * */
   useEffect(() => {
-    if (wallet?.publicKey?.toString()) {
-      try {
-        /** @dev Initlize swap program service with initlized programProvider. */
-        const program = new ProgramService(
-          new PocketProgramProvider(solanaWallet)
-        );
+    (async () => {
+      if (wallet?.publicKey?.toString()) {
+        try {
+          /** @dev Init program provider. */
+          const programProvider = new PocketProgramProvider(solanaWallet);
 
-        /** @dev Init program into state for usage. */
-        initProgram(program);
+          /** ---- DEBUG ---  */
+          // setTimeout(async () => {
+          //   try {
+          //     const pocketState = await programProvider.getPocketState(
+          //       "63fdbd65511692fe51fc195d"
+          //     );
+          //     console.log({ pocketState });
+          //   } catch (err) {
+          //     console.log("Error get pocket state: ", err);
+          //   }
+          // }, 4000);
 
-        /** @dev update sol balance if wallet changes. */
-        getSolBalance();
-      } catch (err: any) {
-        console.log(err.message);
+          /** @dev Initlize swap program service with initlized programProvider. */
+          const program = new ProgramService(programProvider);
+
+          /** @dev Init program into state for usage. */
+          initProgram(program);
+
+          /** @dev update sol balance if wallet changes. */
+          getSolBalance();
+        } catch (err: any) {
+          console.log(err.message);
+        }
       }
-    }
+    })();
   }, [wallet, solanaWallet, router.asPath]);
 
   return (

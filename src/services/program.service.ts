@@ -33,9 +33,8 @@ export class ProgramService {
     walletProvider: WalletProvider,
     createPocketDto: CreatePocketDto
   ): Promise<any> {
-    console.log("creating", { createPocketDto });
     /** @dev Call to HamsterBox server to initialize the proposal. */
-    await networkProvider.request("/pool", {
+    const response = await networkProvider.request<any>("/pool", {
       method: "POST",
       data: {
         ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
@@ -48,10 +47,14 @@ export class ProgramService {
       },
     });
 
-    return await this.pocketProgramProvider.createProposal(
-      walletProvider,
-      createPocketDto
-    );
+    console.log(response);
+
+    return this.requestAndSync(response?._id, async () => {
+      return await this.pocketProgramProvider.createProposal(walletProvider, {
+        ...createPocketDto,
+        id: response?._id,
+      });
+    });
   }
 
   /**
@@ -67,9 +70,12 @@ export class ProgramService {
     const data = await fn();
     return new Promise(async (resolve) =>
       setTimeout(async () => {
-        await this.sync(poolId);
-        resolve(data);
-      }, 4000)
+        try {
+          await this.sync(poolId);
+        } finally {
+          resolve(data);
+        }
+      }, 6000)
     );
   }
 
@@ -79,7 +85,7 @@ export class ProgramService {
    */
   public async sync(poolId: string): Promise<any> {
     return networkProvider.request(`/pool/${poolId}/sync`, {
-      method: "PATCH",
+      method: "POST",
     });
   }
 
@@ -89,7 +95,6 @@ export class ProgramService {
    * @returns {string}
    */
   public static generatePocketId() {
-    // return uuid().slice(0, 10);
     return Keypair.generate().publicKey.toString().slice(0, 24);
   }
 }

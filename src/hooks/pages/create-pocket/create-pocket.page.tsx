@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { useRouter } from "next/router";
 import { ReactNode, useCallback, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
@@ -13,6 +14,7 @@ import {
   convertDurationsTimeToHours,
 } from "@/src/utils";
 import { ErrorValidateContext } from "./useValidate";
+import { SuccessTransactionModal } from "@/src/components/create-pocket/success-modal.component";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -34,8 +36,21 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
 
+  /** @dev Define variable presenting for successful pocket creation. */
+  const [successCreated, setSuccessCreated] = useState(false);
+
+  /** @dev Inject router to use. */
+  const router = useRouter();
+
   /** @dev Inject wallet provider. */
   const { solanaWallet, programService } = useWallet();
+
+  /** @dev The function to validate. */
+  const validateForms = useCallback(() => {
+    return !Object.keys(errorMsgs).filter(
+      (key) => errorMsgs[key as keyof ErrorValidateContext]
+    ).length;
+  }, [errorMsgs]);
 
   /** @dev The function to modify stop conditions. */
   const handleModifyStopConditions = useCallback(
@@ -59,6 +74,11 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     try {
       /** @dev Enable UX when processing. */
       setProcessing(true);
+
+      /** @dev Validate if all form be valid. */
+      if (!validateForms) {
+        throw new Error("NOT::VALIDATION");
+      }
 
       /** @dev Turn createdEnable when first click to create. */
       !createdEnable && setCreatedEnable(true);
@@ -91,6 +111,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       });
 
       console.log(response);
+      setSuccessCreated(true);
     } catch (err) {
       console.log(err);
     } finally {
@@ -109,6 +130,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     stopConditions,
     depositedAmount,
     createdEnable,
+    validateForms,
   ]);
 
   return (
@@ -140,6 +162,11 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       }}
     >
       {props.children}
+      <SuccessTransactionModal
+        isModalOpen={successCreated}
+        handleOk={() => router.push("/my-pockets")}
+        handleCancel={() => {}}
+      />
     </CreatePocketContext.Provider>
   );
 };

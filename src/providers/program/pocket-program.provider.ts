@@ -232,8 +232,12 @@ export class PocketProgramProvider {
 
       console.log("Transaction ID: ", { txId });
       setTimeout(async () => {
-        const [, state] = await this.getPocketState(createPocketDto.id);
-        console.log({ state });
+        try {
+          const [, state] = await this.getPocketState(createPocketDto.id);
+          console.log({ state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
       }, 4000);
     } catch (err: any) {
       console.error("Error", err.message);
@@ -312,7 +316,8 @@ export class PocketProgramProvider {
    * @dev Get pocket state
    * @param {string} id Pocket ID.
    */
-  private async getPocketState(id: string): Promise<[PublicKey, PocketEntity]> {
+  public async getPocketState(id: string): Promise<[PublicKey, PocketEntity]> {
+    console.log("instruction provider", this.instructionProvider);
     const pocketAccount = await this.instructionProvider.findPocketAccount(id);
     const state = await this.program.account.pocket.fetch(pocketAccount);
     const parseState = JSON.parse(JSON.stringify(state)) as PocketEntity;

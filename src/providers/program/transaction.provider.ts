@@ -33,7 +33,8 @@ export class TransactionProvider {
    */
   public async signAndSendTransaction(
     walletProvider: WalletProvider,
-    instructions: TransactionInstruction[]
+    instructions: TransactionInstruction[],
+    commitment: Commitment = "finalized"
   ) {
     /**
      * @dev Setup tx by creating a transaction which includes all instructions which users want to process.
@@ -51,7 +52,7 @@ export class TransactionProvider {
      * @dev Send a raw transaction.
      */
     return this.connection.sendRawTransaction(rawTx.serialize(), {
-      preflightCommitment: "finalized",
+      preflightCommitment: commitment,
     });
   }
 

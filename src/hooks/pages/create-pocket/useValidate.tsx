@@ -38,6 +38,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     stopConditions,
     buyCondition,
     batchVolume,
+    depositedAmount,
   } = useCreatePocketPage();
 
   /** @dev Watch changes in pocket name and validate it. */
@@ -75,6 +76,17 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       !buyCondition ? "Buy condition must be required" : ""
     );
   }, [buyCondition, createdEnable]);
+
+  /** @dev Watch changes in stop condtions. */
+  useEffect(() => {
+    if (!createdEnable) return;
+    modifyErrors(
+      "depositedAmount",
+      depositedAmount <= 0 || !depositedAmount
+        ? "Deposited amount must be larger than 0"
+        : ""
+    );
+  }, [depositedAmount, createdEnable]);
 
   return {
     errors,

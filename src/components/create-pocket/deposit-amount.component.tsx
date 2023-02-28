@@ -1,12 +1,14 @@
 import { FC } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { ErrorLabel } from "@/src/components/error-label";
 
 export const DepositAmount: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setDepositedAmount } = useCreatePocketPage();
+  const { baseTokenAddress, setDepositedAmount, errorMsgs } =
+    useCreatePocketPage();
 
   return (
     <section>
@@ -34,6 +36,9 @@ export const DepositAmount: FC = () => {
             />
           </div>
         </div>
+        {errorMsgs?.depositedAmount && (
+          <ErrorLabel message={errorMsgs.depositedAmount} />
+        )}
       </div>
     </section>
   );
