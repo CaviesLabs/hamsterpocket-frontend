@@ -141,7 +141,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
           // setTimeout(async () => {
           //   try {
           //     const pocketState = await programProvider.getPocketState(
-          //       "63fdbd65511692fe51fc195d"
+          //       "63fe2a0fa9ded18df1f2062b"
           //     );
           //     console.log({ pocketState });
           //   } catch (err) {

@@ -265,57 +265,6 @@ export type PocketIdl = {
       args: [];
     },
     {
-      name: "initializePocketDexRegistry";
-      accounts: [
-        {
-          name: "signer";
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: "pocket";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "pocketRegistry";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "market";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "openOrders";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "dexProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "rent";
-          isMut: false;
-          isSigner: false;
-        }
-      ];
-      args: [];
-    },
-    {
       name: "executeSwap";
       accounts: [
         {
@@ -341,51 +290,6 @@ export type PocketIdl = {
         {
           name: "pocketTargetTokenVault";
           isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "market";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "coinVault";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "pcVault";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "requestQueue";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "eventQueue";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "marketBids";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "marketAsks";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "openOrders";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "dexProgram";
-          isMut: false;
           isSigner: false;
         },
         {
@@ -734,7 +638,7 @@ export type PocketIdl = {
         kind: "enum";
         variants: [
           {
-            name: "GT";
+            name: "gt";
             fields: [
               {
                 name: "value";
@@ -743,7 +647,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "GTE";
+            name: "gte";
             fields: [
               {
                 name: "value";
@@ -752,7 +656,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "LT";
+            name: "lt";
             fields: [
               {
                 name: "value";
@@ -761,7 +665,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "LTE";
+            name: "lte";
             fields: [
               {
                 name: "value";
@@ -770,7 +674,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "EQ";
+            name: "eq";
             fields: [
               {
                 name: "value";
@@ -779,7 +683,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "NEQ";
+            name: "neq";
             fields: [
               {
                 name: "value";
@@ -788,7 +692,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "BW";
+            name: "bw";
             fields: [
               {
                 name: "from_value";
@@ -801,7 +705,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "NBW";
+            name: "nbw";
             fields: [
               {
                 name: "from_value";
@@ -1383,57 +1287,6 @@ export const IDL: PocketIdl = {
       args: [],
     },
     {
-      name: "initializePocketDexRegistry",
-      accounts: [
-        {
-          name: "signer",
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: "pocket",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "pocketRegistry",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "market",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "openOrders",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "dexProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "rent",
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-    },
-    {
       name: "executeSwap",
       accounts: [
         {
@@ -1459,51 +1312,6 @@ export const IDL: PocketIdl = {
         {
           name: "pocketTargetTokenVault",
           isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "market",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "coinVault",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "pcVault",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "requestQueue",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "eventQueue",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "marketBids",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "marketAsks",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "openOrders",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "dexProgram",
-          isMut: false,
           isSigner: false,
         },
         {
@@ -1852,7 +1660,7 @@ export const IDL: PocketIdl = {
         kind: "enum",
         variants: [
           {
-            name: "GT",
+            name: "gt",
             fields: [
               {
                 name: "value",
@@ -1861,7 +1669,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "GTE",
+            name: "gte",
             fields: [
               {
                 name: "value",
@@ -1870,7 +1678,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "LT",
+            name: "lt",
             fields: [
               {
                 name: "value",
@@ -1879,7 +1687,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "LTE",
+            name: "lte",
             fields: [
               {
                 name: "value",
@@ -1888,7 +1696,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "EQ",
+            name: "eq",
             fields: [
               {
                 name: "value",
@@ -1897,7 +1705,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "NEQ",
+            name: "neq",
             fields: [
               {
                 name: "value",
@@ -1906,7 +1714,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "BW",
+            name: "bw",
             fields: [
               {
                 name: "from_value",
@@ -1919,7 +1727,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "NBW",
+            name: "nbw",
             fields: [
               {
                 name: "from_value",
