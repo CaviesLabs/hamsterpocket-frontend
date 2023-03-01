@@ -21,6 +21,7 @@ export const ActivePoolGroup: FC = () => {
   const [search, setSearch] = useState("");
   const [isPauseOnly, setIsPauseOnly] = useState(false);
   const [isDepositNeeded, setIsDepositNeeded] = useState(false);
+  const [sorter, setSorter] = useState([sortOptions[0].value]);
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
@@ -30,12 +31,13 @@ export const ActivePoolGroup: FC = () => {
       getActivePockets({
         ownerAddress: wallet,
         search,
+        sortBy: sorter[0],
         statuses: isPauseOnly
           ? [PocketStatus.PAUSED]
           : [PocketStatus.PAUSED, PocketStatus.ACTIVE, PocketStatus.CREATED],
       })
     );
-  }, [wallet, debouncedSearch, isPauseOnly]);
+  }, [wallet, debouncedSearch, isPauseOnly, sorter]);
 
   return (
     <section className="mt-[60px]">
@@ -98,37 +100,32 @@ export const ActivePoolGroup: FC = () => {
             </div>
           </div>
           <FilterSelect
-            mode="multiple"
-            className="text-center rounded-3xl text-sm h-[44px] px-[80px] md:mt-0 mt-[20px]"
-            placeholder={
-              <div className="w-full regular-text text-center">
-                Pro Advertisers
-              </div>
-            }
-            values={["Newest", "Highest Progress Percent"]}
-            options={[
-              {
-                value: "Newest",
-              },
-              {
-                value: "Highest Progress Percent",
-              },
-              {
-                value: "Lowest Progress percent",
-              },
-              {
-                value: "Pocket ID ascending",
-              },
-              {
-                value: "Pocket ID decrease",
-              },
-            ]}
-            onChange={(value) => {
-              console.log("choose", value);
-            }}
+            className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px]"
+            values={sorter}
+            options={sortOptions}
+            onChange={(value) => setSorter(value)}
           />
         </div>
       </div>
     </section>
   );
 };
+
+const sortOptions = [
+  {
+    label: "Date Started - Descending",
+    value: "DATE_START_DESC",
+  },
+  {
+    label: "Date Created - Descending",
+    value: "DATE_CREATED_DESC",
+  },
+  {
+    label: "Progress - Descending",
+    value: "PROGRESS_DESC",
+  },
+  {
+    label: "Progress - Ascending",
+    value: "PROGRESS_ASC",
+  },
+];

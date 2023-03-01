@@ -19,6 +19,7 @@ export class GetPocketsDto {
   statuses?: PocketStatus[];
 
   search?: string;
+  sortBy?: string;
 }
 
 /**
