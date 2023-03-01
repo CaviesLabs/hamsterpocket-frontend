@@ -5,9 +5,6 @@ import { PocketEntity } from "@/src/entities/pocket.entity";
 
 export class PoolService {
   public async getPockets(payload: GetPocketsDto): Promise<PocketEntity[]> {
-    // TODO remove this line below after developing
-    return ActivePocketsMock;
-
     return networkProvider
       .request<PocketEntity[]>(`/pool`, {
         method: "GET",

@@ -17,6 +17,9 @@ export interface PocketDto {}
 export class GetPocketsDto {
   ownerAddress: string;
   statuses?: PocketStatus[];
+
+  search?: string;
+  sortBy?: string;
 }
 
 /**

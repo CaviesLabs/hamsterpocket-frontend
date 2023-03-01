@@ -88,7 +88,7 @@ export const PoolItem = (props: PoolItemProps) => {
         />
         <div className="flow-root mt-[10px]">
           <p className="float-left text-green text-[14px] regular-text">
-            {data.progressPercent}%
+            {data.progressPercent.toFixed(2)}%
           </p>
           <div className="float-right">
             <ProgressDetailComponent targetToken={targetToken} data={data} />

@@ -9,10 +9,7 @@ import PortfolioController from "@/src/components/portfolio/controller.component
 import TableComponent from "@/src/components/portfolio/table.component";
 import DashboardComponent from "@/src/components/portfolio/dashboard.component";
 import { useDispatch } from "react-redux";
-import {
-  getPortfolios,
-  getPortfolioStatistic,
-} from "../redux/actions/portfolio/portfolio.action";
+import { getPortfolioStatistic } from "../redux/actions/portfolio/portfolio.action";
 import { useConnectedWallet } from "@saberhq/use-solana";
 
 const Layout: FC = () => {
@@ -21,11 +18,6 @@ const Layout: FC = () => {
 
   useEffect(() => {
     if (!wallet) return;
-    dispatch(
-      getPortfolios({
-        ownerAddress: wallet,
-      })
-    );
     dispatch(
       getPortfolioStatistic({
         ownerAddress: wallet,
