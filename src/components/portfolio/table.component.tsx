@@ -9,8 +9,6 @@ export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
   const { whitelist } = useContext(WhitelistContext);
 
-  console.log(whitelist);
-
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
       <table className="table-fixed w-full">
@@ -47,8 +45,8 @@ export default function TableComponent() {
                 </a>
               </td>
               <td>
-                <div>{h.total}</div>
-                <div className="text-dark40">~ $ {h.value}</div>
+                <div>{h.total.toFixed(4)}</div>
+                <div className="text-dark40">~ $ {h.value.toFixed(2)}</div>
               </td>
             </tr>
           ))}

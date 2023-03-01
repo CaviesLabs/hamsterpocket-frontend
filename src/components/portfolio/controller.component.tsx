@@ -9,19 +9,12 @@ import useDebounce from "@/src/hooks/useDebounce";
 
 const options = [
   {
-    value: "Newest",
+    label: "Highest value",
+    value: "VALUE_DESC",
   },
   {
-    value: "Highest",
-  },
-  {
-    value: "Lowest",
-  },
-  {
-    value: "Pocket ID ASC",
-  },
-  {
-    value: "Pocket ID DESC",
+    label: "Lowest value",
+    value: "VALUE_ASC",
   },
 ];
 
@@ -38,11 +31,11 @@ export default function PortfolioController() {
     dispatch(
       getPortfolios({
         ownerAddress: wallet,
-        sortBy: ["VALUE_ASC"],
+        sortBy: selectedType,
         search,
       })
     );
-  }, [wallet, debouncedSearch]);
+  }, [wallet, debouncedSearch, selectedType]);
 
   return (
     <div className="mt-10 flex justify-between">
