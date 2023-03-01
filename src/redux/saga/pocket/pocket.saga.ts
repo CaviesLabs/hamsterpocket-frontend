@@ -16,8 +16,8 @@ export function* getActivePockets({
 }: SagaPayload<GetPocketsDto, PocketEntity[]>) {
   try {
     const pockets: PocketEntity[] = yield call(poolService.getPockets, {
-      ownerAddress: payload.ownerAddress,
       statuses: [PocketStatus.ACTIVE, PocketStatus.CREATED],
+      ...payload,
     });
 
     yield put(setActivePockets(pockets));
