@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { getActivePockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
+import classnames from "classnames";
 
 export const ActivePoolGroup: FC = () => {
   /**
@@ -19,6 +20,7 @@ export const ActivePoolGroup: FC = () => {
   const wallet = useConnectedWallet()?.publicKey.toString();
   const [search, setSearch] = useState("");
   const [isPauseOnly, setIsPauseOnly] = useState(false);
+  const [isDepositNeeded, setIsDepositNeeded] = useState(false);
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
@@ -68,18 +70,31 @@ export const ActivePoolGroup: FC = () => {
                 className="mr-2"
                 color={isPauseOnly && "#B998FB"}
               />
-              <p className="text-center text-[14px] normal-text text-dark50">
+              <p
+                className={classnames(
+                  "text-center text-[14px] normal-text",
+                  isPauseOnly ? "text-[#B998FB]" : "text-dark50"
+                )}
+              >
                 Paused only
               </p>
             </div>
-            <div className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto">
-              <p className="text-center text-[14px] normal-text text-dark50">
+            <div
+              onClick={() => setIsDepositNeeded(!isDepositNeeded)}
+              className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto"
+            >
+              <CircleCheckIcon
+                className="mr-2"
+                color={isDepositNeeded && "#B998FB"}
+              />
+              <p
+                className={classnames(
+                  "text-center text-[14px] normal-text",
+                  isDepositNeeded ? "text-[#B998FB]" : "text-dark50"
+                )}
+              >
                 Need deposit for next buying
               </p>
-              <CircleCheckIcon
-                className="absolute left-[15px]"
-                color="#B998FB"
-              />
             </div>
           </div>
           <FilterSelect
