@@ -4,11 +4,14 @@ import {
   PortfolioEntity,
   PortfolioStatisticEntity,
 } from "@/src/entities/portfolio.entity";
-import { GetPortfoliosDto } from "@/src/dto/portfolio.dto";
+import {
+  GetPortfoliosDto,
+  GetPortfolioStatisticDto,
+} from "@/src/dto/portfolio.dto";
 
 export class PortfolioService {
   public async getStatistic(
-    payload: GetPortfoliosDto
+    payload: GetPortfolioStatisticDto
   ): Promise<PortfolioStatisticEntity[]> {
     const address = payload.ownerAddress;
     delete payload.ownerAddress;

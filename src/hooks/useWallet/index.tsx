@@ -93,9 +93,11 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
       /**
        * @dev Get blance if whether address or signer is valid.
        */
-      const balance = await walletConnection.connection.getBalance(
-        address || solanaWallet?.publicKey
-      );
+      const balance = await walletConnection.connection
+        .getBalance(address || solanaWallet?.publicKey)
+        .catch(() => {
+          return 0;
+        });
 
       /**
        * @dev Check signer sol balance if address is null.

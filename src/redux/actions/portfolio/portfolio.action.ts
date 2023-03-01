@@ -4,7 +4,10 @@ import {
   SET_PORTFOLIO_STATISTIC,
   SET_PORTFOLIOS,
 } from "@/src/redux/actions";
-import { GetPortfoliosDto } from "@/src/dto/portfolio.dto";
+import {
+  GetPortfoliosDto,
+  GetPortfolioStatisticDto,
+} from "@/src/dto/portfolio.dto";
 import {
   PortfolioEntity,
   PortfolioStatisticEntity,
@@ -29,10 +32,10 @@ export const setPortfolios = (data: PortfolioEntity[]) => ({
 });
 
 /**
- * @param {PortfolioStatisticEntity[]} data
+ * @param {GetPortfolioStatisticDto[]} data
  * @returns reducer.
  */
-export const getPortfolioStatistic = (data: GetPortfoliosDto) => ({
+export const getPortfolioStatistic = (data: GetPortfolioStatisticDto) => ({
   type: GET_PORTFOLIO_STATISTIC,
   payload: data,
 });
