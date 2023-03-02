@@ -48,10 +48,12 @@ export const PoolItem = (props: PoolItemProps) => {
         <div className="md:float-left md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
             <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              <img
-                src={whiteLists[data.targetTokenAddress]?.image}
-                className="rounded-[50%]"
-              />
+              {whiteLists[data.targetTokenAddress]?.image && (
+                <img
+                  src={whiteLists[data.targetTokenAddress]?.image}
+                  className="rounded-[50%]"
+                />
+              )}
             </div>
             <div className="pl-[20px]">
               <p className="text-white text-[18px] normal-text uppercase">
