@@ -54,7 +54,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   /** @dev The function to validate. */
   const validateForms = useCallback(() => {
     return !Object.keys(errorMsgs).filter(
-      (key) => errorMsgs[key as keyof ErrorValidateContext]
+      (key) => errorMsgs?.[key as keyof ErrorValidateContext]
     ).length;
   }, [errorMsgs]);
 
@@ -95,9 +95,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       // );
 
       /** @dev Validate if all form be valid. */
-      if (!validateForms) {
-        throw new Error("NOT::VALIDATION");
-      }
+      // if (!validateForms()) {
+      //   throw new Error("NOT::VALIDATION");
+      // }
 
       /** @dev Turn createdEnable when first click to create. */
       !createdEnable && setCreatedEnable(true);
@@ -116,13 +116,14 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         depositedAmount: new BN(
           depositedAmount * Math.pow(10, baseTokenAddress[1])
         ),
+        // buyCondition: null,
         buyCondition: {
-          tokenAddress: new PublicKey(buyCondition.tokenAddress),
-          condition: {
-            [buyCondition.type]: {
-              value: buyCondition.value,
-            },
+          // tokenAddress: new PublicKey(buyCondition.tokenAddress),
+          // condition: {
+          [buyCondition.type]: {
+            value: buyCondition.value,
           },
+          // },
         },
         stopConditions: stopConditions.map((item) => ({
           [Object.keys(item)[0]]: {

@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
-import { PublicKey } from "@solana/web3.js";
+// import { PublicKey } from "@solana/web3.js";
 import "reflect-metadata";
 
 export enum PocketStatus {
@@ -58,12 +58,12 @@ export class BuyCondition {
 }
 
 export class BuyConditionOnChain {
-  tokenAddress: PublicKey;
-  condition: {
-    [key: string]: {
-      value: BN;
-    };
+  [key: string]: {
+    value: BN;
   };
+  // tokenAddress: PublicKey;
+  // condition: {
+  // };
 }
 
 export class StopConditions {
