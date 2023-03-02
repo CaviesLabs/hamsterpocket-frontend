@@ -29,7 +29,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
-  const [processing, setProcessing] = useState(false);
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
@@ -38,6 +37,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev Define variable presenting for successful pocket creation. */
   const [successCreated, setSuccessCreated] = useState(false);
+
+  /** @dev Define variable presenting whenther program is creating pool. */
+  const [processing, setProcessing] = useState(false);
 
   /** @dev Inject router to use. */
   const router = useRouter();
