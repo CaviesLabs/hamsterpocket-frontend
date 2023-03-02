@@ -8,7 +8,9 @@ import {
   useCallback,
 } from "react";
 import { whitelistService } from "@/src/services/whitelist.service";
+import { radyumService } from "@/src/services/radyum.service";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { LiquidityEntity } from "@/src/entities/radyum.entity";
 
 export type WhiteListConfigs = {
   [key: string]: WhitelistEntity;
@@ -18,10 +20,15 @@ export type WhiteListConfigs = {
 export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
   convertDecimalAmount(tokenAddress: string, source: number): number;
+  findPairLiquidity(
+    baseTokenAddress: string,
+    targetTokenAddress: string
+  ): LiquidityEntity;
 }>(null);
 
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const [whiteLists, setWhitelist] = useState<WhiteListConfigs>({});
+  const [liquidities, setLiquidities] = useState<LiquidityEntity[]>([]);
 
   /**
    * @dev Get whitelist data from Hamster server when first load.
@@ -40,6 +47,16 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   }, []);
 
   /**
+   * @dev The function to get liquidies data from Radyumm.
+   */
+  useEffect(() => {
+    (async () => {
+      const res = await radyumService.getLiquidity();
+      setLiquidities(res);
+    })();
+  }, []);
+
+  /**
    * @dev The function to convert amount of token to normal number by dividing its decimals.
    */
   const convertDecimalAmount = useCallback(
@@ -49,11 +66,26 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     [whiteLists]
   );
 
+  /**
+   * @dev The function to find pair liquidity data.
+   */
+  const findPairLiquidity = useCallback(
+    (baseTokenAddress: string, targetTokenAddress: string) => {
+      return liquidities.find(
+        (item) =>
+          item.baseMint === baseTokenAddress &&
+          item.quoteMint === targetTokenAddress
+      );
+    },
+    [liquidities]
+  );
+
   return (
     <WhitelistContext.Provider
       value={{
         whiteLists,
         convertDecimalAmount,
+        findPairLiquidity,
       }}
     >
       {props.children}

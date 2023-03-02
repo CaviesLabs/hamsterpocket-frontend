@@ -7,8 +7,7 @@ export const BatchOption: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { targetTokenAddress, setBatchVolume, errorMsgs } =
-    useCreatePocketPage();
+  const { baseTokenAddress, setBatchVolume, errorMsgs } = useCreatePocketPage();
 
   return (
     <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
@@ -20,7 +19,7 @@ export const BatchOption: FC = () => {
           </span>
         </p>
         <CurrencyInput
-          addressSelected={targetTokenAddress?.[0]?.toBase58().toString()}
+          addressSelected={baseTokenAddress?.[0]?.toBase58().toString()}
           disableDropdown={true}
           onAmountChange={(val) => setBatchVolume(val)}
         />

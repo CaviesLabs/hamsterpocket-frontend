@@ -13,8 +13,9 @@ import {
   BONK_ADDRESS,
   convertDurationsTimeToHours,
 } from "@/src/utils";
-import { ErrorValidateContext } from "./useValidate";
 import { SuccessTransactionModal } from "@/src/components/create-pocket/success-modal.component";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { ErrorValidateContext } from "./useValidate";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -31,6 +32,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
+
+  /** @dev Inject functions from whitelist hook to use. */
+  const { findPairLiquidity } = useWhiteList();
 
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
@@ -77,6 +81,19 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Enable UX when processing. */
       setProcessing(true);
 
+      // console.log(
+      //   findPairLiquidity(
+      //     baseTokenAddress[0].toBase58().toString(),
+      //     targetTokenAddress[0].toBase58().toString()
+      //   )
+      // );
+      // console.log(
+      //   findPairLiquidity(
+      //     targetTokenAddress[0].toBase58().toString(),
+      //     baseTokenAddress[0].toBase58().toString()
+      //   )
+      // );
+
       /** @dev Validate if all form be valid. */
       if (!validateForms) {
         throw new Error("NOT::VALIDATION");
@@ -85,7 +102,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Turn createdEnable when first click to create. */
       !createdEnable && setCreatedEnable(true);
 
+      /** @dev Return when wallet not connected. */
       if (!solanaWallet) return;
+
       const response = await programService.createPocket(solanaWallet, {
         id: ProgramService.generatePocketId(),
         name: pocketName,

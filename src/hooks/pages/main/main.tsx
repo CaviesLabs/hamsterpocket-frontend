@@ -32,6 +32,8 @@ export const MainProvider = (props: { children: ReactNode }) => {
   /** @dev Call hooks to detect router changes. */
   const { transitionLoading, fistLoading } = useRouter();
 
+  console.log("apiuri", process.env.API_URL);
+
   return (
     <MainContext.Provider
       value={{

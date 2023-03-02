@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Button, Input } from "@hamsterbox/ui-kit";
 import { PlusIcon, DeleteIconCircle } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
-import { WSOL_ADDRESS, PRICE_CONDITIONS } from "@/src/utils";
+import { PRICE_CONDITIONS } from "@/src/utils";
 import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
@@ -17,8 +17,8 @@ export const BuyCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { buyCondition, errorMsgs, setBuyCondition } = useCreatePocketPage();
-  const [decimals, setDecimals] = useState(9); // Default decimal of native SOL.
+  const { buyCondition, errorMsgs, setBuyCondition, targetTokenAddress } =
+    useCreatePocketPage();
 
   /**
    * @dev Initialize buy condition when click add condition button.
@@ -26,9 +26,9 @@ export const BuyCondition: FC<{
   useEffect(() => {
     if (!props.buyConditionDisplayed) return;
     setBuyCondition({
-      tokenAddress: WSOL_ADDRESS,
+      tokenAddress: targetTokenAddress[0]?.toBase58()?.toString(),
       type: PriceConditionType.GT,
-      value: new BN(0 * Math.pow(10, decimals)),
+      value: new BN(0 * Math.pow(10, targetTokenAddress?.[1])),
     });
   }, [props.buyConditionDisplayed]);
 
@@ -62,12 +62,14 @@ export const BuyCondition: FC<{
           </div>
           <div className="col-span-2">
             <CurrencyInput
-              currencyBadgeOnly={true}
-              addressSelected={buyCondition?.tokenAddress || WSOL_ADDRESS}
-              onAddressSelect={(val, decimals) => {
-                setBuyCondition({ ...buyCondition, tokenAddress: val });
-                setDecimals(decimals);
-              }}
+              // currencyBadgeOnly={true}
+              // addressSelected={buyCondition?.tokenAddress || WSOL_ADDRESS}
+              // onAddressSelect={(val, decimals) => {
+              //   setBuyCondition({ ...buyCondition, tokenAddress: val });
+              //   setDecimals(decimals);
+              // }}
+              addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
+              disableDropdown={true}
               className="!mt-0"
               dropdownBadgeClassname="!top-[23px]"
             />
@@ -89,14 +91,16 @@ export const BuyCondition: FC<{
             <Input
               containerClassName="app-input w-full !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
-              value={`$ ${
-                buyCondition?.value.toNumber() / Math.pow(10, decimals)
+              value={`${
+                buyCondition?.value.toNumber() /
+                Math.pow(10, targetTokenAddress?.[1])
               }`}
               onValueChange={(val) => {
                 setBuyCondition({
                   ...buyCondition,
                   value: new BN(
-                    (parseFloat(val.slice(1)) || 0) * Math.pow(10, decimals)
+                    (parseFloat(val) || 0) *
+                      Math.pow(10, targetTokenAddress?.[1])
                   ),
                 });
               }}
