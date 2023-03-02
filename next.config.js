@@ -39,6 +39,7 @@ module.exports = withPWA(
       SOLANA_CLUSTER: process.env.SOLANA_CLUSTER,
     },
     async rewrites() {
+      console.log(process.env.API_URL);
       return [
         {
           source: "/api/:path*",
