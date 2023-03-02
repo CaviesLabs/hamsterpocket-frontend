@@ -38,15 +38,6 @@ module.exports = withPWA(
       SWAP_PROGRAM_ADDRESS: process.env.SWAP_PROGRAM_ADDRESS,
       SOLANA_CLUSTER: process.env.SOLANA_CLUSTER,
     },
-    async rewrites() {
-      console.log("API: ", process.env.API_URL);
-      return [
-        {
-          source: "/api/:path*",
-          destination: `${process.env.API_URL}/api/:path*`,
-        },
-      ];
-    },
     serverRuntimeConfig: {
       // Will only be available on the server side
       mySecret: "secret",
