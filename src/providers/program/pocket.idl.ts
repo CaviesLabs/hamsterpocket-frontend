@@ -265,6 +265,78 @@ export type PocketIdl = {
       args: [];
     },
     {
+      name: "initSwapRegistry";
+      accounts: [
+        {
+          name: "pocket";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "openOrders";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "authority";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "marketKey";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "dexProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "rent";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [];
+    },
+    {
+      name: "closeSwapRegistry";
+      accounts: [
+        {
+          name: "pocket";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "openOrders";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "authority";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "destination";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "marketKey";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "dexProgram";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [];
+    },
+    {
       name: "executeSwap";
       accounts: [
         {
@@ -274,6 +346,11 @@ export type PocketIdl = {
         },
         {
           name: "pocket";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "marketKey";
           isMut: true;
           isSigner: false;
         },
@@ -404,6 +481,10 @@ export type PocketIdl = {
             type: "publicKey";
           },
           {
+            name: "marketKey";
+            type: "publicKey";
+          },
+          {
             name: "batchVolume";
             type: "u64";
           },
@@ -483,6 +564,10 @@ export type PocketIdl = {
           },
           {
             name: "targetTokenAddress";
+            type: "publicKey";
+          },
+          {
+            name: "marketKey";
             type: "publicKey";
           },
           {
@@ -579,6 +664,30 @@ export type PocketIdl = {
       };
     },
     {
+      name: "ExchangeRate";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "rate";
+            type: "u64";
+          },
+          {
+            name: "fromDecimals";
+            type: "u8";
+          },
+          {
+            name: "quoteDecimals";
+            type: "u8";
+          },
+          {
+            name: "strict";
+            type: "bool";
+          }
+        ];
+      };
+    },
+    {
       name: "MintInfo";
       type: {
         kind: "struct";
@@ -628,6 +737,37 @@ export type PocketIdl = {
           {
             name: "hours";
             type: "u64";
+          }
+        ];
+      };
+    },
+    {
+      name: "Side";
+      type: {
+        kind: "enum";
+        variants: [
+          {
+            name: "Bid";
+          },
+          {
+            name: "Ask";
+          }
+        ];
+      };
+    },
+    {
+      name: "ErrorCode";
+      type: {
+        kind: "enum";
+        variants: [
+          {
+            name: "SwapTokensCannotMatch";
+          },
+          {
+            name: "SlippageExceeded";
+          },
+          {
+            name: "ZeroSwap";
           }
         ];
       };
@@ -979,6 +1119,63 @@ export type PocketIdl = {
           index: false;
         }
       ];
+    },
+    {
+      name: "DidSwap";
+      fields: [
+        {
+          name: "givenAmount";
+          type: "u64";
+          index: false;
+        },
+        {
+          name: "minExchangeRate";
+          type: {
+            defined: "ExchangeRate";
+          };
+          index: false;
+        },
+        {
+          name: "fromAmount";
+          type: "u64";
+          index: false;
+        },
+        {
+          name: "toAmount";
+          type: "u64";
+          index: false;
+        },
+        {
+          name: "quoteAmount";
+          type: "u64";
+          index: false;
+        },
+        {
+          name: "spillAmount";
+          type: "u64";
+          index: false;
+        },
+        {
+          name: "fromMint";
+          type: "publicKey";
+          index: false;
+        },
+        {
+          name: "toMint";
+          type: "publicKey";
+          index: false;
+        },
+        {
+          name: "quoteMint";
+          type: "publicKey";
+          index: false;
+        },
+        {
+          name: "authority";
+          type: "publicKey";
+          index: false;
+        }
+      ];
     }
   ];
   errors: [
@@ -1287,6 +1484,78 @@ export const IDL: PocketIdl = {
       args: [],
     },
     {
+      name: "initSwapRegistry",
+      accounts: [
+        {
+          name: "pocket",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "openOrders",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "authority",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "marketKey",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "dexProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "rent",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
+      name: "closeSwapRegistry",
+      accounts: [
+        {
+          name: "pocket",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "openOrders",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "authority",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "destination",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "marketKey",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "dexProgram",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [],
+    },
+    {
       name: "executeSwap",
       accounts: [
         {
@@ -1296,6 +1565,11 @@ export const IDL: PocketIdl = {
         },
         {
           name: "pocket",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "marketKey",
           isMut: true,
           isSigner: false,
         },
@@ -1426,6 +1700,10 @@ export const IDL: PocketIdl = {
             type: "publicKey",
           },
           {
+            name: "marketKey",
+            type: "publicKey",
+          },
+          {
             name: "batchVolume",
             type: "u64",
           },
@@ -1505,6 +1783,10 @@ export const IDL: PocketIdl = {
           },
           {
             name: "targetTokenAddress",
+            type: "publicKey",
+          },
+          {
+            name: "marketKey",
             type: "publicKey",
           },
           {
@@ -1601,6 +1883,30 @@ export const IDL: PocketIdl = {
       },
     },
     {
+      name: "ExchangeRate",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "rate",
+            type: "u64",
+          },
+          {
+            name: "fromDecimals",
+            type: "u8",
+          },
+          {
+            name: "quoteDecimals",
+            type: "u8",
+          },
+          {
+            name: "strict",
+            type: "bool",
+          },
+        ],
+      },
+    },
+    {
       name: "MintInfo",
       type: {
         kind: "struct",
@@ -1650,6 +1956,37 @@ export const IDL: PocketIdl = {
           {
             name: "hours",
             type: "u64",
+          },
+        ],
+      },
+    },
+    {
+      name: "Side",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "Bid",
+          },
+          {
+            name: "Ask",
+          },
+        ],
+      },
+    },
+    {
+      name: "ErrorCode",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "SwapTokensCannotMatch",
+          },
+          {
+            name: "SlippageExceeded",
+          },
+          {
+            name: "ZeroSwap",
           },
         ],
       },
@@ -1998,6 +2335,63 @@ export const IDL: PocketIdl = {
         {
           name: "targetTokenAmount",
           type: "u64",
+          index: false,
+        },
+      ],
+    },
+    {
+      name: "DidSwap",
+      fields: [
+        {
+          name: "givenAmount",
+          type: "u64",
+          index: false,
+        },
+        {
+          name: "minExchangeRate",
+          type: {
+            defined: "ExchangeRate",
+          },
+          index: false,
+        },
+        {
+          name: "fromAmount",
+          type: "u64",
+          index: false,
+        },
+        {
+          name: "toAmount",
+          type: "u64",
+          index: false,
+        },
+        {
+          name: "quoteAmount",
+          type: "u64",
+          index: false,
+        },
+        {
+          name: "spillAmount",
+          type: "u64",
+          index: false,
+        },
+        {
+          name: "fromMint",
+          type: "publicKey",
+          index: false,
+        },
+        {
+          name: "toMint",
+          type: "publicKey",
+          index: false,
+        },
+        {
+          name: "quoteMint",
+          type: "publicKey",
+          index: false,
+        },
+        {
+          name: "authority",
+          type: "publicKey",
           index: false,
         },
       ],
