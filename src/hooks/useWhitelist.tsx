@@ -8,9 +8,11 @@ import {
   useCallback,
 } from "react";
 import { whitelistService } from "@/src/services/whitelist.service";
-import { radyumService } from "@/src/services/radyum.service";
+// import { radyumService } from "@/src/services/radyum.service";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
+//useSWR allows the use of SWR inside function components
+import useSWR from "swr";
 
 export type WhiteListConfigs = {
   [key: string]: WhitelistEntity;
@@ -28,7 +30,14 @@ export const WhitelistContext = createContext<{
 
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const [whiteLists, setWhitelist] = useState<WhiteListConfigs>({});
-  const [liquidities, setLiquidities] = useState<LiquidityEntity[]>([]);
+
+  const { data: liquidities } = useSWR("/api/liquidity-data", (url) =>
+    fetch(url)
+      .then((res) => res.json())
+      .then((res) => res as LiquidityEntity[])
+  );
+
+  // console.log(data, error);
 
   /**
    * @dev Get whitelist data from Hamster server when first load.
@@ -46,15 +55,15 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     })();
   }, []);
 
-  /**
-   * @dev The function to get liquidies data from Radyumm.
-   */
-  useEffect(() => {
-    (async () => {
-      const res = await radyumService.getLiquidity();
-      setLiquidities(res);
-    })();
-  }, []);
+  // /**
+  //  * @dev The function to get liquidies data from Radyumm.
+  //  */
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await radyumService.getLiquidity();
+  //     setLiquidities(res);
+  //   })();
+  // }, []);
 
   /**
    * @dev The function to convert amount of token to normal number by dividing its decimals.

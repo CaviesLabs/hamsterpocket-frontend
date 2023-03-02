@@ -66,7 +66,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   return (
     <div className="relative">
       <Input
-        data-dropdown-toggle="dropdown"
+        // data-dropdown-toggle="dropdown"
         size="large"
         className={classNames(
           "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white",
@@ -84,7 +84,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             className={classNames("w-10 h-10", {
               invisible: !addressSelected,
             })}
-            src={allowCurrencies[addressSelected]?.image}
+            src={allowCurrencies?.[addressSelected]?.image}
           />
         }
         type="number"
@@ -102,7 +102,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        {allowCurrencies[addressSelected]?.symbol}
+        {allowCurrencies?.[addressSelected]?.symbol}
         {!props.disableDropdown && (
           <DropdownIcon className="float-right ml-[5px]" />
         )}
@@ -116,10 +116,10 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             {Object.keys(allowCurrencies).map((address, key) => (
               <TokenItem
                 key={`${Math.random()}-${key}`}
-                name={allowCurrencies[address].name}
-                iconUrl={allowCurrencies[address].image}
-                address={allowCurrencies[address].address}
-                decimal={allowCurrencies[address].decimals}
+                name={allowCurrencies?.[address]?.name}
+                iconUrl={allowCurrencies?.[address]?.image}
+                address={allowCurrencies?.[address]?.address}
+                decimal={allowCurrencies?.[address]?.decimals}
                 balance={"0"}
                 addInOwner={false}
                 onClick={(address, decimals) => {

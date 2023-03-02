@@ -43,7 +43,7 @@ const Layout: FC = () => {
               <Button
                 className="float-right !px-[50px] md:w-auto !w-full"
                 text="Create pocket"
-                loading={processing}
+                loading={processing ? true : false}
                 onClick={() => handleCreatePocket()}
               />
             </div>
