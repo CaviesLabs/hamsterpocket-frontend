@@ -502,7 +502,7 @@ export type PocketIdl = {
             name: "buyCondition";
             type: {
               option: {
-                defined: "BuyCondition";
+                defined: "PriceCondition";
               };
             };
           },
@@ -582,7 +582,7 @@ export type PocketIdl = {
             name: "buyCondition";
             type: {
               option: {
-                defined: "BuyCondition";
+                defined: "PriceCondition";
               };
             };
           },
@@ -712,24 +712,6 @@ export type PocketIdl = {
       };
     },
     {
-      name: "BuyCondition";
-      type: {
-        kind: "struct";
-        fields: [
-          {
-            name: "tokenAddress";
-            type: "publicKey";
-          },
-          {
-            name: "condition";
-            type: {
-              defined: "PriceCondition";
-            };
-          }
-        ];
-      };
-    },
-    {
       name: "DateDuration";
       type: {
         kind: "struct";
@@ -778,7 +760,7 @@ export type PocketIdl = {
         kind: "enum";
         variants: [
           {
-            name: "gt";
+            name: "Gt";
             fields: [
               {
                 name: "value";
@@ -787,7 +769,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "gte";
+            name: "Gte";
             fields: [
               {
                 name: "value";
@@ -796,7 +778,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "lt";
+            name: "Lt";
             fields: [
               {
                 name: "value";
@@ -805,7 +787,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "lte";
+            name: "Lte";
             fields: [
               {
                 name: "value";
@@ -814,7 +796,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "eq";
+            name: "Eq";
             fields: [
               {
                 name: "value";
@@ -823,7 +805,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "neq";
+            name: "Neq";
             fields: [
               {
                 name: "value";
@@ -832,7 +814,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "bw";
+            name: "Bw";
             fields: [
               {
                 name: "from_value";
@@ -845,7 +827,7 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "nbw";
+            name: "Nbw";
             fields: [
               {
                 name: "from_value";
@@ -1721,7 +1703,7 @@ export const IDL: PocketIdl = {
             name: "buyCondition",
             type: {
               option: {
-                defined: "BuyCondition",
+                defined: "PriceCondition",
               },
             },
           },
@@ -1801,7 +1783,7 @@ export const IDL: PocketIdl = {
             name: "buyCondition",
             type: {
               option: {
-                defined: "BuyCondition",
+                defined: "PriceCondition",
               },
             },
           },
@@ -1931,24 +1913,6 @@ export const IDL: PocketIdl = {
       },
     },
     {
-      name: "BuyCondition",
-      type: {
-        kind: "struct",
-        fields: [
-          {
-            name: "tokenAddress",
-            type: "publicKey",
-          },
-          {
-            name: "condition",
-            type: {
-              defined: "PriceCondition",
-            },
-          },
-        ],
-      },
-    },
-    {
       name: "DateDuration",
       type: {
         kind: "struct",
@@ -1997,7 +1961,7 @@ export const IDL: PocketIdl = {
         kind: "enum",
         variants: [
           {
-            name: "gt",
+            name: "Gt",
             fields: [
               {
                 name: "value",
@@ -2006,7 +1970,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "gte",
+            name: "Gte",
             fields: [
               {
                 name: "value",
@@ -2015,7 +1979,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "lt",
+            name: "Lt",
             fields: [
               {
                 name: "value",
@@ -2024,7 +1988,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "lte",
+            name: "Lte",
             fields: [
               {
                 name: "value",
@@ -2033,7 +1997,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "eq",
+            name: "Eq",
             fields: [
               {
                 name: "value",
@@ -2042,7 +2006,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "neq",
+            name: "Neq",
             fields: [
               {
                 name: "value",
@@ -2051,7 +2015,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "bw",
+            name: "Bw",
             fields: [
               {
                 name: "from_value",
@@ -2064,7 +2028,7 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "nbw",
+            name: "Nbw",
             fields: [
               {
                 name: "from_value",
