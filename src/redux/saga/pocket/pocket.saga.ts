@@ -20,8 +20,9 @@ export function* getActivePockets({
       ...payload,
     });
 
-    yield put(setActivePockets(pockets));
+    console.log("Active pockets", pockets);
 
+    yield put(setActivePockets(pockets));
     callback && callback(pockets);
   } catch (err) {
     console.error(err);

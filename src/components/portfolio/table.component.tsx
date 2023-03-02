@@ -2,12 +2,11 @@ import { MdOpenInNew } from "react-icons/all";
 import { useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
 import { utilsProvider } from "@/src/utils";
-import { useContext } from "react";
-import { WhitelistContext } from "@/src/hooks/useWhitelist";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
-  const { whitelist } = useContext(WhitelistContext);
+  const { whiteLists } = useWhiteList();
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
@@ -25,7 +24,7 @@ export default function TableComponent() {
               <td className="pr-10 py-4 flex">
                 <div className="bg-gray-600 p-2 rounded-full">
                   <img
-                    src={whitelist[h.tokenAddress]?.image}
+                    src={whiteLists[h.tokenAddress]?.image}
                     className="max-w-[32px] rounded-full"
                   />
                 </div>

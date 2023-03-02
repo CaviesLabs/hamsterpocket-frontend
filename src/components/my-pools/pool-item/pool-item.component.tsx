@@ -1,25 +1,38 @@
+import { useMemo } from "react";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { useContext } from "react";
-import { WhitelistContext } from "@/src/hooks/useWhitelist";
 import { DATE_FORMAT, utilsProvider } from "@/src/utils";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 
 type PoolItemProps = {
   data: PocketEntity;
 };
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
-  const { whitelist } = useContext(WhitelistContext);
-  const targetToken = whitelist?.[data.targetTokenAddress];
+  const { whiteLists, convertDecimalAmount } = useWhiteList();
 
-  const isPaused = data.status === PocketStatus.PAUSED;
+  /** @dev Get target token data base on address. */
+  const targetToken = useMemo<WhitelistEntity>(
+    () => whiteLists[data.targetTokenAddress],
+    [data]
+  );
+
+  /** @dev Get base token data base on address. */
+  const baseToken = useMemo<WhitelistEntity>(
+    () => whiteLists[data.baseTokenAddress],
+    [data]
+  );
+
+  /** @dev Condition filter pockets which is paused only. */
+  const isPaused = useMemo(() => data.status === PocketStatus.PAUSED, [data]);
 
   return (
     <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
@@ -34,8 +47,11 @@ export const PoolItem = (props: PoolItemProps) => {
       <div className="flow-root mt-[24px]">
         <div className="md:float-left md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
-            <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center">
-              <img src="/samm.svg" />
+            <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
+              <img
+                src={whiteLists[data.targetTokenAddress]?.image}
+                className="rounded-[50%]"
+              />
             </div>
             <div className="pl-[20px]">
               <p className="text-white text-[18px] normal-text uppercase">
@@ -64,7 +80,11 @@ export const PoolItem = (props: PoolItemProps) => {
             </p>
             <div>
               <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-                {data.batchVolume} {targetToken?.symbol} every 15 days
+                {convertDecimalAmount(
+                  data.targetTokenAddress,
+                  data.batchVolume
+                )}{" "}
+                {targetToken?.symbol} every 15 days
                 {/*{luxon(data.frequency)}*/}
               </p>
               <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">
@@ -113,7 +133,11 @@ export const PoolItem = (props: PoolItemProps) => {
               Total deposited
             </p>
             <p className="text-white text-[16px] normal-text">
-              {data.currentBaseToken} SOL
+              {convertDecimalAmount(
+                data?.baseTokenAddress,
+                data.remainingBaseTokenBalance
+              )}{" "}
+              {baseToken?.symbol}
             </p>
           </div>
           <div className="flex items-center mt-[5px]">
@@ -121,7 +145,8 @@ export const PoolItem = (props: PoolItemProps) => {
               Outstanding deposit:
             </p>
             <p className="text-white text-[16px] normal-text">
-              {data.remainingBaseTokenBalance} SOL
+              {convertDecimalAmount(data?.baseTokenAddress, 0)}{" "}
+              {whiteLists[data.baseTokenAddress]?.symbol}
             </p>
           </div>
         </div>
