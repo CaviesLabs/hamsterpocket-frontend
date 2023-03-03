@@ -11,6 +11,7 @@ import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-it
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { Duration } from "luxon";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -19,13 +20,13 @@ export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists, convertDecimalAmount } = useWhiteList();
 
-  /** @dev Get target token data base on address. */
+  /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
     () => whiteLists[data.targetTokenAddress],
     [data]
   );
 
-  /** @dev Get base token data base on address. */
+  /** @dev Get base token database on address. */
   const baseToken = useMemo<WhitelistEntity>(
     () => whiteLists[data.baseTokenAddress],
     [data]
@@ -44,14 +45,15 @@ export const PoolItem = (props: PoolItemProps) => {
           #{data.id}
         </p>
       </div>
-      <div className="flow-root mt-[24px]">
-        <div className="md:float-left md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
+      <div className="flex justify-between mt-[24px]">
+        <div className="md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
             <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
               {whiteLists[data.targetTokenAddress]?.image && (
                 <img
                   src={whiteLists[data.targetTokenAddress]?.image}
                   className="rounded-[50%]"
+                  alt={data.targetTokenAddress}
                 />
               )}
             </div>
@@ -75,23 +77,21 @@ export const PoolItem = (props: PoolItemProps) => {
             </a>
           </div>
         </div>
-        <div className="md:float-right md:w-96 md:mt-0 mt-[20px]">
+        <div className="md:mt-0 mt-[20px]">
           <div className="flex">
-            <p className="text-dark40 text-[16px] normal-text w-[30%] float-left">
+            <p className="text-dark40 text-[16px] normal-text mr-20">
               Strategy
             </p>
-            <div>
-              <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
+            <div className="text-white text-[18px] normal-text">
+              <p>
                 {convertDecimalAmount(
                   data.targetTokenAddress,
                   data.batchVolume
                 )}{" "}
-                {targetToken?.symbol} every 15 days
-                {/*{luxon(data.frequency)}*/}
+                {targetToken?.symbol} every{" "}
+                {Duration.fromObject(data.frequency).toHuman()}
               </p>
-              <p className="mt-4 text-white text-[18px] normal-text w-[70%] float-left text-end">
-                {"BLOCK <= $0.051706"}
-              </p>
+              <p className="mt-4">{"BLOCK <= $0.051706"}</p>
             </div>
           </div>
         </div>

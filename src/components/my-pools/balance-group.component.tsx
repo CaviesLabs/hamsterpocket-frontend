@@ -1,29 +1,29 @@
 import { FC, useEffect } from "react";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { useConnectedWallet } from "@saberhq/use-solana";
+import { useDispatch } from "react-redux";
 import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
-import State from "@/src/redux/entities/state";
-
+import { useWallet } from "@/src/hooks/useWallet";
+import { UserBalanceComponent } from "@/src/components/my-pools/user-balance.component";
+import { PocketBalanceComponent } from "@/src/components/my-pools/pocket-balance.component";
 export const BalanceGroup: FC = () => {
   /**
    * @dev Inject router module to use.
    */
   const router = useRouter();
+  const wallet = useWallet();
   const dispatch = useDispatch();
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const connectedWallet = wallet.solanaWallet;
+  const walletAddress = connectedWallet?.publicKey?.toString();
 
   useEffect(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     dispatch(
       getPortfolioStatistic({
-        ownerAddress: wallet,
+        ownerAddress: walletAddress,
       })
     );
-  }, [wallet]);
-
-  const statisticData = useSelector((state: State) => state.portfolioStatistic);
+  }, [walletAddress]);
 
   return (
     <section>
@@ -32,31 +32,11 @@ export const BalanceGroup: FC = () => {
         <div className="md:w-[70%] w-full">
           <div className="md:w-[315px] w-full">
             <div className="bg-dark90 flex items-center px-[20px] py-[10px] rounded-[8px] justify-center">
-              <div>
-                <p className="text-center text-green normal-text text-[20px]">
-                  16.78 SOL
-                </p>
-                <p className="text-center text-green normal-text text-[16px]">
-                  ~$350,20
-                </p>
-                <p className="text-center text-dark40 normal-text text-[14px]">
-                  Wallet Balance
-                </p>
-              </div>
+              <UserBalanceComponent />
               <div className="px-[16px]">
-                <div className="h-[56px] w-[1px] bg-[#4D5A66]"></div>
+                <div className="h-[56px] w-[1px] bg-[#4D5A66]" />
               </div>
-              <div>
-                <p className="text-center text-green normal-text text-[20px]">
-                  {statisticData.totalPoolsBalance} SOL
-                </p>
-                <p className="text-center text-green normal-text text-[16px]">
-                  ~${statisticData.totalPoolsBalanceValue}
-                </p>
-                <p className="text-center text-dark40 normal-text text-[14px]">
-                  Est Pocket balance
-                </p>
-              </div>
+              <PocketBalanceComponent />
             </div>
             <Button
               className="mx-auto mt-[20px] !rounded-[8px] vpbutton"
