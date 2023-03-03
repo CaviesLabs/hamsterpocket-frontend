@@ -109,7 +109,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         id: ProgramService.generatePocketId(),
         name: pocketName,
         baseTokenAddress: baseTokenAddress[0],
-        targetTokenAddress: targetTokenAddress[0],
+        quoteTokenAddress: targetTokenAddress[0],
         startAt: new BN(startAt.getTime().toString()),
         frequency: convertDurationsTimeToHours(frequency),
         batchVolume: new BN(batchVolume * Math.pow(10, targetTokenAddress[1])),
@@ -118,12 +118,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         ),
         // buyCondition: null,
         buyCondition: {
-          // tokenAddress: new PublicKey(buyCondition.tokenAddress),
-          // condition: {
           [buyCondition.type]: {
             value: buyCondition.value,
           },
-          // },
         },
         stopConditions: stopConditions.map((item) => ({
           [Object.keys(item)[0]]: {

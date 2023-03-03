@@ -100,7 +100,7 @@ export class PocketEntity {
 
   baseTokenAddress: string;
 
-  targetTokenAddress: string;
+  quoteTokenAddress: string;
 
   startTime: Date;
 

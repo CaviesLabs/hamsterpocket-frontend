@@ -52,7 +52,7 @@ export class CreatePocketDto {
    * @type {PublicKey}
    */
   @Type(() => PublicKey)
-  targetTokenAddress: PublicKey;
+  quoteTokenAddress: PublicKey;
 
   /**
    * @dev Amout of each batch to buy.

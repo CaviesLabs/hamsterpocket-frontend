@@ -218,6 +218,7 @@ export class PocketProgramProvider {
           walletProvider,
           pocketAccount,
           createPocketDto.baseTokenAddress,
+          createPocketDto.quoteTokenAddress,
           createPocketDto.depositedAmount
         )),
       ].filter((item) => item !== null);
@@ -252,20 +253,21 @@ export class PocketProgramProvider {
   public async depositAsset(
     walletProvider: WalletProvider,
     pocketAccount: PublicKey,
-    tokenAddress: PublicKey,
+    baseTokenAddress: PublicKey,
+    targetTokenAddress: PublicKey,
     depositedAmount: anchor.BN
   ): Promise<TransactionInstruction[]> {
     /** @dev Instruction to create associated token account if doest exists. */
     const associatedInstruction =
       await this.instructionProvider.getOrCreateProposalTokenAccount(
         walletProvider.publicKey,
-        tokenAddress
+        baseTokenAddress
       );
 
     /** @dev Find token vault */
     const tokenVault = await this.instructionProvider.findTokenVaultAccount(
       pocketAccount,
-      tokenAddress
+      baseTokenAddress
     );
 
     /** @dev Create token vault if not already exists .*/
@@ -273,14 +275,14 @@ export class PocketProgramProvider {
       await this.instructionProvider.createTokenVaultAccount(
         walletProvider.publicKey,
         pocketAccount,
-        tokenAddress
+        baseTokenAddress
       );
 
     /**
      * @dev Handle to wrap sol to wsol if offered item is SOL currency.
      */
     const wrapSolInstructions = [];
-    if (tokenAddress.toBase58().toString() === WSOL_ADDRESS) {
+    if (baseTokenAddress.toBase58().toString() === WSOL_ADDRESS) {
       try {
         const [ins1, ins2] = await this.instructionProvider.wrapSol(
           walletProvider.publicKey,
@@ -299,8 +301,8 @@ export class PocketProgramProvider {
     const ins = await this.instructionProvider.depositAsset(
       walletProvider.publicKey,
       pocketAccount,
-      tokenAddress,
-      tokenVault,
+      baseTokenAddress,
+      targetTokenAddress,
       depositedAmount
     );
 

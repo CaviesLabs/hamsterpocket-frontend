@@ -21,7 +21,7 @@ export const PoolItem = (props: PoolItemProps) => {
 
   /** @dev Get target token data base on address. */
   const targetToken = useMemo<WhitelistEntity>(
-    () => whiteLists[data.targetTokenAddress],
+    () => whiteLists[data.quoteTokenAddress],
     [data]
   );
 
@@ -48,9 +48,9 @@ export const PoolItem = (props: PoolItemProps) => {
         <div className="md:float-left md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
             <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {whiteLists[data.targetTokenAddress]?.image && (
+              {whiteLists[data.quoteTokenAddress]?.image && (
                 <img
-                  src={whiteLists[data.targetTokenAddress]?.image}
+                  src={whiteLists[data.quoteTokenAddress]?.image}
                   className="rounded-[50%]"
                 />
               )}
@@ -67,7 +67,7 @@ export const PoolItem = (props: PoolItemProps) => {
           <div className="flex items-center float-right relative top-[5px]">
             <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px]">
               <p className="text-dark50 text-[14px] normal-text">
-                {utilsProvider.makeShort(data.targetTokenAddress)}
+                {utilsProvider.makeShort(data.quoteTokenAddress)}
               </p>
             </div>
             <a href="" className="ml-[10px]">
@@ -82,10 +82,7 @@ export const PoolItem = (props: PoolItemProps) => {
             </p>
             <div>
               <p className="text-white text-[18px] normal-text w-[70%] float-left text-end">
-                {convertDecimalAmount(
-                  data.targetTokenAddress,
-                  data.batchVolume
-                )}{" "}
+                {convertDecimalAmount(data.quoteTokenAddress, data.batchVolume)}{" "}
                 {targetToken?.symbol} every 15 days
                 {/*{luxon(data.frequency)}*/}
               </p>

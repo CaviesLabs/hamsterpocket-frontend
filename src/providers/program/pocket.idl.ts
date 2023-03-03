@@ -184,7 +184,12 @@ export type PocketIdl = {
           isSigner: true;
         },
         {
-          name: "signerTokenAccount";
+          name: "signerBaseTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "signerQuoteTokenAccount";
           isMut: true;
           isSigner: false;
         },
@@ -195,6 +200,11 @@ export type PocketIdl = {
         },
         {
           name: "pocketBaseTokenVault";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "pocketQuoteTokenVault";
           isMut: true;
           isSigner: false;
         },
@@ -247,7 +257,7 @@ export type PocketIdl = {
           isSigner: false;
         },
         {
-          name: "pocketTargetTokenVault";
+          name: "pocketQuoteTokenVault";
           isMut: true;
           isSigner: false;
         },
@@ -365,7 +375,7 @@ export type PocketIdl = {
           isSigner: false;
         },
         {
-          name: "pocketTargetTokenVault";
+          name: "pocketQuoteTokenVault";
           isMut: true;
           isSigner: false;
         },
@@ -477,7 +487,7 @@ export type PocketIdl = {
             type: "publicKey";
           },
           {
-            name: "targetTokenMintAddress";
+            name: "quoteTokenMintAddress";
             type: "publicKey";
           },
           {
@@ -521,7 +531,11 @@ export type PocketIdl = {
             };
           },
           {
-            name: "totalDepositAmount";
+            name: "totalBaseDepositAmount";
+            type: "u64";
+          },
+          {
+            name: "totalQuoteDepositAmount";
             type: "u64";
           },
           {
@@ -529,7 +543,7 @@ export type PocketIdl = {
             type: "u64";
           },
           {
-            name: "targetTokenBalance";
+            name: "quoteTokenBalance";
             type: "u64";
           },
           {
@@ -563,7 +577,7 @@ export type PocketIdl = {
             type: "publicKey";
           },
           {
-            name: "targetTokenAddress";
+            name: "quoteTokenAddress";
             type: "publicKey";
           },
           {
@@ -614,6 +628,12 @@ export type PocketIdl = {
       type: {
         kind: "struct";
         fields: [
+          {
+            name: "mode";
+            type: {
+              defined: "DepositedTokenType";
+            };
+          },
           {
             name: "depositAmount";
             type: "u64";
@@ -719,6 +739,20 @@ export type PocketIdl = {
           {
             name: "hours";
             type: "u64";
+          }
+        ];
+      };
+    },
+    {
+      name: "DepositedTokenType";
+      type: {
+        kind: "enum";
+        variants: [
+          {
+            name: "Base";
+          },
+          {
+            name: "Quote";
           }
         ];
       };
@@ -874,7 +908,33 @@ export type PocketIdl = {
             ];
           },
           {
-            name: "TargetTokenAmountReach";
+            name: "QuoteTokenAmountReach";
+            fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
+              {
+                name: "value";
+                type: "u64";
+              }
+            ];
+          },
+          {
+            name: "SpentBaseTokenAmountReach";
+            fields: [
+              {
+                name: "is_primary";
+                type: "bool";
+              },
+              {
+                name: "value";
+                type: "u64";
+              }
+            ];
+          },
+          {
+            name: "SpentQuoteTokenAmountReach";
             fields: [
               {
                 name: "is_primary";
@@ -928,7 +988,7 @@ export type PocketIdl = {
             name: "BaseTokenAmountReach";
           },
           {
-            name: "TargetTokenAmountReach";
+            name: "QuoteTokenAmountReach";
           },
           {
             name: "BatchAmountReach";
@@ -1024,7 +1084,7 @@ export type PocketIdl = {
       name: "PocketUpdated";
       fields: [
         {
-          name: "owner";
+          name: "actor";
           type: "publicKey";
           index: true;
         },
@@ -1038,6 +1098,11 @@ export type PocketIdl = {
           type: {
             defined: "PocketStatus";
           };
+          index: false;
+        },
+        {
+          name: "memo";
+          type: "string";
           index: false;
         }
       ];
@@ -1091,12 +1156,12 @@ export type PocketIdl = {
           index: false;
         },
         {
-          name: "targetTokenMintAddress";
+          name: "quoteTokenMintAddress";
           type: "publicKey";
           index: true;
         },
         {
-          name: "targetTokenAmount";
+          name: "quoteTokenAmount";
           type: "u64";
           index: false;
         }
@@ -1385,7 +1450,12 @@ export const IDL: PocketIdl = {
           isSigner: true,
         },
         {
-          name: "signerTokenAccount",
+          name: "signerBaseTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "signerQuoteTokenAccount",
           isMut: true,
           isSigner: false,
         },
@@ -1396,6 +1466,11 @@ export const IDL: PocketIdl = {
         },
         {
           name: "pocketBaseTokenVault",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "pocketQuoteTokenVault",
           isMut: true,
           isSigner: false,
         },
@@ -1448,7 +1523,7 @@ export const IDL: PocketIdl = {
           isSigner: false,
         },
         {
-          name: "pocketTargetTokenVault",
+          name: "pocketQuoteTokenVault",
           isMut: true,
           isSigner: false,
         },
@@ -1566,7 +1641,7 @@ export const IDL: PocketIdl = {
           isSigner: false,
         },
         {
-          name: "pocketTargetTokenVault",
+          name: "pocketQuoteTokenVault",
           isMut: true,
           isSigner: false,
         },
@@ -1678,7 +1753,7 @@ export const IDL: PocketIdl = {
             type: "publicKey",
           },
           {
-            name: "targetTokenMintAddress",
+            name: "quoteTokenMintAddress",
             type: "publicKey",
           },
           {
@@ -1722,7 +1797,11 @@ export const IDL: PocketIdl = {
             },
           },
           {
-            name: "totalDepositAmount",
+            name: "totalBaseDepositAmount",
+            type: "u64",
+          },
+          {
+            name: "totalQuoteDepositAmount",
             type: "u64",
           },
           {
@@ -1730,7 +1809,7 @@ export const IDL: PocketIdl = {
             type: "u64",
           },
           {
-            name: "targetTokenBalance",
+            name: "quoteTokenBalance",
             type: "u64",
           },
           {
@@ -1764,7 +1843,7 @@ export const IDL: PocketIdl = {
             type: "publicKey",
           },
           {
-            name: "targetTokenAddress",
+            name: "quoteTokenAddress",
             type: "publicKey",
           },
           {
@@ -1815,6 +1894,12 @@ export const IDL: PocketIdl = {
       type: {
         kind: "struct",
         fields: [
+          {
+            name: "mode",
+            type: {
+              defined: "DepositedTokenType",
+            },
+          },
           {
             name: "depositAmount",
             type: "u64",
@@ -1920,6 +2005,20 @@ export const IDL: PocketIdl = {
           {
             name: "hours",
             type: "u64",
+          },
+        ],
+      },
+    },
+    {
+      name: "DepositedTokenType",
+      type: {
+        kind: "enum",
+        variants: [
+          {
+            name: "Base",
+          },
+          {
+            name: "Quote",
           },
         ],
       },
@@ -2075,7 +2174,33 @@ export const IDL: PocketIdl = {
             ],
           },
           {
-            name: "TargetTokenAmountReach",
+            name: "QuoteTokenAmountReach",
+            fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
+              {
+                name: "value",
+                type: "u64",
+              },
+            ],
+          },
+          {
+            name: "SpentBaseTokenAmountReach",
+            fields: [
+              {
+                name: "is_primary",
+                type: "bool",
+              },
+              {
+                name: "value",
+                type: "u64",
+              },
+            ],
+          },
+          {
+            name: "SpentQuoteTokenAmountReach",
             fields: [
               {
                 name: "is_primary",
@@ -2129,7 +2254,7 @@ export const IDL: PocketIdl = {
             name: "BaseTokenAmountReach",
           },
           {
-            name: "TargetTokenAmountReach",
+            name: "QuoteTokenAmountReach",
           },
           {
             name: "BatchAmountReach",
@@ -2225,7 +2350,7 @@ export const IDL: PocketIdl = {
       name: "PocketUpdated",
       fields: [
         {
-          name: "owner",
+          name: "actor",
           type: "publicKey",
           index: true,
         },
@@ -2239,6 +2364,11 @@ export const IDL: PocketIdl = {
           type: {
             defined: "PocketStatus",
           },
+          index: false,
+        },
+        {
+          name: "memo",
+          type: "string",
           index: false,
         },
       ],
@@ -2292,12 +2422,12 @@ export const IDL: PocketIdl = {
           index: false,
         },
         {
-          name: "targetTokenMintAddress",
+          name: "quoteTokenMintAddress",
           type: "publicKey",
           index: true,
         },
         {
-          name: "targetTokenAmount",
+          name: "quoteTokenAmount",
           type: "u64",
           index: false,
         },

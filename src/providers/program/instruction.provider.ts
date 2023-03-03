@@ -160,7 +160,7 @@ export class InstructionProvider {
     console.log({ createPocketDto });
     const data: any = {
       id: createPocketDto.id,
-      targetTokenAddress: createPocketDto.targetTokenAddress,
+      quoteTokenAddress: createPocketDto.quoteTokenAddress,
       baseTokenAddress: createPocketDto.baseTokenAddress,
       stopConditions: createPocketDto.stopConditions,
       buyCondition: createPocketDto.buyCondition,
@@ -204,27 +204,47 @@ export class InstructionProvider {
   public async depositAsset(
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
-    tokenAccount: PublicKey,
-    tokenVaultAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey,
     depositAmount: anchor.BN
   ): Promise<TransactionInstruction> {
     /**
      * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
      */
-    const asociatedTokenAccountAddress = await getAssociatedTokenAddress(
-      tokenAccount,
+    const baseAsociated = await getAssociatedTokenAddress(
+      baseTokenAccount,
       pocketOwner
+    );
+    const targetAsociated = await getAssociatedTokenAddress(
+      targetTokenAccount,
+      pocketOwner
+    );
+
+    /**
+     * @dev Get @var {PublicKey} tokenVault
+     */
+
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
     );
 
     return await this.program.methods
       .deposit({
         depositAmount,
-      })
+        mode: { base: {} },
+      } as any)
       .accounts({
         signer: pocketOwner,
         pocket: pocketAccount,
-        pocketBaseTokenVault: tokenVaultAccount,
-        signerTokenAccount: asociatedTokenAccountAddress,
+        pocketBaseTokenVault: baseTokenVault,
+        pocketQuoteTokenVault: targetTokenVault,
+        signerBaseTokenAccount: baseAsociated,
+        signerQuoteTokenAccount: targetAsociated,
       })
       .instruction();
   }
