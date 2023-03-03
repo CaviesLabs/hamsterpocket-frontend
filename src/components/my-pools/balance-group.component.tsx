@@ -1,12 +1,29 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { useConnectedWallet } from "@saberhq/use-solana";
+import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
+import State from "@/src/redux/entities/state";
 
 export const BalanceGroup: FC = () => {
   /**
    * @dev Inject router module to use.
    */
   const router = useRouter();
+  const dispatch = useDispatch();
+  const wallet = useConnectedWallet()?.publicKey.toString();
+
+  useEffect(() => {
+    if (!wallet) return;
+    dispatch(
+      getPortfolioStatistic({
+        ownerAddress: wallet,
+      })
+    );
+  }, [wallet]);
+
+  const statisticData = useSelector((state: State) => state.portfolioStatistic);
 
   return (
     <section>
@@ -31,10 +48,10 @@ export const BalanceGroup: FC = () => {
               </div>
               <div>
                 <p className="text-center text-green normal-text text-[20px]">
-                  62.56 SOL
+                  {statisticData.totalPoolsBalance} SOL
                 </p>
                 <p className="text-center text-green normal-text text-[16px]">
-                  ~$1,305.63
+                  ~${statisticData.totalPoolsBalanceValue}
                 </p>
                 <p className="text-center text-dark40 normal-text text-[14px]">
                   Est Pocket balance

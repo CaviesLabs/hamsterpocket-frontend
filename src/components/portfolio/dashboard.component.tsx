@@ -3,10 +3,12 @@ import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
 import { RiQuestionnaireFill } from "react-icons/all";
 Chart.register(ArcElement, Legend, Tooltip);
 import { Tooltip as AntdTooltip } from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { stringToColour } from "@/src/utils";
+import { useConnectedWallet } from "@saberhq/use-solana";
+import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
 
 const options = {
   cutout: 70,
@@ -21,6 +23,18 @@ const options = {
 };
 
 export default function DashboardComponent() {
+  const dispatch = useDispatch();
+  const wallet = useConnectedWallet()?.publicKey.toString();
+
+  useEffect(() => {
+    if (!wallet) return;
+    dispatch(
+      getPortfolioStatistic({
+        ownerAddress: wallet,
+      })
+    );
+  }, [wallet]);
+
   const statisticData = useSelector((state: State) => state.portfolioStatistic);
 
   const chartData = useMemo(() => {
@@ -59,55 +73,57 @@ export default function DashboardComponent() {
           (~ ${statisticData?.totalPoolsBalanceValue})
         </div>
       </div>
-      <div className="flex items-center mr-36">
-        <div className="max-w-[190px] relative flex justify-center items-center">
-          <Doughnut data={chartData} options={options} />
-          <div className="absolute text-white regular-text text-center">
-            <div className="flex items-center">
-              Est Balance
-              <AntdTooltip
-                color="rgba(18, 19, 27, 0.9506)"
-                placement="bottom"
-                title="Total token value is estimated to dollars"
-                className="ml-2"
-                overlayStyle={{
-                  maxWidth: 160,
-                  padding: 0,
-                }}
-                overlayInnerStyle={{
-                  textAlign: "center",
-                  padding: "20px 12px",
-                  border: "solid 1px rgba(255, 255, 255, 0.1985)",
-                }}
-              >
-                <RiQuestionnaireFill />
-              </AntdTooltip>
+      {chartData.labels.length > 0 && (
+        <div className="flex items-center mr-36">
+          <div className="max-w-[190px] relative flex justify-center items-center">
+            <Doughnut data={chartData} options={options} />
+            <div className="absolute text-white regular-text text-center">
+              <div className="flex items-center">
+                Est Balance
+                <AntdTooltip
+                  color="rgba(18, 19, 27, 0.9506)"
+                  placement="bottom"
+                  title="Total token value is estimated to dollars"
+                  className="ml-2"
+                  overlayStyle={{
+                    maxWidth: 160,
+                    padding: 0,
+                  }}
+                  overlayInnerStyle={{
+                    textAlign: "center",
+                    padding: "20px 12px",
+                    border: "solid 1px rgba(255, 255, 255, 0.1985)",
+                  }}
+                >
+                  <RiQuestionnaireFill />
+                </AntdTooltip>
+              </div>
+              <div>${statisticData?.totalPoolsBalanceValue}</div>
             </div>
-            <div>${statisticData?.totalPoolsBalanceValue}</div>
+          </div>
+          <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
+            {chartData.labels.map((label, i) => (
+              <div
+                key={label}
+                className="flex justify-between items-center text-white regular-text"
+              >
+                <div className="flex items-center">
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{
+                      backgroundColor: chartData.datasets[0].backgroundColor[i],
+                    }}
+                  ></div>
+                  <div className="ml-2">{label}</div>
+                </div>
+                <div className="ml-2 font-bold text-[16px] text-green">
+                  {chartData.datasets[0].data[i]}%
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
-          {chartData.labels.map((label, i) => (
-            <div
-              key={label}
-              className="flex justify-between items-center text-white regular-text"
-            >
-              <div className="flex items-center">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{
-                    backgroundColor: chartData.datasets[0].backgroundColor[i],
-                  }}
-                ></div>
-                <div className="ml-2">{label}</div>
-              </div>
-              <div className="ml-2 font-bold text-[16px] text-green">
-                {chartData.datasets[0].data[i]}%
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      )}
     </div>
   );
 }
