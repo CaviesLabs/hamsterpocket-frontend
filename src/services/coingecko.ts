@@ -1,7 +1,8 @@
-import { coingeckoProvider } from "@/src/providers/coingecko.provider";
+import { networkProvider } from "@/src/providers/network.provider";
 
 export const getPrice = function (tokenName: string) {
-  return coingeckoProvider.request("/simple/price", {
+  return networkProvider.request("/simple/price", {
+    baseURL: "https://api.coingecko.com/api/v3",
     method: "GET",
     params: {
       ids: [tokenName],

@@ -45,10 +45,9 @@ export class NetworkProvider {
     url: string,
     requestConfig: RequestConfig
   ): Promise<RequestResponse> {
-    console.log("apiuri", this.BASE_URL);
     const resp = await axios(url, {
-      ...requestConfig,
       baseURL: `${this.BASE_URL}`,
+      ...requestConfig,
       paramsSerializer: {
         serialize: (params: any) => {
           return qs.stringify(params, { arrayFormat: "repeat" });
