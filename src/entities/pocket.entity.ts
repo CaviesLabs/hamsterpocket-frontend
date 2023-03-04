@@ -73,6 +73,12 @@ export interface StopConditions {
   spentQuoteTokenAmountReach?: number;
   batchAmountReach?: number;
 }
+export interface OffChainStopConditions {
+  endTimeReach?: Date;
+  targetTokenAmountReach?: number;
+  baseTokenAmountReach?: number;
+  batchAmountReach?: number;
+}
 export interface StopConditionsOnChain {
   endTime?: {
     value: BN;
@@ -119,7 +125,7 @@ export class PocketEntity {
 
   buyCondition: BuyCondition | undefined;
 
-  stopConditions: StopConditions[] | [];
+  stopConditions: OffChainStopConditions[] | [];
 
   /** Progression fields */
   currentBaseToken: number;
