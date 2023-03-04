@@ -46,8 +46,8 @@ export class NetworkProvider {
     requestConfig: RequestConfig
   ): Promise<RequestResponse> {
     const resp = await axios(url, {
-      ...requestConfig,
       baseURL: `${this.BASE_URL}`,
+      ...requestConfig,
       paramsSerializer: {
         serialize: (params: any) => {
           return qs.stringify(params, { arrayFormat: "repeat" });

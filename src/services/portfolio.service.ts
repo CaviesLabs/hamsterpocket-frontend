@@ -16,7 +16,6 @@ export class PortfolioService {
     const address = payload.ownerAddress;
     delete payload.ownerAddress;
     return networkProvider.request<PortfolioStatisticEntity[]>(
-      // TODO change token base
       `/portfolio/${address}/base-token/So11111111111111111111111111111111111111112`,
       {
         method: "GET",

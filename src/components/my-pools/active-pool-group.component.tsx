@@ -47,7 +47,7 @@ export const ActivePoolGroup: FC = () => {
         </p>
         <p
           className="float-right text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
-          onClick={() => router.push("/my-pools/closed")}
+          onClick={() => router.push("/ended-pockets")}
         >
           View closed & inactive pools
         </p>

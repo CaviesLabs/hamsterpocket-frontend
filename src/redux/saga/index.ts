@@ -1,6 +1,7 @@
 import { takeLatest } from "redux-saga/effects";
 import {
   GET_ACTIVE_POCKETS,
+  GET_CLOSED_POCKETS,
   GET_HISTORIES,
   GET_HISTORY,
   GET_PORTFOLIO_STATISTIC,
@@ -14,7 +15,10 @@ import {
   getPortfolios,
   getPortfolioStatistic,
 } from "@/src/redux/saga/portfolio/portfolio.saga";
-import { getActivePockets } from "@/src/redux/saga/pocket/pocket.saga";
+import {
+  getActivePockets,
+  getClosedPockets,
+} from "@/src/redux/saga/pocket/pocket.saga";
 
 export default function* root() {
   yield takeLatest<any>(GET_HISTORY, getHistory);
@@ -22,4 +26,5 @@ export default function* root() {
   yield takeLatest<any>(GET_PORTFOLIOS, getPortfolios);
   yield takeLatest<any>(GET_PORTFOLIO_STATISTIC, getPortfolioStatistic);
   yield takeLatest<any>(GET_ACTIVE_POCKETS, getActivePockets);
+  yield takeLatest<any>(GET_CLOSED_POCKETS, getClosedPockets);
 }
