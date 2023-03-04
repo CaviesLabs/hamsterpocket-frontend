@@ -3,13 +3,27 @@ import { PocketStatus } from "@/src/entities/pocket.entity";
 import { PublicKey } from "@solana/web3.js";
 import { IsString } from "class-validator";
 import { Type } from "class-transformer";
-// import { DurationObjectUnits } from "luxon";
 import {
   BuyConditionOnChain,
   StopConditionsOnChain,
 } from "@/src/entities/pocket.entity";
 
 export interface PocketDto {}
+
+/**
+ * @dev Enum of liquidity method.
+ */
+export enum LiquidityMethod {
+  // Swap base token for qoute token.
+  buy = "buy",
+  // Swap qoute token for base token.
+  sell = "sell",
+}
+
+/**
+ * @dev Interface of side method.
+ */
+export type SideMethod = Partial<{ [key in Partial<LiquidityMethod>]: any }>;
 
 /**
  * @dev Define list pocket dto
@@ -91,4 +105,16 @@ export class CreatePocketDto {
    * @type {BN}
    */
   depositedAmount: BN;
+
+  /**
+   * @dev Liquidity method.
+   * @type {SideMethod}
+   */
+  side: SideMethod;
+
+  /**
+   * @dev Market id.
+   * @type {string}
+   */
+  marketId: string;
 }

@@ -12,10 +12,12 @@ import {
   WSOL_ADDRESS,
   BONK_ADDRESS,
   convertDurationsTimeToHours,
+  processStopConditions,
 } from "@/src/utils";
 import { SuccessTransactionModal } from "@/src/components/create-pocket/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
+import { SideMethod } from "@/src/dto/pocket.dto";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -37,7 +39,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const { findPairLiquidity } = useWhiteList();
 
   /** @dev Default is every day */
-  const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
+  const [frequency, setFrequency] = useState<DurationObjectUnits>({ days: 1 });
 
   /** @dev Define variable presenting for successful pocket creation. */
   const [successCreated, setSuccessCreated] = useState(false);
@@ -60,7 +62,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev The function to modify stop conditions. */
   const handleModifyStopConditions = useCallback(
-    (excuted = false, key: string, value: any) => {
+    (excuted = false, key: keyof StopConditions, value: any) => {
       setStopConditions((prev) => {
         /** @dev Reset conditions arrays by removing asset. */
         const newConditions = prev.filter((item) => {
@@ -81,18 +83,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Enable UX when processing. */
       setProcessing(true);
 
-      // console.log(
-      //   findPairLiquidity(
-      //     baseTokenAddress[0].toBase58().toString(),
-      //     targetTokenAddress[0].toBase58().toString()
-      //   )
-      // );
-      // console.log(
-      //   findPairLiquidity(
-      //     targetTokenAddress[0].toBase58().toString(),
-      //     baseTokenAddress[0].toBase58().toString()
-      //   )
-      // );
+      /** @dev Return when wallet not connected. */
+      if (!solanaWallet) return;
 
       /** @dev Validate if all form be valid. */
       // if (!validateForms()) {
@@ -102,27 +94,47 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Turn createdEnable when first click to create. */
       !createdEnable && setCreatedEnable(true);
 
-      /** @dev Return when wallet not connected. */
-      if (!solanaWallet) return;
+      /** @dev Convert address to string. */
+      const [baseAddress, targetAddress] = await Promise.all([
+        baseTokenAddress[0].toBase58().toString(),
+        targetTokenAddress[0].toBase58().toString(),
+      ]);
+
+      /** @dev Get base and qoute address in liquidity pool. */
+      const [liqBase, liqQoute, marketId] = findPairLiquidity(
+        baseAddress,
+        targetAddress
+      );
+
+      /** @dev Handle to attract side method of pool.  */
+      const sideMethod: SideMethod =
+        liqBase === baseAddress ? { sell: {} } : { buy: {} };
+      console.log(liqBase, baseAddress);
+
+      /** @dev Process stopConditions. */
+      const processedStopConditions = stopConditions.map((condition) =>
+        processStopConditions(condition, sideMethod)
+      );
 
       const response = await programService.createPocket(solanaWallet, {
         id: ProgramService.generatePocketId(),
         name: pocketName,
-        baseTokenAddress: baseTokenAddress[0],
-        quoteTokenAddress: targetTokenAddress[0],
+        baseTokenAddress: new PublicKey(baseAddress),
+        quoteTokenAddress: new PublicKey(liqQoute),
         startAt: new BN(startAt.getTime().toString()),
         frequency: convertDurationsTimeToHours(frequency),
         batchVolume: new BN(batchVolume * Math.pow(10, targetTokenAddress[1])),
         depositedAmount: new BN(
           depositedAmount * Math.pow(10, baseTokenAddress[1])
         ),
-        // buyCondition: null,
+        side: sideMethod,
+        marketId,
         buyCondition: {
           [buyCondition.type]: {
             value: buyCondition.value,
           },
         },
-        stopConditions: stopConditions.map((item) => ({
+        stopConditions: processedStopConditions.map((item) => ({
           [Object.keys(item)[0]]: {
             value: (item as any)[Object.keys(item)[0] as string],
           },

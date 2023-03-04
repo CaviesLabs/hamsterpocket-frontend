@@ -167,16 +167,9 @@ export class InstructionProvider {
       startAt: createPocketDto.startAt,
       batchVolume: createPocketDto.batchVolume,
       name: createPocketDto.name,
-      frequency: { hours: new anchor.BN(1) },
-      // targetTokenAddress: createPocketDto.targetTokenAddress,
-      // baseTokenAddress: createPocketDto.baseTokenAddress,
-      // stopConditions: [],
-      // buyCondition: null,
-      // startAt: new anchor.BN(new Date().getTime().toString()),
-      // batchVolume: new anchor.BN((LAMPORTS_PER_SOL * 10).toString()),
-      // name: "pocket name",
-      // frequency: { hours: new anchor.BN(1) },
-      side: { buy: {} },
+      frequency: createPocketDto.frequency,
+      side: createPocketDto.side,
+      marketId: createPocketDto.marketId,
     };
 
     /**

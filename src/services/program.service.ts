@@ -38,7 +38,7 @@ export class ProgramService {
       method: "POST",
       data: {
         ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
-        targetTokenAddress: createPocketDto.targetTokenAddress
+        targetTokenAddress: createPocketDto.quoteTokenAddress
           ?.toBase58()
           ?.toString(),
         baseTokenAddress: createPocketDto.baseTokenAddress

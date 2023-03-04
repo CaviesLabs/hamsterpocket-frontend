@@ -1,4 +1,3 @@
-import { Type } from "class-transformer";
 import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
 // import { PublicKey } from "@solana/web3.js";
@@ -66,20 +65,28 @@ export class BuyConditionOnChain {
   // };
 }
 
-export class StopConditions {
+export interface StopConditions {
   endTimeReach?: Date;
   baseTokenAmountReach?: number;
-  targetTokenAmountReach?: number;
+  quoteTokenAmountReach?: number;
+  spentBaseTokenAmountReach?: number;
+  spentQuoteTokenAmountReach?: number;
   batchAmountReach?: number;
 }
-export class StopConditionsOnChain {
+export interface StopConditionsOnChain {
   endTime?: {
     value: BN;
   };
-  baseTokenReach?: {
+  baseTokenAmountReach?: {
     value: BN;
   };
-  targetTokenReach?: {
+  quoteTokenAmountReach?: {
+    value: BN;
+  };
+  spentBaseTokenAmountReach?: {
+    value: BN;
+  };
+  spentQuoteTokenAmountReach?: {
     value: BN;
   };
   batchAmountReach?: {
@@ -110,10 +117,8 @@ export class PocketEntity {
 
   frequency: DurationObjectUnits;
 
-  @Type(() => BuyCondition)
   buyCondition: BuyCondition | undefined;
 
-  @Type(() => StopConditions)
   stopConditions: StopConditions[] | [];
 
   /** Progression fields */

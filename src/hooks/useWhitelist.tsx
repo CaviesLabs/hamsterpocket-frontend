@@ -1,6 +1,6 @@
 import {
-  createContext,
   FC,
+  createContext,
   ReactNode,
   useEffect,
   useState,
@@ -8,10 +8,8 @@ import {
   useCallback,
 } from "react";
 import { whitelistService } from "@/src/services/whitelist.service";
-// import { radyumService } from "@/src/services/radyum.service";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
-//useSWR allows the use of SWR inside function components
 import useSWR from "swr";
 
 export type WhiteListConfigs = {
@@ -22,10 +20,17 @@ export type WhiteListConfigs = {
 export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
   convertDecimalAmount(tokenAddress: string, source: number): number;
+
+  /**
+   * @dev The function handle to get qoute and base token.
+   * @param string {baseTokenAddress}
+   * @param string {targetTokenAddress}
+   * @returns {Array[baseToken, qouteToken, marketId]}
+   */
   findPairLiquidity(
     baseTokenAddress: string,
     targetTokenAddress: string
-  ): LiquidityEntity;
+  ): [string, string, string];
 }>(null);
 
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
@@ -36,8 +41,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       .then((res) => res.json())
       .then((res) => res as LiquidityEntity[])
   );
-
-  // console.log(data, error);
 
   /**
    * @dev Get whitelist data from Hamster server when first load.
@@ -55,16 +58,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     })();
   }, []);
 
-  // /**
-  //  * @dev The function to get liquidies data from Radyumm.
-  //  */
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await radyumService.getLiquidity();
-  //     setLiquidities(res);
-  //   })();
-  // }, []);
-
   /**
    * @dev The function to convert amount of token to normal number by dividing its decimals.
    */
@@ -77,14 +70,28 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
 
   /**
    * @dev The function to find pair liquidity data.
+   * @returns ppair[]
    */
   const findPairLiquidity = useCallback(
-    (baseTokenAddress: string, targetTokenAddress: string) => {
-      return liquidities.find(
-        (item) =>
-          item.baseMint === baseTokenAddress &&
-          item.quoteMint === targetTokenAddress
-      );
+    (
+      baseTokenAddress: string,
+      targetTokenAddress: string
+    ): [string, string, string] => {
+      /** Find ppair available liquidity pool. */
+      const ppair = [
+        liquidities.find(
+          (item) =>
+            item.baseMint === baseTokenAddress &&
+            item.quoteMint === targetTokenAddress
+        ),
+        liquidities.find(
+          (item) =>
+            item.baseMint === targetTokenAddress &&
+            item.quoteMint === baseTokenAddress
+        ),
+      ].filter((item) => item !== null)?.[0];
+      console.log(ppair);
+      return [ppair.baseMint || "", ppair.quoteMint || "", ppair.marketId];
     },
     [liquidities]
   );
