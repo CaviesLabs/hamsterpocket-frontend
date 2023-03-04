@@ -2,18 +2,17 @@ import { FC, useState, useEffect } from "react";
 import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-// import { motion } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 import { BN } from "@project-serum/anchor";
 
-export const TargetAmountCondition: FC<{
+export const BatchAmountCondition: FC<{
   displyed: boolean;
   toggle(): void;
 }> = (props) => {
   /**
    * @dev Injected context.
    */
-  const { targetTokenAddress, handleModifyStopConditions } =
-    useCreatePocketPage();
+  const { handleModifyStopConditions } = useCreatePocketPage();
 
   /**
    * @dev Check whether user want to add this condition into pool.
@@ -30,24 +29,29 @@ export const TargetAmountCondition: FC<{
    */
   useEffect(() => {
     handleModifyStopConditions(
-      "baseTokenAmountReach",
-      new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
+      "batchAmountReach",
+      new BN(currentValue),
       primary
     );
   }, [primary, currentValue]);
 
   return (
-    <div className="mt-[24px] ">
-      {/*  animate={{ x: 0 }} initial={{ x: -100 }} */}
+    // <AnimatePresence>
+    <div
+      // animate={{ x: 0 }}
+      // initial={{ x: -100 }}
+      // exit={{ x: -100 }}
+      className="mt-[24px] "
+    >
       <p className="text-dark10 text-[14px] normal-text">
-        Tokens bought
+        Batches bought (including skipped batches)
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
       </p>
-      <div className="grid grid-cols-12 gap-3 items-center justify-center mt-[16px] max-w-[600px]">
+      <div className="grid grid-cols-12 gap-2 items-center justify-center mt-[16px] max-w-[600px]">
         <div className="col-span-2">
           <button
             onClick={() => {
-              handleModifyStopConditions("baseTokenAmountReach", "delete");
+              handleModifyStopConditions("endTimeReach", "delete");
               props.toggle();
             }}
             className="relative top-[3px]"
@@ -57,7 +61,7 @@ export const TargetAmountCondition: FC<{
         </div>
         <div className="col-span-8">
           <CurrencyInput
-            addressSelected={targetTokenAddress[0]?.toBase58().toString()}
+            addressSelected={"BATCH"}
             disableDropdown={true}
             onAmountChange={(val) => setCurrentValue(val)}
           />
@@ -75,5 +79,6 @@ export const TargetAmountCondition: FC<{
         </div>
       </div>
     </div>
+    // {/* </AnimatePresence> */}
   );
 };

@@ -69,7 +69,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         // data-dropdown-toggle="dropdown"
         size="large"
         className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white",
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white h-[63px]",
           props.className
         )}
         placeholder={
@@ -80,12 +80,14 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             : props.placeholder
         }
         prefix={
-          <img
-            className={classNames("w-10 h-10", {
-              invisible: !addressSelected,
-            })}
-            src={allowCurrencies?.[addressSelected]?.image}
-          />
+          addressSelected === "BATCH" ? null : (
+            <img
+              className={classNames("w-10 h-10", {
+                invisible: !addressSelected,
+              })}
+              src={allowCurrencies?.[addressSelected]?.image}
+            />
+          )
         }
         type="number"
         onChange={(val) => {
@@ -102,7 +104,9 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        {allowCurrencies?.[addressSelected]?.symbol}
+        {addressSelected === "BATCH"
+          ? "BATCH"
+          : allowCurrencies?.[addressSelected]?.symbol}
         {!props.disableDropdown && (
           <DropdownIcon className="float-right ml-[5px]" />
         )}

@@ -18,6 +18,7 @@ import { SuccessTransactionModal } from "@/src/components/create-pocket/success-
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
 import { SideMethod } from "@/src/dto/pocket.dto";
+import { GiReturnArrow } from "react-icons/gi";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -55,23 +56,25 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev The function to validate. */
   const validateForms = useCallback(() => {
-    return !Object.keys(errorMsgs).filter(
-      (key) => errorMsgs?.[key as keyof ErrorValidateContext]
-    ).length;
+    return (
+      Object.keys(errorMsgs).filter(
+        (key) => errorMsgs?.[key as keyof ErrorValidateContext]
+      ).length === 0
+    );
   }, [errorMsgs]);
 
   /** @dev The function to modify stop conditions. */
   const handleModifyStopConditions = useCallback(
-    (excuted = false, key: keyof StopConditions, value: any) => {
+    (key: keyof StopConditions, value: any | "delete", primary = false) => {
       setStopConditions((prev) => {
-        /** @dev Reset conditions arrays by removing asset. */
-        const newConditions = prev.filter((item) => {
-          return !Object.keys(item).includes(key);
-        });
+        if (value === "delete") {
+          return prev.filter((item) => item[key] === undefined);
+        }
 
-        /** @dev Add condition. */
-        excuted && newConditions.push({ [key]: value });
-        return newConditions;
+        return [
+          ...prev.filter((item) => item[key] === undefined),
+          { [key]: { value, primary } },
+        ];
       });
     },
     [stopConditions]
@@ -83,16 +86,16 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Enable UX when processing. */
       setProcessing(true);
 
+      /** @dev Turn createdEnable when first click to create. */
+      !createdEnable && setCreatedEnable(true);
+
       /** @dev Return when wallet not connected. */
       if (!solanaWallet) return;
 
       /** @dev Validate if all form be valid. */
-      // if (!validateForms()) {
-      //   throw new Error("NOT::VALIDATION");
-      // }
-
-      /** @dev Turn createdEnable when first click to create. */
-      !createdEnable && setCreatedEnable(true);
+      if (!validateForms()) {
+        throw new Error("NOT::VALIDATION");
+      }
 
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
@@ -136,7 +139,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         },
         stopConditions: processedStopConditions.map((item) => ({
           [Object.keys(item)[0]]: {
-            value: (item as any)[Object.keys(item)[0] as string],
+            value: (item as any)[Object.keys(item)[0] as string]?.value,
+            primary: (item as any)[Object.keys(item)[0] as string]?.primary,
           },
         })),
       });

@@ -2,17 +2,19 @@ import { FC, useState, useEffect } from "react";
 import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-// import { motion } from "framer-motion";
 import { BN } from "@project-serum/anchor";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
-export const TargetAmountCondition: FC<{
+export const BaseAmountSpendCondition: FC<{
   displyed: boolean;
   toggle(): void;
 }> = (props) => {
+  const { whiteLists } = useWhiteList();
+
   /**
    * @dev Injected context.
    */
-  const { targetTokenAddress, handleModifyStopConditions } =
+  const { baseTokenAddress, handleModifyStopConditions } =
     useCreatePocketPage();
 
   /**
@@ -30,8 +32,8 @@ export const TargetAmountCondition: FC<{
    */
   useEffect(() => {
     handleModifyStopConditions(
-      "baseTokenAmountReach",
-      new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
+      "spentBaseTokenAmountReach",
+      new BN(currentValue * Math.pow(10, baseTokenAddress[1])),
       primary
     );
   }, [primary, currentValue]);
@@ -40,7 +42,7 @@ export const TargetAmountCondition: FC<{
     <div className="mt-[24px] ">
       {/*  animate={{ x: 0 }} initial={{ x: -100 }} */}
       <p className="text-dark10 text-[14px] normal-text">
-        Tokens bought
+        {whiteLists[baseTokenAddress[0].toBase58().toString()]?.symbol} spent
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
       </p>
       <div className="grid grid-cols-12 gap-3 items-center justify-center mt-[16px] max-w-[600px]">
@@ -57,7 +59,7 @@ export const TargetAmountCondition: FC<{
         </div>
         <div className="col-span-8">
           <CurrencyInput
-            addressSelected={targetTokenAddress[0]?.toBase58().toString()}
+            addressSelected={baseTokenAddress[0]?.toBase58().toString()}
             disableDropdown={true}
             onAmountChange={(val) => setCurrentValue(val)}
           />

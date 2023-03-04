@@ -3,6 +3,8 @@ import { PlusIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import { EndTimeCondition } from "./end-time-condition.component";
 import { TargetAmountCondition } from "./target-amount-condition.component";
+import { BaseAmountSpendCondition } from "./base-spent-condition.component";
+import { BatchAmountCondition } from "./batch-amount-condition";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
@@ -16,6 +18,16 @@ export const StopCondition: FC = () => {
    * @dev Displayed end time condition.
    */
   const [targetAmountDisplayed, setTargetAmountDisplayed] = useState(false);
+
+  /**
+   * @dev Displayed end time condition.
+   */
+  const [baseTokenSpentDisplayed, setBaseTokenSpentDisplayed] = useState(false);
+
+  /**
+   * @dev Displayed end time condition.
+   */
+  const [batchAmountDisplayed, setBatchAmountDisplayed] = useState(false);
 
   /**
    * @dev Injected context.
@@ -74,32 +86,36 @@ export const StopCondition: FC = () => {
                   />
                 </div>
               )}
-              <div className="mr-[12px]">
-                <Button
-                  size="small"
-                  text="Add target SOL amount"
-                  className="!rounded-[100px] after:!rounded-[100px] !px-4"
-                  theme={{
-                    backgroundColor: "#F47048",
-                    color: "#FFFFFF",
-                  }}
-                  icon={<PlusIcon />}
-                  // onClick={() => setIsAddGameItem(true)}
-                />
-              </div>
-              <div className="mr-[12px]">
-                <Button
-                  size="small"
-                  text="Add target batches purchased"
-                  className="!rounded-[100px] after:!rounded-[100px] !px-4"
-                  theme={{
-                    backgroundColor: "#97B544",
-                    color: "#FFFFFF",
-                  }}
-                  icon={<PlusIcon />}
-                  // onClick={() => setIsAddGameItem(true)}
-                />
-              </div>
+              {!baseTokenSpentDisplayed && (
+                <div className="mr-[12px]">
+                  <Button
+                    size="small"
+                    text="Add target token spent amount"
+                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
+                    theme={{
+                      backgroundColor: "#F47048",
+                      color: "#FFFFFF",
+                    }}
+                    icon={<PlusIcon />}
+                    onClick={() => setBaseTokenSpentDisplayed(true)}
+                  />
+                </div>
+              )}
+              {!batchAmountDisplayed && (
+                <div className="mr-[12px]">
+                  <Button
+                    size="small"
+                    text="Add target batches purchased"
+                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
+                    theme={{
+                      backgroundColor: "#97B544",
+                      color: "#FFFFFF",
+                    }}
+                    icon={<PlusIcon />}
+                    onClick={() => setBatchAmountDisplayed(true)}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -114,6 +130,18 @@ export const StopCondition: FC = () => {
             <TargetAmountCondition
               displyed={targetAmountDisplayed}
               toggle={() => setTargetAmountDisplayed(false)}
+            />
+          )}
+          {baseTokenSpentDisplayed && (
+            <BaseAmountSpendCondition
+              displyed={baseTokenSpentDisplayed}
+              toggle={() => setBaseTokenSpentDisplayed(false)}
+            />
+          )}
+          {batchAmountDisplayed && (
+            <BatchAmountCondition
+              displyed={batchAmountDisplayed}
+              toggle={() => setBatchAmountDisplayed(false)}
             />
           )}
         </div>

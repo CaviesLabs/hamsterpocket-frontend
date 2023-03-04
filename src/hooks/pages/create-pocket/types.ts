@@ -131,9 +131,9 @@ export interface CreatePocketContextState {
    * @param {StopConditions[]}
    */
   handleModifyStopConditions(
-    excuted: boolean,
     key: keyof StopConditions,
-    value: any
+    value: any | "delete",
+    primary?: boolean
   ): void;
 
   /**

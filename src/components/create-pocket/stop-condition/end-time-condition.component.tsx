@@ -17,7 +17,7 @@ export const EndTimeCondition: FC<{
   /**
    * @dev Check whether user want to add this condition into pool.
    */
-  const [executed, setExecuted] = useState(false);
+  const [primary, setPrimary] = useState(false);
 
   /**
    * @dev Current value.
@@ -29,11 +29,11 @@ export const EndTimeCondition: FC<{
    */
   useEffect(() => {
     handleModifyStopConditions(
-      executed,
       "endTimeReach",
-      new BN(currentValue.getTime().toString())
+      new BN(currentValue.getTime().toString()),
+      primary
     );
-  }, [executed, currentValue]);
+  }, [primary, currentValue]);
 
   return (
     // <AnimatePresence>
@@ -49,7 +49,13 @@ export const EndTimeCondition: FC<{
       </p>
       <div className="grid grid-cols-12 gap-2 items-center justify-center mt-[16px] max-w-[600px]">
         <div className="col-span-2">
-          <button onClick={props.toggle} className="relative top-[3px]">
+          <button
+            onClick={() => {
+              handleModifyStopConditions("endTimeReach", "delete");
+              props.toggle();
+            }}
+            className="relative top-[3px]"
+          >
             <DeleteIconCircle />
           </button>
         </div>
@@ -58,12 +64,12 @@ export const EndTimeCondition: FC<{
         </div>
         <div className="col-span-2">
           <button
-            onClick={() => setExecuted(!executed)}
+            onClick={() => setPrimary(!primary)}
             className="relative top-[3px]"
           >
             <CircleCheckIcon
               size="27"
-              color={executed ? "#3CBF7C" : "#7886A0"}
+              color={primary ? "#3CBF7C" : "#7886A0"}
             />
           </button>
         </div>

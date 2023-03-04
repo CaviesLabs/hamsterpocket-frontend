@@ -66,12 +66,12 @@ export class BuyConditionOnChain {
 }
 
 export interface StopConditions {
-  endTimeReach?: Date;
-  baseTokenAmountReach?: number;
-  quoteTokenAmountReach?: number;
-  spentBaseTokenAmountReach?: number;
-  spentQuoteTokenAmountReach?: number;
-  batchAmountReach?: number;
+  endTimeReach?: { primary: boolean; value: Date };
+  baseTokenAmountReach?: { primary: number; value: number };
+  quoteTokenAmountReach?: { primary: number; value: number };
+  spentBaseTokenAmountReach?: { primary: number; value: number };
+  spentQuoteTokenAmountReach?: { primary: number; value: number };
+  batchAmountReach?: { primary: number; value: number };
 }
 export interface OffChainStopConditions {
   endTimeReach?: Date;
@@ -82,21 +82,27 @@ export interface OffChainStopConditions {
 export interface StopConditionsOnChain {
   endTime?: {
     value: BN;
+    primary: boolean;
   };
   baseTokenAmountReach?: {
     value: BN;
+    primary: boolean;
   };
   quoteTokenAmountReach?: {
     value: BN;
+    primary: boolean;
   };
   spentBaseTokenAmountReach?: {
     value: BN;
+    primary: boolean;
   };
   spentQuoteTokenAmountReach?: {
     value: BN;
+    primary: boolean;
   };
   batchAmountReach?: {
     value: BN;
+    primary: boolean;
   };
 }
 

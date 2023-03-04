@@ -23,6 +23,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev The function to handle modifying error messageses. */
   const modifyErrors = useCallback(
     (key: keyof ErrorValidateContext, msg: string) => {
+      console.log("modify error");
       setErrors((prev) => ({
         ...prev,
         [key]: msg,
@@ -40,6 +41,20 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     batchVolume,
     depositedAmount,
   } = useCreatePocketPage();
+
+  /** @dev Init */
+  useEffect(() => {
+    setErrors({
+      pocketName: "",
+      baseTokenAddress: "",
+      targetTokenAddress: "",
+      batchVersion: "",
+      buyCondition: "",
+      stopConditions: "",
+      depositedAmount: "",
+      batchVolume: "",
+    });
+  }, []);
 
   /** @dev Watch changes in pocket name and validate it. */
   useEffect(() => {
