@@ -446,6 +446,117 @@ export class PocketProgramProvider {
   }
 
   /**
+   * @dev The function to pause.
+   * @param walletProvider
+   * @param pocket
+   */
+  public async pausePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ) {
+    try {
+      console.log("Pocket ID to pause: ", pocket.id);
+
+      /** @dev Get pocket state. */
+      const [pocketAccount] = await this.getPocketState(pocket.id);
+
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+      let instructions: TransactionInstruction[] = [];
+
+      /** @dev Close pool. */
+      instructions.push(
+        await this.instructionProvider.pausePocket(
+          walletProvider.publicKey,
+          pocketAccount
+        )
+      );
+
+      /** @dev Add to instructions if valid. */
+      instructions = [...instructions].filter((item) => item !== null);
+
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
+  }
+
+  /**
+   * @dev The function to resume.
+   * @param walletProvider
+   * @param pocket
+   */
+  public async resumePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ) {
+    try {
+      console.log("Pocket ID: ", pocket.id);
+      console.log("Params to create pocket: ", pocket);
+
+      /** @dev Get pocket state. */
+      const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
+
+      console.log(pocketState);
+
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+      let instructions: TransactionInstruction[] = [];
+
+      /** @dev Close pool. */
+      instructions.push(
+        await this.instructionProvider.resumePocket(
+          walletProvider.publicKey,
+          pocketAccount
+        )
+      );
+
+      /** @dev Add to instructions if valid. */
+      instructions = [...instructions].filter((item) => item !== null);
+
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
+  }
+
+  /**
    * @dev Get pocket state
    * @param {string} id Pocket ID.
    */

@@ -75,6 +75,40 @@ export class ProgramService {
   }
 
   /**
+   * @dev The function to pause pocket onchain & ofchain.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async pausePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ): Promise<any> {
+    return this.requestAndSync(pocket.id, async () => {
+      return await this.pocketProgramProvider.pausePocket(
+        walletProvider,
+        pocket
+      );
+    });
+  }
+
+  /**
+   * @dev The function to pause pocket onchain & ofchain.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async resumePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ): Promise<any> {
+    return this.requestAndSync(pocket.id, async () => {
+      return await this.pocketProgramProvider.resumePocket(
+        walletProvider,
+        pocket
+      );
+    });
+  }
+
+  /**
    * @dev The function to close pocket onchain & ofchain.
    * @param {WalletProvider}
    * @param {PocketEntity}

@@ -181,7 +181,7 @@ export class InstructionProvider {
         pocket: pocketAccount,
         signer: pocketOwner,
         pocketRegistry: this.pocketRegistry,
-      })
+      } as any)
       .instruction();
   }
 
@@ -252,6 +252,42 @@ export class InstructionProvider {
     return await this.program.methods
       .updatePocket({
         status: { closed: {} },
+      } as any)
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+      })
+      .instruction();
+  }
+
+  /**
+   * @dev Instuction to pause pool.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async pausePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
+    return await this.program.methods
+      .updatePocket({
+        status: { paused: {} },
+      } as any)
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+      })
+      .instruction();
+  }
+
+  /**
+   * @dev Instuction to resume pool.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async resumePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
+    return await this.program.methods
+      .updatePocket({
+        status: { active: {} },
       } as any)
       .accounts({
         signer: pocketOwner,

@@ -12,7 +12,12 @@ import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/pro
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Duration } from "luxon";
-import { DepositModal, ClosePocketModal } from "@/src/components/home";
+import {
+  DepositModal,
+  ClosePocketModal,
+  PausePocketModal,
+  ResumePocketModal,
+} from "@/src/components/home";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -27,6 +32,12 @@ export const PoolItem = (props: PoolItemProps) => {
 
   /** @dev Condition to show modal to close pocket. */
   const [closedDisplayed, setClosedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to pause pocket. */
+  const [pausedDisplayed, setPausedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to resume pocket. */
+  const [resumedDisplayed, setResumedDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
@@ -220,6 +231,7 @@ export const PoolItem = (props: PoolItemProps) => {
                   }}
                   text="Continue"
                   width="100%"
+                  onClick={() => setResumedDisplayed(true)}
                 />
               ) : (
                 <Button
@@ -230,6 +242,7 @@ export const PoolItem = (props: PoolItemProps) => {
                   }}
                   text="Pause"
                   width="100%"
+                  onClick={() => setPausedDisplayed(true)}
                 />
               ))}
           </div>
@@ -261,15 +274,39 @@ export const PoolItem = (props: PoolItemProps) => {
           pocket={data}
         />
       )}
-      <ClosePocketModal
-        isModalOpen={closedDisplayed}
-        handleOk={() => {
-          setClosedDisplayed(false);
-          props.handleFetch();
-        }}
-        handleCancel={() => setClosedDisplayed(false)}
-        pocket={data}
-      />
+      {closedDisplayed && (
+        <ClosePocketModal
+          isModalOpen={closedDisplayed}
+          handleOk={() => {
+            setClosedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setClosedDisplayed(false)}
+          pocket={data}
+        />
+      )}
+      {resumedDisplayed && (
+        <ResumePocketModal
+          isModalOpen={resumedDisplayed}
+          handleOk={() => {
+            setResumedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setResumedDisplayed(false)}
+          pocket={data}
+        />
+      )}
+      {pausedDisplayed && (
+        <PausePocketModal
+          isModalOpen={pausedDisplayed}
+          handleOk={() => {
+            setPausedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setPausedDisplayed(false)}
+          pocket={data}
+        />
+      )}
     </div>
   );
 };
