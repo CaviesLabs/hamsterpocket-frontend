@@ -1,8 +1,10 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { PocketProgramProvider } from "@/src/providers/program";
 import { Keypair } from "@solana/web3.js";
-import { CreatePocketDto } from "@/src/dto/pocket.dto";
+import { BN } from "@project-serum/anchor";
 import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
+import { CreatePocketDto } from "@/src/dto/pocket.dto";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 import UtilsProvider from "@/src/utils/utils.provider";
 
 export class ProgramService {
@@ -47,13 +49,47 @@ export class ProgramService {
       },
     });
 
-    console.log(response);
-
     return this.requestAndSync(response?._id, async () => {
       return await this.pocketProgramProvider.createProposal(walletProvider, {
         ...createPocketDto,
         id: response?._id,
       });
+    });
+  }
+
+  /**
+   * @dev The function to close pocket onchain & ofchain.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async closePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ): Promise<any> {
+    return this.requestAndSync(pocket.id, async () => {
+      return await this.pocketProgramProvider.closePocket(
+        walletProvider,
+        pocket
+      );
+    });
+  }
+
+  /**
+   * @dev The function to close pocket onchain & ofchain.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async depositPocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity,
+    depositedAmount: BN
+  ): Promise<any> {
+    return this.requestAndSync(pocket.id, async () => {
+      return await this.pocketProgramProvider.depositToPocket(
+        walletProvider,
+        pocket,
+        depositedAmount
+      );
     });
   }
 
@@ -75,7 +111,7 @@ export class ProgramService {
         } finally {
           resolve(data);
         }
-      }, 6000)
+      }, 15000)
     );
   }
 

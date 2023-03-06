@@ -243,6 +243,75 @@ export class InstructionProvider {
   }
 
   /**
+   * @dev Instuction to close pool.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async closePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
+    return await this.program.methods
+      .updatePocket({
+        status: { closed: {} },
+      } as any)
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+      })
+      .instruction();
+  }
+
+  /**
+   * @dev Instruction to withdraw assets.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @param baseTokenAccount
+   * @param targetTokenAccount
+   * @returns
+   */
+  public async withdrawPocket(
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey
+  ) {
+    /**
+     * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
+     */
+    const baseAsociated = await getAssociatedTokenAddress(
+      baseTokenAccount,
+      pocketOwner
+    );
+    const targetAsociated = await getAssociatedTokenAddress(
+      targetTokenAccount,
+      pocketOwner
+    );
+
+    /**
+     * @dev Get @var {PublicKey} tokenVault
+     */
+
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
+    );
+    return await this.program.methods
+      .withdraw()
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+        pocketBaseTokenVault: baseTokenVault,
+        pocketQuoteTokenVault: targetTokenVault,
+        signerBaseTokenAccount: baseAsociated,
+        signerTargetTokenAccount: targetAsociated,
+      } as any)
+      .instruction();
+  }
+
+  /**
    * @dev Wrap SOL to wSOL before deposit.
    * @param {PublicKey} walletPublicKey
    * @param {BN} amount

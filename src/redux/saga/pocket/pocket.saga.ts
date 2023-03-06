@@ -23,7 +23,9 @@ export function* getActivePockets({
       ...payload,
     });
 
-    yield put(setActivePockets(pockets));
+    yield put(
+      setActivePockets(pockets.map((item) => ({ ...item, id: item?._id })))
+    );
     callback && callback(pockets);
   } catch (err) {
     console.error(err);

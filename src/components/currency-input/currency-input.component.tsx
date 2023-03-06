@@ -17,6 +17,7 @@ export type CurrencyInputProps = {
    * @dev Overwrite style.
    */
   className?: string;
+  inputClassName?: string;
   dropdownBadgeClassname?: string;
 
   /**
@@ -73,10 +74,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       <Input
         // data-dropdown-toggle="dropdown"
         size="large"
-        className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white h-[63px]",
-          props.className
-        )}
+        className={`rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white h-[63px] ${props.inputClassName}`}
         placeholder={
           props.currencyBadgeOnly
             ? addressSelected

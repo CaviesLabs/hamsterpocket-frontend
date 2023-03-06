@@ -34,7 +34,7 @@ export class TransactionProvider {
   public async signAndSendTransaction(
     walletProvider: WalletProvider,
     instructions: TransactionInstruction[],
-    commitment: Commitment = "confirmed"
+    commitment: Commitment = "finalized"
   ) {
     /**
      * @dev Setup tx by creating a transaction which includes all instructions which users want to process.

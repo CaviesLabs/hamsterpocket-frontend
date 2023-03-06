@@ -7,6 +7,8 @@ export const SuccessTransactionModal: FC<{
   handleOk(e?: MouseEvent<HTMLElement>): void;
   handleCancel(e?: MouseEvent<HTMLElement>): void;
   isLoading?: boolean;
+  message: string;
+  okMessage: string;
 }> = (props) => {
   return (
     <Modal
@@ -28,14 +30,12 @@ export const SuccessTransactionModal: FC<{
           <h2 className="mt-4 mb-2 font-bold text-white text-2xl text-center">
             Success!
           </h2>
-          <p className="mb-6 text-lg text-center text-white">
-            You have created pocket and deposited successful
-          </p>
+          <p className="mb-6 text-lg text-center text-white">{props.message}</p>
           <Button
             shape="primary"
             size="large"
             onClick={() => props.handleOk()}
-            text="Back to Home"
+            text={props.okMessage}
             className="mb-3"
             theme={{
               backgroundColor: "#B998FB",

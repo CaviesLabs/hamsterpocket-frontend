@@ -12,10 +12,11 @@ import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/pro
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Duration } from "luxon";
-import { DepositModal } from "@/src/components/home/deposit-modal.component";
+import { DepositModal, ClosePocketModal } from "@/src/components/home";
 
 type PoolItemProps = {
   data: PocketEntity;
+  handleFetch(): void;
 };
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
@@ -23,6 +24,9 @@ export const PoolItem = (props: PoolItemProps) => {
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to close pocket. */
+  const [closedDisplayed, setClosedDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
@@ -37,7 +41,25 @@ export const PoolItem = (props: PoolItemProps) => {
   );
 
   /** @dev Condition filter pockets which is paused only. */
+  const isActive = useMemo(() => data.status === PocketStatus.ACTIVE, [data]);
   const isPaused = useMemo(() => data.status === PocketStatus.PAUSED, [data]);
+  const isClosed = useMemo(() => data.status === PocketStatus.CLOSED, [data]);
+  const isEnded = useMemo(() => data.status === PocketStatus.ENDED, [data]);
+
+  /** @dev */
+  const hummanStatus = useMemo(() => {
+    switch (data.status) {
+      case PocketStatus.PAUSED:
+        return "PAUSE";
+      case PocketStatus.CLOSED:
+        return "CLOSED";
+      case PocketStatus.ENDED:
+        return "ENDED";
+      case PocketStatus.ACTIVE:
+      default:
+        return "ACTIVE";
+    }
+  }, [data]);
 
   return (
     <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
@@ -162,66 +184,91 @@ export const PoolItem = (props: PoolItemProps) => {
       <div className="mt-[24px] md:flow-root">
         <p
           className={classnames(
-            "md:float-left text-[16px] uppercase text-normal relative top-[10px]",
-            isPaused ? "text-orange-500" : "text-green"
+            "md:float-left text-[16px] uppercase text-normal relative top-[10px] text-green",
+            {
+              "!text-red300": isClosed || isEnded,
+              "!text-orange-500": isPaused,
+            }
           )}
         >
-          {isPaused ? "PAUSED" : "ACTIVE"}
+          {hummanStatus}
         </p>
         <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
           <div className="md:float-right">
-            <Button
-              className="!px-[50px] md:w-auto !w-full"
-              theme={{
-                backgroundColor: "#B998FB",
-                color: "#FFFFFF",
-              }}
-              text="Deposit"
-              width="100%"
-              onClick={() => setDepositedDisplayed(true)}
-            />
-          </div>
-          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
-            {isPaused ? (
+            {isActive && (
               <Button
-                className="!px-[50px] md:w-auto"
+                className="!px-[50px] md:w-auto !w-full"
                 theme={{
                   backgroundColor: "#B998FB",
                   color: "#FFFFFF",
                 }}
-                text="Continue"
+                text="Deposit"
                 width="100%"
-              />
-            ) : (
-              <Button
-                className="!px-[50px] md:w-auto"
-                theme={{
-                  backgroundColor: "#B998FB",
-                  color: "#FFFFFF",
-                }}
-                text="Pause"
-                width="100%"
+                onClick={() => setDepositedDisplayed(true)}
               />
             )}
           </div>
           <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
-            <Button
-              className="!px-[50px] !border-solid !border-purple !border-[2px]"
-              theme={{
-                backgroundColor: "transparent",
-                color: "#B998FB",
-                hoverColor: "#B998FB",
-              }}
-              text="Close"
-              width="100%"
-            />
+            {!isClosed &&
+              !isEnded &&
+              (isPaused ? (
+                <Button
+                  className="!px-[50px] md:w-auto"
+                  theme={{
+                    backgroundColor: "#B998FB",
+                    color: "#FFFFFF",
+                  }}
+                  text="Continue"
+                  width="100%"
+                />
+              ) : (
+                <Button
+                  className="!px-[50px] md:w-auto"
+                  theme={{
+                    backgroundColor: "#B998FB",
+                    color: "#FFFFFF",
+                  }}
+                  text="Pause"
+                  width="100%"
+                />
+              ))}
+          </div>
+          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
+            {!isEnded && (
+              <Button
+                className="!px-[50px] !border-solid !border-purple !border-[2px]"
+                theme={{
+                  backgroundColor: "transparent",
+                  color: "#B998FB",
+                  hoverColor: "#B998FB",
+                }}
+                text={isClosed ? "Withdraw" : "Close"}
+                width="100%"
+                onClick={() => setClosedDisplayed(true)}
+              />
+            )}
           </div>
         </div>
       </div>
-      <DepositModal
-        isModalOpen={depositedDisplayed}
-        handleOk={() => setDepositedDisplayed(false)}
-        handleCancel={() => setDepositedDisplayed(false)}
+      {depositedDisplayed && (
+        <DepositModal
+          isModalOpen={depositedDisplayed}
+          handleOk={() => {
+            setDepositedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setDepositedDisplayed(false)}
+          pocket={data}
+        />
+      )}
+      <ClosePocketModal
+        isModalOpen={closedDisplayed}
+        handleOk={() => {
+          setClosedDisplayed(false);
+          props.handleFetch();
+        }}
+        handleCancel={() => setClosedDisplayed(false)}
+        pocket={data}
       />
     </div>
   );

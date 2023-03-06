@@ -180,6 +180,13 @@ input[type=number] {
 .dark-input input::placeholder  {
   color: white;
 }
+.gray-input input {
+  background-color: #353C4B !important;
+  color: white;
+}
+.gray-input input::placeholder  {
+  color: white;
+}
 
 .ant-picker-panel-container {
   background: #20242D !important;

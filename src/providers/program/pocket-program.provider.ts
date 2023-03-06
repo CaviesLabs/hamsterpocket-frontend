@@ -13,6 +13,8 @@ import { WSOL_ADDRESS } from "@/src/utils/constants";
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
 export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
   "https://boldest-few-field.solana-mainnet.quiknode.pro/0ffa9f9f5e9141aa33a030081b78fdfe40bfbae6/";
+// export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
+//   "https://api.mainnet-beta.solana.com";
 
 /**
  * @dev Swap Program Provider acts as an interface to interact with hamsterswap program on solana.
@@ -235,7 +237,60 @@ export class PocketProgramProvider {
       setTimeout(async () => {
         try {
           const [, state] = await this.getPocketState(createPocketDto.id);
-          console.log({ state });
+          console.log(createPocketDto.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
+  }
+
+  public async depositToPocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity,
+    depositedAmount: anchor.BN
+  ) {
+    try {
+      console.log("Pocket ID: ", pocket.id);
+      console.log("Params to deposit pocket: ", pocket);
+
+      /** @dev Get pocket state. */
+      const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
+
+      console.log(pocketState);
+
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+      let instructions: TransactionInstruction[] = [].concat(
+        await this.depositAsset(
+          walletProvider,
+          pocketAccount,
+          new PublicKey((pocketState as any)?.baseTokenMintAddress),
+          new PublicKey((pocketState as any)?.quoteTokenMintAddress),
+          depositedAmount
+        )
+      );
+
+      /** @dev Add to instructions if valid. */
+      instructions = [...instructions].filter((item) => item !== null);
+
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
         } catch (err) {
           console.log("Error when fetch pocket state", err);
         }
@@ -278,6 +333,14 @@ export class PocketProgramProvider {
         baseTokenAddress
       );
 
+    /** @dev Create token vault if not already exists .*/
+    const createTokenTargetVaultInstruction =
+      await this.instructionProvider.createTokenVaultAccount(
+        walletProvider.publicKey,
+        pocketAccount,
+        targetTokenAddress
+      );
+
     /**
      * @dev Handle to wrap sol to wsol if offered item is SOL currency.
      */
@@ -309,9 +372,77 @@ export class PocketProgramProvider {
     return [
       associatedInstruction,
       createTokenVaultInstruction,
+      createTokenTargetVaultInstruction,
       ...wrapSolInstructions,
       ins,
     ];
+  }
+
+  /**
+   * @dev The function to close pocket pool and withdraw assets.
+   * @param walletProvider
+   * @param pocket
+   */
+  public async closePocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ) {
+    try {
+      console.log("Pocket ID: ", pocket.id);
+      console.log("Params to create pocket: ", pocket);
+
+      /** @dev Get pocket state. */
+      const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
+
+      console.log(pocketState);
+
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+      let instructions: TransactionInstruction[] = [];
+
+      /** @dev Close pool. */
+      instructions.push(
+        await this.instructionProvider.closePocket(
+          walletProvider.publicKey,
+          pocketAccount
+        )
+      );
+
+      /** @dev Withdraw assets from pool to wallet. */
+      instructions.push(
+        await this.instructionProvider.withdrawPocket(
+          walletProvider.publicKey,
+          pocketAccount,
+          new PublicKey((pocketState as any)?.baseTokenMintAddress),
+          new PublicKey((pocketState as any)?.quoteTokenMintAddress)
+        )
+      );
+
+      /** @dev Add to instructions if valid. */
+      instructions = [...instructions].filter((item) => item !== null);
+
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
   }
 
   /**

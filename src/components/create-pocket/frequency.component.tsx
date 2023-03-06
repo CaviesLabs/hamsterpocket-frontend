@@ -16,6 +16,8 @@ export const FrequencyOption: FC = () => {
   const handleModifyFrequency = useCallback(
     (val: string) => {
       switch (val) {
+        case FrequencyConditionType.HOURLY:
+          setFrequency({ hours: 1 });
         case FrequencyConditionType.DAILY:
           setFrequency({ days: 1 });
           break;

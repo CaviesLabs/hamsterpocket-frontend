@@ -28,6 +28,8 @@ export enum PriceConditionType {
 
 export enum FrequencyConditionType {
   /** Daily */
+  HOURLY = "Hourly",
+  /** Daily */
   DAILY = "Daily",
   /** Weekly */
   WEEKLY = "Weekly",
@@ -107,7 +109,8 @@ export interface StopConditionsOnChain {
 }
 
 export class PocketEntity {
-  id: string;
+  id?: string;
+  _id?: string;
 
   address: string;
 

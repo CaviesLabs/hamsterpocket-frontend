@@ -32,6 +32,10 @@ export const categoryOptions = [
  */
 export const TIME_CONDITIONS: OptionProps[] = [
   {
+    label: "Hourly",
+    value: FrequencyConditionType.HOURLY,
+  },
+  {
     label: "Daily",
     value: FrequencyConditionType.DAILY,
   },

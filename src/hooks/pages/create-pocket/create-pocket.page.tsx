@@ -14,7 +14,7 @@ import {
   convertDurationsTimeToHours,
   processStopConditions,
 } from "@/src/utils";
-import { SuccessTransactionModal } from "@/src/components/create-pocket/success-modal.component";
+import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
 import { SideMethod } from "@/src/dto/pocket.dto";
@@ -120,7 +120,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       /** @dev Handle to attract side method of pool.  */
       const sideMethod: SideMethod =
         liqBase === baseAddress ? { sell: {} } : { buy: {} };
-      console.log(liqBase, baseAddress);
 
       /** @dev Process stopConditions. */
       const processedStopConditions = stopConditions.map((condition) =>
@@ -221,9 +220,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     }
   }, [availableTargetTokens, whiteLists]);
 
-  console.log(availableBaseTokens);
-  console.log(availableTargetTokens);
-
   return (
     <CreatePocketContext.Provider
       value={{
@@ -259,6 +255,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         isModalOpen={successCreated}
         handleOk={() => router.push("/my-pockets")}
         handleCancel={() => {}}
+        okMessage="Back to Home"
+        message="You have created pocket and deposited successful"
       />
     </CreatePocketContext.Provider>
   );

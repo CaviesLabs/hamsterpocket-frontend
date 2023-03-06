@@ -46,8 +46,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
         .then((res) => res as LiquidityEntity[])
   );
 
-  console.log(liquidities);
-
   /**
    * @dev Get whitelist data from Hamster server when first load.
    */

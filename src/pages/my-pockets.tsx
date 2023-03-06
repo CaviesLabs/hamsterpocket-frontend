@@ -6,7 +6,6 @@ import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
 import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { BalanceGroup, ActivePoolGroup } from "@/src/components/my-pools";
-import { ActivePockets } from "@/src/components/my-pools/active-pockets";
 
 const Layout: FC = () => {
   const {} = useMain();
@@ -17,7 +16,6 @@ const Layout: FC = () => {
         <LayoutSection className="!pt-[160px] pb-[100px]">
           <BalanceGroup />
           <ActivePoolGroup />
-          <ActivePockets />
         </LayoutSection>
       </div>
     </MainLayout>
