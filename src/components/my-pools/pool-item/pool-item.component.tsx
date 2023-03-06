@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -12,6 +12,7 @@ import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/pro
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Duration } from "luxon";
+import { DepositModal } from "@/src/components/home/deposit-modal.component";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -19,6 +20,9 @@ type PoolItemProps = {
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists, convertDecimalAmount } = useWhiteList();
+
+  /** @dev Condition to show modal to deposit. */
+  const [depositedDisplayed, setDepositedDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
@@ -174,6 +178,7 @@ export const PoolItem = (props: PoolItemProps) => {
               }}
               text="Deposit"
               width="100%"
+              onClick={() => setDepositedDisplayed(true)}
             />
           </div>
           <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
@@ -213,6 +218,11 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
         </div>
       </div>
+      <DepositModal
+        isModalOpen={depositedDisplayed}
+        handleOk={() => setDepositedDisplayed(false)}
+        handleCancel={() => setDepositedDisplayed(false)}
+      />
     </div>
   );
 };

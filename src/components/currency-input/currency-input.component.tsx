@@ -28,6 +28,11 @@ export type CurrencyInputProps = {
    * @dev Restrict disable dropdown to select token.
    */
   disableDropdown?: boolean;
+
+  /**
+   * @dev List of allowed tokens.
+   */
+  allowedTokens?: string[];
 };
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
@@ -117,7 +122,12 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
           className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80"
         >
           <div className="overflow-y-scroll max-h-64">
-            {Object.keys(allowCurrencies).map((address, key) => (
+            {(props.allowedTokens
+              ? Object.keys(allowCurrencies).filter((item) =>
+                  props.allowedTokens.includes(item)
+                )
+              : Object.keys(allowCurrencies)
+            ).map((address, key) => (
               <TokenItem
                 key={`${Math.random()}-${key}`}
                 name={allowCurrencies?.[address]?.name}

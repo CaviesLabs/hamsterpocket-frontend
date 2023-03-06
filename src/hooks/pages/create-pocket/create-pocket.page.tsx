@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRouter } from "next/router";
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
 import { BuyCondition, StopConditions } from "@/src/entities/pocket.entity";
@@ -18,7 +18,7 @@ import { SuccessTransactionModal } from "@/src/components/create-pocket/success-
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
 import { SideMethod } from "@/src/dto/pocket.dto";
-import { GiReturnArrow } from "react-icons/gi";
+import { union } from "lodash";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [pocketName, setPocketName] = useState("");
@@ -36,8 +36,16 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
+  /** @dev Avalabible tokens when choose base. */
+  const [availableBaseTokens, setAvailableBaseTokens] = useState<string[]>([]);
+
+  /** @dev Avalabible tokens when choose target. */
+  const [availableTargetTokens, setAvailableTargetTokens] = useState<string[]>(
+    []
+  );
+
   /** @dev Inject functions from whitelist hook to use. */
-  const { findPairLiquidity } = useWhiteList();
+  const { findPairLiquidity, whiteLists, liquidities } = useWhiteList();
 
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ days: 1 });
@@ -168,6 +176,54 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     validateForms,
   ]);
 
+  /**
+   * @dev dynamically update a list of available base tokens based on
+   * the available liquidity data.
+   */
+  useEffect(() => {
+    setAvailableBaseTokens(() => {
+      return union(
+        liquidities?.map((item) => [item.baseMint, item.quoteMint]).flat(1)
+      );
+    });
+  }, [liquidities]);
+
+  /**
+   * @dev dynamically update a list of available target tokens based on
+   * the selected base token and the available liquidity data.
+   */
+  useEffect(() => {
+    setAvailableTargetTokens(() => {
+      return union(
+        liquidities
+          ?.filter(
+            (item) =>
+              item.baseMint === baseTokenAddress[0].toBase58().toString() ||
+              item.quoteMint === baseTokenAddress[0].toBase58().toString()
+          )
+          .map((item) => [item.baseMint, item.quoteMint])
+          .flat(1)
+          .filter((item) => item !== baseTokenAddress[0].toBase58().toString())
+      );
+    });
+  }, [liquidities, baseTokenAddress]);
+
+  /**
+   * @dev dynamically update the targetTokenAddress state variable based on
+   * the selected target token and the available whiteLists data.
+   * */
+  useEffect(() => {
+    if (availableTargetTokens.length) {
+      setTargetTokenAddress([
+        new PublicKey(availableTargetTokens[0]),
+        whiteLists[availableTargetTokens[0]]?.decimals,
+      ]);
+    }
+  }, [availableTargetTokens, whiteLists]);
+
+  console.log(availableBaseTokens);
+  console.log(availableTargetTokens);
+
   return (
     <CreatePocketContext.Provider
       value={{
@@ -183,6 +239,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         processing,
         createdEnable,
         errorMsgs,
+        availableBaseTokens,
+        availableTargetTokens,
         setPocketName,
         setBaseTokenAddress,
         setTargetTokenAddress,

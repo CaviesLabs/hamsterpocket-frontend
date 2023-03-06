@@ -11,6 +11,8 @@ export const DCAPPair: FC = () => {
   const {
     baseTokenAddress,
     targetTokenAddress,
+    availableBaseTokens,
+    availableTargetTokens,
     setBaseTokenAddress,
     setTargetTokenAddress,
   } = useCreatePocketPage();
@@ -33,6 +35,7 @@ export const DCAPPair: FC = () => {
             <CurrencyInput
               placeholder="Enter SOL amount"
               addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
+              allowedTokens={availableBaseTokens}
               onAddressSelect={(address, decimals) =>
                 setBaseTokenAddress([new PublicKey(address), decimals])
               }
@@ -54,6 +57,7 @@ export const DCAPPair: FC = () => {
               placeholder="Select token"
               currencyBadgeOnly={true}
               addressSelected={targetTokenAddress?.[0]?.toBase58()?.toString()}
+              allowedTokens={availableTargetTokens}
               onAddressSelect={(address, decimals) =>
                 setTargetTokenAddress([new PublicKey(address), decimals])
               }

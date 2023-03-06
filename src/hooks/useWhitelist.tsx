@@ -19,6 +19,7 @@ export type WhiteListConfigs = {
 /** @dev Initiize context. */
 export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
+  liquidities: LiquidityEntity[];
   convertDecimalAmount(tokenAddress: string, source: number): number;
 
   /**
@@ -36,11 +37,16 @@ export const WhitelistContext = createContext<{
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const [whiteLists, setWhitelist] = useState<WhiteListConfigs>({});
 
-  const { data: liquidities } = useSWR("/api/liquidity-data", (url) =>
-    fetch(url)
-      .then((res) => res.json())
-      .then((res) => res as LiquidityEntity[])
+  /** @dev Fetch market data. */
+  const { data: liquidities } = useSWR(
+    "https://dev-pocket-api.hamsterbox.xyz/api/whitelist/market",
+    (url) =>
+      fetch(url)
+        .then((res) => res.json())
+        .then((res) => res as LiquidityEntity[])
   );
+
+  console.log(liquidities);
 
   /**
    * @dev Get whitelist data from Hamster server when first load.
@@ -100,6 +106,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     <WhitelistContext.Provider
       value={{
         whiteLists,
+        liquidities,
         convertDecimalAmount,
         findPairLiquidity,
       }}

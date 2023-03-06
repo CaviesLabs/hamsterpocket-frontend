@@ -79,6 +79,16 @@ export interface CreatePocketContextState {
   errorMsgs: ErrorValidateContext;
 
   /**
+   * @dev Avalable list of tokens to select for base.
+   */
+  availableBaseTokens: string[];
+
+  /**
+   * @dev Avalable list of tokens to select for target.
+   */
+  availableTargetTokens: string[];
+
+  /**
    * @dev The function to modify pocket name state.
    * @param {String}
    */
