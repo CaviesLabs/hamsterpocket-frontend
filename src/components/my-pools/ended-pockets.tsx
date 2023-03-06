@@ -10,7 +10,7 @@ export const ClosedPockets: FC = () => {
   return (
     <section>
       {closedPockets.map((_: PocketEntity) => (
-        <PoolItem data={_} key={_.id} />
+        <PoolItem data={_} key={_.id} handleFetch={() => {}} />
       ))}
     </section>
   );
