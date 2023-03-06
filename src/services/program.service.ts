@@ -50,7 +50,7 @@ export class ProgramService {
     });
 
     return this.requestAndSync(response?._id, async () => {
-      return await this.pocketProgramProvider.createProposal(walletProvider, {
+      return await this.pocketProgramProvider.createPocket(walletProvider, {
         ...createPocketDto,
         id: response?._id,
       });

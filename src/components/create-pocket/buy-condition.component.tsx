@@ -49,16 +49,16 @@ export const BuyCondition: FC<{
       {batchVolume && (
         <p className="text-dark10 text-[14px] normal-text mt-[10px] text-green">
           {batchVolume}{" "}
-          {whiteLists[baseTokenAddress[0].toBase58().toString()].symbol} can
+          {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol} can
           swap for{" "}
           {PRICE_CONDITIONS.find(
-            (item) => item.value === buyCondition.type
+            (item) => item?.value === buyCondition?.type
           )?.label?.toLowerCase()}{" "}
           {convertDecimalAmount(
-            targetTokenAddress[0].toBase58().toString(),
-            buyCondition.value.toNumber()
+            targetTokenAddress?.[0]?.toBase58().toString(),
+            buyCondition?.value?.toNumber()
           )}{" "}
-          {whiteLists[targetTokenAddress[0].toBase58().toString()].symbol}
+          {whiteLists?.[targetTokenAddress[0]?.toBase58().toString()]?.symbol}
         </p>
       )}
       {errorMsgs?.buyCondition && (

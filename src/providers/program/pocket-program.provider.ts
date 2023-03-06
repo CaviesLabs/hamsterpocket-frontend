@@ -174,7 +174,7 @@ export class PocketProgramProvider {
    * @param {CreatePocketDto} createPocketDto
    * @returns {any}.
    */
-  public async createProposal(
+  public async createPocket(
     walletProvider: WalletProvider,
     createPocketDto: CreatePocketDto
   ) {
