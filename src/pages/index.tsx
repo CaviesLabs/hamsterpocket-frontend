@@ -2,7 +2,6 @@ import type { InferGetStaticPropsType } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
-import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
@@ -14,9 +13,6 @@ type LayoutProps = {
 };
 const Layout = (props: LayoutProps) => {
   const { data } = props;
-  // const proposals = useSelector((state: any) => state.proposals);
-  const {} = useMain();
-
   /**
    * @dev Router injected.
    */

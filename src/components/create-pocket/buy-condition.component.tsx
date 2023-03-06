@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { Button, Input } from "@hamsterbox/ui-kit";
 import { PlusIcon, DeleteIconCircle } from "@/src/components/icons";
-import { CurrencyInput } from "@/src/components/currency-input";
+// import { CurrencyInput } from "@/src/components/currency-input";
 import { PRICE_CONDITIONS } from "@/src/utils";
 import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
@@ -26,7 +26,7 @@ export const BuyCondition: FC<{
     baseTokenAddress,
     batchVolume,
   } = useCreatePocketPage();
-  const { whiteLists, convertDecimalAmount } = useWhiteList();
+  const { whiteLists } = useWhiteList();
 
   /**
    * @dev Initialize buy condition when click add condition button.
@@ -46,21 +46,6 @@ export const BuyCondition: FC<{
       <p className="text-dark10 text-[14px] normal-text">
         Buy at market price if
       </p>
-      {batchVolume && (
-        <p className="text-dark10 text-[14px] normal-text mt-[10px] text-green">
-          {batchVolume}{" "}
-          {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol} can
-          swap for{" "}
-          {PRICE_CONDITIONS.find(
-            (item) => item?.value === buyCondition?.type
-          )?.label?.toLowerCase()}{" "}
-          {convertDecimalAmount(
-            targetTokenAddress?.[0]?.toBase58().toString(),
-            buyCondition?.value?.toNumber()
-          )}{" "}
-          {whiteLists?.[targetTokenAddress[0]?.toBase58().toString()]?.symbol}
-        </p>
-      )}
       {errorMsgs?.buyCondition && (
         <ErrorLabel message={errorMsgs.buyCondition} />
       )}
@@ -77,13 +62,31 @@ export const BuyCondition: FC<{
           onClick={props.toggle}
         />
       ) : (
-        <div className="grid grid-cols-8 items-center justify-center mt-[16px] max-w-[600px]">
-          <div className="col-span-1">
-            <button onClick={props.toggle}>
+        <div className="grid grid-cols-12 items-center justify-center mt-[16px] max-w-[1000px]">
+          <div className="col-span-1 items-center flex">
+            <button onClick={props.toggle} className="relative top-[4px]">
               <DeleteIconCircle />
             </button>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-4 relative flex items-center">
+            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text">
+              Each batch {`(${batchVolume}`}
+            </p>
+            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+              {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol}
+            </p>
+            <img
+              src={
+                whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.image
+              }
+              alt="Image"
+              className="w-[24px] h-[24px] ml-[7px] relative top-[4px]"
+            />
+            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+              ) can buy
+            </p>
+          </div>
+          {/* <div className="col-span-2">
             <CurrencyInput
               disabledInput={true}
               addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
@@ -91,7 +94,7 @@ export const BuyCondition: FC<{
               className="!mt-0"
               dropdownBadgeClassname="!top-[23px]"
             />
-          </div>
+          </div> */}
           <div className="col-span-3 pl-[10px]">
             <DropdownSelect
               handleSelectValue={(val) =>
@@ -123,6 +126,21 @@ export const BuyCondition: FC<{
                 });
               }}
             />
+          </div>
+          <div className="col-span-2 pl-[10px] h-full flex items-center relative">
+            <img
+              src={
+                whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]?.image
+              }
+              alt="Image"
+              className="w-[24px] h-[24px]"
+            />
+            <p className="text-[16px] text-white ml-[5px]">
+              {
+                whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                  ?.symbol
+              }
+            </p>
           </div>
         </div>
       )}

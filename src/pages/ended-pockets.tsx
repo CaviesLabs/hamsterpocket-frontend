@@ -3,7 +3,6 @@ import type { NextPage } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
-import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import {
   BalanceGroup,
@@ -12,8 +11,6 @@ import {
 import { ClosedPockets } from "@/src/components/my-pools/ended-pockets";
 
 const Layout: FC = () => {
-  const {} = useMain();
-
   return (
     <MainLayout>
       <div className={styles.container}>
