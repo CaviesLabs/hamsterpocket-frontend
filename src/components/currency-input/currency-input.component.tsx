@@ -29,6 +29,7 @@ export type CurrencyInputProps = {
    * @dev Restrict disable dropdown to select token.
    */
   disableDropdown?: boolean;
+  disabledInput?: boolean;
 
   /**
    * @dev List of allowed tokens.
@@ -72,7 +73,6 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   return (
     <div className="relative">
       <Input
-        // data-dropdown-toggle="dropdown"
         size="large"
         className={`rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white h-[63px] ${props.inputClassName}`}
         placeholder={
@@ -97,7 +97,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
           props.onAmountChange &&
             props.onAmountChange(parseFloat(val.target.value));
         }}
-        disabled={props.currencyBadgeOnly}
+        disabled={props.currencyBadgeOnly || props.disabledInput}
       />
       <p
         className={classNames(

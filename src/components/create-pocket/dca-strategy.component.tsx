@@ -39,7 +39,8 @@ export const DCAStrategy: FC = () => {
           DCA strategy
         </p>
         <div className="mt-[16px]">
-          <p className="text-dark20 text-[14px] normal-text italic">
+          <BatchOption />
+          <p className="text-dark20 text-[14px] normal-text italic mt-[24px]">
             Set the conditions that must be met before each batch of tokens
             purchase is executed
           </p>
@@ -50,7 +51,6 @@ export const DCAStrategy: FC = () => {
               setBuyConditionDisplayed(!buyConditionDisplayed);
             }}
           />
-          <BatchOption />
           <div className="grid md:grid-cols-5 gap-3">
             <div className="col-span-1">
               <FrequencyOption />

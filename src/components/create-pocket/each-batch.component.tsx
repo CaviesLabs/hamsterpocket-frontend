@@ -10,7 +10,7 @@ export const BatchOption: FC = () => {
   const { baseTokenAddress, setBatchVolume, errorMsgs } = useCreatePocketPage();
 
   return (
-    <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
+    <div className="grid md:grid-cols-5 gap-3">
       <div className="md:col-span-2">
         <p className="text-dark10 text-[14px] normal-text">
           Amount each batch

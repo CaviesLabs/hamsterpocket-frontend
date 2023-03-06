@@ -12,7 +12,7 @@ export const BatchAmountCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { handleModifyStopConditions } = useCreatePocketPage();
+  const { handleModifyStopConditions, stopConditions } = useCreatePocketPage();
 
   /**
    * @dev Check whether user want to add this condition into pool.
@@ -34,6 +34,13 @@ export const BatchAmountCondition: FC<{
       primary
     );
   }, [primary, currentValue]);
+
+  /** @dev Default first is primary */
+  useEffect(() => {
+    if (stopConditions.length <= 1) {
+      setPrimary(true);
+    }
+  }, [stopConditions]);
 
   return (
     // <AnimatePresence>

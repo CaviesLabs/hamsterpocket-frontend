@@ -9,6 +9,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 // import { motion } from "framer-motion";
 import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -17,8 +18,15 @@ export const BuyCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { buyCondition, errorMsgs, setBuyCondition, targetTokenAddress } =
-    useCreatePocketPage();
+  const {
+    buyCondition,
+    errorMsgs,
+    setBuyCondition,
+    targetTokenAddress,
+    baseTokenAddress,
+    batchVolume,
+  } = useCreatePocketPage();
+  const { whiteLists, convertDecimalAmount } = useWhiteList();
 
   /**
    * @dev Initialize buy condition when click add condition button.
@@ -38,6 +46,21 @@ export const BuyCondition: FC<{
       <p className="text-dark10 text-[14px] normal-text">
         Buy at market price if
       </p>
+      {batchVolume && (
+        <p className="text-dark10 text-[14px] normal-text mt-[10px] text-green">
+          {batchVolume}{" "}
+          {whiteLists[baseTokenAddress[0].toBase58().toString()].symbol} can
+          swap for{" "}
+          {PRICE_CONDITIONS.find(
+            (item) => item.value === buyCondition.type
+          )?.label?.toLowerCase()}{" "}
+          {convertDecimalAmount(
+            targetTokenAddress[0].toBase58().toString(),
+            buyCondition.value.toNumber()
+          )}{" "}
+          {whiteLists[targetTokenAddress[0].toBase58().toString()].symbol}
+        </p>
+      )}
       {errorMsgs?.buyCondition && (
         <ErrorLabel message={errorMsgs.buyCondition} />
       )}
@@ -62,12 +85,7 @@ export const BuyCondition: FC<{
           </div>
           <div className="col-span-2">
             <CurrencyInput
-              // currencyBadgeOnly={true}
-              // addressSelected={buyCondition?.tokenAddress || WSOL_ADDRESS}
-              // onAddressSelect={(val, decimals) => {
-              //   setBuyCondition({ ...buyCondition, tokenAddress: val });
-              //   setDecimals(decimals);
-              // }}
+              disabledInput={true}
               addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
               disableDropdown={true}
               className="!mt-0"

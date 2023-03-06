@@ -14,7 +14,7 @@ export const BaseAmountSpendCondition: FC<{
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, handleModifyStopConditions } =
+  const { baseTokenAddress, handleModifyStopConditions, stopConditions } =
     useCreatePocketPage();
 
   /**
@@ -37,6 +37,13 @@ export const BaseAmountSpendCondition: FC<{
       primary
     );
   }, [primary, currentValue]);
+
+  /** @dev Default first is primary */
+  useEffect(() => {
+    if (stopConditions.length <= 1) {
+      setPrimary(true);
+    }
+  }, [stopConditions]);
 
   return (
     <div className="mt-[24px] ">

@@ -36,6 +36,7 @@ export const DCAPPair: FC = () => {
               placeholder="Enter SOL amount"
               addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
               allowedTokens={availableBaseTokens}
+              disabledInput={true}
               onAddressSelect={(address, decimals) =>
                 setBaseTokenAddress([new PublicKey(address), decimals])
               }
@@ -58,6 +59,7 @@ export const DCAPPair: FC = () => {
               currencyBadgeOnly={true}
               addressSelected={targetTokenAddress?.[0]?.toBase58()?.toString()}
               allowedTokens={availableTargetTokens}
+              disabledInput={true}
               onAddressSelect={(address, decimals) =>
                 setTargetTokenAddress([new PublicKey(address), decimals])
               }
