@@ -48,7 +48,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const { findPairLiquidity, whiteLists, liquidities } = useWhiteList();
 
   /** @dev Default is every day */
-  const [frequency, setFrequency] = useState<DurationObjectUnits>({ days: 1 });
+  const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
 
   /** @dev Define variable presenting for successful pocket creation. */
   const [successCreated, setSuccessCreated] = useState(false);

@@ -44,10 +44,10 @@ export const convertDurationsTimeToHours = (
   };
 
   /** @dev Condition for each  */
-  if (duration.days) {
-    return swapDuration(duration.days * 24);
-  } else if (duration.hours) {
+  if (duration.hours) {
     return swapDuration(duration.hours);
+  } else if (duration.days) {
+    return swapDuration(duration.days * 24);
   } else if (duration.weeks) {
     return swapDuration(duration.weeks * 7 * 24);
   } else if (duration.months) {
