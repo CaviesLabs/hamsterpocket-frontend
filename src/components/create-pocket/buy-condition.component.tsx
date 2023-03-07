@@ -86,15 +86,6 @@ export const BuyCondition: FC<{
               ) can buy
             </p>
           </div>
-          {/* <div className="col-span-2">
-            <CurrencyInput
-              disabledInput={true}
-              addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
-              disableDropdown={true}
-              className="!mt-0"
-              dropdownBadgeClassname="!top-[23px]"
-            />
-          </div> */}
           <div className="col-span-3 pl-[10px]">
             <DropdownSelect
               handleSelectValue={(val) =>

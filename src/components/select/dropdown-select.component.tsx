@@ -58,12 +58,9 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
         <div className="h-52 overflow-scroll">{menu}</div>
       )}
     >
-      <div className="flex items-center w-full rounded-[16px]">
-        <Input
-          disabled={true}
-          bordered={false}
-          className="text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full"
-          value={useMemo(() => {
+      <div className="flex items-center w-full rounded-[16px] cursor-pointer">
+        <div className="flex items-center justify-center text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full">
+          {useMemo(() => {
             if (!props.autoValue) {
               if (props.format) {
                 return props.format(props.value);
@@ -78,11 +75,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
             );
             return cur?.label || cur?.value;
           }, [props.value, currentValue])}
-          onChange={(e) => {
-            props.handleSelectValue(e.target.value);
-            setCurrentValue(e.target.value);
-          }}
-        />
+        </div>
         <ChevronDownIcon className="w-5 text-gray-500 mr-3" />
       </div>
     </Dropdown>
