@@ -7,7 +7,6 @@ import {
   PocketEntity,
   PocketStatus,
 } from "../entities/pocket.entity";
-import { BN } from "@project-serum/anchor";
 
 export const StatisticMock: StatisticEntity = {
   users: "6.458",
@@ -225,7 +224,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
       type: PriceConditionType.GT,
-      value: new BN(1),
+      value: [1],
     },
     stopConditions: [
       {
@@ -257,7 +256,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
       type: PriceConditionType.GT,
-      value: new BN(1),
+      value: [1],
     },
     stopConditions: [
       {
@@ -289,7 +288,7 @@ export const ActivePocketsMock: PocketEntity[] = [
     buyCondition: {
       tokenAddress: "9n4nbM75f5Ui33ZbPYXn59EwSgE8CGsHtAeTH5YFeJ9E",
       type: PriceConditionType.GT,
-      value: new BN(1),
+      value: [1],
     },
     stopConditions: [
       {

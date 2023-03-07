@@ -133,7 +133,13 @@ export class PocketEntity {
 
   frequency: DurationObjectUnits;
 
-  buyCondition: BuyCondition | undefined;
+  buyCondition:
+    | {
+        tokenAddress: string;
+        type: PriceConditionType;
+        value: [number, number?];
+      }
+    | undefined;
 
   stopConditions: OffChainStopConditions[] | [];
 
