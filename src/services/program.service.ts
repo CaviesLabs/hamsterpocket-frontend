@@ -75,6 +75,23 @@ export class ProgramService {
   }
 
   /**
+   * @dev The function to close pocket onchain & ofchain.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async withdrawPocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ): Promise<any> {
+    return this.requestAndSync(pocket.id, async () => {
+      return await this.pocketProgramProvider.withdrawPocket(
+        walletProvider,
+        pocket
+      );
+    });
+  }
+
+  /**
    * @dev The function to pause pocket onchain & ofchain.
    * @param {WalletProvider}
    * @param {PocketEntity}

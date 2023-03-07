@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Input } from "@hamsterbox/ui-kit";
 import { DropdownSelect, FilterSelect } from "@/src/components/select";
@@ -8,6 +8,10 @@ import { useDispatch } from "react-redux";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
+import { useSelector } from "react-redux";
+import { PoolItem } from "@/src/components/my-pools/pool-item";
+import { PocketEntity } from "@/src/entities/pocket.entity";
+import State from "@/src/redux/entities/state";
 
 export const EndedPoolGroupComponent: FC = () => {
   /**
@@ -16,6 +20,8 @@ export const EndedPoolGroupComponent: FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const closedPockets = useSelector((state: State) => state.closedPockets);
+
   const wallet = useConnectedWallet()?.publicKey.toString();
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState(PocketTypes[2].value);
@@ -23,7 +29,7 @@ export const EndedPoolGroupComponent: FC = () => {
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
-  useEffect(() => {
+  const handleFetch = useCallback(() => {
     if (!wallet) return;
     dispatch(
       getClosedPockets({
@@ -37,6 +43,11 @@ export const EndedPoolGroupComponent: FC = () => {
       })
     );
   }, [wallet, debouncedSearch, selectedType, sorter]);
+
+  useEffect(
+    () => handleFetch(),
+    [wallet, debouncedSearch, selectedType, sorter]
+  );
 
   return (
     <section className="mt-[60px]">
@@ -76,6 +87,11 @@ export const EndedPoolGroupComponent: FC = () => {
           />
         </div>
       </div>
+      <section>
+        {closedPockets.map((_: PocketEntity) => (
+          <PoolItem data={_} key={_.id} handleFetch={() => handleFetch()} />
+        ))}
+      </section>
     </section>
   );
 };

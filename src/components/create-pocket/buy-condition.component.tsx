@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Button, Input } from "@hamsterbox/ui-kit";
 import { PlusIcon, DeleteIconCircle } from "@/src/components/icons";
 // import { CurrencyInput } from "@/src/components/currency-input";
@@ -10,6 +10,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import classNames from "classnames";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -28,6 +29,14 @@ export const BuyCondition: FC<{
   } = useCreatePocketPage();
   const { whiteLists } = useWhiteList();
 
+  /** @dev Price */
+  const isTwoValue = useMemo(
+    () =>
+      buyCondition?.type === PriceConditionType.BW ||
+      buyCondition?.type === PriceConditionType.NBW,
+    [buyCondition]
+  );
+
   /**
    * @dev Initialize buy condition when click add condition button.
    */
@@ -39,6 +48,29 @@ export const BuyCondition: FC<{
       value: new BN(0 * Math.pow(10, targetTokenAddress?.[1])),
     });
   }, [props.buyConditionDisplayed]);
+
+  /**
+   * @dev Adjust changes.
+   */
+  useEffect(() => {
+    if (isTwoValue === false && buyCondition?.fromValue !== undefined) {
+      setBuyCondition({
+        ...buyCondition,
+        value: buyCondition.fromValue,
+        fromValue: undefined,
+        toValue: undefined,
+      });
+    }
+    if (isTwoValue && buyCondition?.fromValue === undefined) {
+      setBuyCondition({
+        ...buyCondition,
+        fromValue: new BN(0),
+        toValue: buyCondition.value,
+      });
+    }
+  }, [isTwoValue, buyCondition]);
+
+  console.log(buyCondition);
 
   return (
     <div className="mt-[24px] ">
@@ -62,13 +94,13 @@ export const BuyCondition: FC<{
           onClick={props.toggle}
         />
       ) : (
-        <div className="grid grid-cols-12 items-center justify-center mt-[16px] max-w-[1000px]">
+        <div className="grid grid-cols-12 items-center justify-center mt-[16px] max-w-[100%]">
           <div className="col-span-1 items-center flex">
             <button onClick={props.toggle} className="relative top-[4px]">
               <DeleteIconCircle />
             </button>
           </div>
-          <div className="col-span-4 relative flex items-center">
+          <div className="col-span-3 relative flex items-center">
             <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text">
               Each batch {`(${batchVolume}`}
             </p>
@@ -86,16 +118,7 @@ export const BuyCondition: FC<{
               ) can buy
             </p>
           </div>
-          {/* <div className="col-span-2">
-            <CurrencyInput
-              disabledInput={true}
-              addressSelected={targetTokenAddress[0]?.toBase58()?.toString()}
-              disableDropdown={true}
-              className="!mt-0"
-              dropdownBadgeClassname="!top-[23px]"
-            />
-          </div> */}
-          <div className="col-span-3 pl-[10px]">
+          <div className="col-span-2 pl-[10px]">
             <DropdownSelect
               handleSelectValue={(val) =>
                 setBuyCondition({
@@ -108,24 +131,66 @@ export const BuyCondition: FC<{
               className="w-full"
             />
           </div>
-          <div className="col-span-2 pl-[10px] h-full">
+          <div
+            className={classNames(
+              "col-span-1 pl-[10px] h-full relative flex items-center",
+              {
+                "!col-span-3": isTwoValue,
+              }
+            )}
+          >
             <Input
-              containerClassName="app-input w-full !h-full"
+              containerClassName="app-input w-[110px] !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
               value={`${
-                buyCondition?.value.toNumber() /
-                Math.pow(10, targetTokenAddress?.[1])
+                (isTwoValue
+                  ? buyCondition?.fromValue
+                  : buyCondition?.value
+                )?.toNumber() / Math.pow(10, targetTokenAddress?.[1])
               }`}
               onValueChange={(val) => {
-                setBuyCondition({
-                  ...buyCondition,
-                  value: new BN(
-                    (parseFloat(val) || 0) *
-                      Math.pow(10, targetTokenAddress?.[1])
-                  ),
-                });
+                setBuyCondition(
+                  isTwoValue
+                    ? {
+                        ...buyCondition,
+                        fromValue: new BN(
+                          (parseFloat(val) || 0) *
+                            Math.pow(10, targetTokenAddress?.[1])
+                        ),
+                      }
+                    : {
+                        ...buyCondition,
+                        value: new BN(
+                          (parseFloat(val) || 0) *
+                            Math.pow(10, targetTokenAddress?.[1])
+                        ),
+                      }
+                );
               }}
             />
+            {isTwoValue && (
+              <>
+                <p className="text-white mx-[5px]">Or</p>
+                <Input
+                  containerClassName="app-input w-[110px] !h-full"
+                  inputClassName="bg-dark90 !text-white w-full !h-full"
+                  placeholder="to value"
+                  value={`${
+                    buyCondition?.toValue?.toNumber() /
+                    Math.pow(10, targetTokenAddress?.[1])
+                  }`}
+                  onValueChange={(val) => {
+                    setBuyCondition({
+                      ...buyCondition,
+                      toValue: new BN(
+                        (parseFloat(val) || 0) *
+                          Math.pow(10, targetTokenAddress?.[1])
+                      ),
+                    });
+                  }}
+                />
+              </>
+            )}
           </div>
           <div className="col-span-2 pl-[10px] h-full flex items-center relative">
             <img

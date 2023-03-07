@@ -68,10 +68,10 @@ export const processStopConditions = (
 ) => {
   /* @dev Create a copy of stopConditions */
   const processedConditions: StopConditions = { ...stopConditions };
-  if (side.sell) {
+  if (side.buy) {
     /**
      * @dev Map baseTokenAmountReach to quoteTokenAmountReach and delete baseTokenAmountReach
-     * if side is sell.
+     * if side is buy.
      */
     if (processedConditions.baseTokenAmountReach) {
       processedConditions.quoteTokenAmountReach =

@@ -10,6 +10,7 @@ export const ClosePocketModal: FC<{
   handleOk(e?: MouseEvent<HTMLElement>): void;
   handleCancel(e?: MouseEvent<HTMLElement>): void;
   isLoading?: boolean;
+  closed?: boolean;
   pocket: PocketEntity;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
@@ -26,11 +27,17 @@ export const ClosePocketModal: FC<{
     try {
       if (!programService) throw new Error("Wallet not connected.");
 
+      console.log(props.pocket);
+
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
       /** @dev Execute transaction. */
-      await programService.closePocket(solanaWallet, props.pocket);
+      if (props.closed) {
+        await programService.withdrawPocket(solanaWallet, props.pocket);
+      } else {
+        await programService.closePocket(solanaWallet, props.pocket);
+      }
 
       /** @dev Callback function when close successfully. */
       setSuccessClosed(true);
@@ -59,17 +66,17 @@ export const ClosePocketModal: FC<{
           />
 
           <h2 className="mt-4 mb-2 font-bold text-white text-2xl text-center">
-            Close
+            {props?.closed ? "Withdraw" : "Close"}
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
-            Confirm the transaction to close Pocket{" "}
-            <span className="text-green">{props.pocket.id}</span>
+            Confirm the transaction to {props?.closed ? "withdraw" : "close "}{" "}
+            Pocket <span className="text-green">{props.pocket.id}</span>
           </p>
           <Button
             shape="primary"
             size="large"
             onClick={handleClosePocket}
-            text="Close pocket"
+            text={props.closed ? "Withdraw Pocket" : "Close Pocket"}
             className="mb-3"
             loading={loading}
             theme={{

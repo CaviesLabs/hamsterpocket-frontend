@@ -56,15 +56,16 @@ export class BuyCondition {
   tokenAddress: string;
   type: PriceConditionType;
   value: BN;
+  fromValue?: BN;
+  toValue?: BN;
 }
 
 export class BuyConditionOnChain {
   [key: string]: {
-    value: BN;
+    value?: BN;
+    fromValue?: BN;
+    toValue?: BN;
   };
-  // tokenAddress: PublicKey;
-  // condition: {
-  // };
 }
 
 export interface StopConditions {

@@ -140,9 +140,14 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         side: sideMethod,
         marketId,
         buyCondition: {
-          [buyCondition.type]: {
-            value: buyCondition.value,
-          },
+          [buyCondition.type]: buyCondition?.fromValue
+            ? {
+                fromValue: buyCondition.fromValue,
+                toValue: buyCondition.toValue,
+              }
+            : {
+                value: buyCondition.value,
+              },
         },
         stopConditions: processedStopConditions.map((item) => ({
           [Object.keys(item)[0]]: {

@@ -200,7 +200,7 @@ export class InstructionProvider {
     baseTokenAccount: PublicKey,
     targetTokenAccount: PublicKey,
     depositAmount: anchor.BN
-  ): Promise<TransactionInstruction> {
+  ): Promise<TransactionInstruction[]> {
     /**
      * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
      */
@@ -226,20 +226,34 @@ export class InstructionProvider {
       targetTokenAccount
     );
 
-    return await this.program.methods
-      .deposit({
-        depositAmount,
-        mode: { base: {} },
-      } as any)
-      .accounts({
-        signer: pocketOwner,
-        pocket: pocketAccount,
-        pocketBaseTokenVault: baseTokenVault,
-        pocketQuoteTokenVault: targetTokenVault,
-        signerBaseTokenAccount: baseAsociated,
-        signerQuoteTokenAccount: targetAsociated,
-      })
-      .instruction();
+    return [
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        pocketOwner as any,
+        baseTokenAccount,
+        pocketOwner
+      ),
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        pocketOwner as any,
+        targetTokenAccount,
+        pocketOwner
+      ),
+      await this.program.methods
+        .deposit({
+          depositAmount,
+          mode: { base: {} },
+        } as any)
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+          signerBaseTokenAccount: baseAsociated,
+          signerQuoteTokenAccount: targetAsociated,
+        })
+        .instruction(),
+    ];
   }
 
   /**
@@ -309,7 +323,7 @@ export class InstructionProvider {
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
     targetTokenAccount: PublicKey
-  ) {
+  ): Promise<TransactionInstruction[]> {
     /**
      * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
      */
@@ -334,17 +348,31 @@ export class InstructionProvider {
       pocketAccount,
       targetTokenAccount
     );
-    return await this.program.methods
-      .withdraw()
-      .accounts({
-        signer: pocketOwner,
-        pocket: pocketAccount,
-        pocketBaseTokenVault: baseTokenVault,
-        pocketQuoteTokenVault: targetTokenVault,
-        signerBaseTokenAccount: baseAsociated,
-        signerTargetTokenAccount: targetAsociated,
-      } as any)
-      .instruction();
+    return [
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        pocketOwner as any,
+        baseTokenAccount,
+        pocketOwner
+      ),
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        pocketOwner as any,
+        targetTokenAccount,
+        pocketOwner
+      ),
+      await this.program.methods
+        .withdraw()
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+          signerBaseTokenAccount: baseAsociated,
+          signerQuoteTokenAccount: targetAsociated,
+        } as any)
+        .instruction(),
+    ];
   }
 
   /**

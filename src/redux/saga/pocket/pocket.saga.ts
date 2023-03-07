@@ -48,7 +48,9 @@ export function* getClosedPockets({
       ...payload,
     });
 
-    yield put(setClosedPockets(pockets));
+    yield put(
+      setClosedPockets(pockets.map((item) => ({ ...item, id: item?._id })))
+    );
     callback && callback(pockets);
   } catch (err) {
     console.error(err);

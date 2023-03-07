@@ -374,7 +374,7 @@ export class PocketProgramProvider {
       createTokenVaultInstruction,
       createTokenTargetVaultInstruction,
       ...wrapSolInstructions,
-      ins,
+      ...ins,
     ];
   }
 
@@ -388,8 +388,7 @@ export class PocketProgramProvider {
     pocket: PocketEntity
   ) {
     try {
-      console.log("Pocket ID: ", pocket.id);
-      console.log("Params to create pocket: ", pocket);
+      console.log("Pocket ID to close: ", pocket.id);
 
       /** @dev Get pocket state. */
       const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
@@ -410,17 +409,75 @@ export class PocketProgramProvider {
       );
 
       /** @dev Withdraw assets from pool to wallet. */
-      instructions.push(
-        await this.instructionProvider.withdrawPocket(
-          walletProvider.publicKey,
-          pocketAccount,
-          new PublicKey((pocketState as any)?.baseTokenMintAddress),
-          new PublicKey((pocketState as any)?.quoteTokenMintAddress)
-        )
+      const withdrawIns = await this.instructionProvider.withdrawPocket(
+        walletProvider.publicKey,
+        pocketAccount,
+        new PublicKey((pocketState as any)?.baseTokenMintAddress),
+        new PublicKey((pocketState as any)?.quoteTokenMintAddress)
+      );
+      console.log(withdrawIns);
+      /** @dev Add to instructions if valid. */
+      instructions = [...withdrawIns, ...instructions].filter(
+        (item) => item !== null
       );
 
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
+  }
+
+  /**
+   * @dev The function to withdraw assets.
+   * @param walletProvider
+   * @param pocket
+   */
+  public async withdrawPocket(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ) {
+    try {
+      console.log("Pocket ID to withdraw: ", pocket.id);
+
+      /** @dev Get pocket state. */
+      const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
+
+      console.log(pocketState);
+
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+      let instructions: TransactionInstruction[] = [];
+
+      /** @dev Withdraw assets from pool to wallet. */
+      const withdrawIns = await this.instructionProvider.withdrawPocket(
+        walletProvider.publicKey,
+        pocketAccount,
+        new PublicKey((pocketState as any)?.baseTokenMintAddress),
+        new PublicKey((pocketState as any)?.quoteTokenMintAddress)
+      );
+      console.log(withdrawIns);
       /** @dev Add to instructions if valid. */
-      instructions = [...instructions].filter((item) => item !== null);
+      instructions = [...withdrawIns, ...instructions].filter(
+        (item) => item !== null
+      );
 
       /**
        * @dev Sign and confirm instructions.

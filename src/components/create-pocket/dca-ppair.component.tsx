@@ -33,7 +33,7 @@ export const DCAPPair: FC = () => {
               </span>
             </p>
             <CurrencyInput
-              placeholder="Enter SOL amount"
+              placeholder=""
               addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
               allowedTokens={availableBaseTokens}
               disabledInput={true}

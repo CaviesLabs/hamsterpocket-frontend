@@ -283,6 +283,7 @@ export const PoolItem = (props: PoolItemProps) => {
           }}
           handleCancel={() => setClosedDisplayed(false)}
           pocket={data}
+          closed={!isEnded && isClosed}
         />
       )}
       {resumedDisplayed && (
