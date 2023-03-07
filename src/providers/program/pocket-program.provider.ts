@@ -408,18 +408,44 @@ export class PocketProgramProvider {
         )
       );
 
+      const baseTokenMint = new PublicKey(
+        (pocketState as any)?.baseTokenMintAddress
+      );
+      const qouteTokeMint = new PublicKey(
+        (pocketState as any)?.quoteTokenMintAddress
+      );
+
+      /** @dev Create token vault if not already exists .*/
+      const createTokenVaultInstruction =
+        await this.instructionProvider.createTokenVaultAccount(
+          walletProvider.publicKey,
+          pocketAccount,
+          baseTokenMint
+        );
+
+      /** @dev Create token vault if not already exists .*/
+      const createTokenTargetVaultInstruction =
+        await this.instructionProvider.createTokenVaultAccount(
+          walletProvider.publicKey,
+          pocketAccount,
+          qouteTokeMint
+        );
+
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
         walletProvider.publicKey,
         pocketAccount,
-        new PublicKey((pocketState as any)?.baseTokenMintAddress),
-        new PublicKey((pocketState as any)?.quoteTokenMintAddress)
+        baseTokenMint,
+        qouteTokeMint
       );
-      console.log(withdrawIns);
       /** @dev Add to instructions if valid. */
-      instructions = [...withdrawIns, ...instructions].filter(
-        (item) => item !== null
-      );
+      instructions = [
+        ...instructions,
+        createTokenVaultInstruction,
+        createTokenTargetVaultInstruction,
+        ...withdrawIns,
+      ].filter((item) => item !== null);
+      console.log("instructions to close", instructions);
 
       /**
        * @dev Sign and confirm instructions.
@@ -466,18 +492,44 @@ export class PocketProgramProvider {
        */
       let instructions: TransactionInstruction[] = [];
 
+      const baseTokenMint = new PublicKey(
+        (pocketState as any)?.baseTokenMintAddress
+      );
+      const qouteTokeMint = new PublicKey(
+        (pocketState as any)?.quoteTokenMintAddress
+      );
+
+      /** @dev Create token vault if not already exists .*/
+      const createTokenVaultInstruction =
+        await this.instructionProvider.createTokenVaultAccount(
+          walletProvider.publicKey,
+          pocketAccount,
+          baseTokenMint
+        );
+
+      /** @dev Create token vault if not already exists .*/
+      const createTokenTargetVaultInstruction =
+        await this.instructionProvider.createTokenVaultAccount(
+          walletProvider.publicKey,
+          pocketAccount,
+          qouteTokeMint
+        );
+
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
         walletProvider.publicKey,
         pocketAccount,
-        new PublicKey((pocketState as any)?.baseTokenMintAddress),
-        new PublicKey((pocketState as any)?.quoteTokenMintAddress)
+        baseTokenMint,
+        qouteTokeMint
       );
-      console.log(withdrawIns);
       /** @dev Add to instructions if valid. */
-      instructions = [...withdrawIns, ...instructions].filter(
-        (item) => item !== null
-      );
+      instructions = [
+        createTokenVaultInstruction,
+        createTokenTargetVaultInstruction,
+        ...instructions,
+        ...withdrawIns,
+      ].filter((item) => item !== null);
+      console.log(instructions);
 
       /**
        * @dev Sign and confirm instructions.
