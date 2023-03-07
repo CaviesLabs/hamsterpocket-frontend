@@ -173,15 +173,17 @@ export const PoolItem = (props: PoolItemProps) => {
               {baseToken?.symbol}
             </p>
           </div>
-          <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Outstanding deposit:
-            </p>
-            <p className="text-white text-[16px] normal-text">
-              {convertDecimalAmount(data?.baseTokenAddress, 0)}{" "}
-              {whiteLists[data.baseTokenAddress]?.symbol}
-            </p>
-          </div>
+          {data.batchVolume > data.remainingBaseTokenBalance && (
+            <div className="flex items-center mt-[5px]">
+              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+                Outstanding deposit:
+              </p>
+              <p className="text-white text-[16px] normal-text">
+                {data.batchVolume - data.remainingBaseTokenBalance}{" "}
+                {baseToken?.symbol}
+              </p>
+            </div>
+          )}
         </div>
         <PoolItemEndConditionComponent targetToken={targetToken} data={data} />
       </div>
