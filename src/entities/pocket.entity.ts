@@ -55,7 +55,7 @@ export enum MainProgressBy {
 export class BuyCondition {
   tokenAddress: string;
   type: PriceConditionType;
-  value: BN;
+  value: [number, number?];
 }
 
 export class BuyConditionOnChain {

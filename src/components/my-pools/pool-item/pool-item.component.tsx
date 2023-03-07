@@ -11,13 +11,13 @@ import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-it
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
-import { Duration } from "luxon";
 import {
   DepositModal,
   ClosePocketModal,
   PausePocketModal,
   ResumePocketModal,
 } from "@/src/components/home";
+import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -119,17 +119,11 @@ export const PoolItem = (props: PoolItemProps) => {
             <p className="text-dark40 text-[16px] normal-text mr-20">
               Strategy
             </p>
-            <div className="text-white text-[18px] normal-text">
-              <p>
-                {convertDecimalAmount(
-                  data.targetTokenAddress,
-                  data.batchVolume
-                )}{" "}
-                {targetToken?.symbol} every{" "}
-                {Duration.fromObject(data.frequency).toHuman()}
-              </p>
-              <p className="mt-4">{"BLOCK <= $0.051706"}</p>
-            </div>
+            <PoolItemBuyConditionComponent
+              data={data}
+              baseToken={baseToken}
+              targetToken={targetToken}
+            />
           </div>
         </div>
       </div>
