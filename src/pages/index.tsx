@@ -9,6 +9,7 @@ import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { useEffect } from "react";
 import { useWallet } from "../hooks/useWallet";
+import { useWalletKit } from "@gokiprotocol/walletkit";
 
 type LayoutProps = {
   data: StatisticEntity;
@@ -24,11 +25,20 @@ const Layout = (props: LayoutProps) => {
    * @dev Wallet hook injected.
    */
   const wallet = useWallet();
+  const { connect: connectWallet } = useWalletKit();
   useEffect(() => {
     if (wallet?.solanaWallet.publicKey?.toString()) {
       router.push("/my-pockets");
     }
   }, [wallet]);
+
+  const handleCreatePocket = () => {
+    if (wallet?.solanaWallet.publicKey) {
+      router.push("/create-pocket");
+    } else {
+      connectWallet();
+    }
+  };
 
   return (
     <MainLayout>
@@ -53,7 +63,7 @@ const Layout = (props: LayoutProps) => {
                     color: "white",
                   }}
                   text="Create a Pocket"
-                  onClick={() => router.push("/create-pocket")}
+                  onClick={() => handleCreatePocket()}
                 />
               </div>
             </div>
