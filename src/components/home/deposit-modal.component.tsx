@@ -15,6 +15,7 @@ export const DepositModal: FC<{
   isLoading?: boolean;
   pocket: PocketEntity;
 }> = (props) => {
+  const { pocket } = props;
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet } = useWallet();
 
@@ -23,6 +24,7 @@ export const DepositModal: FC<{
 
   /** @dev Deposited amount. */
   const [depositedAmount, setDepositedAmount] = useState<BN>();
+  const [isAmountSet, setIsAmountSet] = useState<boolean>(false);
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -54,6 +56,9 @@ export const DepositModal: FC<{
     }
   }, [programService, solanaWallet, props.pocket, depositedAmount]);
 
+  /** @dev Define base token **/
+  const baseToken = whiteLists[pocket.baseTokenAddress];
+
   return (
     <Modal
       open={props.isModalOpen}
@@ -74,37 +79,47 @@ export const DepositModal: FC<{
           <h2 className="mt-4 mb-2 font-bold text-white text-2xl text-center">
             Deposit
           </h2>
-          <p className="mb-2 font-bold text-white text-[16px] text-center">
+          <p className="mb-2 text-white text-[16px] text-center">
             Please enter amount to deposit
           </p>
           <CurrencyInput
-            addressSelected={props.pocket.baseTokenAddress}
+            addressSelected={pocket.baseTokenAddress}
             disableDropdown={true}
             inputClassName="gray-input !bg-[#353C4B]"
             onAmountChange={(val) => {
-              console.log(whiteLists[props.pocket.baseTokenAddress]?.decimals);
+              setIsAmountSet(!isNaN(val));
               setDepositedAmount(
-                new BN(
-                  val *
-                    Math.pow(
-                      10,
-                      whiteLists[props.pocket.baseTokenAddress]?.decimals || 0
-                    )
-                )
+                new BN(val * Math.pow(10, baseToken?.decimals || 0))
               );
             }}
+            placeholder="Enter SOL amount"
+            inputType="text"
           />
+          <p className="my-4 text-white text-[16px] flex">
+            Your balance:
+            <img
+              src={baseToken.image}
+              alt="token balance"
+              className="w-6 mx-1 rounded"
+            />
+            {convertDecimalAmount(
+              pocket.baseTokenAddress,
+              pocket.remainingBaseTokenBalance
+            )}{" "}
+            {baseToken.symbol}
+          </p>
           <Button
             shape="primary"
             size="large"
             onClick={handleDeposit}
-            text="Deposit"
+            text={"Deposit"}
             className="my-3"
             loading={loading}
             theme={{
-              backgroundColor: "#B998FB",
+              backgroundColor: isAmountSet ? "#B998FB" : "gray",
               color: "#FFFFFF",
             }}
+            disabled={!isAmountSet}
           />
         </div>
       </div>
@@ -113,9 +128,9 @@ export const DepositModal: FC<{
         handleOk={() => props.handleOk()}
         handleCancel={() => props.handleOk()}
         message={`You have deposited ${convertDecimalAmount(
-          props.pocket.baseTokenAddress,
+          pocket.baseTokenAddress,
           depositedAmount?.toNumber()
-        )} ${whiteLists[props.pocket.baseTokenAddress]?.symbol}`}
+        )} ${baseToken?.symbol}`}
         okMessage="Done"
       />
     </Modal>
