@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { Dropdown, Input } from "antd";
+import { Dropdown } from "antd";
 import { DropdownSelectProps } from "./types";
 import { ChevronDownIcon } from "@/src/components/icons";
 import classnames from "classnames";
