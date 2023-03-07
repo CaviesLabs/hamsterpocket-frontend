@@ -86,9 +86,9 @@ export const PoolItem = (props: PoolItemProps) => {
         <div className="md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
             <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {whiteLists[data.targetTokenAddress]?.image && (
+              {targetToken?.image && (
                 <img
-                  src={whiteLists[data.targetTokenAddress]?.image}
+                  src={targetToken?.image}
                   className="rounded-[50%]"
                   alt={data.targetTokenAddress}
                 />
