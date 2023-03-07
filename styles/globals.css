@@ -187,7 +187,9 @@ input[type=number] {
 .gray-input input::placeholder  {
   color: white;
 }
-
+.dark-input, .gray-input, .dark-input input, .gray-input input {
+  cursor: pointer !important;
+}
 .ant-picker-panel-container {
   background: #20242D !important;
 }

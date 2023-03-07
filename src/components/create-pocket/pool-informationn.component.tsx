@@ -24,7 +24,7 @@ export const PoolInformation: FC = () => {
         <Input
           containerClassName="app-input w-full mt-[10px]"
           inputClassName="bg-dark90 !text-white !rounded-[16px] w-full"
-          placeholder="Search by Pool name, ID, Token"
+          placeholder="Enter pocket name"
           value={pocketName}
           onValueChange={(v) => setPocketName(v)}
         />
