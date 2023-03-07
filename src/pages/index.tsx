@@ -7,6 +7,8 @@ import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
 import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
+import { useEffect } from "react";
+import { useWallet } from "../hooks/useWallet";
 
 type LayoutProps = {
   data: StatisticEntity;
@@ -17,6 +19,16 @@ const Layout = (props: LayoutProps) => {
    * @dev Router injected.
    */
   const router = useRouter();
+
+  /**
+   * @dev Wallet hook injected.
+   */
+  const wallet = useWallet();
+  useEffect(() => {
+    if (wallet?.solanaWallet.publicKey?.toString()) {
+      router.push("/my-pockets");
+    }
+  }, [wallet]);
 
   return (
     <MainLayout>
