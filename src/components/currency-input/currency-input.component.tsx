@@ -35,6 +35,11 @@ export type CurrencyInputProps = {
    * @dev List of allowed tokens.
    */
   allowedTokens?: string[];
+
+  /**
+   * @dev Config input type
+   */
+  inputType?: "text" | "number";
 };
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
@@ -92,7 +97,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             />
           )
         }
-        type="number"
+        type={props.inputType || "number"}
         onChange={(val) => {
           props.onAmountChange &&
             props.onAmountChange(parseFloat(val.target.value));
