@@ -141,7 +141,12 @@ export class PocketEntity {
       }
     | undefined;
 
-  stopConditions: OffChainStopConditions[] | [];
+  stopConditions: {
+    endTime?: Date;
+    targetTokenReach?: number;
+    baseTokenReach?: number;
+    batchAmountReach?: number;
+  };
 
   /** Progression fields */
   currentBaseToken: number;

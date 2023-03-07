@@ -140,16 +140,18 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
           const programProvider = new PocketProgramProvider(solanaWallet);
 
           /** ---- DEBUG ---  */
-          // setTimeout(async () => {
-          //   try {
-          //     const pocketState = await programProvider.getPocketState(
-          //       "63fe2a0fa9ded18df1f2062b"
-          //     );
-          //     console.log({ pocketState });
-          //   } catch (err) {
-          //     console.log("Error get pocket state: ", err);
-          //   }
-          // }, 4000);
+          setTimeout(async () => {
+            try {
+              const [, pocketState, root] =
+                await programProvider.getPocketState(
+                  "6405796e49cfded6a9edd3ce"
+                );
+              (window as any).test = root;
+              console.log({ pocketState });
+            } catch (err) {
+              console.log("Error get pocket state: ", err);
+            }
+          }, 4000);
 
           /** @dev Initlize swap program service with initlized programProvider. */
           const program = new ProgramService(programProvider);

@@ -226,14 +226,12 @@ export const ActivePocketsMock: PocketEntity[] = [
       type: PriceConditionType.GT,
       value: [1],
     },
-    stopConditions: [
-      {
-        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenAmountReach: 300,
-        targetTokenAmountReach: 1000000000,
-        batchAmountReach: 10,
-      },
-    ],
+    stopConditions: {
+      endTime: new Date("2023-02-20T08:13:13.901Z"),
+      baseTokenReach: 300,
+      targetTokenReach: 1000000000,
+      batchAmountReach: 10,
+    },
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
@@ -258,14 +256,12 @@ export const ActivePocketsMock: PocketEntity[] = [
       type: PriceConditionType.GT,
       value: [1],
     },
-    stopConditions: [
-      {
-        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenAmountReach: 300,
-        targetTokenAmountReach: 1000000000,
-        batchAmountReach: 10,
-      },
-    ],
+    stopConditions: {
+      endTime: new Date("2023-02-20T08:13:13.901Z"),
+      baseTokenReach: 300,
+      targetTokenReach: 1000000000,
+      batchAmountReach: 10,
+    },
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
@@ -290,14 +286,12 @@ export const ActivePocketsMock: PocketEntity[] = [
       type: PriceConditionType.GT,
       value: [1],
     },
-    stopConditions: [
-      {
-        endTimeReach: new Date("2023-02-20T08:13:13.901Z"),
-        baseTokenAmountReach: 0,
-        targetTokenAmountReach: 0,
-        batchAmountReach: 0,
-      },
-    ],
+    stopConditions: {
+      endTime: new Date("2023-02-20T08:13:13.901Z"),
+      baseTokenReach: 300,
+      targetTokenReach: 1000000000,
+      batchAmountReach: 10,
+    },
     currentBaseToken: 120,
     remainingBaseTokenBalance: 180,
     currentTargetToken: 0,
