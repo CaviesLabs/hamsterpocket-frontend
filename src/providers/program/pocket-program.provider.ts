@@ -13,8 +13,6 @@ import { WSOL_ADDRESS } from "@/src/utils/constants";
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
 export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
   "https://boldest-few-field.solana-mainnet.quiknode.pro/0ffa9f9f5e9141aa33a030081b78fdfe40bfbae6/";
-// export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
-//   "https://api.mainnet-beta.solana.com";
 
 /**
  * @dev Swap Program Provider acts as an interface to interact with hamsterswap program on solana.
@@ -438,12 +436,27 @@ export class PocketProgramProvider {
         baseTokenMint,
         qouteTokeMint
       );
+
+      /** @dev Unwrap sol if base token is wrap sol. */
+      const unwrapSolBase =
+        baseTokenMint.toBase58().toString() === WSOL_ADDRESS
+          ? await this.instructionProvider.unwrapSol(baseTokenMint)
+          : null;
+
+      /** @dev Unwrap sol if base token is wrap sol. */
+      const unwrapSolQoute =
+        qouteTokeMint.toBase58().toString() === WSOL_ADDRESS
+          ? await this.instructionProvider.unwrapSol(qouteTokeMint)
+          : null;
+
       /** @dev Add to instructions if valid. */
       instructions = [
         ...instructions,
         createTokenVaultInstruction,
         createTokenTargetVaultInstruction,
         ...withdrawIns,
+        unwrapSolBase,
+        unwrapSolQoute,
       ].filter((item) => item !== null);
       console.log("instructions to close", instructions);
 
@@ -522,12 +535,27 @@ export class PocketProgramProvider {
         baseTokenMint,
         qouteTokeMint
       );
+
+      /** @dev Unwrap sol if base token is wrap sol. */
+      const unwrapSolBase =
+        baseTokenMint.toBase58().toString() === WSOL_ADDRESS
+          ? await this.instructionProvider.unwrapSol(baseTokenMint)
+          : null;
+
+      /** @dev Unwrap sol if base token is wrap sol. */
+      const unwrapSolQoute =
+        qouteTokeMint.toBase58().toString() === WSOL_ADDRESS
+          ? await this.instructionProvider.unwrapSol(qouteTokeMint)
+          : null;
+
       /** @dev Add to instructions if valid. */
       instructions = [
         createTokenVaultInstruction,
         createTokenTargetVaultInstruction,
         ...instructions,
         ...withdrawIns,
+        unwrapSolBase,
+        unwrapSolQoute,
       ].filter((item) => item !== null);
       console.log(instructions);
 
