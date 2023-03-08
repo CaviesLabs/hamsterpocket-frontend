@@ -16,6 +16,7 @@ import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import State from "@/src/redux/entities/state";
 import classnames from "classnames";
+import { SyncOutlined } from "@ant-design/icons";
 
 export const ActivePoolGroup: FC = () => {
   /**
@@ -49,12 +50,19 @@ export const ActivePoolGroup: FC = () => {
     );
   }, [wallet, debouncedSearch, isPauseOnly, sorter]);
 
+  /** @dev Handle fetching data */
+  const [fetching, setFetching] = useState(false);
+
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
-    wallet &&
-      dispatch(
-        syncWalletPockets({ walletAddress: wallet }, () => handleFetch())
-      );
+    if (!wallet) return;
+    setFetching(true);
+    dispatch(
+      syncWalletPockets({ walletAddress: wallet }, () => {
+        setFetching(false);
+        handleFetch();
+      })
+    );
   }, [wallet]);
 
   useEffect(
@@ -65,23 +73,25 @@ export const ActivePoolGroup: FC = () => {
   return (
     <section>
       <section className="mt-[60px]">
-        <div className="flow-root">
-          <p className="md:text-[32px] text-[24px] text-white float-left">
-            Active Pools
-          </p>
-          <div className="float-right flex items-center">
+        <div className="flex justify-between">
+          <div className="flex items-center">
+            <p className="md:text-[32px] text-[24px] text-white">
+              Current Pockets
+            </p>
+            <button className="relative ml-2" onClick={handleSync}>
+              <SyncOutlined
+                spin={fetching}
+                style={{ fontSize: 18, color: "white" }}
+              />
+            </button>
+          </div>
+          <div className="flex items-center">
             <p
               className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
               onClick={() => router.push("/ended-pockets")}
             >
-              View closed & inactive pools
+              View closed & inactive pockets
             </p>
-            <button className="relative top-[4px]" onClick={handleSync}>
-              <img
-                src="https://img.icons8.com/color/96/cloud-sync--v1.png"
-                className="w-[25px] h-[25px] ml-[10px]"
-              />
-            </button>
           </div>
         </div>
         <div className="flow-root mt-[32px]">
