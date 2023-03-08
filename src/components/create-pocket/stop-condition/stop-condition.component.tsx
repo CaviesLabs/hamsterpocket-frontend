@@ -49,12 +49,6 @@ export const StopCondition: FC = () => {
         </p>
         <div className="mt-[24px]">
           <div>
-            <p className="text-dark10 text-[14px] normal-text">
-              Deposit amount
-              <span className="text-red300 relative top-[-2px] right-[-2px]">
-                *
-              </span>
-            </p>
             <div className="mt-[10px] inline-flex">
               {!endTimeDisplayed && (
                 <div className="float-left mr-[12px]">
