@@ -515,21 +515,25 @@ export class PocketProgramProvider {
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolBase =
-        baseTokenMint.toBase58().toString() === WSOL_ADDRESS
+        baseTokenMint.toBase58().toString() === WSOL_ADDRESS &&
+        (pocketState as any).baseTokenBalance !== "00"
           ? await this.instructionProvider.unwrapSol(baseTokenMint)
           : null;
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolQoute =
-        qouteTokeMint.toBase58().toString() === WSOL_ADDRESS
+        qouteTokeMint.toBase58().toString() === WSOL_ADDRESS &&
+        (pocketState as any).quoteTokenBalance !== "00"
           ? await this.instructionProvider.unwrapSol(qouteTokeMint)
           : null;
 
+      console.log(unwrapSolBase, unwrapSolQoute);
+
       /** @dev Add to instructions if valid. */
       instructions = [
+        ...instructions,
         createTokenVaultInstruction,
         createTokenTargetVaultInstruction,
-        ...instructions,
         ...withdrawIns,
         unwrapSolBase,
         unwrapSolQoute,

@@ -184,7 +184,7 @@ export const PoolItem = (props: PoolItemProps) => {
               </p>
               <p className="text-white text-[16px] normal-text">
                 {convertDecimalAmount(
-                  baseToken.address,
+                  baseToken?.address,
                   data.batchVolume - data.remainingBaseTokenBalance
                 )}{" "}
                 {baseToken?.symbol}

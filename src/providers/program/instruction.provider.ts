@@ -375,16 +375,6 @@ export class InstructionProvider {
       pocketAccount,
       targetTokenAccount
     );
-    console.log({
-      signer: pocketOwner,
-      pocket: pocketAccount,
-      pocketBaseTokenVault: baseTokenVault,
-      pocketQuoteTokenVault: targetTokenVault,
-      signerBaseTokenAccount: baseAsociated,
-      signerQuoteTokenAccount: targetAsociated,
-      pocketOwner,
-      targetTokenAccount,
-    } as any);
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,

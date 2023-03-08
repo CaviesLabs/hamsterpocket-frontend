@@ -144,7 +144,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
             try {
               const [, pocketState, root] =
                 await programProvider.getPocketState(
-                  "6405796e49cfded6a9edd3ce"
+                  "640856ba92f54d45cd5268ad"
                 );
               (window as any).test = root;
               console.log({ pocketState });
