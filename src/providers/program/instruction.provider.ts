@@ -16,6 +16,7 @@ import {
 } from "@solana/spl-token";
 import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 import { PocketIdl } from "./pocket.idl";
+import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 
 export class InstructionProvider {
   /**
@@ -29,6 +30,7 @@ export class InstructionProvider {
    * @private
    */
   private readonly program: Program<PocketIdl>;
+  private readonly programId: string;
 
   /**
    * @dev Swap registry
@@ -40,6 +42,7 @@ export class InstructionProvider {
   constructor(
     connection: Connection,
     program: Program<PocketIdl>,
+    programId: string,
     pocketRegistry: PublicKey,
     swapRegistryBump: number
   ) {
@@ -47,6 +50,7 @@ export class InstructionProvider {
     this.program = program;
     this.pocketRegistry = pocketRegistry;
     this.swapRegistryBump = swapRegistryBump;
+    this.programId = programId;
   }
 
   /**
@@ -195,6 +199,7 @@ export class InstructionProvider {
    * @returns {TransactionInstruction}
    */
   public async depositAsset(
+    walletProvider: WalletProvider,
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
@@ -229,13 +234,13 @@ export class InstructionProvider {
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        pocketOwner as any,
+        walletProvider as any,
         baseTokenAccount,
         pocketOwner
       ),
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        pocketOwner as any,
+        walletProvider as any,
         targetTokenAccount,
         pocketOwner
       ),
@@ -319,6 +324,7 @@ export class InstructionProvider {
    * @returns
    */
   public async withdrawPocket(
+    walletProvider: WalletProvider,
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
@@ -348,16 +354,26 @@ export class InstructionProvider {
       pocketAccount,
       targetTokenAccount
     );
+    console.log({
+      signer: pocketOwner,
+      pocket: pocketAccount,
+      pocketBaseTokenVault: baseTokenVault,
+      pocketQuoteTokenVault: targetTokenVault,
+      signerBaseTokenAccount: baseAsociated,
+      signerQuoteTokenAccount: targetAsociated,
+      pocketOwner,
+      targetTokenAccount,
+    } as any);
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        pocketOwner as any,
+        walletProvider as any,
         baseTokenAccount,
         pocketOwner
       ),
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        pocketOwner as any,
+        walletProvider as any,
         targetTokenAccount,
         pocketOwner
       ),
@@ -370,7 +386,7 @@ export class InstructionProvider {
           pocketQuoteTokenVault: targetTokenVault,
           signerBaseTokenAccount: baseAsociated,
           signerQuoteTokenAccount: targetAsociated,
-        } as any)
+        })
         .instruction(),
     ];
   }
@@ -405,7 +421,10 @@ export class InstructionProvider {
     /**
      * @dev Create native sol.
      */
-    const instruction2 = createSyncNativeInstruction(associatedTokenAccount);
+    const instruction2 = createSyncNativeInstruction(
+      associatedTokenAccount,
+      new PublicKey(this.programId)
+    );
 
     return [instruction1, instruction2];
   }
@@ -429,7 +448,9 @@ export class InstructionProvider {
     return createCloseAccountInstruction(
       associatedTokenAccount,
       walletPublicKey,
-      walletPublicKey
+      walletPublicKey,
+      [],
+      new PublicKey(this.programId)
     );
   }
 }

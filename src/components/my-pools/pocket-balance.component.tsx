@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { WSOL_ADDRESS } from "@/src/utils";
 import State from "@/src/redux/entities/state";
 
 export const PocketBalanceComponent: FC = () => {
@@ -17,30 +18,20 @@ export const PocketBalanceComponent: FC = () => {
 
   const handleBalance = useCallback(() => {
     setTotalUSD(() => {
-      return portfolios
-        .map((token) => {
-          const humanValue =
-            token.total /
-            Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
-          return (
-            humanValue *
-              statisticData.topTokens.find(
-                (item) => item.symbol === whiteLists[token.tokenAddress]?.symbol
-              )?.price || 0
-          );
-        })
-        .reduce((prev, cur) => cur + prev);
+      const arr = portfolios.map((token) => {
+        const humanValue =
+          token.total / Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
+        return humanValue * whiteLists[token.tokenAddress]?.estimatedValue || 0;
+      });
+      return arr.length ? arr.reduce((prev, cur) => cur + prev) : 0;
     });
   }, [statisticData, portfolios, whiteLists]);
 
   useEffect(() => handleBalance(), [statisticData, portfolios, whiteLists]);
   useEffect(() => {
     setTotalSOL(() => {
-      return (
-        totalUSD /
-          statisticData.topTokens?.find((item) => item.symbol === "SOL")
-            ?.price || 1
-      );
+      const solPrice = whiteLists[WSOL_ADDRESS]?.estimatedValue || 1;
+      return totalUSD / solPrice;
     });
   }, [totalUSD, statisticData]);
 

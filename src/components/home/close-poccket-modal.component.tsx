@@ -32,6 +32,8 @@ export const ClosePocketModal: FC<{
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
+      console.log(solanaWallet);
+
       /** @dev Execute transaction. */
       if (props.closed) {
         await programService.withdrawPocket(solanaWallet, props.pocket);

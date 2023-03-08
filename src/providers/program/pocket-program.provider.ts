@@ -86,6 +86,7 @@ export class PocketProgramProvider {
       this.instructionProvider = new InstructionProvider(
         this.connection,
         this.program,
+        this.programId,
         this.pocketRegistry,
         this.pocketRegistryBump
       );
@@ -310,19 +311,6 @@ export class PocketProgramProvider {
     targetTokenAddress: PublicKey,
     depositedAmount: anchor.BN
   ): Promise<TransactionInstruction[]> {
-    /** @dev Instruction to create associated token account if doest exists. */
-    const associatedInstruction =
-      await this.instructionProvider.getOrCreateProposalTokenAccount(
-        walletProvider.publicKey,
-        baseTokenAddress
-      );
-
-    /** @dev Find token vault */
-    const tokenVault = await this.instructionProvider.findTokenVaultAccount(
-      pocketAccount,
-      baseTokenAddress
-    );
-
     /** @dev Create token vault if not already exists .*/
     const createTokenVaultInstruction =
       await this.instructionProvider.createTokenVaultAccount(
@@ -360,6 +348,7 @@ export class PocketProgramProvider {
      * @dev Try to create a instruction to deposit token.
      */
     const ins = await this.instructionProvider.depositAsset(
+      walletProvider,
       walletProvider.publicKey,
       pocketAccount,
       baseTokenAddress,
@@ -368,9 +357,8 @@ export class PocketProgramProvider {
     );
 
     return [
-      associatedInstruction,
-      createTokenVaultInstruction,
-      createTokenTargetVaultInstruction,
+      // createTokenVaultInstruction,
+      // createTokenTargetVaultInstruction,
       ...wrapSolInstructions,
       ...ins,
     ];
@@ -431,6 +419,7 @@ export class PocketProgramProvider {
 
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
+        walletProvider,
         walletProvider.publicKey,
         pocketAccount,
         baseTokenMint,
@@ -530,6 +519,7 @@ export class PocketProgramProvider {
 
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
+        walletProvider,
         walletProvider.publicKey,
         pocketAccount,
         baseTokenMint,

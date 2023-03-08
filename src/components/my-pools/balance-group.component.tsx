@@ -2,7 +2,6 @@ import { FC, useEffect } from "react";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
 import { useWallet } from "@/src/hooks/useWallet";
 import { UserBalanceComponent } from "@/src/components/my-pools/user-balance.component";
 import { PocketBalanceComponent } from "@/src/components/my-pools/pocket-balance.component";
@@ -13,36 +12,22 @@ export const BalanceGroup: FC = () => {
    * @dev Inject router module to use.
    */
   const router = useRouter();
-  const wallet = useWallet();
+  const { solanaWallet } = useWallet();
   const dispatch = useDispatch();
-  const connectedWallet = wallet.solanaWallet;
-  const walletAddress = connectedWallet?.publicKey?.toString();
-
-  /**
-   * @dev Fetch statistic.
-   */
-  useEffect(() => {
-    if (!walletAddress) return;
-    dispatch(
-      getPortfolioStatistic({
-        ownerAddress: walletAddress,
-      })
-    );
-  }, [walletAddress]);
 
   /**
    * @dev Fetch
    */
   useEffect(() => {
-    if (!wallet.solanaWallet) return;
+    if (!solanaWallet) return;
     dispatch(
       getPortfolios({
-        ownerAddress: wallet.solanaWallet.publicKey.toBase58().toString(),
+        ownerAddress: solanaWallet?.publicKey?.toBase58()?.toString(),
         sortBy: ["VALUE_DESC"],
         search: "",
       })
     );
-  }, [wallet.solanaWallet]);
+  }, [solanaWallet]);
 
   return (
     <section>

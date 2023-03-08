@@ -15,8 +15,6 @@ export const PoolItemBuyConditionComponent = (
   const { data, baseToken, targetToken } = props;
   const { convertDecimalAmount } = useWhiteList();
 
-  console.log("batch volum", data.batchVolume);
-
   const humanBuyConditionType = () => {
     const baseAmount = convertDecimalAmount(
       data.baseTokenAddress,
