@@ -11,7 +11,7 @@ export const PocketNote = (props: PocketNoteProps) => {
   const isClosed = status === PocketStatus.CLOSED;
   const isEnded = status === PocketStatus.ENDED;
   const noteText = isActive
-    ? "If Pool balance is not enough on each batch, the pool will just buy the SOL balance left"
+    ? "If the pool balance is not enough for a batch, the strategy will be executed using the remaining balance."
     : isPaused
     ? "Pool is paused, the next batch will not be executed."
     : isClosed

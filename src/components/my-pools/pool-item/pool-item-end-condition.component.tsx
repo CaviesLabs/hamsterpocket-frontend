@@ -15,40 +15,53 @@ export const PoolItemEndConditionComponent = (
 ) => {
   /** @dev Attract data props. */
   const {
-    data: { stopConditions, baseTokenAddress, targetTokenAddress },
+    data: {
+      stopConditions: {
+        endTime,
+        baseTokenReach,
+        targetTokenReach,
+        batchAmountReach,
+      },
+      baseTokenAddress,
+      targetTokenAddress,
+    },
   } = props;
 
   /** @dev Inject whitelist to get info. */
   const { whiteLists } = useWhiteList();
+
+  const conditions = [];
+  if (endTime) {
+    conditions.push(dayjs(endTime).format(DATE_FORMAT));
+  }
+  if (baseTokenReach) {
+    conditions.push(
+      `${baseTokenReach} ${whiteLists[baseTokenAddress]?.symbol}`
+    );
+  }
+  if (targetTokenReach) {
+    conditions.push(
+      `${targetTokenReach} ${whiteLists[targetTokenAddress]?.symbol}`
+    );
+  }
+  if (batchAmountReach) {
+    conditions.push(`${batchAmountReach} PAX`);
+  }
 
   return (
     <div className="md:mt-0 mt-[20px] md:pr-[20px] pr-0 w-96">
       <p className="text-dark40 text-[16px] font-bold">End Conditions</p>
       <div className="flex mt-[5px]">
         <div className="text-white text-[16px] normal-text">
-          {stopConditions.endTime && (
+          {conditions.length === 0 && <p>N/A</p>}
+          {conditions.map((cond, i) => (
             <p>
-              {dayjs(stopConditions.endTime).format(DATE_FORMAT)}{" "}
-              <span className="text-dark50 text-[14px]">or</span>
+              {cond}{" "}
+              {i < conditions.length - 1 && (
+                <span className="text-dark50 text-[14px]">or</span>
+              )}
             </p>
-          )}
-          {stopConditions.baseTokenReach && (
-            <p>
-              {stopConditions.baseTokenReach}{" "}
-              {whiteLists[baseTokenAddress]?.symbol}{" "}
-              <span className="text-dark50 text-[14px]">or</span>
-            </p>
-          )}
-          {stopConditions.targetTokenReach && (
-            <p>
-              {stopConditions.targetTokenReach}{" "}
-              {whiteLists[targetTokenAddress]?.symbol}{" "}
-              <span className="text-dark50 text-[14px]">or</span>
-            </p>
-          )}
-          {stopConditions.batchAmountReach && (
-            <p>{stopConditions.batchAmountReach} PAX </p>
-          )}
+          ))}
         </div>
       </div>
     </div>

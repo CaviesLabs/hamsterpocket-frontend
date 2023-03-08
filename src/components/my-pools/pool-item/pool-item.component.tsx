@@ -5,7 +5,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { DATE_FORMAT, utilsProvider } from "@/src/utils";
+import { DATE_TIME_FORMAT, utilsProvider } from "@/src/utils";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -158,7 +158,7 @@ export const PoolItem = (props: PoolItemProps) => {
               Start date:
             </p>
             <p className="text-white text-[16px] normal-text">
-              {dayjs(data.startTime).format(DATE_FORMAT)}
+              {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
           <div className="flex items-center mt-[5px]">
