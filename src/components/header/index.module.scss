@@ -166,7 +166,7 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
   .toggle-container {
     position: absolute;
     width: 100%;
-    bottom: -78px;
+    bottom: -80px;
     left: 13px;
     display: none;
     padding-top: 20px;
@@ -182,14 +182,5 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
         }
       }
     }
-  }
-  &:hover {
-    .toggle-container {
-      display: block;
-    }
-  }
-
-  .toggle-container:hover {
-    display: block;
   }
 }

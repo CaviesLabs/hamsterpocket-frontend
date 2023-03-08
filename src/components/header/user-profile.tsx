@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
@@ -6,6 +6,7 @@ import { useWallet } from "@/src/hooks/useWallet";
 import { LoggoutIcon } from "@/src/components/icons";
 import classnames from "classnames";
 import styles from "./index.module.scss";
+import { DownOutlined } from "@ant-design/icons";
 
 const UserProfile: FC = () => {
   const wallet = useConnectedWallet();
@@ -20,6 +21,11 @@ const UserProfile: FC = () => {
     [wallet]
   );
 
+  /**
+   * @description Define state of showing profile menu
+   */
+  const [show, setShow] = useState(false);
+
   return (
     <div
       className={classnames(
@@ -32,10 +38,17 @@ const UserProfile: FC = () => {
         src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
         alt="Boring avatar"
       />
-      <span className="text-[7px] md:text-[14px] text-white">
-        {utilsProvider.makeShort(walletPublicKey, 3)}
+      <span
+        className="text-[7px] md:text-[14px] text-white flex items-center"
+        onClick={() => setShow(!show)}
+      >
+        {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
+        <DownOutlined style={{ fontSize: 14 }} className="ml-2" />
       </span>
-      <ul className={styles["toggle-container"]}>
+      <ul
+        style={{ display: show ? "block" : "none" }}
+        className={styles["toggle-container"]}
+      >
         <div className={styles.container}>
           <ul>
             <li
