@@ -9,6 +9,7 @@ import { useEffect, useMemo } from "react";
 import { stringToColour } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
+import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 
 const options = {
   cutout: 70,
@@ -26,6 +27,9 @@ export default function DashboardComponent() {
   const dispatch = useDispatch();
   const wallet = useConnectedWallet()?.publicKey.toString();
 
+  /** @dev Handle to get total estimate sol in total pockets. */
+  const { totalSOL, totalUSD } = usePocketBalance();
+
   useEffect(() => {
     if (!wallet) return;
     dispatch(
@@ -36,7 +40,6 @@ export default function DashboardComponent() {
   }, [wallet]);
 
   const statisticData = useSelector((state: State) => state.portfolioStatistic);
-  console.log("statisticData", statisticData);
 
   const chartData = useMemo(() => {
     if (!statisticData)
@@ -66,12 +69,10 @@ export default function DashboardComponent() {
         <div className="text-white normal-text">Total Pockets Balance:</div>
         <div className="flex mt-4">
           <img src="/assets/images/solana-icon.svg" />
-          <div className="text-green ml-3">
-            {statisticData?.totalPoolsBalance} SOL
-          </div>
+          <div className="text-green ml-3">{totalSOL} SOL</div>
         </div>
         <div className="text-green mt-1 italic regular-text">
-          (~ ${statisticData?.totalPoolsBalanceValue})
+          (~ ${totalUSD.toFixed(4)})
         </div>
       </div>
       {chartData.labels.length > 0 && (
