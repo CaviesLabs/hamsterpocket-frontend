@@ -19,10 +19,10 @@ export const DCAPPair: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text">DCA ppair</p>
+      <p className="mt-[48px] text-[24px] text-white normal-text">DCA pair</p>
       <div className="mt-[16px]">
         <p className="text-dark20 text-[14px] normal-text italic">
-          Enter the pair on Raydium
+          Enter the buy and sell token pair for this pool
         </p>
         <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
           <div className="md:col-span-2">
@@ -33,7 +33,6 @@ export const DCAPPair: FC = () => {
               </span>
             </p>
             <CurrencyInput
-              placeholder=""
               addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
               allowedTokens={availableBaseTokens}
               disabledInput={true}
