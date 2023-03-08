@@ -85,27 +85,27 @@ export interface OffChainStopConditions {
 export interface StopConditionsOnChain {
   endTime?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
   baseTokenAmountReach?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
   quoteTokenAmountReach?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
   spentBaseTokenAmountReach?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
   spentQuoteTokenAmountReach?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
   batchAmountReach?: {
     value: BN;
-    primary: boolean;
+    isPrimary: boolean;
   };
 }
 

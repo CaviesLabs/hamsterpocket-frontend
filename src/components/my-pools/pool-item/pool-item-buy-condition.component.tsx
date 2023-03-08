@@ -22,10 +22,10 @@ export const PoolItemBuyConditionComponent = (
     );
     const targetLeftAmount = convertDecimalAmount(
       data.targetTokenAddress,
-      data.buyCondition.value[0]
+      data.buyCondition?.value?.[0]
     );
     const targetRightAmount =
-      data.buyCondition.value[1] &&
+      data.buyCondition?.value?.[1] &&
       convertDecimalAmount(data.targetTokenAddress, data.buyCondition.value[1]);
     const baseSymbol = baseToken?.symbol;
     const targetSymbol = targetToken?.symbol;
@@ -73,7 +73,7 @@ export const PoolItemBuyConditionComponent = (
   };
 
   const handleRenderFrequency = () => {
-    const res = convertHoursToDurationsTime(data.frequency.hours);
+    const res = convertHoursToDurationsTime(data?.frequency?.hours);
     if (res.hours) {
       if (res.hours === 1) {
         return "hourly";

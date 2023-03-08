@@ -154,7 +154,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         stopConditions: processedStopConditions.map((item) => ({
           [Object.keys(item)[0]]: {
             value: (item as any)[Object.keys(item)[0] as string]?.value,
-            primary: (item as any)[Object.keys(item)[0] as string]?.primary,
+            isPrimary: (item as any)[Object.keys(item)[0] as string]?.primary,
           },
         })),
       });

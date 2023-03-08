@@ -51,7 +51,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
       <>
         <p className="text-end text-[14px] text-white regular-text">
           <span className="text-green ml-[5px]">{data.currentBatchAmount}</span>
-          /{data.batchVolume} {targetToken?.symbol}
+          /{data.stopConditions.batchAmountReach} BATCH
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {data.currentTargetToken} {targetToken?.symbol} (

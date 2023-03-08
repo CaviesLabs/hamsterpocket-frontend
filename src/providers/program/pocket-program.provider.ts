@@ -517,14 +517,14 @@ export class PocketProgramProvider {
       const unwrapSolBase =
         baseTokenMint.toBase58().toString() === WSOL_ADDRESS &&
         (pocketState as any).baseTokenBalance !== "00"
-          ? await this.instructionProvider.unwrapSol(baseTokenMint)
+          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
           : null;
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolQoute =
         qouteTokeMint.toBase58().toString() === WSOL_ADDRESS &&
         (pocketState as any).quoteTokenBalance !== "00"
-          ? await this.instructionProvider.unwrapSol(qouteTokeMint)
+          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
           : null;
 
       console.log(unwrapSolBase, unwrapSolQoute);
@@ -684,6 +684,7 @@ export class PocketProgramProvider {
     console.log("instruction provider", this.instructionProvider);
     const pocketAccount = await this.instructionProvider.findPocketAccount(id);
     const state = await this.program.account.pocket.fetch(pocketAccount);
+    (window as any).test = state;
     const parseState = JSON.parse(JSON.stringify(state)) as PocketEntity;
     return [pocketAccount, parseState, state];
   }

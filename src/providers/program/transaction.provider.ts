@@ -48,6 +48,9 @@ export class TransactionProvider {
      */
     const rawTx = await walletProvider.signTransaction(tx);
 
+    console.log({ rawTx });
+    rawTx.serialize();
+
     /**
      * @dev Send a raw transaction.
      */

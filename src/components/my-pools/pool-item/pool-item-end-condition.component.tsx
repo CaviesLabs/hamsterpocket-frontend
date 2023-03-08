@@ -14,48 +14,46 @@ export const PoolItemEndConditionComponent = (
 ) => {
   /** @dev Attract data props. */
   const {
-    data: {
-      stopConditions: {
-        endTime,
-        baseTokenReach,
-        targetTokenReach,
-        batchAmountReach,
-        spentBaseTokenReach,
-      },
-      baseTokenAddress,
-      targetTokenAddress,
-    },
+    data: { baseTokenAddress, targetTokenAddress },
   } = props;
 
   /** @dev Inject whitelist to get info. */
   const { whiteLists, convertDecimalAmount } = useWhiteList();
 
   const conditions = [];
-  if (endTime) {
-    conditions.push(dayjs(endTime).format(DATE_TIME_FORMAT));
-  }
-  if (baseTokenReach) {
+  if (props?.data?.stopConditions?.endTime) {
     conditions.push(
-      `${convertDecimalAmount(baseTokenAddress, baseTokenReach)} ${
-        whiteLists[baseTokenAddress]?.symbol
+      dayjs(props?.data?.stopConditions?.endTime).format(DATE_TIME_FORMAT)
+    );
+  }
+  if (props?.data?.stopConditions?.baseTokenReach) {
+    conditions.push(
+      `${convertDecimalAmount(
+        baseTokenAddress,
+        props?.data?.stopConditions?.baseTokenReach
+      )} ${whiteLists[baseTokenAddress]?.symbol}`
+    );
+  }
+  if (props?.data?.stopConditions?.targetTokenReach) {
+    conditions.push(
+      `${props?.data?.stopConditions?.targetTokenReach} ${whiteLists[targetTokenAddress]?.symbol}`
+    );
+  }
+  if (props?.data?.stopConditions?.spentBaseTokenReach) {
+    conditions.push(
+      `${convertDecimalAmount(
+        baseTokenAddress,
+        props?.data?.stopConditions?.spentBaseTokenReach
+      )} ${whiteLists[baseTokenAddress]?.symbol}`
+    );
+  }
+  if (props?.data?.stopConditions?.batchAmountReach) {
+    conditions.push(
+      `${props?.data?.stopConditions?.batchAmountReach} ${
+        props?.data?.stopConditions?.batchAmountReach === 1
+          ? "BATCH"
+          : "BATCHES"
       }`
-    );
-  }
-  if (targetTokenReach) {
-    conditions.push(
-      `${targetTokenReach} ${whiteLists[targetTokenAddress]?.symbol}`
-    );
-  }
-  if (spentBaseTokenReach) {
-    conditions.push(
-      `${convertDecimalAmount(baseTokenAddress, spentBaseTokenReach)} ${
-        whiteLists[baseTokenAddress]?.symbol
-      }`
-    );
-  }
-  if (batchAmountReach) {
-    conditions.push(
-      `${batchAmountReach} ${batchAmountReach === 1 ? "BATCH" : "BATCHES"}`
     );
   }
 
