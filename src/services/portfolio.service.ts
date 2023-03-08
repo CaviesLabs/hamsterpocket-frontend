@@ -38,6 +38,20 @@ export class PortfolioService {
         return PortfoliosMock;
       });
   }
+
+  /**
+   * @dev Make call to hamster server to sync all pockets owned by a wallet address.
+   * @param walletAddress
+   * @returns
+   */
+  public async syncWalletPortfolio(walletAddress: string): Promise<any> {
+    return networkProvider.request<any>(
+      `/portfolio/${walletAddress}/portfolio/sync`,
+      {
+        method: "POST",
+      }
+    );
+  }
 }
 
 export const portfolioService = new PortfolioService();

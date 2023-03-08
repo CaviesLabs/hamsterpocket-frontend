@@ -6,6 +6,7 @@ import {
   setActivePockets,
   setClosedPockets,
 } from "@/src/redux/actions/pocket/pocket.action";
+import { portfolioService } from "@/src/services/portfolio.service";
 import { GetPocketsDto } from "@/src/dto/pocket.dto";
 
 /**
@@ -52,6 +53,25 @@ export function* getClosedPockets({
       setClosedPockets(pockets.map((item) => ({ ...item, id: item?._id })))
     );
     callback && callback(pockets);
+  } catch (err) {
+    console.error(err);
+    callback && callback(null);
+  }
+}
+
+/**
+ * @param callback
+ * @description
+ * Sync all pocckets owned by a wallet.
+ */
+export function* syncWalletPockets({
+  payload,
+  callback,
+}: SagaPayload<{ walletAddress: string }, boolean>) {
+  try {
+    yield call(poolService.syncWalletPockets, payload.walletAddress);
+    yield call(portfolioService.syncWalletPortfolio, payload.walletAddress);
+    callback && callback(true);
   } catch (err) {
     console.error(err);
     callback && callback(null);

@@ -6,6 +6,7 @@ import {
   GET_HISTORY,
   GET_PORTFOLIO_STATISTIC,
   GET_PORTFOLIOS,
+  SYNC_WALLET_POCKETS,
 } from "@/src/redux/actions";
 import {
   getHistories,
@@ -18,6 +19,7 @@ import {
 import {
   getActivePockets,
   getClosedPockets,
+  syncWalletPockets,
 } from "@/src/redux/saga/pocket/pocket.saga";
 
 export default function* root() {
@@ -27,4 +29,5 @@ export default function* root() {
   yield takeLatest<any>(GET_PORTFOLIO_STATISTIC, getPortfolioStatistic);
   yield takeLatest<any>(GET_ACTIVE_POCKETS, getActivePockets);
   yield takeLatest<any>(GET_CLOSED_POCKETS, getClosedPockets);
+  yield takeLatest<any>(SYNC_WALLET_POCKETS, syncWalletPockets);
 }

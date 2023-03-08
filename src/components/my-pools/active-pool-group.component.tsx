@@ -6,12 +6,15 @@ import { SearchIcon, CircleCheckIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useConnectedWallet } from "@saberhq/use-solana";
-import { getActivePockets } from "@/src/redux/actions/pocket/pocket.action";
+import {
+  getActivePockets,
+  syncWalletPockets,
+} from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
+import State from "@/src/redux/entities/state";
 import classnames from "classnames";
 
 export const ActivePoolGroup: FC = () => {
@@ -31,6 +34,7 @@ export const ActivePoolGroup: FC = () => {
 
   const activePockets = useSelector((state: State) => state.activePockets);
 
+  /** @dev The function to handle request pockets from server. */
   const handleFetch = useCallback(() => {
     if (!wallet) return;
     dispatch(
@@ -45,6 +49,14 @@ export const ActivePoolGroup: FC = () => {
     );
   }, [wallet, debouncedSearch, isPauseOnly, sorter]);
 
+  /** @dev The function to handle sync pockets. */
+  const handleSync = useCallback(() => {
+    wallet &&
+      dispatch(
+        syncWalletPockets({ walletAddress: wallet }, () => handleFetch())
+      );
+  }, [wallet]);
+
   useEffect(
     () => handleFetch(),
     [wallet, debouncedSearch, isPauseOnly, sorter]
@@ -57,12 +69,20 @@ export const ActivePoolGroup: FC = () => {
           <p className="md:text-[32px] text-[24px] text-white float-left">
             Active Pools
           </p>
-          <p
-            className="float-right text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
-            onClick={() => router.push("/ended-pockets")}
-          >
-            View closed & inactive pools
-          </p>
+          <div className="float-right flex items-center">
+            <p
+              className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
+              onClick={() => router.push("/ended-pockets")}
+            >
+              View closed & inactive pools
+            </p>
+            <button className="relative top-[4px]" onClick={handleSync}>
+              <img
+                src="https://img.icons8.com/color/96/cloud-sync--v1.png"
+                className="w-[25px] h-[25px] ml-[10px]"
+              />
+            </button>
+          </div>
         </div>
         <div className="flow-root mt-[32px]">
           <div className="md:float-left md:w-[442px] w-full">

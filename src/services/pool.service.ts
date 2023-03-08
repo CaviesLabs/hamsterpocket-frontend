@@ -14,6 +14,17 @@ export class PoolService {
         return ActivePocketsMock;
       });
   }
+
+  /**
+   * @dev Make call to hamster server to sync all pockets owned by a wallet address.
+   * @param walletAddress
+   * @returns
+   */
+  public async syncWalletPockets(walletAddress: string): Promise<any> {
+    return networkProvider.request<any>(`/pool/user/${walletAddress}/sync`, {
+      method: "POST",
+    });
+  }
 }
 
 export const poolService = new PoolService();

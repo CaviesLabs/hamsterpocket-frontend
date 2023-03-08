@@ -7,6 +7,7 @@ import {
   SET_CLOSED_POCKET,
   GET_CLOSED_POCKETS,
   SET_CLOSED_POCKETS,
+  SYNC_WALLET_POCKETS,
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
@@ -101,4 +102,18 @@ export const getClosedPockets = (data: GetPocketsDto) => ({
 export const setClosedPockets = (data: PocketEntity[]) => ({
   type: SET_CLOSED_POCKETS,
   payload: data,
+});
+
+/**
+ * @dev Request to sync all pockets owned by wallet.
+ * @param data Wallet address.
+ * @returns {boolean}
+ */
+export const syncWalletPockets = (
+  data: { walletAddress: string },
+  callback?: CallBackSaga<any>
+) => ({
+  type: SYNC_WALLET_POCKETS,
+  payload: data,
+  callback,
 });
