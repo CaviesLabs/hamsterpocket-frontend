@@ -146,6 +146,7 @@ export class PocketEntity {
     targetTokenReach?: number;
     baseTokenReach?: number;
     batchAmountReach?: number;
+    spentBaseTokenReach?: number;
   };
 
   /** Progression fields */
