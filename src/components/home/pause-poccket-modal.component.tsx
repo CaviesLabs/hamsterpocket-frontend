@@ -69,7 +69,7 @@ export const PausePocketModal: FC<{
             shape="primary"
             size="large"
             onClick={handleClosePocket}
-            text="Close pocket"
+            text="Pause pocket"
             className="mb-3"
             loading={loading}
             theme={{

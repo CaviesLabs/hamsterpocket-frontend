@@ -440,13 +440,13 @@ export class PocketProgramProvider {
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolBase =
         baseTokenMint.toBase58().toString() === WSOL_ADDRESS
-          ? await this.instructionProvider.unwrapSol(baseTokenMint)
+          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
           : null;
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolQoute =
         qouteTokeMint.toBase58().toString() === WSOL_ADDRESS
-          ? await this.instructionProvider.unwrapSol(qouteTokeMint)
+          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
           : null;
 
       /** @dev Add to instructions if valid. */

@@ -1073,6 +1073,11 @@ export type PocketIdl = {
           name: "associatedAccount";
           type: "publicKey";
           index: true;
+        },
+        {
+          name: "pocketAddress";
+          type: "publicKey";
+          index: true;
         }
       ];
     },
@@ -1186,6 +1191,11 @@ export type PocketIdl = {
     {
       name: "DidSwap";
       fields: [
+        {
+          name: "pocketAddress";
+          type: "publicKey";
+          index: true;
+        },
         {
           name: "givenAmount";
           type: "u64";
@@ -2356,6 +2366,11 @@ export const IDL: PocketIdl = {
           type: "publicKey",
           index: true,
         },
+        {
+          name: "pocketAddress",
+          type: "publicKey",
+          index: true,
+        },
       ],
     },
     {
@@ -2468,6 +2483,11 @@ export const IDL: PocketIdl = {
     {
       name: "DidSwap",
       fields: [
+        {
+          name: "pocketAddress",
+          type: "publicKey",
+          index: true,
+        },
         {
           name: "givenAmount",
           type: "u64",
