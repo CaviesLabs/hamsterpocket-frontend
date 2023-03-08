@@ -6,6 +6,8 @@ import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.a
 import { useWallet } from "@/src/hooks/useWallet";
 import { UserBalanceComponent } from "@/src/components/my-pools/user-balance.component";
 import { PocketBalanceComponent } from "@/src/components/my-pools/pocket-balance.component";
+import { getPortfolios } from "@/src/redux/actions/portfolio/portfolio.action";
+
 export const BalanceGroup: FC = () => {
   /**
    * @dev Inject router module to use.
@@ -16,6 +18,9 @@ export const BalanceGroup: FC = () => {
   const connectedWallet = wallet.solanaWallet;
   const walletAddress = connectedWallet?.publicKey?.toString();
 
+  /**
+   * @dev Fetch statistic.
+   */
   useEffect(() => {
     if (!walletAddress) return;
     dispatch(
@@ -24,6 +29,20 @@ export const BalanceGroup: FC = () => {
       })
     );
   }, [walletAddress]);
+
+  /**
+   * @dev Fetch
+   */
+  useEffect(() => {
+    if (!wallet.solanaWallet) return;
+    dispatch(
+      getPortfolios({
+        ownerAddress: wallet.solanaWallet.publicKey.toBase58().toString(),
+        sortBy: ["VALUE_DESC"],
+        search: "",
+      })
+    );
+  }, [wallet.solanaWallet]);
 
   return (
     <section>

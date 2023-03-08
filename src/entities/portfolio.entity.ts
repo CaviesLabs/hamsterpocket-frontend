@@ -1,6 +1,7 @@
 type TopTokenEntity = {
   symbol: string;
   percent: number;
+  price: number;
 };
 
 export type PortfolioStatisticEntity = {
