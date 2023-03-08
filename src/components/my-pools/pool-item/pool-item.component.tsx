@@ -109,7 +109,11 @@ export const PoolItem = (props: PoolItemProps) => {
                 {utilsProvider.makeShort(data.targetTokenAddress)}
               </p>
             </div>
-            <a href="" className="ml-[10px]">
+            <a
+              href={`https://raydium.io/swap?inputCurrency=sol&outputCurrency=${data.targetTokenAddress}`}
+              target="_blank"
+              className="ml-[10px]"
+            >
               <ShareIcon />
             </a>
           </div>
