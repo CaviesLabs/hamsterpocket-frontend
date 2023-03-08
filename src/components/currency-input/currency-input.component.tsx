@@ -40,9 +40,18 @@ export type CurrencyInputProps = {
    * @dev Config input type
    */
   inputType?: "text" | "number";
+
+  isPositiveOnly?: boolean;
 };
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
+  const { isPositiveOnly } = props;
+
+  /**
+   * @dev handle value
+   */
+  const [value, setValue] = useState<string>("0");
+
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
    */
@@ -98,11 +107,16 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
           )
         }
         type={props.inputType || "number"}
-        onChange={(val) => {
-          props.onAmountChange &&
-            props.onAmountChange(parseFloat(val.target.value));
+        onChange={(e) => {
+          const value = e.target.value;
+          if (!isPositiveOnly || !value.startsWith("-")) {
+            return;
+          }
+          props.onAmountChange && props.onAmountChange(parseFloat(value));
+          setValue(e.target.value);
         }}
         disabled={props.currencyBadgeOnly || props.disabledInput}
+        value={value}
       />
       <p
         className={classNames(
