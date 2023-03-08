@@ -61,7 +61,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const hummanStatus = useMemo(() => {
     switch (data.status) {
       case PocketStatus.PAUSED:
-        return "PAUSE";
+        return "PAUSED";
       case PocketStatus.CLOSED:
         return "CLOSED";
       case PocketStatus.ENDED:
@@ -194,7 +194,7 @@ export const PoolItem = (props: PoolItemProps) => {
             "md:float-left text-[16px] uppercase text-normal relative top-[10px] text-green",
             {
               "!text-red300": isClosed || isEnded,
-              "!text-orange-500": isPaused,
+              "!text-[#FFAA44]": isPaused,
             }
           )}
         >
@@ -202,7 +202,7 @@ export const PoolItem = (props: PoolItemProps) => {
         </p>
         <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
           <div className="md:float-right">
-            {isActive && (
+            {(isActive || isPaused) && (
               <Button
                 className="!px-[50px] md:w-auto !w-full"
                 theme={{
