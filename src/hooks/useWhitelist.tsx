@@ -54,7 +54,13 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       try {
         const result = await whitelistService.getWhitelist();
         const res: WhiteListConfigs = {};
-        result.forEach((_) => (res[_.address] = _));
+        result.forEach((_) => {
+          /** desc Convert Wrapped SOL to SOL */
+          if (_.name === "Wrapped SOL") {
+            _.name = "SOL";
+          }
+          res[_.address] = _;
+        });
         setWhitelist(res);
       } catch (err) {
         console.log(err);
