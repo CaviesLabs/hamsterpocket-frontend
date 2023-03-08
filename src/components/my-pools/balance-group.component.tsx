@@ -28,8 +28,8 @@ export const BalanceGroup: FC = () => {
   return (
     <section>
       <p className="text-[24px] text-white">Your balance</p>
-      <section className="md:flex items-center mt-[20px]">
-        <div className="md:w-[70%] w-full">
+      <section className="md:flex justify-between items-center mt-[20px]">
+        <div className="w-full">
           <div className="md:w-[315px] w-full">
             <div className="bg-dark90 flex items-center px-[20px] py-[10px] rounded-[8px] justify-center">
               <UserBalanceComponent />
@@ -51,22 +51,18 @@ export const BalanceGroup: FC = () => {
             />
           </div>
         </div>
-        <div className="md:w-[20%] w-full block md:mt-0 mt-[20px]">
-          <div className="md:float-right">
-            <div className="md:w-[253px] w-full">
-              <Button
-                className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full"
-                theme={{
-                  backgroundColor: "transparent",
-                  color: "#B998FB",
-                  hoverColor: "#B998FB",
-                }}
-                text="View history"
-                width="100%"
-                onClick={() => router.push("/history")}
-              />
-            </div>
-          </div>
+        <div className="w-full md:w-[253px] block md:mt-0 mt-[20px]">
+          <Button
+            className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full"
+            theme={{
+              backgroundColor: "transparent",
+              color: "#B998FB",
+              hoverColor: "#B998FB",
+            }}
+            text="View history"
+            width="100%"
+            onClick={() => router.push("/history")}
+          />
         </div>
       </section>
     </section>
