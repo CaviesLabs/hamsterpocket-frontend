@@ -6,7 +6,7 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, convertDecimalAmount } = useWhiteList();
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
@@ -44,8 +44,12 @@ export default function TableComponent() {
                 </a>
               </td>
               <td>
-                <div>{h.total.toFixed(4)}</div>
-                <div className="text-dark40">~ $ {h.value.toFixed(2)}</div>
+                <div>
+                  {convertDecimalAmount(h.tokenAddress, h.total).toFixed(4)}
+                </div>
+                <div className="text-dark40">
+                  ~ ${convertDecimalAmount(h.tokenAddress, h.value).toFixed(2)}
+                </div>
               </td>
             </tr>
           ))}
