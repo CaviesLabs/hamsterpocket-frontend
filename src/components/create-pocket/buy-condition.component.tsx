@@ -147,23 +147,24 @@ export const BuyCondition: FC<{
                 )?.toNumber() / Math.pow(10, targetTokenAddress?.[1])
               }`}
               onValueChange={(val) => {
-                setBuyCondition(
-                  isTwoValue
-                    ? {
-                        ...buyCondition,
-                        fromValue: new BN(
-                          (parseFloat(val) || 0) *
-                            Math.pow(10, targetTokenAddress?.[1])
-                        ),
-                      }
-                    : {
-                        ...buyCondition,
-                        value: new BN(
-                          (parseFloat(val) || 0) *
-                            Math.pow(10, targetTokenAddress?.[1])
-                        ),
-                      }
-                );
+                parseFloat(val) >= 0 &&
+                  setBuyCondition(
+                    isTwoValue
+                      ? {
+                          ...buyCondition,
+                          fromValue: new BN(
+                            (parseFloat(val) || 0) *
+                              Math.pow(10, targetTokenAddress?.[1])
+                          ),
+                        }
+                      : {
+                          ...buyCondition,
+                          value: new BN(
+                            (parseFloat(val) || 0) *
+                              Math.pow(10, targetTokenAddress?.[1])
+                          ),
+                        }
+                  );
               }}
             />
             {isTwoValue && (

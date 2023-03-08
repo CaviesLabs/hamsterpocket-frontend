@@ -21,7 +21,11 @@ export const BatchOption: FC = () => {
         <CurrencyInput
           addressSelected={baseTokenAddress?.[0]?.toBase58().toString()}
           disableDropdown={true}
-          onAmountChange={(val) => setBatchVolume(val)}
+          isPositiveOnly={true}
+          onAmountChange={(val) => {
+            setBatchVolume(val);
+            console.log(val);
+          }}
         />
         {errorMsgs?.batchVolume && (
           <ErrorLabel message={errorMsgs.batchVolume} />

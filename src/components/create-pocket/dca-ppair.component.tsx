@@ -34,7 +34,7 @@ export const DCAPPair: FC = () => {
   useEffect(() => {
     const address = baseTokenAddress[0]?.toBase58()?.toString();
     getPriceBySolana(address).then((resp: any) =>
-      setBaseTokenPrice(resp[address].usd)
+      setBaseTokenPrice(resp[address]?.usd)
     );
   }, [baseTokenAddress]);
 
@@ -44,7 +44,7 @@ export const DCAPPair: FC = () => {
   useEffect(() => {
     const address = targetTokenAddress[0]?.toBase58()?.toString();
     getPriceBySolana(address).then((resp: any) =>
-      setTargetTokenPrice(resp[address].usd)
+      setTargetTokenPrice(resp[address]?.usd)
     );
   }, [targetTokenAddress]);
 

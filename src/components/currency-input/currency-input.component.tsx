@@ -109,7 +109,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         type={props.inputType || "number"}
         onChange={(e) => {
           const value = e.target.value;
-          if (!isPositiveOnly || !value.startsWith("-")) {
+          if (isPositiveOnly && value.startsWith("-")) {
             return;
           }
           props.onAmountChange && props.onAmountChange(parseFloat(value));
