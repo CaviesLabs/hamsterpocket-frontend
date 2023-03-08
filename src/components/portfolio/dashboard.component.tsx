@@ -36,6 +36,7 @@ export default function DashboardComponent() {
   }, [wallet]);
 
   const statisticData = useSelector((state: State) => state.portfolioStatistic);
+  console.log("statisticData", statisticData);
 
   const chartData = useMemo(() => {
     if (!statisticData)
