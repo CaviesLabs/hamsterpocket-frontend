@@ -18,6 +18,7 @@ export const FrequencyOption: FC = () => {
       switch (val) {
         case FrequencyConditionType.HOURLY:
           setFrequency({ hours: 1 });
+          break;
         case FrequencyConditionType.DAILY:
           setFrequency({ days: 1 });
           break;
