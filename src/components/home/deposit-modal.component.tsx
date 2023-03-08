@@ -17,7 +17,7 @@ export const DepositModal: FC<{
 }> = (props) => {
   const { pocket } = props;
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService, solanaWallet, solBalance } = useWallet();
 
   /** @dev Inject whitelist provider to use. */
   const { whiteLists, convertDecimalAmount } = useWhiteList();
@@ -62,10 +62,7 @@ export const DepositModal: FC<{
   /** @dev Define the button text */
   const [buttonText, setButtonText] = useState<string>("Deposit");
 
-  const baseBalance = convertDecimalAmount(
-    pocket.baseTokenAddress,
-    pocket.remainingBaseTokenBalance
-  );
+  const baseBalance = convertDecimalAmount(pocket.baseTokenAddress, solBalance);
 
   const handleInputChange = (val: number) => {
     if (val < 0.05) {
@@ -109,6 +106,7 @@ export const DepositModal: FC<{
             onAmountChange={(val) => handleInputChange(val)}
             placeholder="Enter SOL amount"
             inputType="text"
+            isPositiveOnly={true}
           />
           <p className="my-4 text-white text-[16px] flex">
             Your balance:
@@ -117,7 +115,7 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {baseBalance} {baseToken.symbol}
+            {baseBalance.toFixed(4)} {baseToken.symbol}
           </p>
           <Button
             shape="primary"
