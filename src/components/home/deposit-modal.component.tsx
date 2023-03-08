@@ -59,6 +59,26 @@ export const DepositModal: FC<{
   /** @dev Define base token **/
   const baseToken = whiteLists[pocket.baseTokenAddress];
 
+  /** @dev Define the button text */
+  const [buttonText, setButtonText] = useState<string>("Deposit");
+
+  const baseBalance = convertDecimalAmount(
+    pocket.baseTokenAddress,
+    pocket.remainingBaseTokenBalance
+  );
+
+  const handleInputChange = (val: number) => {
+    if (val < 0.05) {
+      setButtonText(`Minimum deposit is 0.05 ${baseToken.symbol}`);
+    } else if (val > baseBalance) {
+      setButtonText(`Insufficient ${baseToken.symbol} balance`);
+    } else {
+      setButtonText("Deposit");
+    }
+    setIsAmountSet(!isNaN(val));
+    setDepositedAmount(new BN(val * Math.pow(10, baseToken?.decimals || 0)));
+  };
+
   return (
     <Modal
       open={props.isModalOpen}
@@ -86,12 +106,7 @@ export const DepositModal: FC<{
             addressSelected={pocket.baseTokenAddress}
             disableDropdown={true}
             inputClassName="gray-input !bg-[#353C4B]"
-            onAmountChange={(val) => {
-              setIsAmountSet(!isNaN(val));
-              setDepositedAmount(
-                new BN(val * Math.pow(10, baseToken?.decimals || 0))
-              );
-            }}
+            onAmountChange={(val) => handleInputChange(val)}
             placeholder="Enter SOL amount"
             inputType="text"
           />
@@ -102,17 +117,13 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {convertDecimalAmount(
-              pocket.baseTokenAddress,
-              pocket.remainingBaseTokenBalance
-            )}{" "}
-            {baseToken.symbol}
+            {baseBalance} {baseToken.symbol}
           </p>
           <Button
             shape="primary"
             size="large"
             onClick={handleDeposit}
-            text={"Deposit"}
+            text={buttonText}
             className="my-3"
             loading={loading}
             theme={{

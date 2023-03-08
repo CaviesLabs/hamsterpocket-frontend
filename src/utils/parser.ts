@@ -58,6 +58,40 @@ export const convertDurationsTimeToHours = (
 };
 
 /**
+ * @dev The function to convert hours to frequency time.
+ * @param {DurationObjectUnits} hour Root hour number which user selected.
+ * */
+export const convertHoursToDurationsTime = (
+  hours: number
+): DurationObjectUnits => {
+  /** @dev Initialize duration result. */
+  const result: DurationObjectUnits = {};
+
+  /** @dev Condition for each  */
+  if (hours >= 24 * 365) {
+    result.years = Math.floor(hours / (365 * 24));
+    hours = hours % (365 * 24);
+  }
+  if (hours >= 24 * 30) {
+    result.months = Math.floor(hours / (30 * 24));
+    hours = hours % (30 * 24);
+  }
+  if (hours >= 24 * 7) {
+    result.weeks = Math.floor(hours / (24 * 7));
+    hours = hours % (24 * 7);
+  }
+  if (hours >= 24) {
+    result.days = Math.floor(hours / 24);
+    hours = hours % 24;
+  }
+  if (hours > 0) {
+    result.hours = hours;
+  }
+
+  return result;
+};
+
+/**
  * @dev The function to convert stopCondition to match with contract based on sideMethod.
  * @param {StopConditions} stopCondtions The root condition which user choose.
  * @return {StopConditions} The final condition which is processed.

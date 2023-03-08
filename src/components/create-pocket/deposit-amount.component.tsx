@@ -17,7 +17,7 @@ export const DepositAmount: FC = () => {
       </p>
       <div className="mt-[16px]">
         <p className="text-dark20 text-[14px] normal-text italic">
-          Deposit {">="} amount each batch
+          Deposit amount must be equal or greater than the each batch amount
         </p>
         <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
           <div className="md:col-span-2">
@@ -33,6 +33,7 @@ export const DepositAmount: FC = () => {
               onAmountChange={(val) => {
                 setDepositedAmount(val);
               }}
+              placeholder="Enter amount"
             />
           </div>
         </div>

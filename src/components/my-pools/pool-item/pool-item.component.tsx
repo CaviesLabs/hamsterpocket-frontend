@@ -5,7 +5,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { DATE_FORMAT, utilsProvider } from "@/src/utils";
+import { DATE_TIME_FORMAT, utilsProvider } from "@/src/utils";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -61,7 +61,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const hummanStatus = useMemo(() => {
     switch (data.status) {
       case PocketStatus.PAUSED:
-        return "PAUSE";
+        return "PAUSED";
       case PocketStatus.CLOSED:
         return "CLOSED";
       case PocketStatus.ENDED:
@@ -109,7 +109,11 @@ export const PoolItem = (props: PoolItemProps) => {
                 {utilsProvider.makeShort(data.targetTokenAddress)}
               </p>
             </div>
-            <a href="" className="ml-[10px]">
+            <a
+              href={`https://raydium.io/swap?inputCurrency=sol&outputCurrency=${data.targetTokenAddress}`}
+              target="_blank"
+              className="ml-[10px]"
+            >
               <ShareIcon />
             </a>
           </div>
@@ -158,7 +162,7 @@ export const PoolItem = (props: PoolItemProps) => {
               Start date:
             </p>
             <p className="text-white text-[16px] normal-text">
-              {dayjs(data.startTime).format(DATE_FORMAT)}
+              {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
           <div className="flex items-center mt-[5px]">
@@ -194,7 +198,7 @@ export const PoolItem = (props: PoolItemProps) => {
             "md:float-left text-[16px] uppercase text-normal relative top-[10px] text-green",
             {
               "!text-red300": isClosed || isEnded,
-              "!text-orange-500": isPaused,
+              "!text-[#FFAA44]": isPaused,
             }
           )}
         >
@@ -202,7 +206,7 @@ export const PoolItem = (props: PoolItemProps) => {
         </p>
         <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
           <div className="md:float-right">
-            {isActive && (
+            {(isActive || isPaused) && (
               <Button
                 className="!px-[50px] md:w-auto !w-full"
                 theme={{
