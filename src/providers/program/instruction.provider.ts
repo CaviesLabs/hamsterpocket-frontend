@@ -174,7 +174,7 @@ export class InstructionProvider {
       name: createPocketDto.name,
       frequency: createPocketDto.frequency,
       side: createPocketDto.side,
-      marketId: createPocketDto.marketId,
+      marketKey: new PublicKey(createPocketDto.marketId),
     };
 
     /**

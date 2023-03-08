@@ -131,7 +131,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(liqQoute),
-        startAt: new BN(startAt.getTime().toString()),
+        startAt: new BN(
+          parseInt((startAt.getTime() / 1000).toString()).toString()
+        ),
         frequency: convertDurationsTimeToHours(frequency),
         batchVolume: new BN(batchVolume * Math.pow(10, baseTokenAddress[1])),
         depositedAmount: new BN(

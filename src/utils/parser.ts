@@ -37,7 +37,6 @@ export const convertDurationsTimeToHours = (
 ): { hours: BN } => {
   /** @dev Initilize duration result. */
   const swapDuration = (val: number) => {
-    console.log(val);
     return {
       hours: new BN(val),
     };
