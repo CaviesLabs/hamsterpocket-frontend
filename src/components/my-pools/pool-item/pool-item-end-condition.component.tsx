@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import dayjs from "dayjs";
-import { DATE_FORMAT } from "@/src/utils";
+import { DATE_TIME_FORMAT } from "@/src/utils";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 
@@ -21,6 +20,7 @@ export const PoolItemEndConditionComponent = (
         baseTokenReach,
         targetTokenReach,
         batchAmountReach,
+        spentBaseTokenReach,
       },
       baseTokenAddress,
       targetTokenAddress,
@@ -28,15 +28,17 @@ export const PoolItemEndConditionComponent = (
   } = props;
 
   /** @dev Inject whitelist to get info. */
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, convertDecimalAmount } = useWhiteList();
 
   const conditions = [];
   if (endTime) {
-    conditions.push(dayjs(endTime).format(DATE_FORMAT));
+    conditions.push(dayjs(endTime).format(DATE_TIME_FORMAT));
   }
   if (baseTokenReach) {
     conditions.push(
-      `${baseTokenReach} ${whiteLists[baseTokenAddress]?.symbol}`
+      `${convertDecimalAmount(baseTokenAddress, baseTokenReach)} ${
+        whiteLists[baseTokenAddress]?.symbol
+      }`
     );
   }
   if (targetTokenReach) {
@@ -44,8 +46,17 @@ export const PoolItemEndConditionComponent = (
       `${targetTokenReach} ${whiteLists[targetTokenAddress]?.symbol}`
     );
   }
+  if (spentBaseTokenReach) {
+    conditions.push(
+      `${convertDecimalAmount(baseTokenAddress, spentBaseTokenReach)} ${
+        whiteLists[baseTokenAddress]?.symbol
+      }`
+    );
+  }
   if (batchAmountReach) {
-    conditions.push(`${batchAmountReach} PAX`);
+    conditions.push(
+      `${batchAmountReach} ${batchAmountReach === 1 ? "BATCH" : "BATCHES"}`
+    );
   }
 
   return (
