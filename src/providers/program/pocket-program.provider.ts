@@ -9,6 +9,7 @@ import { PocketIdl, IDL } from "./pocket.idl";
 import { InstructionProvider } from "./instruction.provider";
 import { TransactionProvider } from "./transaction.provider";
 import { WSOL_ADDRESS } from "@/src/utils/constants";
+import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
 export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
@@ -220,7 +221,8 @@ export class PocketProgramProvider {
           pocketAccount,
           createPocketDto.baseTokenAddress,
           createPocketDto.quoteTokenAddress,
-          createPocketDto.depositedAmount
+          createPocketDto.depositedAmount,
+          Object.keys(createPocketDto.side).includes("sell") ? "base" : "quote"
         )),
       ].filter((item) => item !== null);
 
@@ -270,7 +272,8 @@ export class PocketProgramProvider {
           pocketAccount,
           new PublicKey((pocketState as any)?.baseTokenMintAddress),
           new PublicKey((pocketState as any)?.quoteTokenMintAddress),
-          depositedAmount
+          depositedAmount,
+          "base"
         )
       );
 
@@ -309,7 +312,8 @@ export class PocketProgramProvider {
     pocketAccount: PublicKey,
     baseTokenAddress: PublicKey,
     targetTokenAddress: PublicKey,
-    depositedAmount: anchor.BN
+    depositedAmount: anchor.BN,
+    mode: "base" | "quote"
   ): Promise<TransactionInstruction[]> {
     /** @dev Create token vault if not already exists .*/
     const createTokenVaultInstruction =
@@ -328,23 +332,6 @@ export class PocketProgramProvider {
       );
 
     /**
-     * @dev Handle to wrap sol to wsol if offered item is SOL currency.
-     */
-    const wrapSolInstructions = [];
-    if (baseTokenAddress.toBase58().toString() === WSOL_ADDRESS) {
-      try {
-        const [ins1, ins2] = await this.instructionProvider.wrapSol(
-          walletProvider.publicKey,
-          depositedAmount
-        );
-
-        ins1 && wrapSolInstructions.push(ins1);
-        ins2 && wrapSolInstructions.push(ins2);
-      } catch (err) {
-        console.log("Error when wrap sol", err);
-      }
-    }
-    /**
      * @dev Try to create a instruction to deposit token.
      */
     const ins = await this.instructionProvider.depositAsset(
@@ -353,13 +340,13 @@ export class PocketProgramProvider {
       pocketAccount,
       baseTokenAddress,
       targetTokenAddress,
-      depositedAmount
+      depositedAmount,
+      mode
     );
 
     return [
-      // createTokenVaultInstruction,
-      // createTokenTargetVaultInstruction,
-      ...wrapSolInstructions,
+      createTokenVaultInstruction,
+      createTokenTargetVaultInstruction,
       ...ins,
     ];
   }

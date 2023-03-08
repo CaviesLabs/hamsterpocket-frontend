@@ -17,6 +17,7 @@ import {
 import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 import { PocketIdl } from "./pocket.idl";
 import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
+import { WSOL_ADDRESS } from "@/src/utils";
 
 export class InstructionProvider {
   /**
@@ -204,7 +205,8 @@ export class InstructionProvider {
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
     targetTokenAccount: PublicKey,
-    depositAmount: anchor.BN
+    depositAmount: anchor.BN,
+    mode: "base" | "quote"
   ): Promise<TransactionInstruction[]> {
     /**
      * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
@@ -231,6 +233,24 @@ export class InstructionProvider {
       targetTokenAccount
     );
 
+    /**
+     * @dev Handle to wrap sol to wsol if offered item is SOL currency.
+     */
+    const wrapSolInstructions = [];
+    if (baseTokenAccount.toBase58().toString() === WSOL_ADDRESS) {
+      try {
+        const [ins1, ins2] = await this.wrapSol(
+          walletProvider.publicKey,
+          depositAmount
+        );
+
+        ins1 && wrapSolInstructions.push(ins1);
+        ins2 && wrapSolInstructions.push(ins2);
+      } catch (err) {
+        console.log("Error when wrap sol", err);
+      }
+    }
+
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,
@@ -244,10 +264,11 @@ export class InstructionProvider {
         targetTokenAccount,
         pocketOwner
       ),
+      ...wrapSolInstructions,
       await this.program.methods
         .deposit({
           depositAmount,
-          mode: { base: {} },
+          mode: { [mode]: {} },
         } as any)
         .accounts({
           signer: pocketOwner,
@@ -406,7 +427,8 @@ export class InstructionProvider {
      */
     const associatedTokenAccount = await getAssociatedTokenAddress(
       NATIVE_MINT,
-      walletPublicKey
+      walletPublicKey,
+      false
     );
 
     /**
@@ -421,10 +443,7 @@ export class InstructionProvider {
     /**
      * @dev Create native sol.
      */
-    const instruction2 = createSyncNativeInstruction(
-      associatedTokenAccount,
-      new PublicKey(this.programId)
-    );
+    const instruction2 = createSyncNativeInstruction(associatedTokenAccount);
 
     return [instruction1, instruction2];
   }
@@ -449,8 +468,7 @@ export class InstructionProvider {
       associatedTokenAccount,
       walletPublicKey,
       walletPublicKey,
-      [],
-      new PublicKey(this.programId)
+      []
     );
   }
 }

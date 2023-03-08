@@ -65,14 +65,6 @@ export async function getOrCreateAssociatedTokenAccount(
     ) {
       // As this isn't atomic, it's possible others can create associated accounts meanwhile.
       try {
-        console.log({
-          payloadP: payer.publicKey,
-          associatedToken,
-          owner,
-          mint,
-          programId,
-          associatedTokenProgramId,
-        });
         const instruction = createAssociatedTokenAccountInstruction(
           payer.publicKey,
           associatedToken,

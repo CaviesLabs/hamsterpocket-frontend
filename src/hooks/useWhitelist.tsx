@@ -82,17 +82,18 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       targetTokenAddress: string
     ): [string, string, string] => {
       /** Find ppair available liquidity pool. */
+      console.log(liquidities, baseTokenAddress, targetTokenAddress);
       const ppair = [
         liquidities.find(
           (item) =>
-            item.baseMint === baseTokenAddress &&
-            item.quoteMint === targetTokenAddress
-        ),
+            item?.baseMint === baseTokenAddress &&
+            item?.quoteMint === targetTokenAddress
+        ) || null,
         liquidities.find(
           (item) =>
-            item.baseMint === targetTokenAddress &&
-            item.quoteMint === baseTokenAddress
-        ),
+            item?.baseMint === targetTokenAddress &&
+            item?.quoteMint === baseTokenAddress
+        ) || null,
       ].filter((item) => item !== null)?.[0];
       console.log(ppair);
       return [ppair.baseMint || "", ppair.quoteMint || "", ppair.marketId];
