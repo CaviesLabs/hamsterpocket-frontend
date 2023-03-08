@@ -1,11 +1,13 @@
-import { PocketStatus } from "@/src/entities/pocket.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 
 type PocketNoteProps = {
-  status: PocketStatus;
+  data: PocketEntity;
 };
 export const PocketNote = (props: PocketNoteProps) => {
-  const { status } = props;
+  const {
+    data: { status },
+  } = props;
   const isActive = status === PocketStatus.ACTIVE;
   const isPaused = status === PocketStatus.PAUSED;
   const isClosed = status === PocketStatus.CLOSED;
