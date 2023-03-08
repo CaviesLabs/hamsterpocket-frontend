@@ -183,7 +183,10 @@ export const PoolItem = (props: PoolItemProps) => {
                 Outstanding deposit:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.batchVolume - data.remainingBaseTokenBalance}{" "}
+                {convertDecimalAmount(
+                  baseToken.address,
+                  data.batchVolume - data.remainingBaseTokenBalance
+                )}{" "}
                 {baseToken?.symbol}
               </p>
             </div>
@@ -191,7 +194,7 @@ export const PoolItem = (props: PoolItemProps) => {
         </div>
         <PoolItemEndConditionComponent targetToken={targetToken} data={data} />
       </div>
-      <PocketNote status={data.status} />
+      <PocketNote data={data} />
       <div className="mt-[24px] md:flow-root">
         <p
           className={classnames(
