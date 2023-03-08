@@ -10,3 +10,14 @@ export const getPrice = function (tokenName: string) {
     },
   });
 };
+
+export const getPriceBySolana = function (tokenAddress: string) {
+  return networkProvider.request("/simple/token_price/solana", {
+    baseURL: "https://api.coingecko.com/api/v3",
+    method: "GET",
+    params: {
+      vs_currencies: "usd",
+      contract_addresses: tokenAddress,
+    },
+  });
+};
