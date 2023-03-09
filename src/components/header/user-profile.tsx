@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
@@ -7,6 +7,7 @@ import { LoggoutIcon } from "@/src/components/icons";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import { DownOutlined } from "@ant-design/icons";
+import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
   const wallet = useConnectedWallet();
@@ -26,6 +27,16 @@ const UserProfile: FC = () => {
    */
   const [show, setShow] = useState(false);
 
+  /**
+   * @dev reference to the button
+   * close the dropdown when user click outside
+   */
+  const ref = useRef(null);
+
+  useOnClickOutside(ref, () => {
+    setShow(false);
+  });
+
   return (
     <div
       className={classnames(
@@ -41,6 +52,7 @@ const UserProfile: FC = () => {
       <span
         className="text-[7px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
+        ref={ref}
       >
         {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
         <DownOutlined style={{ fontSize: 14 }} className="ml-2" />

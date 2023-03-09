@@ -76,6 +76,8 @@ export const DepositModal: FC<{
     setDepositedAmount(new BN(val * Math.pow(10, baseToken?.decimals || 0)));
   };
 
+  const isDisabled = !isAmountSet || buttonText !== "Deposit";
+
   return (
     <Modal
       open={props.isModalOpen}
@@ -105,7 +107,6 @@ export const DepositModal: FC<{
             inputClassName="gray-input !bg-[#353C4B]"
             onAmountChange={(val) => handleInputChange(val)}
             placeholder="Enter SOL amount"
-            isPositiveOnly={true}
           />
           <p className="my-4 text-white text-[16px] flex">
             Your balance:
@@ -124,10 +125,10 @@ export const DepositModal: FC<{
             className="my-3"
             loading={loading}
             theme={{
-              backgroundColor: isAmountSet ? "#B998FB" : "gray",
+              backgroundColor: isDisabled ? "gray" : "#B998FB",
               color: "#FFFFFF",
             }}
-            disabled={!isAmountSet}
+            disabled={isDisabled}
           />
         </div>
       </div>

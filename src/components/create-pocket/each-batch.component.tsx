@@ -23,7 +23,6 @@ export const BatchOption: FC = () => {
           placeholder="Enter amount"
           addressSelected={baseTokenAddress?.[0]?.toBase58().toString()}
           disableDropdown={true}
-          isPositiveOnly={true}
           onAmountChange={(val) => {
             setErrorMsgs({
               ...errorMsgs,
