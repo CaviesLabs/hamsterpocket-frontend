@@ -7,8 +7,13 @@ export const DepositAmount: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setDepositedAmount, errorMsgs } =
-    useCreatePocketPage();
+  const {
+    baseTokenAddress,
+    setDepositedAmount,
+    errorMsgs,
+    setErrorMsgs,
+    batchVolume,
+  } = useCreatePocketPage();
 
   return (
     <section>
@@ -31,6 +36,12 @@ export const DepositAmount: FC = () => {
               addressSelected={baseTokenAddress[0]?.toBase58().toString()}
               disableDropdown={true}
               onAmountChange={(val) => {
+                setErrorMsgs({
+                  ...errorMsgs,
+                  depositedAmount:
+                    val < batchVolume &&
+                    "Deposit amount must be equal or greater than the each batch amount",
+                });
                 setDepositedAmount(val);
               }}
               placeholder="Enter amount"
