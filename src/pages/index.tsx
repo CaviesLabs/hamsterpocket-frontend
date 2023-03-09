@@ -105,7 +105,7 @@ const Layout = (props: LayoutProps) => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] normal-text">
-                  $ {data.totalVolume}
+                  $ {data.totalVolume.toFixed(2)}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Total Volume
