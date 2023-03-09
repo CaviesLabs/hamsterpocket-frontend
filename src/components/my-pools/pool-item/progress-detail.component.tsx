@@ -26,7 +26,10 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">
-            {convertDecimalAmount(data.baseTokenAddress, data.depositedAmount)}
+            {convertDecimalAmount(
+              data.baseTokenAddress,
+              data.currentSpentBaseToken
+            )}
           </span>
           /
           {convertDecimalAmount(
@@ -40,7 +43,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         </p>
       </>
     );
-  } else if (data.mainProgressBy === MainProgressBy.TARGET_TOKEN) {
+  } else if (data.mainProgressBy === MainProgressBy.RECEIVED_TARGET_TOKEN) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
@@ -65,7 +68,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {currentReceivedTarget} {targetToken?.symbol} (
-          {data.currentBaseToken} {baseToken?.symbol})
+          {data.currentSpentBaseToken} {baseToken?.symbol})
         </p>
       </>
     );
@@ -78,7 +81,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
           ~ {currentReceivedTarget} {targetToken?.symbol} (
-          {data?.currentBaseToken} {baseToken?.symbol})
+          {data?.currentSpentBaseToken} {baseToken?.symbol})
         </p>
       </>
     );

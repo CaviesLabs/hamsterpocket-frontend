@@ -48,7 +48,7 @@ export enum FrequencyConditionType {
 export enum MainProgressBy {
   END_TIME = "MAIN_PROGRESS_BY::END_TIME",
   SPENT_BASE_TOKEN = "MAIN_PROGRESS_BY::SPENT_BASE_TOKEN",
-  TARGET_TOKEN = "MAIN_PROGRESS_BY::TARGET_TOKEN",
+  RECEIVED_TARGET_TOKEN = "MAIN_PROGRESS_BY::RECEIVED_TARGET_TOKEN",
   BATCH_AMOUNT = "MAIN_PROGRESS_BY::BATCH_AMOUNT",
 }
 
@@ -150,7 +150,7 @@ export class PocketEntity {
   };
 
   /** Progression fields */
-  currentBaseToken: number;
+  currentSpentBaseToken: number;
 
   remainingBaseTokenBalance: number;
 

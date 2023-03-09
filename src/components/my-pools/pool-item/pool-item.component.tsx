@@ -154,7 +154,10 @@ export const PoolItem = (props: PoolItemProps) => {
             />
             <div className="flow-root mt-[10px]">
               <p className="float-left text-green text-[14px] regular-text">
-                {data.progressPercent > 1 ? 100 : data.progressPercent * 100}%
+                {data.progressPercent > 1
+                  ? 100
+                  : (data.progressPercent * 100).toFixed(2)}
+                %
               </p>
               <div className="float-right">
                 <ProgressDetailComponent
@@ -189,7 +192,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 Spent:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.currentBaseToken || 0} {baseToken.symbol}
+                {data.currentSpentBaseToken || 0} {baseToken.symbol}
               </p>
             </div>
           </>
