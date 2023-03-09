@@ -1,12 +1,15 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Input } from "@hamsterbox/ui-kit";
+import { Input, toast } from "@hamsterbox/ui-kit";
 import { DropdownSelect, FilterSelect } from "@/src/components/select";
 import { SearchIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useDispatch } from "react-redux";
 import { useConnectedWallet } from "@saberhq/use-solana";
-import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
+import {
+  getClosedPockets,
+  syncWalletPockets,
+} from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useSelector } from "react-redux";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
@@ -52,6 +55,21 @@ export const EndedPoolGroupComponent: FC = () => {
     );
   }, [wallet, debouncedSearch, selectedType, sorter]);
 
+  /** @dev The function to handle sync pockets. */
+  const handleSync = useCallback(() => {
+    if (!wallet) return;
+    setFetching(true);
+    dispatch(
+      syncWalletPockets({ walletAddress: wallet }, () => {
+        setFetching(false);
+        handleFetch();
+        toast("The latest data is now available", {
+          theme: "dark",
+        });
+      })
+    );
+  }, [wallet]);
+
   useEffect(
     () => handleFetch(),
     [wallet, debouncedSearch, selectedType, sorter]
@@ -66,7 +84,7 @@ export const EndedPoolGroupComponent: FC = () => {
           </p>
           <button
             className="relative ml-4 bg-dark90 text-dark40 hover:text-white rounded-full px-4 py-2 flex items-center"
-            onClick={handleFetch}
+            onClick={handleSync}
           >
             <SyncOutlined spin={fetching} style={{ fontSize: 18 }} />
             <p className="font-normal ml-4">Refresh</p>

@@ -37,7 +37,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   const {
     createdEnable,
     pocketName,
-    stopConditions,
     buyCondition,
     batchVolume,
     depositedAmount,
@@ -77,13 +76,13 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   }, [batchVolume, createdEnable]);
 
   /** @dev Watch changes in stop condtions. */
-  useEffect(() => {
-    if (!createdEnable) return;
-    modifyErrors(
-      "stopConditions",
-      !stopConditions.length ? "Must add at least one stop condition" : ""
-    );
-  }, [stopConditions, createdEnable]);
+  // useEffect(() => {
+  //   if (!createdEnable) return;
+  //   modifyErrors(
+  //     "stopConditions",
+  //     !stopConditions.length ? "Must add at least one stop condition" : ""
+  //   );
+  // }, [stopConditions, createdEnable]);
 
   /** @dev Watch changes in stop condtions. */
   useEffect(() => {

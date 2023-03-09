@@ -1,6 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Input } from "@hamsterbox/ui-kit";
+import { Input, toast } from "@hamsterbox/ui-kit";
 import { FilterSelect } from "@/src/components/select";
 import { SearchIcon, CircleCheckIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
@@ -61,6 +61,9 @@ export const ActivePoolGroup: FC = () => {
       syncWalletPockets({ walletAddress: wallet }, () => {
         setFetching(false);
         handleFetch();
+        toast("The latest data is now available", {
+          theme: "dark",
+        });
       })
     );
   }, [wallet]);
