@@ -55,7 +55,6 @@ export function* getPortfolioStatistic({
     );
 
     yield put(setPortfolioStatistic(statistic));
-
     callback && callback(statistic);
   } catch (err) {
     console.error(err);

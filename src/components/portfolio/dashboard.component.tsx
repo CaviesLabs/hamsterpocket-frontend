@@ -3,11 +3,7 @@ import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
 import { RiQuestionnaireFill } from "react-icons/all";
 Chart.register(ArcElement, Legend, Tooltip);
 import { Tooltip as AntdTooltip } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
-import { useEffect, useMemo } from "react";
-import { useConnectedWallet } from "@saberhq/use-solana";
-import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
+import { useMemo } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 
 const options = {
@@ -23,22 +19,8 @@ const options = {
 };
 
 export default function DashboardComponent() {
-  const dispatch = useDispatch();
-  const wallet = useConnectedWallet()?.publicKey.toString();
-
   /** @dev Handle to get total estimate sol in total pockets. */
   const { totalSOL, totalUSD, getTokenBlances } = usePocketBalance();
-
-  useEffect(() => {
-    if (!wallet) return;
-    dispatch(
-      getPortfolioStatistic({
-        ownerAddress: wallet,
-      })
-    );
-  }, [wallet]);
-
-  const statisticData = useSelector((state: State) => state.portfolioStatistic);
 
   const chartData = useMemo(() => {
     const mapData = getTokenBlances();
@@ -54,7 +36,7 @@ export default function DashboardComponent() {
         },
       ],
     };
-  }, [statisticData, totalUSD, totalSOL]);
+  }, [totalUSD, totalSOL]);
 
   return (
     <div className="mt-12 flex justify-between items-center">

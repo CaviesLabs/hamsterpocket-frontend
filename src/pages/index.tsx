@@ -135,9 +135,6 @@ function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
 export async function getStaticProps() {
   // Call an external API endpoint to get statistic.
   const res = await statisticService.getStatistic();
-
-  // By returning { props: { statistic } }, the Home component
-  // will receive `statistic` as a prop at build time
   return {
     props: {
       statistic: res,
