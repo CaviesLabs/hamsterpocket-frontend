@@ -201,7 +201,11 @@ export const PoolItem = (props: PoolItemProps) => {
                 Token bought:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.currentReceivedTargetToken || 0} {targetToken?.symbol}
+                {convertDecimalAmount(
+                  targetToken.address,
+                  data.currentReceivedTargetToken
+                ).toFixed(2) || 0}{" "}
+                {targetToken?.symbol}
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
@@ -209,7 +213,11 @@ export const PoolItem = (props: PoolItemProps) => {
                 Spent:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.currentSpentBaseToken || 0} {baseToken?.symbol}
+                {convertDecimalAmount(
+                  baseToken.address,
+                  data.currentSpentBaseToken
+                ).toFixed(2) || 0}{" "}
+                {baseToken?.symbol}
               </p>
             </div>
           </>
