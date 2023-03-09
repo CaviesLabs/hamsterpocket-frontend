@@ -28,7 +28,7 @@ export const ActivePoolGroup: FC = () => {
   const wallet = useConnectedWallet()?.publicKey.toString();
   const [search, setSearch] = useState("");
   const [isPauseOnly, setIsPauseOnly] = useState(false);
-  const [isDepositNeeded, setIsDepositNeeded] = useState(false);
+  // const [isDepositNeeded, setIsDepositNeeded] = useState(false);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
@@ -94,7 +94,7 @@ export const ActivePoolGroup: FC = () => {
           </p>
         </div>
         <div className="flow-root mt-[32px]">
-          <div className="md:float-left md:w-[442px] w-full">
+          <div className="md:float-left md:w-[450px] w-full">
             <Input
               containerClassName="app-input w-full"
               inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
@@ -122,7 +122,7 @@ export const ActivePoolGroup: FC = () => {
                   Paused only
                 </p>
               </div>
-              <div
+              {/* <div
                 onClick={() => setIsDepositNeeded(!isDepositNeeded)}
                 className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto"
               >
@@ -138,7 +138,7 @@ export const ActivePoolGroup: FC = () => {
                 >
                   Need deposit for next buying
                 </p>
-              </div>
+              </div> */}
             </div>
             <FilterSelect
               className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px]"

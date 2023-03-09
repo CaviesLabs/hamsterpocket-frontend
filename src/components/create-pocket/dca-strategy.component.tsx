@@ -11,7 +11,8 @@ export const DCAStrategy: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { setStartAt, setBuyCondition } = useCreatePocketPage();
+  const { setStartAt, setBuyCondition, targetTokenAddress } =
+    useCreatePocketPage();
 
   /**
    * @dev Buy condition display.
@@ -61,6 +62,7 @@ export const DCAStrategy: FC = () => {
           </div>
           <BuyCondition
             buyConditionDisplayed={buyConditionDisplayed}
+            disabled={!targetTokenAddress.length}
             toggle={() => {
               setBuyCondition(null);
               setBuyConditionDisplayed(!buyConditionDisplayed);

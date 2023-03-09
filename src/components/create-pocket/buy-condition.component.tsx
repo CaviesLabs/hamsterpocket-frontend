@@ -14,6 +14,7 @@ import classNames from "classnames";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
+  disabled?: boolean;
   toggle(): void;
 }> = (props) => {
   /**
@@ -68,6 +69,7 @@ export const BuyCondition: FC<{
         toValue: buyCondition.value,
       });
     }
+    (window as any).test = buyCondition;
   }, [isTwoValue, buyCondition]);
 
   return (
@@ -90,6 +92,7 @@ export const BuyCondition: FC<{
           }}
           icon={<PlusIcon />}
           onClick={props.toggle}
+          disabled={props.disabled}
         />
       ) : (
         <div className="grid grid-cols-12 items-center justify-center mt-[16px] max-w-[100%]">
@@ -140,12 +143,7 @@ export const BuyCondition: FC<{
             <Input
               containerClassName="app-input w-[110px] !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
-              value={`${
-                (isTwoValue
-                  ? buyCondition?.fromValue
-                  : buyCondition?.value
-                )?.toNumber() / Math.pow(10, targetTokenAddress?.[1])
-              }`}
+              placeholder={isTwoValue ? "from value" : "value"}
               onValueChange={(val) => {
                 parseFloat(val) >= 0 &&
                   setBuyCondition(
@@ -174,10 +172,6 @@ export const BuyCondition: FC<{
                   containerClassName="app-input w-[110px] !h-full"
                   inputClassName="bg-dark90 !text-white w-full !h-full"
                   placeholder="to value"
-                  value={`${
-                    buyCondition?.toValue?.toNumber() /
-                    Math.pow(10, targetTokenAddress?.[1])
-                  }`}
                   onValueChange={(val) => {
                     setBuyCondition({
                       ...buyCondition,
