@@ -52,7 +52,7 @@ export const FrequencyOption: FC = () => {
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
       </p>
       <DropdownSelect
-        className="mt-[10px] !min-w-[250px]"
+        className="mt-3 !min-w-[250px]"
         handleSelectValue={(val) => handleModifyFrequency(val)}
         options={TIME_CONDITIONS}
         autoValue={true}

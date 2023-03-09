@@ -48,12 +48,17 @@ export const DCAStrategy: FC = () => {
         <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
           DCA strategy
         </p>
-        <div className="mt-[16px]">
+        <p className="text-dark20 text-[14px] normal-text italic mt-2">
+          Set the conditions that must be met before each batch of tokens
+          purchase is executed
+        </p>
+        <div className="mt-6">
           <BatchOption />
-          <p className="text-dark20 text-[14px] normal-text italic mt-[24px]">
-            Set the conditions that must be met before each batch of tokens
-            purchase is executed
-          </p>
+          <div className="grid md:grid-cols-5 gap-3">
+            <div className="col-span-1">
+              <FrequencyOption />
+            </div>
+          </div>
           <BuyCondition
             buyConditionDisplayed={buyConditionDisplayed}
             toggle={() => {
@@ -61,11 +66,6 @@ export const DCAStrategy: FC = () => {
               setBuyConditionDisplayed(!buyConditionDisplayed);
             }}
           />
-          <div className="grid md:grid-cols-5 gap-3">
-            <div className="col-span-1">
-              <FrequencyOption />
-            </div>
-          </div>
         </div>
       </section>
       <DepositAmount />
