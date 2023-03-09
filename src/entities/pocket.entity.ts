@@ -143,7 +143,7 @@ export class PocketEntity {
 
   stopConditions: {
     endTime?: Date;
-    targetTokenReach?: number;
+    receivedTargetTokenReach?: number;
     baseTokenReach?: number;
     batchAmountReach?: number;
     spentBaseTokenReach?: number;

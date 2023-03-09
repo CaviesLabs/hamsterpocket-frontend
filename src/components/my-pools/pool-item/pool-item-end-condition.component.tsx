@@ -21,38 +21,40 @@ export const PoolItemEndConditionComponent = (
   const { whiteLists, convertDecimalAmount } = useWhiteList();
 
   const conditions = [];
-  if (props?.data?.stopConditions?.endTime) {
-    conditions.push(
-      dayjs(props?.data?.stopConditions?.endTime).format(DATE_TIME_FORMAT)
-    );
+
+  const stopConditions = props?.data?.stopConditions;
+
+  if (stopConditions?.endTime) {
+    conditions.push(dayjs(stopConditions?.endTime).format(DATE_TIME_FORMAT));
   }
-  if (props?.data?.stopConditions?.baseTokenReach) {
+  if (stopConditions?.baseTokenReach) {
     conditions.push(
       `${convertDecimalAmount(
         baseTokenAddress,
-        props?.data?.stopConditions?.baseTokenReach
+        stopConditions?.baseTokenReach
       )} ${whiteLists[baseTokenAddress]?.symbol}`
     );
   }
-  if (props?.data?.stopConditions?.targetTokenReach) {
+  if (stopConditions?.receivedTargetTokenReach) {
     conditions.push(
-      `${props?.data?.stopConditions?.targetTokenReach} ${whiteLists[targetTokenAddress]?.symbol}`
+      `${convertDecimalAmount(
+        targetTokenAddress,
+        stopConditions?.receivedTargetTokenReach
+      )} ${whiteLists[targetTokenAddress]?.symbol}`
     );
   }
-  if (props?.data?.stopConditions?.spentBaseTokenReach) {
+  if (stopConditions?.spentBaseTokenReach) {
     conditions.push(
       `${convertDecimalAmount(
         baseTokenAddress,
-        props?.data?.stopConditions?.spentBaseTokenReach
+        stopConditions?.spentBaseTokenReach
       )} ${whiteLists[baseTokenAddress]?.symbol}`
     );
   }
-  if (props?.data?.stopConditions?.batchAmountReach) {
+  if (stopConditions?.batchAmountReach) {
     conditions.push(
-      `${props?.data?.stopConditions?.batchAmountReach} ${
-        props?.data?.stopConditions?.batchAmountReach === 1
-          ? "BATCH"
-          : "BATCHES"
+      `${stopConditions?.batchAmountReach} ${
+        stopConditions?.batchAmountReach === 1 ? "BATCH" : "BATCHES"
       }`
     );
   }
