@@ -4,7 +4,11 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { WSOL_ADDRESS } from "@/src/utils";
 import State from "@/src/redux/entities/state";
 
-export const usePocketBalance = (): { totalUSD: number; totalSOL: number } => {
+export const usePocketBalance = (): {
+  totalUSD: number;
+  totalSOL: number;
+  getTokenBlances(): { token: string; totalValue: number; percent: number }[];
+} => {
   /** @dev Inject value from saga. */
   const { portfolioStatistic: statisticData, portfolios } = useSelector(
     (state: State) => state
@@ -16,6 +20,7 @@ export const usePocketBalance = (): { totalUSD: number; totalSOL: number } => {
   /** @dev Innject whitelist to get info. */
   const { whiteLists } = useWhiteList();
 
+  /** @dev Handle total balance in USD value. */
   const handleBalance = useCallback(() => {
     setTotalUSD(() => {
       const arr = portfolios.map((token) => {
@@ -26,6 +31,27 @@ export const usePocketBalance = (): { totalUSD: number; totalSOL: number } => {
       return arr.length ? arr.reduce((prev, cur) => cur + prev) : 0;
     });
   }, [statisticData, portfolios, whiteLists]);
+
+  /** @dev The function render dicnationy of tokens in all pockets and these blance. */
+  const getTokenBlances = useCallback(() => {
+    return portfolios.map((token) => {
+      /** @dev Attract token info. */
+      const tokenInfo = whiteLists[token.tokenAddress];
+
+      /** @dev Get decimal amount. */
+      const humanValue =
+        token.total / Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
+
+      /** @dev Get price based on amount. */
+      const usdPrice = humanValue * tokenInfo?.estimatedValue || 0;
+
+      return {
+        token: tokenInfo?.symbol,
+        totalValue: usdPrice,
+        percent: usdPrice / totalUSD,
+      };
+    });
+  }, [statisticData, portfolios, whiteLists, totalUSD]);
 
   useEffect(() => handleBalance(), [statisticData, portfolios, whiteLists]);
   useEffect(() => {
@@ -38,5 +64,6 @@ export const usePocketBalance = (): { totalUSD: number; totalSOL: number } => {
   return {
     totalUSD,
     totalSOL,
+    getTokenBlances,
   };
 };

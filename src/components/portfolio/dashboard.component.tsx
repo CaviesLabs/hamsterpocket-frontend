@@ -6,7 +6,6 @@ import { Tooltip as AntdTooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
 import { useEffect, useMemo } from "react";
-import { stringToColour } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { getPortfolioStatistic } from "@/src/redux/actions/portfolio/portfolio.action";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
@@ -28,7 +27,7 @@ export default function DashboardComponent() {
   const wallet = useConnectedWallet()?.publicKey.toString();
 
   /** @dev Handle to get total estimate sol in total pockets. */
-  const { totalSOL, totalUSD } = usePocketBalance();
+  const { totalSOL, totalUSD, getTokenBlances } = usePocketBalance();
 
   useEffect(() => {
     if (!wallet) return;
@@ -42,21 +41,15 @@ export default function DashboardComponent() {
   const statisticData = useSelector((state: State) => state.portfolioStatistic);
 
   const chartData = useMemo(() => {
-    if (!statisticData)
-      return {
-        labels: [],
-        datasets: [],
-      };
-    const tokens = statisticData.topTokens;
-    const labels = tokens.map((_) => _.symbol);
-
+    const mapData = getTokenBlances();
+    const labels = mapData.map((item) => item.token);
     return {
       labels,
       datasets: [
         {
-          data: tokens.map((_) => _.percent * 100),
-          backgroundColor: labels.map((_) => stringToColour(_)),
-          hoverBackgroundColor: labels.map((_) => stringToColour(_)),
+          data: mapData.map((item) => (item.percent * 100).toFixed(2)),
+          backgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
+          hoverBackgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
           borderWidth: 0,
         },
       ],
@@ -100,7 +93,7 @@ export default function DashboardComponent() {
                   <RiQuestionnaireFill />
                 </AntdTooltip>
               </div>
-              <div>${statisticData?.totalPoolsBalanceValue}</div>
+              <div>${totalUSD.toFixed(2)}</div>
             </div>
           </div>
           <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">

@@ -48,7 +48,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           <span className="text-green ml-[5px]">{currentReceivedTarget}</span>/
           {convertDecimalAmount(
             targetToken?.address,
-            data.stopConditions.targetTokenReach
+            data.stopConditions.receivedTargetTokenReach
           )}{" "}
           {targetToken?.symbol}
         </p>
