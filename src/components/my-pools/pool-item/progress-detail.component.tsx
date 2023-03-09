@@ -1,23 +1,42 @@
 import { MainProgressBy, PocketEntity } from "@/src/entities/pocket.entity";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 type PoolItemEndConditionProps = {
+  baseToken: WhitelistEntity;
   targetToken: WhitelistEntity;
   data: PocketEntity;
 };
 
 export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
-  const { data, targetToken } = props;
-  if (data.mainProgressBy === MainProgressBy.BASE_TOKEN) {
+  const { data, baseToken, targetToken } = props;
+  const { convertDecimalAmount } = useWhiteList();
+
+  const currentReceivedTarget = convertDecimalAmount(
+    targetToken?.address,
+    data.currentReceivedTargetToken
+  ).toFixed(2);
+
+  if (data.mainProgressBy === MainProgressBy.SPENT_BASE_TOKEN) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
-          <span className="text-green ml-[5px]">{data.depositedAmount}</span>/
-          {data.stopConditions?.baseTokenReach} SOL
+          <span className="text-green ml-[5px]">
+            {convertDecimalAmount(data.baseTokenAddress, data.depositedAmount)}
+          </span>
+          /
+          {convertDecimalAmount(
+            data.baseTokenAddress,
+            data.stopConditions?.spentBaseTokenReach
+          )}{" "}
+          {baseToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.currentTargetToken} {targetToken?.symbol}
+          ~ {currentReceivedTarget} {targetToken?.symbol}
         </p>
       </>
     );
@@ -26,11 +45,15 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
       <>
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
-          <span className="text-green ml-[5px]">{data.currentTargetToken}</span>
-          /{data.stopConditions.targetTokenReach} {targetToken?.symbol}
+          <span className="text-green ml-[5px]">{currentReceivedTarget}</span>/
+          {convertDecimalAmount(
+            targetToken?.address,
+            data.stopConditions.targetTokenReach
+          )}{" "}
+          {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.depositedAmount} SOL
+          ~ {data.depositedAmount} {baseToken?.symbol}
         </p>
       </>
     );
@@ -38,11 +61,11 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
-          {/* {new DateTime(data.startTime).toDuration()} */}
+          {dayjs(data.startTime).fromNow()}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.currentTargetToken} {targetToken?.symbol} (
-          {data.currentBaseToken} SOL)
+          ~ {currentReceivedTarget} {targetToken?.symbol} (
+          {data.currentBaseToken} {baseToken?.symbol})
         </p>
       </>
     );
@@ -54,8 +77,8 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           /{data?.stopConditions?.batchAmountReach} BATCH
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data?.currentTargetToken} {targetToken?.symbol} (
-          {data?.currentBaseToken} SOL)
+          ~ {currentReceivedTarget} {targetToken?.symbol} (
+          {data?.currentBaseToken} {baseToken?.symbol})
         </p>
       </>
     );

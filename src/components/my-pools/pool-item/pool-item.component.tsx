@@ -135,27 +135,35 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-[24px]">
-        <p className="text-dark40 text-[16px] font-bold">Progress</p>
-        <ProgressBar
-          completed={data.progressPercent}
-          bgColor="#735CF7"
-          baseBgColor="#94A3B8"
-          customLabel={`${data.progressPercent * 100}%`}
-          labelAlignment="center"
-          labelClassName="progress-label app-font"
-          className="mt-[10px]"
-          height="10px"
-        />
-        <div className="flow-root mt-[10px]">
-          <p className="float-left text-green text-[14px] regular-text">
-            {data.progressPercent.toFixed(2)}%
-          </p>
-          <div className="float-right">
-            <ProgressDetailComponent targetToken={targetToken} data={data} />
+      {data.progressPercent >= 0 && (
+        <div className="mt-[24px]">
+          <p className="text-dark40 text-[16px] font-bold">Progress</p>
+          <ProgressBar
+            completed={
+              data.progressPercent > 1 ? 100 : data.progressPercent * 100
+            }
+            bgColor="#735CF7"
+            baseBgColor="#94A3B8"
+            customLabel={`${data.progressPercent * 100}%`}
+            labelAlignment="center"
+            labelClassName="progress-label app-font"
+            className="mt-[10px]"
+            height="10px"
+          />
+          <div className="flow-root mt-[10px]">
+            <p className="float-left text-green text-[14px] regular-text">
+              {data.progressPercent > 1 ? 100 : data.progressPercent * 100}%
+            </p>
+            <div className="float-right">
+              <ProgressDetailComponent
+                baseToken={baseToken}
+                targetToken={targetToken}
+                data={data}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <div className="mt-[24px] flex justify-between flex-row">
         <div>
           <p className="text-dark40 text-[16px] font-bold">
