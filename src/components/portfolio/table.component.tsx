@@ -30,7 +30,9 @@ export default function TableComponent() {
                 </div>
                 <div className="ml-4">
                   <div className="truncate">{h.tokenSymbol}</div>
-                  <div className="text-dark40">{h.tokenName}</div>
+                  <div className="text-dark40">
+                    {h.tokenName === "Wrapped SOL" ? "SOL" : h.tokenName}
+                  </div>
                 </div>
               </td>
               <td>
