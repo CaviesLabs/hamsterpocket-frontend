@@ -135,35 +135,66 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
         </div>
       </div>
-      {data.progressPercent >= 0 && (
-        <div className="mt-[24px]">
-          <p className="text-dark40 text-[16px] font-bold">Progress</p>
-          <ProgressBar
-            completed={
-              data.progressPercent > 1 ? 100 : data.progressPercent * 100
-            }
-            bgColor="#735CF7"
-            baseBgColor="#94A3B8"
-            customLabel={`${data.progressPercent * 100}%`}
-            labelAlignment="center"
-            labelClassName="progress-label app-font"
-            className="mt-[10px]"
-            height="10px"
-          />
-          <div className="flow-root mt-[10px]">
-            <p className="float-left text-green text-[14px] regular-text">
-              {data.progressPercent > 1 ? 100 : data.progressPercent * 100}%
-            </p>
-            <div className="float-right">
-              <ProgressDetailComponent
-                baseToken={baseToken}
-                targetToken={targetToken}
-                data={data}
-              />
+      <div className="mt-[24px]">
+        <p className="text-dark40 text-[16px] font-bold">Progress</p>
+        {Object.keys(data.stopConditions).length > 0 &&
+        !data.stopConditions.endTime ? (
+          <>
+            <ProgressBar
+              completed={
+                data.progressPercent > 1 ? 100 : data.progressPercent * 100
+              }
+              bgColor="#735CF7"
+              baseBgColor="#94A3B8"
+              customLabel={`${data.progressPercent * 100}%`}
+              labelAlignment="center"
+              labelClassName="progress-label app-font"
+              className="mt-[10px]"
+              height="10px"
+            />
+            <div className="flow-root mt-[10px]">
+              <p className="float-left text-green text-[14px] regular-text">
+                {data.progressPercent > 1 ? 100 : data.progressPercent * 100}%
+              </p>
+              <div className="float-right">
+                <ProgressDetailComponent
+                  baseToken={baseToken}
+                  targetToken={targetToken}
+                  data={data}
+                />
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        ) : (
+          <>
+            <div className="flex items-center mt-[5px]">
+              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+                Batch bought:
+              </p>
+              <p className="text-white text-[16px] normal-text">
+                {data.currentBatchAmount || 0}{" "}
+                {data.currentBatchAmount > 1 ? "BATCHES" : "BATCH"}
+              </p>
+            </div>
+            <div className="flex items-center mt-[5px]">
+              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+                Token bought:
+              </p>
+              <p className="text-white text-[16px] normal-text">
+                {data.currentReceivedTargetToken || 0} {targetToken.symbol}
+              </p>
+            </div>
+            <div className="flex items-center mt-[5px]">
+              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+                Spent:
+              </p>
+              <p className="text-white text-[16px] normal-text">
+                {data.currentBaseToken || 0} {baseToken.symbol}
+              </p>
+            </div>
+          </>
+        )}
+      </div>
       <div className="mt-[24px] flex justify-between flex-row">
         <div>
           <p className="text-dark40 text-[16px] font-bold">
