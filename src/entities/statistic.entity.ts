@@ -2,15 +2,15 @@ export interface StatisticEntity {
   /**
    * User amount
    */
-  users: string;
+  users: number;
 
   /**
    * Created pocket amount
    */
-  pockets: string;
+  pockets: number;
 
   /**
    * Total traded volume
    */
-  totalVolume: string;
+  totalVolume: number;
 }

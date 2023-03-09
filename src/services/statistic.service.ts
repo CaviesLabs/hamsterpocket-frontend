@@ -9,7 +9,7 @@ export class StatisticService {
        * @dev Call to HamsterPocket server to get statistic info.
        */
       const response = await networkProvider.request<StatisticEntity>(
-        "/statistic",
+        "/statistics/latest",
         {
           data: {},
         }
