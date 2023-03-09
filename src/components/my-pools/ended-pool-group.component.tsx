@@ -8,10 +8,6 @@ import { useDispatch } from "react-redux";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
-import { useSelector } from "react-redux";
-import { PoolItem } from "@/src/components/my-pools/pool-item";
-import { PocketEntity } from "@/src/entities/pocket.entity";
-import State from "@/src/redux/entities/state";
 import { SyncOutlined } from "@ant-design/icons";
 
 export const EndedPoolGroupComponent: FC = () => {
@@ -20,8 +16,6 @@ export const EndedPoolGroupComponent: FC = () => {
    */
   const router = useRouter();
   const dispatch = useDispatch();
-
-  const closedPockets = useSelector((state: State) => state.closedPockets);
 
   const wallet = useConnectedWallet()?.publicKey.toString();
   const [search, setSearch] = useState("");
@@ -104,11 +98,6 @@ export const EndedPoolGroupComponent: FC = () => {
           />
         </div>
       </div>
-      <section>
-        {closedPockets.map((_: PocketEntity) => (
-          <PoolItem data={_} key={_.id} handleFetch={() => handleFetch()} />
-        ))}
-      </section>
     </section>
   );
 };
