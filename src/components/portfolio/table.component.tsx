@@ -14,8 +14,8 @@ export default function TableComponent() {
         <thead>
           <tr>
             <th className="pb-4">Token</th>
-            <th className="pb-4">Address</th>
-            <th className="pb-4">Total</th>
+            <th className="pb-4 text-center">Address</th>
+            <th className="pb-4 text-right">Total</th>
           </tr>
         </thead>
         <tbody className="normal-text">
@@ -34,7 +34,7 @@ export default function TableComponent() {
                 </div>
               </td>
               <td>
-                <a href="#" className="flex items-center">
+                <a href="#" className="flex justify-center items-center">
                   <div className="border border-gray-700 rounded text-center py-1 w-[160px]">
                     {utilsProvider.makeShort(h.tokenAddress)}
                   </div>
@@ -43,7 +43,7 @@ export default function TableComponent() {
                   </div>
                 </a>
               </td>
-              <td>
+              <td className="text-right">
                 <div>
                   {convertDecimalAmount(h.tokenAddress, h.total).toFixed(4)}
                 </div>
