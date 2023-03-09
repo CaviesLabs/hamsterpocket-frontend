@@ -88,9 +88,13 @@ export const setClosedPocket = (data: PocketEntity) => ({
  * @param {PocketEntity[]} data
  * @returns reducer.
  */
-export const getClosedPockets = (data: GetPocketsDto) => ({
+export const getClosedPockets = (
+  data: GetPocketsDto,
+  callback?: CallBackSaga<any>
+) => ({
   type: GET_CLOSED_POCKETS,
   payload: data,
+  callback,
 });
 
 /**

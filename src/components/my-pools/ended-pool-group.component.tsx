@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import State from "@/src/redux/entities/state";
+import { SyncOutlined } from "@ant-design/icons";
 
 export const EndedPoolGroupComponent: FC = () => {
   /**
@@ -29,18 +30,25 @@ export const EndedPoolGroupComponent: FC = () => {
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
+  /** @dev Handle fetching data */
+  const [fetching, setFetching] = useState(false);
+
   const handleFetch = useCallback(() => {
     if (!wallet) return;
+    setFetching(true);
     dispatch(
-      getClosedPockets({
-        ownerAddress: wallet,
-        search,
-        sortBy: sorter[0],
-        statuses:
-          selectedType === PocketTypes[2].value
-            ? [PocketStatus.CLOSED, PocketStatus.ENDED]
-            : [selectedType as PocketStatus.ENDED],
-      })
+      getClosedPockets(
+        {
+          ownerAddress: wallet,
+          search,
+          sortBy: sorter[0],
+          statuses:
+            selectedType === PocketTypes[2].value
+              ? [PocketStatus.CLOSED, PocketStatus.ENDED]
+              : [selectedType as PocketStatus.ENDED],
+        },
+        () => setFetching(false)
+      )
     );
   }, [wallet, debouncedSearch, selectedType, sorter]);
 
@@ -52,9 +60,20 @@ export const EndedPoolGroupComponent: FC = () => {
   return (
     <section className="mt-[60px]">
       <div className="flow-root">
-        <p className="md:text-[32px] text-[24px] text-white float-left">
-          Closed & Ended Pockets
-        </p>
+        <div className="flex items-center">
+          <p className="md:text-[32px] text-[24px] text-white float-left">
+            Closed & Ended Pockets
+          </p>
+          <button
+            className="relative ml-2 border border-1 rounded px-4 py-2 flex items-center"
+            onClick={() => handleFetch()}
+          >
+            <SyncOutlined
+              spin={fetching}
+              style={{ fontSize: 18, color: "white" }}
+            />
+          </button>
+        </div>
         <p
           className="float-right text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
           onClick={() => router.push("/my-pockets")}

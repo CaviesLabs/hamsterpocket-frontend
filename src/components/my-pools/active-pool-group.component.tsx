@@ -78,7 +78,10 @@ export const ActivePoolGroup: FC = () => {
             <p className="md:text-[32px] text-[24px] text-white">
               Current Pockets
             </p>
-            <button className="relative ml-2" onClick={handleSync}>
+            <button
+              className="relative ml-2 border border-1 rounded px-4 py-2 flex items-center"
+              onClick={handleSync}
+            >
               <SyncOutlined
                 spin={fetching}
                 style={{ fontSize: 18, color: "white" }}
