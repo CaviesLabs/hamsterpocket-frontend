@@ -49,6 +49,10 @@ export class PortfolioService {
       `/portfolio/${walletAddress}/portfolio/sync`,
       {
         method: "POST",
+        data: {},
+        headers: {
+          "content-type": "text/plain;charset=UTF-8",
+        },
       }
     );
   }

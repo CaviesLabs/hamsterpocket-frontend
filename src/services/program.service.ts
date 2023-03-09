@@ -191,6 +191,10 @@ export class ProgramService {
   public async sync(poolId: string): Promise<any> {
     return networkProvider.request(`/pool/${poolId}/sync`, {
       method: "POST",
+      data: {},
+      headers: {
+        "content-type": "text/plain;charset=UTF-8",
+      },
     });
   }
 

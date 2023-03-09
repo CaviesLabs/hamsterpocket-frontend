@@ -23,6 +23,10 @@ export class PoolService {
   public async syncWalletPockets(walletAddress: string): Promise<any> {
     return networkProvider.request<any>(`/pool/user/${walletAddress}/sync`, {
       method: "POST",
+      data: {},
+      headers: {
+        "content-type": "text/plain;charset=UTF-8",
+      },
     });
   }
 }

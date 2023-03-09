@@ -106,10 +106,10 @@ export const processStopConditions = (
      * @dev Map baseTokenAmountReach to quoteTokenAmountReach and delete baseTokenAmountReach
      * if side is buy.
      */
-    if (processedConditions.baseTokenAmountReach) {
-      processedConditions.quoteTokenAmountReach =
-        processedConditions.baseTokenAmountReach;
-      delete processedConditions.baseTokenAmountReach;
+    if (processedConditions.quoteTokenAmountReach) {
+      processedConditions.baseTokenAmountReach =
+        processedConditions.quoteTokenAmountReach;
+      delete processedConditions.quoteTokenAmountReach;
     }
 
     /**

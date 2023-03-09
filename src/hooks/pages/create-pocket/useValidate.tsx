@@ -11,6 +11,7 @@ export interface ErrorValidateContext {
   stopConditions: string;
   depositedAmount: string;
   batchVolume: string;
+  startAt: string;
 }
 
 /**

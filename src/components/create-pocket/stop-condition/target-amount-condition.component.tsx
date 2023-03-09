@@ -30,7 +30,7 @@ export const TargetAmountCondition: FC<{
    */
   useEffect(() => {
     handleModifyStopConditions(
-      "baseTokenAmountReach",
+      "quoteTokenAmountReach",
       new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
       primary
     );

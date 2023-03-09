@@ -11,8 +11,13 @@ export const DCAStrategy: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { setStartAt, setBuyCondition, targetTokenAddress } =
-    useCreatePocketPage();
+  const {
+    setStartAt,
+    setBuyCondition,
+    setErrorMsgs,
+    errorMsgs,
+    targetTokenAddress,
+  } = useCreatePocketPage();
 
   /**
    * @dev Buy condition display.
@@ -40,7 +45,13 @@ export const DCAStrategy: FC = () => {
               disabledDate={(current) =>
                 current && current < dayjs().startOf("day")
               }
-              onChange={(v) => setStartAt(v)}
+              onChange={(v) => {
+                setErrorMsgs({
+                  ...errorMsgs,
+                  startAt: "Date start must be larger than now.",
+                });
+                setStartAt(v);
+              }}
             />
           </div>
         </div>
