@@ -4,6 +4,7 @@ import { DatetimePicker } from "@/src/components/datetime-picker";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 // import { motion, AnimatePresence } from "framer-motion";
 import { BN } from "@project-serum/anchor";
+import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 
 export const EndTimeCondition: FC<{
   displyed: boolean;
@@ -37,7 +38,7 @@ export const EndTimeCondition: FC<{
 
   /** @dev Default first is primary */
   useEffect(() => {
-    if (stopConditions.length <= 1) {
+    if (stopConditions.length <= 0) {
       setPrimary(true);
     }
   }, [stopConditions]);
@@ -70,15 +71,23 @@ export const EndTimeCondition: FC<{
           <DatetimePicker onChange={(v) => setCurrentValue(v)} />
         </div>
         <div className="col-span-2">
-          <button
-            onClick={() => setPrimary(!primary)}
-            className="relative top-[3px]"
-          >
-            <CircleCheckIcon
-              size="27"
-              color={primary ? "#3CBF7C" : "#7886A0"}
-            />
-          </button>
+          <TooltipPrimaryComponent>
+            <button
+              onClick={() => setPrimary(!primary)}
+              className="relative top-[3px]"
+              disabled={
+                !primary &&
+                stopConditions.filter(
+                  (item: any) => item?.[Object.keys(item)?.[0] as any].primary
+                ).length > 0
+              }
+            >
+              <CircleCheckIcon
+                size="27"
+                color={primary ? "#3CBF7C" : "#7886A0"}
+              />
+            </button>
+          </TooltipPrimaryComponent>
         </div>
       </div>
     </div>

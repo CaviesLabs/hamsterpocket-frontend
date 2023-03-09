@@ -4,6 +4,7 @@ import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 
 export const BaseAmountSpendCondition: FC<{
   displyed: boolean;
@@ -40,7 +41,7 @@ export const BaseAmountSpendCondition: FC<{
 
   /** @dev Default first is primary */
   useEffect(() => {
-    if (stopConditions.length <= 1) {
+    if (stopConditions.length <= 0) {
       setPrimary(true);
     }
   }, [stopConditions]);
@@ -72,15 +73,23 @@ export const BaseAmountSpendCondition: FC<{
           />
         </div>
         <div className="col-span-2">
-          <button
-            onClick={() => setPrimary(!primary)}
-            className="relative top-[3px]"
-          >
-            <CircleCheckIcon
-              size="27"
-              color={primary ? "#3CBF7C" : "#7886A0"}
-            />
-          </button>
+          <TooltipPrimaryComponent>
+            <button
+              onClick={() => setPrimary(!primary)}
+              className="relative top-[3px]"
+              disabled={
+                !primary &&
+                stopConditions.filter(
+                  (item: any) => item?.[Object.keys(item)?.[0] as any].primary
+                ).length > 0
+              }
+            >
+              <CircleCheckIcon
+                size="27"
+                color={primary ? "#3CBF7C" : "#7886A0"}
+              />
+            </button>
+          </TooltipPrimaryComponent>
         </div>
       </div>
     </div>
