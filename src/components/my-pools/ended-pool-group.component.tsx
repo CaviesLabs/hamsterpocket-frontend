@@ -11,7 +11,7 @@ import {
   syncWalletPockets,
 } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
-import { SyncOutlined } from "@ant-design/icons";
+import { RefreshButton } from "@/src/components/refresh-button";
 
 export const EndedPoolGroupComponent: FC = () => {
   /**
@@ -76,13 +76,7 @@ export const EndedPoolGroupComponent: FC = () => {
           <p className="md:text-[32px] text-[24px] text-white float-left">
             Closed & Ended Pockets
           </p>
-          <button
-            className="relative ml-4 bg-dark90 text-dark40 hover:text-white rounded-full px-4 py-2 flex items-center"
-            onClick={handleSync}
-          >
-            <SyncOutlined spin={fetching} style={{ fontSize: 18 }} />
-            <p className="font-normal ml-4">Refresh</p>
-          </button>
+          <RefreshButton handleClick={() => handleSync()} loading={fetching} />
         </div>
         <p
           className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"

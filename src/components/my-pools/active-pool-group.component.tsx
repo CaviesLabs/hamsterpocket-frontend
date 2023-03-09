@@ -16,7 +16,7 @@ import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import State from "@/src/redux/entities/state";
 import classnames from "classnames";
-import { SyncOutlined } from "@ant-design/icons";
+import { RefreshButton } from "@/src/components/refresh-button";
 
 export const ActivePoolGroup: FC = () => {
   /**
@@ -81,13 +81,10 @@ export const ActivePoolGroup: FC = () => {
             <p className="md:text-[32px] text-[24px] text-white">
               Current Pockets
             </p>
-            <button
-              className="relative ml-4 bg-dark90 text-dark40 hover:text-white rounded-full px-4 py-2 flex items-center"
-              onClick={handleSync}
-            >
-              <SyncOutlined spin={fetching} style={{ fontSize: 18 }} />
-              <p className="font-normal ml-4">Refresh</p>
-            </button>
+            <RefreshButton
+              handleClick={() => handleSync()}
+              loading={fetching}
+            />
           </div>
           <p
             className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
