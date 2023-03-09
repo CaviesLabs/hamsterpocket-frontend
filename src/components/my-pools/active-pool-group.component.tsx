@@ -45,7 +45,7 @@ export const ActivePoolGroup: FC = () => {
         sortBy: sorter[0],
         statuses: isPauseOnly
           ? [PocketStatus.PAUSED]
-          : [PocketStatus.PAUSED, PocketStatus.ACTIVE, PocketStatus.CREATED],
+          : [PocketStatus.PAUSED, PocketStatus.ACTIVE],
       })
     );
   }, [wallet, debouncedSearch, isPauseOnly, sorter]);
