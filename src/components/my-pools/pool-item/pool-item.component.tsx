@@ -99,8 +99,15 @@ export const PoolItem = (props: PoolItemProps) => {
         <p className="text-[24px] text-white normal-text float-left">
           {data.name}
         </p>
-        <p className="float-right text-dark50 text-[16px] regular-text relative top-[6px]">
+        <p className="float-right text-dark50 text-[16px] regular-text relative top-[6px] flex items-center">
           #{data.id}
+          <a
+            href={`https://solscan.io/account/${data.address}`}
+            target="_blank"
+            className="ml-[10px] relative top-[-3px]"
+          >
+            <ShareIcon />
+          </a>
         </p>
       </div>
       <div className="flex justify-between mt-[24px]">
