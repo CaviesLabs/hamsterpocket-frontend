@@ -163,6 +163,13 @@ export class ProgramService {
   }
 
   /**
+   * @dev Get pocket account.
+   */
+  public async getPocketAccount(pocketId: string): Promise<any> {
+    return this.pocketProgramProvider.getPocketState(pocketId);
+  }
+
+  /**
    * @dev Sync pool by id.
    */
   public async requestAndSync(

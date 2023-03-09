@@ -740,10 +740,8 @@ export class PocketProgramProvider {
   public async getPocketState(
     id: string
   ): Promise<[PublicKey, PocketEntity, any?]> {
-    console.log("instruction provider", this.instructionProvider);
     const pocketAccount = await this.instructionProvider.findPocketAccount(id);
     const state = await this.program.account.pocket.fetch(pocketAccount);
-    (window as any).test = state;
     const parseState = JSON.parse(JSON.stringify(state)) as PocketEntity;
     return [pocketAccount, parseState, state];
   }

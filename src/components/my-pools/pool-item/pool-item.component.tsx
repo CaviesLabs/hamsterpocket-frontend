@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import ProgressBar from "@ramonak/react-progress-bar";
@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { useWallet } from "@/src/hooks/useWallet";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import {
   DepositModal,
@@ -27,6 +28,7 @@ type PoolItemProps = {
 export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists, convertDecimalAmount } = useWhiteList();
+  const { programService } = useWallet();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -55,11 +57,26 @@ export const PoolItem = (props: PoolItemProps) => {
     [data]
   );
 
+  /** @dev Condition whether pocket account is closed completedly  before. */
+  const [isClaimed, setClaimed] = useState(false);
+
   /** @dev Condition filter pockets which is paused only. */
   const isActive = useMemo(() => data.status === PocketStatus.ACTIVE, [data]);
   const isPaused = useMemo(() => data.status === PocketStatus.PAUSED, [data]);
   const isClosed = useMemo(() => data.status === PocketStatus.CLOSED, [data]);
   const isEnded = useMemo(() => data.status === PocketStatus.ENDED, [data]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        programService && (await programService.getPocketAccount(data._id));
+        setClaimed(false);
+      } catch (err) {
+        console.log(err);
+        setClaimed(true);
+      }
+    })();
+  }, [data, programService]);
 
   /** @dev */
   const hummanStatus = useMemo(() => {
@@ -181,7 +198,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 Token bought:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.currentReceivedTargetToken || 0} {targetToken.symbol}
+                {data.currentReceivedTargetToken || 0} {targetToken?.symbol}
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
@@ -189,7 +206,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 Spent:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {data.currentBaseToken || 0} {baseToken.symbol}
+                {data.currentBaseToken || 0} {baseToken?.symbol}
               </p>
             </div>
           </>
@@ -306,7 +323,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 onClick={() => setClosedDisplayed(true)}
               />
             )}
-            {isEnded && (
+            {isEnded && !isClaimed && (
               <Button
                 className="!px-[50px] !border-solid !border-purple !border-[2px]"
                 theme={{
