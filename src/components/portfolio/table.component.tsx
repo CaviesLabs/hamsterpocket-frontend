@@ -36,7 +36,11 @@ export default function TableComponent() {
                 </div>
               </td>
               <td>
-                <a href="#" className="flex justify-center items-center">
+                <a
+                  href={`https://solscan.io/account/${h.tokenAddress}`}
+                  target="_blank"
+                  className="flex justify-center items-center"
+                >
                   <div className="border border-gray-700 rounded text-center py-1 w-[160px]">
                     {utilsProvider.makeShort(h.tokenAddress)}
                   </div>

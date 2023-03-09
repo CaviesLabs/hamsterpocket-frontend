@@ -54,7 +54,7 @@ export default function DashboardComponent() {
         },
       ],
     };
-  }, [statisticData]);
+  }, [statisticData, totalUSD, totalSOL]);
 
   return (
     <div className="mt-12 flex justify-between items-center">
