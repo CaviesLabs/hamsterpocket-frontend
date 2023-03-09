@@ -50,7 +50,7 @@ export default function PortfolioController() {
       </div>
       <div className="flex">
         <FilterSelect
-          className="rounded-3xl text-sm w-[185px] h-[44px] px-[80px] md:mt-0 mt-[20px]"
+          className="rounded-3xl text-sm w-[185px] h-[44px] px-8 md:mt-0 mt-[20px]"
           placeholder={
             <div className="pl-5 w-full regular-text">Highest value</div>
           }

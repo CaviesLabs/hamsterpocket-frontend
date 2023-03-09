@@ -47,7 +47,7 @@ export default function TableComponent() {
               </td>
               <td className="text-right">
                 <div>
-                  {convertDecimalAmount(h.tokenAddress, h.total).toFixed(4)}
+                  {convertDecimalAmount(h.tokenAddress, h.total).toFixed(2)}
                 </div>
                 <div className="text-dark40">
                   ~ ${convertDecimalAmount(h.tokenAddress, h.value).toFixed(2)}
