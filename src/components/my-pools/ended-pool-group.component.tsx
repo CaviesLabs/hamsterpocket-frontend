@@ -59,23 +59,21 @@ export const EndedPoolGroupComponent: FC = () => {
 
   return (
     <section className="mt-[60px]">
-      <div className="flow-root">
+      <div className="flex justify-between items-center">
         <div className="flex items-center">
           <p className="md:text-[32px] text-[24px] text-white float-left">
             Closed & Ended Pockets
           </p>
           <button
-            className="relative ml-2 border border-1 rounded px-4 py-2 flex items-center"
-            onClick={() => handleFetch()}
+            className="relative ml-4 bg-dark90 text-dark40 hover:text-white rounded-full px-4 py-2 flex items-center"
+            onClick={handleFetch}
           >
-            <SyncOutlined
-              spin={fetching}
-              style={{ fontSize: 18, color: "white" }}
-            />
+            <SyncOutlined spin={fetching} style={{ fontSize: 18 }} />
+            <p className="font-normal ml-4">Refresh</p>
           </button>
         </div>
         <p
-          className="float-right text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative top-[6px]"
+          className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
           onClick={() => router.push("/my-pockets")}
         >
           View Active Pockets

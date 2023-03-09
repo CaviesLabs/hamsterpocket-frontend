@@ -83,7 +83,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
     <div className="relative">
       <Input
         size="large"
-        className={`rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-white h-[63px] ${props.inputClassName}`}
+        className={`rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder:text-dark60 h-[63px] ${props.inputClassName}`}
         placeholder={
           props.currencyBadgeOnly
             ? addressSelected
