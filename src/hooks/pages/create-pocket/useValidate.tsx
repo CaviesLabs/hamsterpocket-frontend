@@ -37,7 +37,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   const {
     createdEnable,
     pocketName,
-    buyCondition,
+    // buyCondition,
     batchVolume,
     depositedAmount,
   } = useCreatePocketPage();
@@ -85,13 +85,13 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   // }, [stopConditions, createdEnable]);
 
   /** @dev Watch changes in stop condtions. */
-  useEffect(() => {
-    if (!createdEnable) return;
-    modifyErrors(
-      "buyCondition",
-      !buyCondition ? "Buy condition must be required" : ""
-    );
-  }, [buyCondition, createdEnable]);
+  // useEffect(() => {
+  //   if (!createdEnable) return;
+  //   modifyErrors(
+  //     "buyCondition",
+  //     !buyCondition ? "Buy condition must be required" : ""
+  //   );
+  // }, [buyCondition, createdEnable]);
 
   /** @dev Watch changes in stop condtions. */
   useEffect(() => {
