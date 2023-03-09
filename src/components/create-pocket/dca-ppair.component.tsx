@@ -50,7 +50,9 @@ export const DCAPPair: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text">DCA pair</p>
+      <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
+        DCA pair
+      </p>
       <div className="mt-[16px]">
         <p className="text-dark20 text-[14px] normal-text italic">
           Enter the buy and sell token pair for this pool

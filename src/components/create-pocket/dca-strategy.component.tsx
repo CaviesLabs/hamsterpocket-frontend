@@ -20,7 +20,7 @@ export const DCAStrategy: FC = () => {
   return (
     <>
       <section>
-        <p className="mt-[48px] text-[24px] text-white normal-text">
+        <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
           Pool start time
         </p>
         <div className="mt-[16px]">
@@ -35,7 +35,7 @@ export const DCAStrategy: FC = () => {
         </div>
       </section>
       <section>
-        <p className="mt-[48px] text-[24px] text-white normal-text">
+        <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
           DCA strategy
         </p>
         <div className="mt-[16px]">

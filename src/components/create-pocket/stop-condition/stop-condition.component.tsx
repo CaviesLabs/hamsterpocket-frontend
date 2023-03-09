@@ -36,7 +36,7 @@ export const StopCondition: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text">
+      <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
         Pocket end condition
       </p>
       {errorMsgs?.stopConditions && (
