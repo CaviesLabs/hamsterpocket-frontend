@@ -63,6 +63,7 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
         onChange={(v) => handleSelectDate(v)}
         suffixIcon={<CalendarIcon />}
         clearIcon={null}
+        disabledDate={props.disabledDate}
       />
       <div className="ml-[20px] relative col-span-1">
         <DropdownSelect

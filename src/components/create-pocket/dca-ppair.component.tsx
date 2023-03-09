@@ -74,7 +74,7 @@ export const DCAPPair: FC = () => {
               }
             />
             <p className="text-dark10 text-[14px] normal-text">
-              Price: ~${baseTokenPrice.toFixed(2)}
+              Price: ~${baseTokenPrice?.toFixed(2)}
             </p>
           </div>
           <div className="md:col-span-1 flex items-center justify-center">
@@ -99,7 +99,7 @@ export const DCAPPair: FC = () => {
               }
             />
             <p className="text-dark10 text-[14px] normal-text">
-              Price: ~${targetTokenPrice.toFixed(2)}
+              Price: ~${targetTokenPrice?.toFixed(2)}
             </p>
           </div>
         </div>
