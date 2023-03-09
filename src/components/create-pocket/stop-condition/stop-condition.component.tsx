@@ -4,7 +4,7 @@ import { Button } from "@hamsterbox/ui-kit";
 import { EndTimeCondition } from "./end-time-condition.component";
 import { TargetAmountCondition } from "./target-amount-condition.component";
 import { BaseAmountSpendCondition } from "./base-spent-condition.component";
-import { BatchAmountCondition } from "./batch-amount-condition";
+// import { BatchAmountCondition } from "./batch-amount-condition";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
@@ -27,7 +27,7 @@ export const StopCondition: FC = () => {
   /**
    * @dev Displayed end time condition.
    */
-  const [batchAmountDisplayed, setBatchAmountDisplayed] = useState(false);
+  // const [batchAmountDisplayed, setBatchAmountDisplayed] = useState(false);
 
   /**
    * @dev Injected context.
@@ -95,7 +95,7 @@ export const StopCondition: FC = () => {
                   />
                 </div>
               )}
-              {!batchAmountDisplayed && (
+              {/* {!batchAmountDisplayed && (
                 <div className="mr-[12px]">
                   <Button
                     size="small"
@@ -109,7 +109,7 @@ export const StopCondition: FC = () => {
                     onClick={() => setBatchAmountDisplayed(true)}
                   />
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
@@ -132,12 +132,12 @@ export const StopCondition: FC = () => {
               toggle={() => setBaseTokenSpentDisplayed(false)}
             />
           )}
-          {batchAmountDisplayed && (
+          {/* {batchAmountDisplayed && (
             <BatchAmountCondition
               displyed={batchAmountDisplayed}
               toggle={() => setBatchAmountDisplayed(false)}
             />
-          )}
+          )} */}
         </div>
       </div>
     </section>

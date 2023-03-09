@@ -35,11 +35,7 @@ export const ClosePocketModal: FC<{
       console.log(solanaWallet);
 
       /** @dev Execute transaction. */
-      if (props.closed) {
-        await programService.withdrawPocket(solanaWallet, props.pocket);
-      } else {
-        await programService.closePocket(solanaWallet, props.pocket);
-      }
+      await programService.closePocket(solanaWallet, props.pocket);
 
       /** @dev Callback function when close successfully. */
       setSuccessClosed(true);

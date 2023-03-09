@@ -4,7 +4,7 @@ import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
 import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
-import { PocketEntity } from "@/src/entities/pocket.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { PocketIdl, IDL } from "./pocket.idl";
 import { InstructionProvider } from "./instruction.provider";
 import { TransactionProvider } from "./transaction.provider";
@@ -361,7 +361,7 @@ export class PocketProgramProvider {
     pocket: PocketEntity
   ) {
     try {
-      console.log("Pocket ID to close: ", pocket.id);
+      console.log("Pocket ID to close and withdraw: ", pocket.id);
 
       /** @dev Get pocket state. */
       const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
@@ -373,13 +373,15 @@ export class PocketProgramProvider {
        */
       let instructions: TransactionInstruction[] = [];
 
-      /** @dev Close pool. */
-      instructions.push(
-        await this.instructionProvider.closePocket(
-          walletProvider.publicKey,
-          pocketAccount
-        )
-      );
+      /** @dev Close pool first if its status is not CLOSED. */
+      if (!(pocketState as any)?.status?.closed) {
+        instructions.push(
+          await this.instructionProvider.closePocket(
+            walletProvider.publicKey,
+            pocketAccount
+          )
+        );
+      }
 
       const baseTokenMint = new PublicKey(
         (pocketState as any)?.baseTokenMintAddress

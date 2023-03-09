@@ -112,10 +112,10 @@ export const EndedPoolGroupComponent: FC = () => {
             options={PocketTypes}
             handleSelectValue={(v) => setSelectedType(v)}
             value={selectedType}
-            className="!rounded-full !h-[48px] mr-4 max-w-[230px]"
+            className="!rounded-full !h-[48px] mr-4 max-w-[230px] w-[210px]"
           />
           <FilterSelect
-            className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px]"
+            className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px] w-[228px]"
             values={sorter}
             options={sortOptions}
             onChange={(value) => setSorter(value)}

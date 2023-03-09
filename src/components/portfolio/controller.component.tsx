@@ -41,7 +41,7 @@ export default function PortfolioController() {
     <div className="mt-10 flex justify-between">
       <div className="max-w-[440px]">
         <Input
-          containerClassName="app-input w-full"
+          containerClassName="app-input w-full md:w-[450px]"
           inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
           placeholder="Search by Token, Address"
           icon={<SearchIcon />}
@@ -50,7 +50,7 @@ export default function PortfolioController() {
       </div>
       <div className="flex">
         <FilterSelect
-          className="rounded-3xl text-sm w-[185px] h-[44px] px-[80px] md:mt-0 mt-[20px]"
+          className="rounded-3xl text-sm w-[215px] h-[44px] px-[30px] md:mt-0 mt-[20px]"
           placeholder={
             <div className="pl-5 w-full regular-text">Highest value</div>
           }
