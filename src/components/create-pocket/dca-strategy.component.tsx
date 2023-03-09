@@ -48,7 +48,9 @@ export const DCAStrategy: FC = () => {
               onChange={(v) => {
                 setErrorMsgs({
                   ...errorMsgs,
-                  startAt: "Date start must be larger than now.",
+                  startAt:
+                    v.getTime() < Date.now() &&
+                    "Date start must be larger than now.",
                 });
                 setStartAt(v);
               }}

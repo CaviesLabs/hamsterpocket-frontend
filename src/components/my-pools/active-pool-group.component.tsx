@@ -98,7 +98,7 @@ export const ActivePoolGroup: FC = () => {
             <Input
               containerClassName="app-input w-full"
               inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
-              placeholder="Search by Pool name, ID, Token"
+              placeholder="Search by Pocket name, ID, Token"
               icon={<SearchIcon />}
               onValueChange={(v) => setSearch(v)}
             />

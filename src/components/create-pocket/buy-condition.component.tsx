@@ -27,6 +27,7 @@ export const BuyCondition: FC<{
     targetTokenAddress,
     baseTokenAddress,
     batchVolume,
+    setErrorMsgs,
   } = useCreatePocketPage();
   const { whiteLists } = useWhiteList();
 
@@ -145,24 +146,42 @@ export const BuyCondition: FC<{
               inputClassName="bg-dark90 !text-white w-full !h-full"
               placeholder={isTwoValue ? "from value" : "value"}
               onValueChange={(val) => {
-                parseFloat(val) >= 0 &&
-                  setBuyCondition(
-                    isTwoValue
-                      ? {
-                          ...buyCondition,
-                          fromValue: new BN(
-                            (parseFloat(val) || 0) *
-                              Math.pow(10, targetTokenAddress?.[1])
-                          ),
-                        }
-                      : {
-                          ...buyCondition,
-                          value: new BN(
-                            (parseFloat(val) || 0) *
-                              Math.pow(10, targetTokenAddress?.[1])
-                          ),
-                        }
-                  );
+                if (parseFloat(val) < 0) return;
+                if (!isTwoValue) {
+                  return setBuyCondition({
+                    ...buyCondition,
+                    value: new BN(
+                      (parseFloat(val) || 0) *
+                        Math.pow(10, targetTokenAddress?.[1])
+                    ),
+                  });
+                }
+
+                /** @dev Validate from value must be smaller from value. */
+                const isError = () => {
+                  if (!buyCondition.fromValue || !buyCondition.toValue)
+                    return "Must enter from value and to value.";
+                  if (
+                    parseFloat(val) >=
+                    buyCondition.toValue.toNumber() /
+                      Math.pow(10, targetTokenAddress?.[1] || 0)
+                  ) {
+                    return "from value must be smaller than to value.";
+                  }
+                  return "";
+                };
+
+                /** @dev Raise error if having incorrect valid. */
+                setErrorMsgs({ ...errorMsgs, buyCondition: isError() });
+
+                /** @dev Set from value. */
+                setBuyCondition({
+                  ...buyCondition,
+                  fromValue: new BN(
+                    (parseFloat(val) || 0) *
+                      Math.pow(10, targetTokenAddress?.[1])
+                  ),
+                });
               }}
             />
             {isTwoValue && (
@@ -173,6 +192,22 @@ export const BuyCondition: FC<{
                   inputClassName="bg-dark90 !text-white w-full !h-full"
                   placeholder="to value"
                   onValueChange={(val) => {
+                    /** @dev Validate from value must be smaller from value. */
+                    const isError = () => {
+                      if (!buyCondition.fromValue || !buyCondition.toValue)
+                        return "Must enter from value and to value.";
+                      if (
+                        parseFloat(val) <=
+                        buyCondition.fromValue.toNumber() /
+                          Math.pow(10, targetTokenAddress?.[1] || 0)
+                      ) {
+                        return "from value must be smaller than to value.";
+                      }
+                      return "";
+                    };
+
+                    /** @dev Raise error if having incorrect valid. */
+                    setErrorMsgs({ ...errorMsgs, buyCondition: isError() });
                     setBuyCondition({
                       ...buyCondition,
                       toValue: new BN(
