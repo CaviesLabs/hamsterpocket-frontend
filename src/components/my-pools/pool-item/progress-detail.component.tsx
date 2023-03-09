@@ -20,18 +20,17 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
     data.currentReceivedTargetToken
   ).toFixed(2);
 
+  const currentSpentBase = convertDecimalAmount(
+    baseToken?.address,
+    data.currentSpentBaseToken
+  ).toFixed(2);
+
   if (data.mainProgressBy === MainProgressBy.SPENT_BASE_TOKEN) {
     return (
       <>
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
-          <span className="text-green ml-[5px]">
-            {convertDecimalAmount(
-              data.baseTokenAddress,
-              data.currentSpentBaseToken
-            )}
-          </span>
-          /
+          <span className="text-green ml-[5px]">{currentSpentBase}</span>/
           {convertDecimalAmount(
             data.baseTokenAddress,
             data.stopConditions?.spentBaseTokenReach
@@ -56,8 +55,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {convertDecimalAmount(baseToken.address, data.depositedAmount)}{" "}
-          {baseToken?.symbol}
+          ~ {currentSpentBase} {baseToken?.symbol}
         </p>
       </>
     );
@@ -68,8 +66,8 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           {dayjs(data.startTime).fromNow()}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {currentReceivedTarget} {targetToken?.symbol} (
-          {data.currentSpentBaseToken} {baseToken?.symbol})
+          ~ {currentReceivedTarget} {targetToken?.symbol} ({currentSpentBase}{" "}
+          {baseToken?.symbol})
         </p>
       </>
     );
@@ -81,8 +79,8 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           /{data?.stopConditions?.batchAmountReach} BATCH
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {currentReceivedTarget} {targetToken?.symbol} (
-          {data?.currentSpentBaseToken} {baseToken?.symbol})
+          ~ {currentReceivedTarget} {targetToken?.symbol} ({currentSpentBase}{" "}
+          {baseToken?.symbol})
         </p>
       </>
     );
