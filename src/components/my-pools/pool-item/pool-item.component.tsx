@@ -16,6 +16,7 @@ import {
   ClosePocketModal,
   PausePocketModal,
   ResumePocketModal,
+  ClaimFeeModal,
 } from "@/src/components/home";
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
 
@@ -38,6 +39,9 @@ export const PoolItem = (props: PoolItemProps) => {
 
   /** @dev Condition to show modal to resume pocket. */
   const [resumedDisplayed, setResumedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to claim fee create pocket. */
+  const [claimFeeDisplayed, setClaimFeeDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
@@ -263,6 +267,19 @@ export const PoolItem = (props: PoolItemProps) => {
                 onClick={() => setClosedDisplayed(true)}
               />
             )}
+            {isEnded && (
+              <Button
+                className="!px-[50px] !border-solid !border-purple !border-[2px]"
+                theme={{
+                  backgroundColor: "transparent",
+                  color: "#B998FB",
+                  hoverColor: "#B998FB",
+                }}
+                text="Claim fee"
+                width="100%"
+                onClick={() => setClaimFeeDisplayed(true)}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -308,6 +325,17 @@ export const PoolItem = (props: PoolItemProps) => {
             props.handleFetch();
           }}
           handleCancel={() => setPausedDisplayed(false)}
+          pocket={data}
+        />
+      )}
+      {claimFeeDisplayed && (
+        <ClaimFeeModal
+          isModalOpen={claimFeeDisplayed}
+          handleOk={() => {
+            setClaimFeeDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setClaimFeeDisplayed(false)}
           pocket={data}
         />
       )}

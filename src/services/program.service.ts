@@ -95,6 +95,21 @@ export class ProgramService {
   }
 
   /**
+   * @dev The function to delete ended pocket and claim fee which pay for create these pocket.
+   * @param {WalletProvider}
+   * @param {PocketEntity}
+   */
+  public async claimPocketFee(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ): Promise<any> {
+    return this.pocketProgramProvider.closePocketAccount(
+      walletProvider,
+      pocket
+    );
+  }
+
+  /**
    * @dev The function to pause pocket onchain & ofchain.
    * @param {WalletProvider}
    * @param {PocketEntity}

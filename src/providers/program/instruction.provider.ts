@@ -301,6 +301,41 @@ export class InstructionProvider {
   }
 
   /**
+   * @dev Instuction to close pocket.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async closePocketAccount(
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey
+  ): Promise<TransactionInstruction[]> {
+    /** @dev Get @var {PublicKey} tokenVault */
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
+    );
+
+    return [
+      await this.program.methods
+        .closePocketAccounts()
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+        })
+        .instruction(),
+    ];
+  }
+
+  /**
    * @dev Instuction to pause pool.
    * @param pocketOwner
    * @param pocketAccount

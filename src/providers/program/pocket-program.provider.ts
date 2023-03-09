@@ -564,6 +564,63 @@ export class PocketProgramProvider {
   }
 
   /**
+   * @dev The function to close pocket account.
+   * @param walletProvider
+   * @param pocket
+   */
+  public async closePocketAccount(
+    walletProvider: WalletProvider,
+    pocket: PocketEntity
+  ) {
+    try {
+      console.log("Pocket ID to close pocket account: ", pocket.id);
+      /** @dev Get pocket state. */
+      const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
+      console.log(pocketState);
+      /**
+       * @dev Define @var {TransactionInstruction} @arrays instructions to process.
+       */
+
+      const baseTokenMint = new PublicKey(
+        (pocketState as any)?.baseTokenMintAddress
+      );
+      const qouteTokeMint = new PublicKey(
+        (pocketState as any)?.quoteTokenMintAddress
+      );
+
+      const instructions: TransactionInstruction[] = [
+        ...(await this.instructionProvider.closePocketAccount(
+          walletProvider.publicKey,
+          pocketAccount,
+          baseTokenMint,
+          qouteTokeMint
+        )),
+      ];
+
+      /**
+       * @dev Sign and confirm instructions.
+       */
+      const txId = await this.transactionProvider.signAndSendTransaction(
+        walletProvider,
+        instructions
+      );
+
+      console.log("Transaction ID: ", { txId });
+      setTimeout(async () => {
+        try {
+          const [, state] = await this.getPocketState(pocket.id);
+          console.log(pocket.id, { state });
+        } catch (err) {
+          console.log("Error when fetch pocket state", err);
+        }
+      }, 4000);
+    } catch (err: any) {
+      console.error("Error", err.message);
+      throw err;
+    }
+  }
+
+  /**
    * @dev The function to pause.
    * @param walletProvider
    * @param pocket
