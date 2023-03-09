@@ -41,7 +41,7 @@ const Layout: FC = () => {
           <section className="mt-[30px] flow-root">
             <div className="float-right ml-[20px]">
               <Button
-                className="float-right !px-[50px] md:w-auto !w-full"
+                className="float-right !w-[220px] !h-[56px] !text-[18px]"
                 text="Create pocket"
                 loading={processing ? true : false}
                 onClick={() => handleCreatePocket()}
@@ -49,13 +49,13 @@ const Layout: FC = () => {
             </div>
             <div className="float-right">
               <Button
-                className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full"
+                className="float-right !border-solid !border-purple !border-[2px] !w-[220px] !h-[56px] !text-[18px]"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",
                   hoverColor: "#B998FB",
                 }}
-                text="Previous"
+                text="Back"
               />
             </div>
           </section>
