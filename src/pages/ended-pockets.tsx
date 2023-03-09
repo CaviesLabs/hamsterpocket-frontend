@@ -8,7 +8,6 @@ import {
   BalanceGroup,
   EndedPoolGroupComponent,
 } from "@/src/components/my-pools";
-import { ClosedPockets } from "@/src/components/my-pools/ended-pockets";
 
 const Layout: FC = () => {
   return (
@@ -17,7 +16,6 @@ const Layout: FC = () => {
         <LayoutSection className="!pt-[160px] pb-[100px]">
           <BalanceGroup />
           <EndedPoolGroupComponent />
-          <ClosedPockets />
         </LayoutSection>
       </div>
     </MainLayout>
