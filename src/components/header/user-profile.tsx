@@ -43,6 +43,7 @@ const UserProfile: FC = () => {
         "relative flex items-center h-full py-[3px] px-[10px] border-solid border-[0px] border-purple rounded-[5px] cursor-pointer avatar-profile",
         styles["avatar-profile"]
       )}
+      ref={ref}
     >
       <img
         className="w-[20px] md:w-[40px] h-[auto] mr-[10px]"
@@ -52,7 +53,6 @@ const UserProfile: FC = () => {
       <span
         className="text-[7px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
-        ref={ref}
       >
         {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
         <DownOutlined style={{ fontSize: 14 }} className="ml-2" />
