@@ -56,7 +56,8 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
-          ~ {data.depositedAmount} {baseToken?.symbol}
+          ~ {convertDecimalAmount(baseToken.address, data.depositedAmount)}{" "}
+          {baseToken?.symbol}
         </p>
       </>
     );
