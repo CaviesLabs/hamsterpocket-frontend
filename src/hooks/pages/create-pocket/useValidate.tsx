@@ -96,13 +96,22 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev Watch changes in stop condtions. */
   useEffect(() => {
     if (!createdEnable) return;
+
+    /** @dev Raise error if user enter deposit amount smaller than batch amount. */
+    if (depositedAmount < batchVolume) {
+      return modifyErrors(
+        "depositedAmount",
+        "Deposited amount must be greater than batch amount"
+      );
+    }
+
     modifyErrors(
       "depositedAmount",
       depositedAmount <= 0 || !depositedAmount
         ? "Deposited amount must be larger than 0"
         : ""
     );
-  }, [depositedAmount, createdEnable]);
+  }, [depositedAmount, createdEnable, batchVolume]);
 
   return {
     errors,

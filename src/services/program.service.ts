@@ -40,14 +40,9 @@ export class ProgramService {
       `/pool/${walletProvider.publicKey?.toBase58()?.toString()}`,
       {
         method: "POST",
-        data: {
-          ownerAddress: walletProvider.publicKey?.toBase58()?.toString(),
-          targetTokenAddress: createPocketDto.quoteTokenAddress
-            ?.toBase58()
-            ?.toString(),
-          baseTokenAddress: createPocketDto.baseTokenAddress
-            ?.toBase58()
-            ?.toString(),
+        data: {},
+        headers: {
+          "content-type": "text/plain;charset=UTF-8",
         },
       }
     );
