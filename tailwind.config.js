@@ -63,7 +63,7 @@ module.exports = {
         borderColor: "#D2D7DF",
         strongTitle: "#20242D",
         contentColor: "#5F6C87",
-        footerItemColor: "#5F6C87",
+        footerItemColor: "#CBD4E1",
         navy: "#5F6C87",
 
         /** Dark mode */

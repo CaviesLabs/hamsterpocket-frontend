@@ -44,30 +44,32 @@ const Layout = (props: LayoutProps) => {
     <MainLayout>
       <div className={styles.container}>
         <LayoutSection className="pt-[60px] pb-[100px]">
-          <section className="md:flex md:justify-center md:items-center">
-            <div className="w-full md:w-[50%] mt-[60px] md:mt-0">
+          <section className="md:flex md:items-center">
+            <div className="w-full md:w-[57%]">
               <h1 className="banner-title">Self-Managed DCA Vault</h1>
               <h2 className="text-[48px] text-white normal-text relative top-[-20px]">
                 HamsterPocket
               </h2>
-              <p className="max-w-[498px] pr-10 text-white text-center text-[20px] mt-[15px] regular-text">
-                HamsterPocket allows users to create and manage their own
-                dollar-cost averaging pools (“pockets”) that will automatically
-                execute the chosen strategies over time.
-              </p>
-              <div className="text-center mt-[34px]">
-                <Button
-                  className="mx-auto !px-[50px] !border-solid !border-white !border-[2px]"
-                  theme={{
-                    backgroundColor: "transparent",
-                    color: "white",
-                  }}
-                  text="Create a Pocket"
-                  onClick={() => handleCreatePocket()}
-                />
+              <div className="max-w-[498px] text-center">
+                <p className="text-white text-[20px] mt-[15px] regular-text leading-[33px] tracking-[0.72px]">
+                  HamsterPocket allows users to create and manage their own
+                  dollar-cost averaging pools (“pockets”) that will
+                  automatically execute the chosen strategies over time.
+                </p>
+                <div className="mt-[34px]">
+                  <Button
+                    className="mx-auto !text-[18px] !px-[50px] !border-solid !border-white !border-[2px]"
+                    theme={{
+                      backgroundColor: "transparent",
+                      color: "white",
+                    }}
+                    text="Create a Pocket"
+                    onClick={() => handleCreatePocket()}
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-full md:w-[30%] md:pt-[90px]">
+            <div className="w-full md:w-[35%] mt-28">
               <img
                 src="/assets/images/banner-icon.png"
                 alt="Image"
@@ -82,7 +84,9 @@ const Layout = (props: LayoutProps) => {
             <p className="text-center text-white text-[32px] normal-text">
               HamsterPocket provides the most flexible DCA strategies to users
             </p>
-            <div className="grid md:grid-cols-3 gap-3 pt-5">
+          </section>
+          <section className="pt-5 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-3">
               <div>
                 <p className="text-center text-green text-[32px] normal-text">
                   {data.users}

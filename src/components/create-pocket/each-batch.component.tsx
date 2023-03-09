@@ -7,7 +7,8 @@ export const BatchOption: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setBatchVolume, errorMsgs } = useCreatePocketPage();
+  const { baseTokenAddress, setBatchVolume, errorMsgs, setErrorMsgs } =
+    useCreatePocketPage();
 
   return (
     <div className="grid md:grid-cols-5 gap-3">
@@ -24,8 +25,11 @@ export const BatchOption: FC = () => {
           disableDropdown={true}
           isPositiveOnly={true}
           onAmountChange={(val) => {
+            setErrorMsgs({
+              ...errorMsgs,
+              batchVolume: val < 0.05 && "Minimum deposit must be 0.05 SOL",
+            });
             setBatchVolume(val);
-            console.log(val);
           }}
         />
         {errorMsgs?.batchVolume && (
