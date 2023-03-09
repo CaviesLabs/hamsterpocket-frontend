@@ -36,11 +36,6 @@ export type CurrencyInputProps = {
    */
   allowedTokens?: string[];
 
-  /**
-   * @dev Config input type
-   */
-  inputType?: "text" | "number";
-
   isPositiveOnly?: boolean;
 };
 
@@ -50,7 +45,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   /**
    * @dev handle value
    */
-  const [value, setValue] = useState<string>("0");
+  const [value, setValue] = useState<string>("");
 
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
@@ -106,7 +101,6 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             />
           )
         }
-        type={props.inputType || "number"}
         onChange={(e) => {
           const value = e.target.value;
           if (isPositiveOnly && value.startsWith("-")) {

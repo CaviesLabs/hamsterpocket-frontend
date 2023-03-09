@@ -105,7 +105,6 @@ export const DepositModal: FC<{
             inputClassName="gray-input !bg-[#353C4B]"
             onAmountChange={(val) => handleInputChange(val)}
             placeholder="Enter SOL amount"
-            inputType="text"
             isPositiveOnly={true}
           />
           <p className="my-4 text-white text-[16px] flex">

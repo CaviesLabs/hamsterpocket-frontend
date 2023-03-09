@@ -10,9 +10,9 @@ import { BN } from "@project-serum/anchor";
 import { ProgramService } from "@/src/services/program.service";
 import {
   WSOL_ADDRESS,
-  BONK_ADDRESS,
   convertDurationsTimeToHours,
   processStopConditions,
+  USDC_ADDRESS,
 } from "@/src/utils";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
@@ -27,7 +27,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   );
   const [targetTokenAddress, setTargetTokenAddress] = useState<
     [PublicKey, number]
-  >([new PublicKey(BONK_ADDRESS), 5]);
+  >([new PublicKey(USDC_ADDRESS), 5]);
   const [batchVolume, setBatchVolume] = useState<number>(0);
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
