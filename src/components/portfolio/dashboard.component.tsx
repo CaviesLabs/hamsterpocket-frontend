@@ -69,10 +69,10 @@ export default function DashboardComponent() {
         <div className="text-white normal-text">Total Pockets Balance:</div>
         <div className="flex mt-4">
           <img src="/assets/images/solana-icon.svg" />
-          <div className="text-green ml-3">{totalSOL} SOL</div>
+          <div className="text-green ml-3">~ {totalSOL.toFixed(2)} SOL</div>
         </div>
         <div className="text-green mt-1 italic regular-text">
-          (~ ${totalUSD.toFixed(4)})
+          (~ ${totalUSD.toFixed(2)})
         </div>
       </div>
       {chartData.labels.length > 0 && (
