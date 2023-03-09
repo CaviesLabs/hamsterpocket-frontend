@@ -42,7 +42,7 @@ const Footer: FC = () => {
 
   return (
     <div className="footer pb-9">
-      <div className="md:px-[40px] px-[20px] lg:max-w-[86rem] lg:mx-auto">
+      <div className="lg:max-w-[1140px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
           <div className="menu-wrapper md:pt-0 pt-[20px]">
             <ul className="footer-menu w-[100%] md:flex justify-center flex-wrap md:justify-start">
