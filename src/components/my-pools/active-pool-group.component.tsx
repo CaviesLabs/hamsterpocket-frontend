@@ -160,7 +160,7 @@ export const ActivePoolGroup: FC = () => {
         ) : (
           <div className="py-[70px]">
             <img
-              src="/assets/images/cry-empty.png"
+              src="/assets/images/empty-icon.png"
               className="w-[175px] h-[175px] mx-auto"
             />
             <p className="text-[20px] mt-[20px] text-dark50 text-center">
