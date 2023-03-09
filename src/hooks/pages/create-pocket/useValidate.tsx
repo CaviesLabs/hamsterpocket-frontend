@@ -54,6 +54,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       stopConditions: "",
       depositedAmount: "",
       batchVolume: "",
+      startAt: "",
     });
   }, []);
 
