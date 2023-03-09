@@ -9,9 +9,9 @@ import {
 } from "../entities/pocket.entity";
 
 export const StatisticMock: StatisticEntity = {
-  users: "6.458",
-  pockets: "17,934",
-  totalVolume: "35,293.04",
+  users: 6.458,
+  pockets: 17.934,
+  totalVolume: 35293.04,
 };
 
 export const HistoriesMock: HistoryEntity[] = [
