@@ -6,6 +6,7 @@ import { WSOL_ADDRESS } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 import classNames from "classnames";
+import styles from "./currency-input.module.scss";
 
 export type CurrencyInputProps = {
   onAddressSelect?: (address: string, decimals?: number) => void;
@@ -80,10 +81,14 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   );
 
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <Input
         size="large"
-        className={`rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder:text-dark60 h-[63px] ${props.inputClassName}`}
+        className={classNames(
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px]",
+          styles.myInput,
+          props.inputClassName
+        )}
         placeholder={
           props.currencyBadgeOnly
             ? addressSelected
@@ -94,9 +99,10 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         prefix={
           addressSelected === "BATCH" ? null : (
             <img
-              className={classNames("w-10 h-10", {
-                invisible: !addressSelected,
-              })}
+              className={classNames(
+                "rounded-full",
+                addressSelected ? "w-10 h-10 mr-4" : "invisible"
+              )}
               src={allowCurrencies?.[addressSelected]?.image}
             />
           )
@@ -128,10 +134,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         )}
       </p>
       {!props?.disableDropdown && dropDown && (
-        <div
-          ref={ref}
-          className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80"
-        >
+        <div className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80">
           <div className="overflow-y-scroll max-h-64">
             {(props.allowedTokens
               ? Object.keys(allowCurrencies).filter((item) =>

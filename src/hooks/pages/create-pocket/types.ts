@@ -24,7 +24,7 @@ export interface CreatePocketContextState {
    * @type {PublicKey} mintAcount
    * @type {number} decimals
    */
-  targetTokenAddress: [PublicKey, number];
+  targetTokenAddress: [PublicKey?, number?];
 
   /**
    * @dev Amout of each batch to buy.

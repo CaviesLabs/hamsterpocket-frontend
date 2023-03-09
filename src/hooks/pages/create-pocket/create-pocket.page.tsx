@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useRouter } from "next/router";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
@@ -12,7 +11,6 @@ import {
   WSOL_ADDRESS,
   convertDurationsTimeToHours,
   processStopConditions,
-  USDC_ADDRESS,
 } from "@/src/utils";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
@@ -26,8 +24,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     [new PublicKey(WSOL_ADDRESS), 9]
   );
   const [targetTokenAddress, setTargetTokenAddress] = useState<
-    [PublicKey, number]
-  >([new PublicKey(USDC_ADDRESS), 5]);
+    [PublicKey?, number?]
+  >([]);
   const [batchVolume, setBatchVolume] = useState<number>(0);
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
@@ -45,7 +43,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   );
 
   /** @dev Inject functions from whitelist hook to use. */
-  const { findPairLiquidity, whiteLists, liquidities } = useWhiteList();
+  const { findPairLiquidity, liquidities } = useWhiteList();
 
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
@@ -213,19 +211,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       );
     });
   }, [liquidities, baseTokenAddress]);
-
-  /**
-   * @dev dynamically update the targetTokenAddress state variable based on
-   * the selected target token and the available whiteLists data.
-   * */
-  useEffect(() => {
-    if (availableTargetTokens.length) {
-      setTargetTokenAddress([
-        new PublicKey(availableTargetTokens[0]),
-        whiteLists[availableTargetTokens[0]]?.decimals,
-      ]);
-    }
-  }, [availableTargetTokens, whiteLists]);
 
   return (
     <CreatePocketContext.Provider

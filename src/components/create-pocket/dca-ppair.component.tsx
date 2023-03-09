@@ -43,6 +43,7 @@ export const DCAPPair: FC = () => {
   };
   useEffect(() => {
     const address = targetTokenAddress[0]?.toBase58()?.toString();
+    if (!address) return;
     getPriceBySolana(address).then((resp: any) =>
       setTargetTokenPrice(resp[address]?.usd)
     );
@@ -90,6 +91,7 @@ export const DCAPPair: FC = () => {
               </span>
             </p>
             <CurrencyInput
+              placeholder="Select Token"
               currencyBadgeOnly={true}
               addressSelected={targetTokenAddress?.[0]?.toBase58()?.toString()}
               allowedTokens={availableTargetTokens}
