@@ -36,13 +36,9 @@ export type CurrencyInputProps = {
    * @dev List of allowed tokens.
    */
   allowedTokens?: string[];
-
-  isPositiveOnly?: boolean;
 };
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
-  const { isPositiveOnly } = props;
-
   /**
    * @dev handle value
    */
@@ -109,9 +105,8 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         }
         onChange={(e) => {
           const value = e.target.value;
-          if (isPositiveOnly && value.startsWith("-")) {
-            return;
-          }
+          const validator = /^[+]?([.]\d+|\d+[.]?\d*)$/;
+          if (value !== "" && !validator.exec(value)) return;
           props.onAmountChange && props.onAmountChange(parseFloat(value));
           setValue(e.target.value);
         }}
