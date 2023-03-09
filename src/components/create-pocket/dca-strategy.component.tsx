@@ -28,7 +28,7 @@ export const DCAStrategy: FC = () => {
           Select a time to execute the first batch of this Pocket
         </p>
         <p className="mt-6 text-dark10 text-[14px] normal-text">
-          Start time (UTC)
+          Start time
           <span className="text-red300 relative top-[-2px] right-[-2px]">
             *
           </span>
