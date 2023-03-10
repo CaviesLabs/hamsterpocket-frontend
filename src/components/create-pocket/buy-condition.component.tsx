@@ -1,16 +1,14 @@
 import { FC, useEffect, useMemo } from "react";
 import { Button, Input } from "@hamsterbox/ui-kit";
 import { PlusIcon, DeleteIconCircle } from "@/src/components/icons";
-// import { CurrencyInput } from "@/src/components/currency-input";
 import { PRICE_CONDITIONS } from "@/src/utils";
 import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-// import { motion } from "framer-motion";
 import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import classNames from "classnames";
+import UtilsProvider from "@/src/utils/utils.provider";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -96,15 +94,15 @@ export const BuyCondition: FC<{
           disabled={props.disabled}
         />
       ) : (
-        <div className="grid grid-cols-12 items-center justify-center mt-[16px] max-w-[100%]">
-          <div className="col-span-1 items-center flex">
+        <div className="flex items-center mt-[16px] max-w-[100%]">
+          <div className="mr-6 items-center flex">
             <button onClick={props.toggle} className="relative top-[4px]">
               <DeleteIconCircle />
             </button>
           </div>
-          <div className="col-span-3 relative flex items-center">
+          <div className="mr-6 relative flex items-center">
             <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text">
-              Each batch {`(${batchVolume}`}
+              Each batch {`(${UtilsProvider.formatLongNumber(batchVolume)}`}
             </p>
             <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol}
@@ -120,7 +118,7 @@ export const BuyCondition: FC<{
               ) can buy
             </p>
           </div>
-          <div className="col-span-2 pl-[10px]">
+          <div className="mr-6">
             <DropdownSelect
               handleSelectValue={(val) =>
                 setBuyCondition({
@@ -130,19 +128,12 @@ export const BuyCondition: FC<{
               }
               value={buyCondition?.type}
               options={PRICE_CONDITIONS}
-              className="w-full"
+              className="w-full min-w-[230px]"
             />
           </div>
-          <div
-            className={classNames(
-              "col-span-1 pl-[10px] h-full relative flex items-center",
-              {
-                "!col-span-3": isTwoValue,
-              }
-            )}
-          >
+          <div className="h-[63px] mr-6 relative flex items-center">
             <Input
-              containerClassName="app-input w-[110px] !h-full"
+              containerClassName="app-input w-52 !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
               placeholder={isTwoValue ? "from value" : "value"}
               onValueChange={(val) => {
@@ -220,7 +211,7 @@ export const BuyCondition: FC<{
               </>
             )}
           </div>
-          <div className="col-span-2 pl-[10px] h-full flex items-center relative">
+          <div className="h-full flex items-center relative">
             <img
               src={
                 whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]?.image

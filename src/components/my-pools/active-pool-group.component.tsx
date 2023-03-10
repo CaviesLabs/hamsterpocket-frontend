@@ -67,7 +67,7 @@ export const ActivePoolGroup: FC = () => {
         });
       })
     );
-  }, [wallet]);
+  }, [wallet, debouncedSearch, isPauseOnly, sorter]);
 
   useEffect(
     () => handleFetch(),

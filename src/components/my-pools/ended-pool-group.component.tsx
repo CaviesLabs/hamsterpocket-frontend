@@ -70,7 +70,7 @@ export const EndedPoolGroupComponent: FC = () => {
         });
       })
     );
-  }, [wallet]);
+  }, [wallet, debouncedSearch, selectedType, sorter]);
 
   useEffect(
     () => handleFetch(),
