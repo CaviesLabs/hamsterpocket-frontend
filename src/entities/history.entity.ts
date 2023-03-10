@@ -5,7 +5,6 @@ export enum PoolType {
   PAUSE = "ACTIVITY_TYPE::PAUSED",
   CONTINUE = "ACTIVITY_TYPE::CONTINUE",
   DEPOSIT = "ACTIVITY_TYPE::DEPOSITED",
-  BUY = "BUY",
   CLOSE = "ACTIVITY_TYPE::CLOSED",
   WITHDRAW = "ACTIVITY_TYPE::WITHDRAWN",
   SWAPPED = "ACTIVITY_TYPE::SWAPPED",
@@ -20,6 +19,13 @@ export type HistoryEntity = {
   type: PoolType;
   createdAt: Date;
 
+  transactionId: string;
+
   /** @dev Pool detail */
   pool_docs: PocketEntity[];
+
+  /** Swapped data */
+  baseTokenAmount?: number;
+
+  targetTokenAmount?: number;
 };

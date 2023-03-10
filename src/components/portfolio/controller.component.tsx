@@ -30,6 +30,7 @@ export default function PortfolioController() {
     if (!wallet) return;
     dispatch(
       getPortfolios({
+        limit: 999,
         ownerAddress: wallet,
         sortBy: selectedType,
         search,

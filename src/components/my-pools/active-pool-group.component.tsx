@@ -40,6 +40,7 @@ export const ActivePoolGroup: FC = () => {
     if (!wallet) return;
     dispatch(
       getActivePockets({
+        limit: 999,
         ownerAddress: wallet,
         search,
         sortBy: sorter[0],
