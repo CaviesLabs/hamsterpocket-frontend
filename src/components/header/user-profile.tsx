@@ -67,7 +67,19 @@ const UserProfile: FC = () => {
               onClick={() => router.push(`/my-pockets`)}
               className="hover:text-purple normal-text"
             >
-              My pockets
+              My Pockets
+            </li>
+            <li
+              onClick={() => router.push(`/portfolio`)}
+              className="hover:text-purple normal-text"
+            >
+              View Portfolio
+            </li>
+            <li
+              onClick={() => router.push(`/history`)}
+              className="hover:text-purple normal-text"
+            >
+              View History
             </li>
             <li
               onClick={disconnect}
