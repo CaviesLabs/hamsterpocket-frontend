@@ -20,7 +20,7 @@ const types = [
   { label: "Pause", value: PoolType.PAUSE },
   { label: "Resume", value: PoolType.CONTINUE },
   { label: "Deposit", value: PoolType.DEPOSIT },
-  { label: "Buy", value: PoolType.SWAPPED },
+  { label: "Swap", value: PoolType.SWAPPED },
   { label: "Close", value: PoolType.CLOSE },
   { label: "Withdraw", value: PoolType.WITHDRAW },
 ];

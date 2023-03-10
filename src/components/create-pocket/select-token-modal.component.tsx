@@ -30,7 +30,10 @@ export const TargetSelectTokenModal: FC<{
     return availableTargetTokens.filter(
       (token) =>
         whiteLists[token]?.name.toLowerCase().includes(search.toLowerCase()) ||
-        whiteLists[token]?.symbol.toLowerCase().includes(search.toLowerCase())
+        whiteLists[token]?.symbol
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        whiteLists[token]?.address.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, availableTargetTokens]);
 
