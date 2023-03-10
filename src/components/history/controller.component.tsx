@@ -7,18 +7,24 @@ import { useDispatch } from "react-redux";
 import { getHistories } from "../../redux/actions/history/history.action";
 import useDebounce from "../../hooks/useDebounce";
 import { useConnectedWallet } from "@saberhq/use-solana";
+import { PoolType } from "@/src/entities/history.entity";
+import classnames from "classnames";
+import styles from "./styles.module.scss";
+import dayjs from "dayjs";
+
+const { RangePicker } = DatePicker;
 
 const types = [
-  "All type",
-  "Create",
-  "Pause",
-  "Reactivate",
-  "Deposit",
-  "Buy",
-  "Close",
-  "Withdraw",
-  "Fail transaction",
+  { label: "All type", value: "ALL" },
+  { label: "Create", value: PoolType.CREATE },
+  { label: "Pause", value: PoolType.PAUSE },
+  { label: "Resume", value: PoolType.CONTINUE },
+  { label: "Deposit", value: PoolType.DEPOSIT },
+  { label: "Buy", value: PoolType.SWAPPED },
+  { label: "Close", value: PoolType.CLOSE },
+  { label: "Withdraw", value: PoolType.WITHDRAW },
 ];
+const PickerFormat = "DD/MM/YYYY";
 
 export default function HistoryController() {
   const dispatch = useDispatch();
@@ -27,21 +33,29 @@ export default function HistoryController() {
    */
   const wallet = useConnectedWallet()?.publicKey.toString();
 
-  const [selectedType, setSelectedType] = useState(types[0]);
+  const [selectedType, setSelectedType] = useState<string>(types[0].value);
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState([]);
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   useEffect(() => {
     if (!wallet) return;
+    const [start, end] = date;
     dispatch(
       getHistories({
         limit: 999,
         ownerAddress: wallet,
         search,
+        statuses: selectedType === types[0].value ? undefined : [selectedType],
+        timeFrom: start
+          ? dayjs(start, PickerFormat).startOf("days").toISOString()
+          : undefined,
+        timeTo: end
+          ? dayjs(end, PickerFormat).endOf("days").toISOString()
+          : undefined,
       })
     );
-  }, [wallet, debouncedSearch, date]);
+  }, [wallet, debouncedSearch, selectedType, date]);
 
   return (
     <div className="mt-8 flex justify-between">
@@ -55,11 +69,14 @@ export default function HistoryController() {
         />
       </div>
       <div className="flex">
-        <DatePicker
-          format="DD/MM/YYYY"
+        <RangePicker
+          format={PickerFormat}
           size="large"
-          className="rounded-full px-[20px] bg-dark90 !h-[48px] placeholder-gray-500 border-none col-span-3"
-          placeholder="All time"
+          className={classnames(
+            "rounded-full w-full min-w-[280px] px-[20px] bg-dark90 !h-[48px] placeholder-gray-500 border-none",
+            styles.customDatePicker
+          )}
+          placeholder={["From", "To"]}
           onChange={(_, dateString) => setDate(dateString)}
           suffixIcon={<CalendarIcon />}
           clearIcon={null}
