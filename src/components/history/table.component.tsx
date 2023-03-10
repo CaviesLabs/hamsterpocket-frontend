@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { ShareIcon } from "@/src/components/icons";
 
 export default function TableComponent() {
   const { whiteLists, convertDecimalAmount } = useWhiteList();
@@ -64,9 +65,20 @@ export default function TableComponent() {
                   </div>
                 </td>
                 <td>
-                  <div>{baseToken?.symbol}</div>
-                  <div className="text-dark40">
+                  <div>
+                    {baseToken?.symbol}/{targetToken?.symbol}
+                  </div>
+                  <div className="text-dark40 flex">
                     {utilsProvider.makeShort(baseToken?.address)}
+                    {targetToken?.address && (
+                      <a
+                        href={`https://raydium.io/swap?inputCurrency=sol&outputCurrency=${targetToken.address}`}
+                        target="_blank"
+                        className="ml-[10px]"
+                      >
+                        <ShareIcon />
+                      </a>
+                    )}
                   </div>
                 </td>
                 <td>{typeHumanize(h.type)}</td>
