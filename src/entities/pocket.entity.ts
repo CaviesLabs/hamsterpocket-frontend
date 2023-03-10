@@ -127,6 +127,10 @@ export class PocketEntity {
 
   startTime: Date;
 
+  endedAt: Date;
+
+  closedAt: Date;
+
   depositedAmount: number;
 
   batchVolume: number;

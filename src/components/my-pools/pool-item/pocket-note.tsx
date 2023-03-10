@@ -1,12 +1,14 @@
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
+import dayjs from "dayjs";
+import { DATE_TIME_FORMAT } from "@/src/utils";
 
 type PocketNoteProps = {
   data: PocketEntity;
 };
 export const PocketNote = (props: PocketNoteProps) => {
   const {
-    data: { status },
+    data: { status, closedAt, endedAt },
   } = props;
   const isActive = status === PocketStatus.ACTIVE;
   const isPaused = status === PocketStatus.PAUSED;
@@ -17,8 +19,10 @@ export const PocketNote = (props: PocketNoteProps) => {
     : isPaused
     ? "Pool is paused, the next batch will not be executed."
     : isClosed
-    ? "Pool is closed on dd/mm/yyyy, you can withdraw your fund."
-    : isEnded && "ENDED: dd/mm/yyyy";
+    ? `Pool is closed on ${dayjs(closedAt).format(
+        DATE_TIME_FORMAT
+      )}, you can withdraw your fund.`
+    : isEnded && `ENDED: ${dayjs(endedAt).format(DATE_TIME_FORMAT)}`;
 
   return (
     <div className="mt-[24px]">
