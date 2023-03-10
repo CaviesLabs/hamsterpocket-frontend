@@ -197,7 +197,10 @@ input[type=number] {
 .ant-picker-body table th {
   color: white !important;
 }
-.ant-picker-body table tr td {
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range {
+  color: #20242D !important;
+}
+.ant-picker-dropdown .ant-picker-cell-in-view {
   color: #F0F3FA !important;
 }
 .ant-picker-year-btn {

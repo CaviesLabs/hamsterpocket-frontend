@@ -6,6 +6,11 @@ export class GetHistoriesDto {
   limit?: number;
   offset?: number;
 
+  statuses?: string[];
+
+  timeFrom?: string;
+  timeTo?: string;
+
   ownerAddress: string;
   search?: string;
 }

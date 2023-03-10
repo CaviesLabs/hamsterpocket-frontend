@@ -1,0 +1,19 @@
+
+.customDatePicker {
+    :global {
+        input::placeholder {
+            color: #7886A0 !important;
+        }
+        .anticon-swap-right {
+            color: white;
+        }
+        .anticon-close-circle {
+            background: transparent;
+        }
+    }
+}
+//:global {
+//    .ant-picker-body table tr td {
+//        color: #111a2c;;
+//    }
+//}
