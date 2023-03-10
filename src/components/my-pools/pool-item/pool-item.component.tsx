@@ -138,7 +138,7 @@ export const PoolItem = (props: PoolItemProps) => {
               </p>
             </div>
             <a
-              href={`https://raydium.io/swap?inputCurrency=sol&outputCurrency=${data.targetTokenAddress}`}
+              href={`https://raydium.io/swap?inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`}
               target="_blank"
               className="ml-[10px]"
             >

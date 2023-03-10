@@ -1,4 +1,4 @@
-import type { InferGetStaticPropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
@@ -119,7 +119,7 @@ const Layout = (props: LayoutProps) => {
   );
 };
 
-function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
+function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <DashboardPageProvider>
       <Layout data={props.statistic} />
@@ -128,18 +128,19 @@ function Home(props: InferGetStaticPropsType<typeof getStaticProps>) {
 }
 
 /**
- * @dev This function gets called at build time on server-side.
- * It won't be called on client-side, so you can even do
+ * @dev This function gets called on server-side.
+ * It never runs on the browser, so you can even do
  * direct database queries.
  */
-export async function getStaticProps() {
-  // Call an external API endpoint to get statistic.
+export const getServerSideProps: GetServerSideProps<{
+  statistic: any;
+}> = async () => {
   const res = await statisticService.getStatistic();
   return {
     props: {
       statistic: res,
-    },
+    }, // will be passed to the page component as props
   };
-}
+};
 
 export default Home;

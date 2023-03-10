@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { ShareIcon } from "@/src/components/icons";
 
 export default function TableComponent() {
   const { whiteLists, convertDecimalAmount } = useWhiteList();
@@ -42,7 +43,7 @@ export default function TableComponent() {
         <thead>
           <tr>
             <th className="max-w-xl pb-4">Pocket</th>
-            <th>Token</th>
+            <th>Pair</th>
             <th>Type</th>
             <th>Base amount</th>
             <th>Target amount</th>
@@ -59,14 +60,29 @@ export default function TableComponent() {
               <tr key={h.poolId} className="">
                 <td className="pr-10 py-4">
                   <div className="truncate">{poolDoc.name}</div>
-                  <div className="text-dark40">
+                  <div className="text-dark40 flex">
                     #{utilsProvider.makeShort(h.poolId)}
+                    <a
+                      href={`https://solscan.io/account/${poolDoc.address}`}
+                      target="_blank"
+                      className="ml-2"
+                    >
+                      <ShareIcon />
+                    </a>
                   </div>
                 </td>
                 <td>
-                  <div>{baseToken?.symbol}</div>
-                  <div className="text-dark40">
-                    {utilsProvider.makeShort(baseToken?.address)}
+                  <div className="flex">
+                    {baseToken?.symbol}/{targetToken?.symbol}
+                    {baseToken?.address && targetToken?.address && (
+                      <a
+                        href={`https://raydium.io/swap?inputCurrency=${baseToken.address}&outputCurrency=${targetToken.address}`}
+                        target="_blank"
+                        className="ml-[10px]"
+                      >
+                        <ShareIcon />
+                      </a>
+                    )}
                   </div>
                 </td>
                 <td>{typeHumanize(h.type)}</td>

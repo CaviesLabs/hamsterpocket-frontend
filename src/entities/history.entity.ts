@@ -18,15 +18,7 @@ export enum PoolType {
 export type HistoryEntity = {
   poolId: string;
   name: string;
-  token: {
-    name: string;
-    address: string;
-  };
   type: PoolType;
-  nativeTokenAmount: number;
-  nativeTokenPrice: number;
-  tokenAmount: number;
-  tokenPrice: number;
   createdAt: Date;
 
   /** @dev Pool detail */
