@@ -36,6 +36,11 @@ export type CurrencyInputProps = {
    * @dev List of allowed tokens.
    */
   allowedTokens?: string[];
+
+  /**
+   * @dev Callback function for on click event.
+   */
+  onClick?: () => void;
 };
 
 export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
@@ -77,7 +82,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   );
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative" ref={ref} onClick={props.onClick}>
       <Input
         size="large"
         className={classNames(

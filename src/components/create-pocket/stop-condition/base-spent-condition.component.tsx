@@ -19,11 +19,6 @@ export const BaseAmountSpendCondition: FC<{
     useCreatePocketPage();
 
   /**
-   * @dev Check whether user want to add this condition into pool.
-   */
-  // const [primary, setPrimary] = useState(false);
-
-  /**
    * @dev Current value.
    */
   const [currentValue, setCurrentValue] = useState(0);

@@ -231,3 +231,12 @@ table tr {
 table tr th {
   text-align: left;
 }
+
+
+*:focus {
+  outline: none;
+  border: none;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}

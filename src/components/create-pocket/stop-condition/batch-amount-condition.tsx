@@ -2,7 +2,6 @@ import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-// import { motion, AnimatePresence } from "framer-motion";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { BN } from "@project-serum/anchor";
 
@@ -48,13 +47,7 @@ export const BatchAmountCondition: FC<{
   }, [currentValue]);
 
   return (
-    // <AnimatePresence>
-    <div
-      // animate={{ x: 0 }}
-      // initial={{ x: -100 }}
-      // exit={{ x: -100 }}
-      className="mt-[24px] "
-    >
+    <div className="mt-[24px]">
       <p className="text-dark10 text-[14px] normal-text">
         Batches bought (including skipped batches)
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>

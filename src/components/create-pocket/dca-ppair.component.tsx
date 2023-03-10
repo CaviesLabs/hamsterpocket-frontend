@@ -4,6 +4,7 @@ import { TwoWayArrowIcon } from "@/src/components/icons";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { PublicKey } from "@solana/web3.js";
 import { getPriceBySolana } from "@/src/services/coingecko";
+import { TargetSelectTokenModal } from "./select-token-modal.component";
 
 export const DCAPPair: FC = () => {
   /**
@@ -23,6 +24,9 @@ export const DCAPPair: FC = () => {
    */
   const [baseTokenPrice, setBaseTokenPrice] = useState<number>(0);
   const [targetTokenPrice, setTargetTokenPrice] = useState<number>(0);
+
+  /** @dev Condition to show modal to select target token. */
+  const [tokenSelectDisplayed, setTokenSelectDisplayed] = useState(false);
 
   /**
    * @desc handle change token and update token price from coingecko
@@ -96,6 +100,8 @@ export const DCAPPair: FC = () => {
               addressSelected={targetTokenAddress?.[0]?.toBase58()?.toString()}
               allowedTokens={availableTargetTokens}
               disabledInput={true}
+              disableDropdown={true}
+              onClick={() => setTokenSelectDisplayed(true)}
               onAddressSelect={(address, decimals) =>
                 handleTargetTokenSelect(address, decimals)
               }
@@ -106,6 +112,14 @@ export const DCAPPair: FC = () => {
           </div>
         </div>
       </div>
+      <TargetSelectTokenModal
+        isModalOpen={tokenSelectDisplayed}
+        handleCancel={() => setTokenSelectDisplayed(false)}
+        handleOk={(_, address, decimals) => {
+          setTokenSelectDisplayed(false);
+          handleTargetTokenSelect(address, decimals);
+        }}
+      />
     </section>
   );
 };
