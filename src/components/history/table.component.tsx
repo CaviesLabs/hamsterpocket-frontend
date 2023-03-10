@@ -123,8 +123,17 @@ export default function TableComponent() {
                     <div className="text-dark40">--</div>
                   )}
                 </td>
-                <td className="max-w-[160px]">
-                  {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
+                <td>
+                  <div className="flex items-center">
+                    {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
+                    <a
+                      href={`https://solscan.io/tx/${h.transactionId}`}
+                      target="_blank"
+                      className="ml-2"
+                    >
+                      <ShareIcon />
+                    </a>
+                  </div>
                 </td>
               </tr>
             );
