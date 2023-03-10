@@ -63,7 +63,7 @@ export const ResumePocketModal: FC<{
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
             Confirm the transaction to resume Pocket{" "}
-            <span className="text-green">{props.pocket.id}</span>
+            <span className="text-green">#{props.pocket.id}</span>
           </p>
           <Button
             shape="primary"
