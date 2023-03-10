@@ -22,4 +22,9 @@ export type HistoryEntity = {
 
   /** @dev Pool detail */
   pool_docs: PocketEntity[];
+
+  /** Swapped data */
+  baseTokenAmount?: number;
+
+  targetTokenAmount?: number;
 };
