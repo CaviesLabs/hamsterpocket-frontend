@@ -1,4 +1,3 @@
-import { PoolEntity } from "@/src/entities/pool.entity";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 
 export enum PoolType {

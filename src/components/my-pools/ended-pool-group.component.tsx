@@ -29,7 +29,7 @@ export const EndedPoolGroupComponent: FC = () => {
 
   const wallet = useConnectedWallet()?.publicKey.toString();
   const [search, setSearch] = useState("");
-  const [selectedType, setSelectedType] = useState(PocketTypes[2].value);
+  const [selectedType, setSelectedType] = useState(PocketTypes[0].value);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
 
   const debouncedSearch: string = useDebounce<string>(search, 500);
