@@ -29,6 +29,10 @@ export type SideMethod = Partial<{ [key in Partial<LiquidityMethod>]: any }>;
  * @dev Define list pocket dto
  */
 export class GetPocketsDto {
+  /** @dev pagination fields */
+  limit?: number;
+  offset?: number;
+
   ownerAddress: string;
   statuses?: PocketStatus[];
 

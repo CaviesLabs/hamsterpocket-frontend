@@ -36,6 +36,7 @@ export default function HistoryController() {
     if (!wallet) return;
     dispatch(
       getHistories({
+        limit: 999,
         ownerAddress: wallet,
         search,
       })

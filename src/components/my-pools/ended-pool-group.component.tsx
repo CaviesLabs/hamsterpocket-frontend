@@ -43,6 +43,7 @@ export const EndedPoolGroupComponent: FC = () => {
     dispatch(
       getClosedPockets(
         {
+          limit: 999,
           ownerAddress: wallet,
           search,
           sortBy: sorter[0],
