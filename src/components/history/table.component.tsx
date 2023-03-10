@@ -43,7 +43,7 @@ export default function TableComponent() {
         <thead>
           <tr>
             <th className="max-w-xl pb-4">Pocket</th>
-            <th>Token</th>
+            <th>Pair</th>
             <th>Type</th>
             <th>Base amount</th>
             <th>Target amount</th>
@@ -65,14 +65,11 @@ export default function TableComponent() {
                   </div>
                 </td>
                 <td>
-                  <div>
+                  <div className="flex">
                     {baseToken?.symbol}/{targetToken?.symbol}
-                  </div>
-                  <div className="text-dark40 flex">
-                    {utilsProvider.makeShort(baseToken?.address)}
                     {targetToken?.address && (
                       <a
-                        href={`https://raydium.io/swap?inputCurrency=sol&outputCurrency=${targetToken.address}`}
+                        href={`https://raydium.io/swap?inputCurrency=${baseToken.address}&outputCurrency=${targetToken.address}`}
                         target="_blank"
                         className="ml-[10px]"
                       >
