@@ -94,7 +94,7 @@ export default function TableComponent() {
                       <div>
                         {convertDecimalAmount(
                           baseToken?.address,
-                          poolDoc.currentSpentBaseToken
+                          h.baseTokenAmount
                         )}
                       </div>
                       {/*<div className="text-dark40">*/}
@@ -112,7 +112,7 @@ export default function TableComponent() {
                       <div>
                         {convertDecimalAmount(
                           targetToken?.address,
-                          poolDoc.currentReceivedTargetToken
+                          h.targetTokenAmount
                         )}
                       </div>
                       {/*<div className="text-dark40">*/}
