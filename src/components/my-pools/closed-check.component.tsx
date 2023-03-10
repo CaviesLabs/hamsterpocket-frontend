@@ -44,10 +44,10 @@ export const ClosedCheckComponent = () => {
         hidden: closedPockets.length === 0 || isClosed,
       })}
     >
-      <div className="w-full rounded bg-yellow-50 px-5 py-4 flex items-center justify-between">
+      <div className="w-full rounded-2xl bg-[#FFF9D8] px-5 py-4 flex items-center justify-between">
         <div className="flex items-center">
           <UpdatedIcon className="mr-4" />
-          <p className="normal-text text-yellow-600">
+          <p className="normal-text text-[#835C00]">
             You have {closedPockets.length} closed{" "}
             {closedPockets.length > 1 ? "pockets" : "pocket"}, you can withdraw
             your funds.
