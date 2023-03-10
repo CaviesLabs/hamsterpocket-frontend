@@ -77,10 +77,24 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           return prev.filter((item) => item[key] === undefined);
         }
 
-        return [
-          ...prev.filter((item) => item[key] === undefined),
-          { [key]: { value, primary } },
-        ];
+        /** @dev Filter condition not contains key. */
+        let filteredConditions = prev.filter((item) => item[key] === undefined);
+        filteredConditions = filteredConditions.map((condition: any) => {
+          const fKey = Object.keys(condition)?.[0];
+          return {
+            [fKey]: {
+              value: condition[fKey]?.value,
+              primary:
+                condition[fKey]?.primary !== undefined
+                  ? primary
+                    ? false
+                    : condition[fKey]?.primary
+                  : false,
+            },
+          };
+        });
+
+        return [...filteredConditions, { [key]: { value, primary } }];
       });
     },
     [stopConditions]
@@ -139,16 +153,18 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         ),
         side: sideMethod,
         marketId,
-        buyCondition: {
-          [buyCondition.type]: buyCondition?.fromValue
-            ? {
-                fromValue: buyCondition.fromValue,
-                toValue: buyCondition.toValue,
-              }
-            : {
-                value: buyCondition.value,
-              },
-        },
+        buyCondition: buyCondition
+          ? {
+              [buyCondition.type]: buyCondition?.fromValue
+                ? {
+                    fromValue: buyCondition.fromValue,
+                    toValue: buyCondition.toValue,
+                  }
+                : {
+                    value: buyCondition.value,
+                  },
+            }
+          : null,
         stopConditions: processedStopConditions.map((item) => ({
           [Object.keys(item)[0]]: {
             value: (item as any)[Object.keys(item)[0] as string]?.value,

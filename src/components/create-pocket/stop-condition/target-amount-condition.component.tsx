@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { DeleteIconCircle, CircleCheckIcon } from "@/src/components/icons";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
@@ -16,32 +16,37 @@ export const TargetAmountCondition: FC<{
     useCreatePocketPage();
 
   /**
-   * @dev Check whether user want to add this condition into pool.
-   */
-  const [primary, setPrimary] = useState(false);
-
-  /**
    * @dev Current value.
    */
   const [currentValue, setCurrentValue] = useState(0);
+
+  /** @dev Get current condition */
+  const curCondition = useMemo(() => {
+    return stopConditions.find(
+      (item) => item.quoteTokenAmountReach !== undefined
+    )?.quoteTokenAmountReach;
+  }, [stopConditions]);
+  const primary = useMemo(
+    () => (curCondition?.primary == undefined ? false : curCondition?.primary),
+    [curCondition]
+  );
+  const handleChange = useCallback(
+    (isPrimary: boolean) => {
+      handleModifyStopConditions(
+        "quoteTokenAmountReach",
+        new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
+        isPrimary
+      );
+    },
+    [currentValue]
+  );
 
   /**
    * @dev Watch changes in excuted boolean condition.
    */
   useEffect(() => {
-    handleModifyStopConditions(
-      "quoteTokenAmountReach",
-      new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
-      primary
-    );
-  }, [primary, currentValue]);
-
-  /** @dev Default first is primary */
-  useEffect(() => {
-    if (stopConditions.length <= 0) {
-      setPrimary(true);
-    }
-  }, [stopConditions]);
+    handleChange(primary);
+  }, [currentValue]);
 
   return (
     <div className="mt-[24px] ">
@@ -72,14 +77,8 @@ export const TargetAmountCondition: FC<{
         <div className="col-span-2">
           <TooltipPrimaryComponent>
             <button
-              onClick={() => setPrimary(!primary)}
+              onClick={() => handleChange(!primary)}
               className="relative top-[3px]"
-              disabled={
-                !primary &&
-                stopConditions.filter(
-                  (item: any) => item?.[Object.keys(item)?.[0] as any].primary
-                ).length > 0
-              }
             >
               <CircleCheckIcon
                 size="27"

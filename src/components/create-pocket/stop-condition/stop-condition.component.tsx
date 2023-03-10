@@ -32,7 +32,7 @@ export const StopCondition: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { errorMsgs } = useCreatePocketPage();
+  const { errorMsgs, handleModifyStopConditions } = useCreatePocketPage();
 
   return (
     <section>
@@ -117,19 +117,31 @@ export const StopCondition: FC = () => {
           {endTimeDisplayed && (
             <EndTimeCondition
               displyed={endTimeDisplayed}
-              toggle={() => setEndTimeDisplayed(false)}
+              toggle={() => {
+                handleModifyStopConditions("endTimeReach", "delete");
+                setEndTimeDisplayed(false);
+              }}
             />
           )}
           {targetAmountDisplayed && (
             <TargetAmountCondition
               displyed={targetAmountDisplayed}
-              toggle={() => setTargetAmountDisplayed(false)}
+              toggle={() => {
+                handleModifyStopConditions("quoteTokenAmountReach", "delete");
+                setTargetAmountDisplayed(false);
+              }}
             />
           )}
           {baseTokenSpentDisplayed && (
             <BaseAmountSpendCondition
               displyed={baseTokenSpentDisplayed}
-              toggle={() => setBaseTokenSpentDisplayed(false)}
+              toggle={() => {
+                handleModifyStopConditions(
+                  "spentBaseTokenAmountReach",
+                  "delete"
+                );
+                setBaseTokenSpentDisplayed(false);
+              }}
             />
           )}
           {/* {batchAmountDisplayed && (

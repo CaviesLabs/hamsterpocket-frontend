@@ -24,7 +24,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev The function to handle modifying error messageses. */
   const modifyErrors = useCallback(
     (key: keyof ErrorValidateContext, msg: string) => {
-      console.log("modify error");
       setErrors((prev) => ({
         ...prev,
         [key]: msg,
