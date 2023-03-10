@@ -15,6 +15,31 @@ export const TIME_ARRAYS = Array.from(Array(24).keys())
   })
   .flat(1);
 
+export const roundTime = (time: string) => {
+  const hour = parseInt(time.split(":")[0]);
+  const minute = parseInt(time.split(":")[1]);
+  const haft = minute % 5;
+  if (haft > 0) {
+    let newMinute: any = minute + (5 - haft);
+    if (newMinute === 60) {
+      newMinute = "00";
+      let newHour: any = hour + 1;
+      if (newHour === 24) {
+        newHour = "00";
+      }
+      return `${newHour.toString().padStart(2, "0")}:${newMinute
+        .toString()
+        .padStart(2, "0")}`;
+    }
+    return `${hour.toString().padStart(2, "0")}:${newMinute
+      .toString()
+      .padStart(2, "0")}`;
+  }
+  return `${hour.toString().padStart(2, "0")}:${minute
+    .toString()
+    .padStart(2, "0")}`;
+};
+
 export const stringToColour = (str: string) => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

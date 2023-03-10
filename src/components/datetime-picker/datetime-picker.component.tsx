@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { DatePicker } from "antd";
 import { CalendarIcon } from "@/src/components/icons";
 import { DropdownSelect } from "@/src/components/select";
-import { TIME_ARRAYS } from "@/src/utils";
+import { TIME_ARRAYS, roundTime } from "@/src/utils";
 import { DatetimePickerProps } from "./types";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -52,6 +52,8 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
     props.onChange(dateTime.toDate());
   }, [dateTime]);
 
+  console.log(roundTime(`${dateTime.format("HH")}:${dateTime.format("mm")}`));
+
   return (
     <div className="grid grid-cols-3">
       <DatePicker
@@ -68,7 +70,9 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
       <div className="ml-[20px] relative col-span-1">
         <DropdownSelect
           options={TIME_ARRAYS}
-          value={dateTime.toISOString()}
+          value={`${roundTime(
+            `${dateTime.format("HH")}:${dateTime.format("mm")}`
+          )}`}
           handleSelectValue={(value) => handleSelectTime(value)}
           format={() =>
             dateTime
