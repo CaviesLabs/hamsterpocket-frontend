@@ -60,14 +60,21 @@ export default function TableComponent() {
               <tr key={h.poolId} className="">
                 <td className="pr-10 py-4">
                   <div className="truncate">{poolDoc.name}</div>
-                  <div className="text-dark40">
+                  <div className="text-dark40 flex">
                     #{utilsProvider.makeShort(h.poolId)}
+                    <a
+                      href={`https://solscan.io/account/${poolDoc.address}`}
+                      target="_blank"
+                      className="ml-2"
+                    >
+                      <ShareIcon />
+                    </a>
                   </div>
                 </td>
                 <td>
                   <div className="flex">
                     {baseToken?.symbol}/{targetToken?.symbol}
-                    {targetToken?.address && (
+                    {baseToken?.address && targetToken?.address && (
                       <a
                         href={`https://raydium.io/swap?inputCurrency=${baseToken.address}&outputCurrency=${targetToken.address}`}
                         target="_blank"
