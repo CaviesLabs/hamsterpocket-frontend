@@ -6,7 +6,7 @@ export const MobileDeny = () => {
         className="w-[175px] h-[175px] mx-auto"
       />
       <p className="text-center text-white">
-        Oops, HamsterPocket is not available on mobile (yet!). Please switch to
+        Oops, Hamsterpocket is not available on mobile (yet!). Please switch to
         our desktop version.
       </p>
     </div>
