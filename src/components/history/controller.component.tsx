@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getHistories } from "../../redux/actions/history/history.action";
 import useDebounce from "../../hooks/useDebounce";
+import { useConnectedWallet } from "@saberhq/use-solana";
 
 const types = [
   "All type",
@@ -21,18 +22,25 @@ const types = [
 
 export default function HistoryController() {
   const dispatch = useDispatch();
+  /**
+   * @desc Wallet injected
+   */
+  const wallet = useConnectedWallet()?.publicKey.toString();
+
   const [selectedType, setSelectedType] = useState(types[0]);
   const [search, setSearch] = useState("");
   const [date, setDate] = useState(null);
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   useEffect(() => {
+    if (!wallet) return;
     dispatch(
       getHistories({
+        ownerAddress: wallet,
         search,
       })
     );
-  }, [debouncedSearch, date]);
+  }, [wallet, debouncedSearch, date]);
 
   return (
     <div className="mt-8 flex justify-between">
