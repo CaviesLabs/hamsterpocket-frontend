@@ -15,8 +15,6 @@ export const BatchOption: FC = () => {
     setErrorMsgs,
   } = useCreatePocketPage();
 
-  console.log(mintOrderSize);
-
   return (
     <div className="grid md:grid-cols-5 gap-3">
       <div className="md:col-span-2">

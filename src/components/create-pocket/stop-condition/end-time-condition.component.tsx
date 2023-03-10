@@ -24,10 +24,14 @@ export const EndTimeCondition: FC<{
     return stopConditions.find((item) => item.endTimeReach !== undefined)
       ?.endTimeReach;
   }, [stopConditions]);
+
+  /** @dev Get primary value of current condition. */
   const primary = useMemo(
     () => (curCondition?.primary == undefined ? false : curCondition?.primary),
     [curCondition]
   );
+
+  /** @dev The function to change value in condition. */
   const handleChange = useCallback(
     (isPrimary: boolean) => {
       handleModifyStopConditions(

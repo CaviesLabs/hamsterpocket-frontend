@@ -97,11 +97,31 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           };
         });
 
-        return [...filteredConditions, { [key]: { value, primary } }];
+        /** @dev The function to handle update primary. */
+        const checkPrimary = () => {
+          if (!primary) {
+            if (
+              !filteredConditions.filter((condition: any) => {
+                const fKey = Object.keys(condition)[0];
+                return condition?.[fKey]?.primary;
+              }).length
+            ) {
+              return true;
+            }
+          }
+          return primary;
+        };
+
+        return [
+          ...filteredConditions,
+          { [key]: { value, primary: checkPrimary() } },
+        ];
       });
     },
     [stopConditions]
   );
+
+  console.log(stopConditions);
 
   /** @dev The function to execute pocket creation. */
   const handleCreatePocket = useCallback(async () => {
