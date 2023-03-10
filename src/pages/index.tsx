@@ -48,11 +48,11 @@ const Layout = (props: LayoutProps) => {
             <div className="w-full md:w-[57%]">
               <h1 className="banner-title">Self-Managed DCA Vault</h1>
               <h2 className="text-[48px] text-white normal-text relative top-[-20px]">
-                HamsterPocket
+                Hamsterpocket
               </h2>
               <div className="max-w-[498px] text-center">
                 <p className="text-white text-[20px] mt-[15px] regular-text leading-[33px] tracking-[0.72px]">
-                  HamsterPocket allows users to create and manage their own
+                  Hamsterpocket allows users to create and manage their own
                   dollar-cost averaging pools (“pockets”) that will
                   automatically execute the chosen strategies over time.
                 </p>
@@ -82,7 +82,7 @@ const Layout = (props: LayoutProps) => {
               Achievements
             </p>
             <p className="text-center text-white text-[32px] normal-text">
-              HamsterPocket provides the most flexible DCA strategies to users
+              Hamsterpocket provides the most flexible DCA strategies to users
             </p>
           </section>
           <section className="pt-5 max-w-4xl mx-auto">
