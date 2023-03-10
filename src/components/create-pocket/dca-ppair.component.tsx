@@ -74,7 +74,7 @@ export const DCAPPair: FC = () => {
                 handleBaseTokenSelect(address, decimals)
               }
             />
-            <p className="text-dark10 text-[14px] normal-text">
+            <p className="mt-1 text-dark10 text-[14px] normal-text">
               Price: ~${baseTokenPrice?.toFixed(2)}
             </p>
           </div>
@@ -100,7 +100,7 @@ export const DCAPPair: FC = () => {
                 handleTargetTokenSelect(address, decimals)
               }
             />
-            <p className="text-dark10 text-[14px] normal-text">
+            <p className="mt-1 text-dark10 text-[14px] normal-text">
               Price: ~${targetTokenPrice?.toFixed(2)}
             </p>
           </div>
