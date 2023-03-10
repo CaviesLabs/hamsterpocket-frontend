@@ -38,6 +38,11 @@ export type CurrencyInputProps = {
   allowedTokens?: string[];
 
   /**
+   * @dev Condition to show dropdown icon.
+   */
+  dropdownIconDisplayed?: boolean | false;
+
+  /**
    * @dev Callback function for on click event.
    */
   onClick?: () => void;
@@ -130,6 +135,9 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
           ? "BATCH"
           : allowCurrencies?.[addressSelected]?.symbol}
         {!props.disableDropdown && (
+          <DropdownIcon className="float-right ml-[5px]" />
+        )}
+        {props.dropdownIconDisplayed && (
           <DropdownIcon className="float-right ml-[5px]" />
         )}
       </p>

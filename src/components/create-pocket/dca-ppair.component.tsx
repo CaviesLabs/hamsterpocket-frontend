@@ -74,6 +74,7 @@ export const DCAPPair: FC = () => {
               addressSelected={baseTokenAddress[0]?.toBase58()?.toString()}
               allowedTokens={availableBaseTokens}
               disabledInput={true}
+              disableDropdown={true}
               onAddressSelect={(address, decimals) =>
                 handleBaseTokenSelect(address, decimals)
               }
@@ -102,6 +103,7 @@ export const DCAPPair: FC = () => {
               disabledInput={true}
               disableDropdown={true}
               onClick={() => setTokenSelectDisplayed(true)}
+              dropdownIconDisplayed={true}
               onAddressSelect={(address, decimals) =>
                 handleTargetTokenSelect(address, decimals)
               }

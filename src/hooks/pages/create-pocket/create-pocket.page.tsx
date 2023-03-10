@@ -77,7 +77,25 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     (key: keyof StopConditions, value: any | "delete", primary = false) => {
       setStopConditions((prev) => {
         if (value === "delete") {
-          return prev.filter((item) => item[key] === undefined);
+          const wantDelete = prev.find((item) => item[key] !== undefined);
+          const wantDeletePrimary = wantDelete?.[key]?.primary;
+          let updatedPrimary = false;
+          return prev
+            .filter((item) => item[key] === undefined)
+            .map((condition: any) => {
+              if (wantDeletePrimary && !updatedPrimary) {
+                const fKey = Object.keys(condition)?.[0];
+                updatedPrimary = true;
+                return {
+                  ...condition,
+                  [fKey]: {
+                    value: condition?.[fKey]?.value,
+                    primary: true,
+                  },
+                };
+              }
+              return condition;
+            });
         }
 
         /** @dev Filter condition not contains key. */
@@ -120,8 +138,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     },
     [stopConditions]
   );
-
-  console.log(stopConditions);
 
   /** @dev The function to execute pocket creation. */
   const handleCreatePocket = useCallback(async () => {

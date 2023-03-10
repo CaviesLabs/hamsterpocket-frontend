@@ -50,7 +50,7 @@ export default function DashboardComponent() {
           (~ ${totalUSD.toFixed(2)})
         </div>
       </div>
-      {chartData.labels.length > 0 && (
+      {totalUSD > 0 && chartData.labels.length > 0 && (
         <div className="flex items-center mr-36">
           <div className="max-w-[190px] relative flex justify-center items-center">
             <Doughnut data={chartData} options={options} />

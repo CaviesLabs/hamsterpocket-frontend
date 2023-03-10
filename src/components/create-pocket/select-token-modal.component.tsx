@@ -27,8 +27,10 @@ export const TargetSelectTokenModal: FC<{
   /** @dev Filter tokens with search. */
   const filterdList = useMemo(() => {
     if (!search) return availableTargetTokens;
-    return availableTargetTokens.filter((token) =>
-      whiteLists[token]?.name.toLowerCase().includes(search.toLowerCase())
+    return availableTargetTokens.filter(
+      (token) =>
+        whiteLists[token]?.name.toLowerCase().includes(search.toLowerCase()) ||
+        whiteLists[token]?.symbol.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, availableTargetTokens]);
 
@@ -49,7 +51,7 @@ export const TargetSelectTokenModal: FC<{
           <Input
             containerClassName="app-input w-full"
             inputClassName="bg-dark80 !text-white !rounded-[100px] w-full"
-            placeholder="Search by Pocket name, ID, Token"
+            placeholder="Search by name, symbol"
             icon={<SearchIcon />}
             onValueChange={(v) => setSearch(v)}
           />

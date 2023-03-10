@@ -34,9 +34,9 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
 
   /** @dev Injected all modules to watch changes. */
   const {
+    // buyCondition,
     createdEnable,
     pocketName,
-    // buyCondition,
     mintOrderSize,
     batchVolume,
     depositedAmount,
