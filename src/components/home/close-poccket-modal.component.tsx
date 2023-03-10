@@ -68,7 +68,7 @@ export const ClosePocketModal: FC<{
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
             Confirm the transaction to {props?.closed ? "withdraw" : "close "}{" "}
-            Pocket <span className="text-green">{props.pocket.id}</span>
+            Pocket <span className="text-green">#{props.pocket.id}</span>
           </p>
           <Button
             shape="primary"
