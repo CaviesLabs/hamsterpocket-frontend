@@ -5,7 +5,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { DATE_TIME_FORMAT, utilsProvider } from "@/src/utils";
+import { DATE_TIME_FORMAT, formatCurrency, utilsProvider } from "@/src/utils";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -208,10 +208,12 @@ export const PoolItem = (props: PoolItemProps) => {
                 Token bought:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {convertDecimalAmount(
-                  targetToken.address,
-                  data.currentReceivedTargetToken
-                ).toFixed(2) || 0}{" "}
+                {formatCurrency(
+                  convertDecimalAmount(
+                    targetToken?.address,
+                    data.currentReceivedTargetToken
+                  )
+                )}{" "}
                 {targetToken?.symbol}
               </p>
             </div>
@@ -220,10 +222,12 @@ export const PoolItem = (props: PoolItemProps) => {
                 Spent:
               </p>
               <p className="text-white text-[16px] normal-text">
-                {convertDecimalAmount(
-                  baseToken.address,
-                  data.currentSpentBaseToken
-                ).toFixed(2) || 0}{" "}
+                {formatCurrency(
+                  convertDecimalAmount(
+                    baseToken?.address,
+                    data.currentSpentBaseToken
+                  )
+                )}{" "}
                 {baseToken?.symbol}
               </p>
             </div>

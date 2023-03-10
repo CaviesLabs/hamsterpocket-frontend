@@ -3,6 +3,7 @@ import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { formatCurrency } from "@/src/utils";
 dayjs.extend(relativeTime);
 
 type PoolItemEndConditionProps = {
@@ -15,15 +16,13 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
   const { data, baseToken, targetToken } = props;
   const { convertDecimalAmount } = useWhiteList();
 
-  const currentReceivedTarget = convertDecimalAmount(
-    targetToken?.address,
-    data.currentReceivedTargetToken
-  ).toFixed(FIXED_DECIMALS);
+  const currentReceivedTarget = formatCurrency(
+    convertDecimalAmount(targetToken?.address, data.currentReceivedTargetToken)
+  );
 
-  const currentSpentBase = convertDecimalAmount(
-    baseToken?.address,
-    data.currentSpentBaseToken
-  ).toFixed(FIXED_DECIMALS);
+  const currentSpentBase = formatCurrency(
+    convertDecimalAmount(baseToken?.address, data.currentSpentBaseToken)
+  );
 
   if (data.mainProgressBy === MainProgressBy.SPENT_BASE_TOKEN) {
     return (
@@ -31,9 +30,11 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{currentSpentBase}</span>/
-          {convertDecimalAmount(
-            data.baseTokenAddress,
-            data.stopConditions?.spentBaseTokenReach
+          {formatCurrency(
+            convertDecimalAmount(
+              data.baseTokenAddress,
+              data.stopConditions?.spentBaseTokenReach
+            )
           )}{" "}
           {baseToken?.symbol}
         </p>
@@ -48,10 +49,12 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
         <p className="text-end text-[14px] text-white regular-text">
           Bought:
           <span className="text-green ml-[5px]">{currentReceivedTarget}</span>/
-          {convertDecimalAmount(
-            targetToken?.address,
-            data.stopConditions.receivedTargetTokenReach
-          ).toFixed(FIXED_DECIMALS)}{" "}
+          {formatCurrency(
+            convertDecimalAmount(
+              targetToken?.address,
+              data.stopConditions.receivedTargetTokenReach
+            )
+          )}{" "}
           {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
@@ -87,5 +90,3 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
   }
   return null;
 };
-
-const FIXED_DECIMALS = 3;
