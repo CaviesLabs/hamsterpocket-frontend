@@ -53,7 +53,11 @@ export const TargetSelectTokenModal: FC<{
             icon={<SearchIcon />}
             onValueChange={(v) => setSearch(v)}
           />
-          <div className="mt-[30px] max-h-[240px] overflow-y-scroll">
+          <div className="flow-root mt-[30px] px-[10px]">
+            <p className="float-left text-[14px] text-white">Token</p>
+            <p className="float-right text-[14px] text-white">Address</p>
+          </div>
+          <div className="mt-[2px] max-h-[240px] overflow-y-scroll">
             {filterdList.map((token) => (
               <div
                 className="w-full bg-[transparent] hover:bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root cursor-pointer"
