@@ -32,7 +32,7 @@ const Layout: FC = () => {
         <LayoutSection className="!pt-[100px] pb-[100px]">
           <BreadCrumb data={["Home", "Create a Pocket"]} />
           <p className="md:text-[32px] text-[24px] text-white mt-[24px]">
-            Create Pocket
+            Create a new Pocket
           </p>
           <PoolInformation />
           <DCAPPair />
