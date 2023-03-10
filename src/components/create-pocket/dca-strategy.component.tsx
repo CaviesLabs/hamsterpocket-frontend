@@ -5,6 +5,7 @@ import { BuyCondition } from "./buy-condition.component";
 import { BatchOption } from "./each-batch.component";
 import { FrequencyOption } from "./frequency.component";
 import { DepositAmount } from "./deposit-amount.component";
+import { ErrorLabel } from "@/src/components/error-label";
 import dayjs from "dayjs";
 
 export const DCAStrategy: FC = () => {
@@ -57,6 +58,7 @@ export const DCAStrategy: FC = () => {
             />
           </div>
         </div>
+        {errorMsgs?.startAt && <ErrorLabel message={errorMsgs.startAt} />}
       </section>
       <section>
         <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">

@@ -40,6 +40,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     mintOrderSize,
     batchVolume,
     depositedAmount,
+    startAt,
   } = useCreatePocketPage();
 
   /** @dev Init */
@@ -65,6 +66,17 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       !pocketName ? "Pocket Name must be required" : ""
     );
   }, [pocketName, createdEnable]);
+
+  /** @dev Watch changes in pocket start at. */
+  useEffect(() => {
+    if (!createdEnable) return;
+    modifyErrors(
+      "startAt",
+      startAt.getTime() < Date.now()
+        ? "Start date must be greather than now"
+        : ""
+    );
+  }, [startAt, createdEnable]);
 
   /** @dev Watch changes in batch volume and validate it. */
   useEffect(() => {
