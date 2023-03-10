@@ -6,15 +6,16 @@ interface Props {
 }
 
 const MobileDenyMiddleware: FC<Props> = ({ children }) => {
-  const [width, setWidth] = useState<number>(
-    typeof window !== "undefined" ? window?.innerWidth : undefined
-  );
+  const [width, setWidth] = useState<number>(0);
 
   function handleWindowSizeChange() {
     setWidth(window?.innerWidth);
   }
+
   useEffect(() => {
     if (!window) return;
+
+    setWidth(window?.innerWidth);
     window.addEventListener("resize", handleWindowSizeChange);
     return () => {
       window.removeEventListener("resize", handleWindowSizeChange);
@@ -23,12 +24,7 @@ const MobileDenyMiddleware: FC<Props> = ({ children }) => {
 
   const isMobile = width <= 768;
 
-  return (
-    <>
-      {isMobile && <MobileDeny />}
-      {children}
-    </>
-  );
+  return <>{isMobile ? <MobileDeny /> : children}</>;
 };
 
 export default MobileDenyMiddleware;
