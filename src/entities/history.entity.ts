@@ -14,6 +14,7 @@ export enum PoolType {
 }
 
 export type HistoryEntity = {
+  _id: string;
   poolId: string;
   name: string;
   type: PoolType;

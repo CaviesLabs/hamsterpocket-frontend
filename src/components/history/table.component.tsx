@@ -57,7 +57,7 @@ export default function TableComponent() {
             const targetToken = whiteLists[poolDoc.targetTokenAddress];
 
             return (
-              <tr key={h.poolId} className="">
+              <tr key={h._id} className="">
                 <td className="pr-10 py-4">
                   <div className="truncate">{poolDoc.name}</div>
                   <div className="text-dark40 flex">
