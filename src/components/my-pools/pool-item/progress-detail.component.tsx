@@ -18,12 +18,12 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
   const currentReceivedTarget = convertDecimalAmount(
     targetToken?.address,
     data.currentReceivedTargetToken
-  ).toFixed(2);
+  ).toFixed(FIXED_DECIMALS);
 
   const currentSpentBase = convertDecimalAmount(
     baseToken?.address,
     data.currentSpentBaseToken
-  ).toFixed(2);
+  ).toFixed(FIXED_DECIMALS);
 
   if (data.mainProgressBy === MainProgressBy.SPENT_BASE_TOKEN) {
     return (
@@ -51,7 +51,7 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
           {convertDecimalAmount(
             targetToken?.address,
             data.stopConditions.receivedTargetTokenReach
-          )}{" "}
+          ).toFixed(FIXED_DECIMALS)}{" "}
           {targetToken?.symbol}
         </p>
         <p className="text-end text-[14px] text-white regular-text mt-[6px]">
@@ -87,3 +87,5 @@ export const ProgressDetailComponent = (props: PoolItemEndConditionProps) => {
   }
   return null;
 };
+
+const FIXED_DECIMALS = 3;

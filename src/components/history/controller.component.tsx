@@ -59,10 +59,10 @@ export default function HistoryController() {
 
   return (
     <div className="mt-8 flex justify-between">
-      <div className="max-w-[440px]">
+      <div className="w-full max-w-[440px]">
         <Input
-          containerClassName="app-input w-full"
-          inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
+          containerClassName="app-input"
+          inputClassName="bg-dark90 !text-white !rounded-[100px]"
           placeholder="Search by Pocket name/ID"
           icon={<SearchIcon />}
           onValueChange={(v) => setSearch(v)}
