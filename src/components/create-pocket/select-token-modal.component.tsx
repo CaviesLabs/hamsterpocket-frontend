@@ -92,7 +92,7 @@ export const TargetSelectTokenModal: FC<{
                     </p>
                   </div>
                   <a
-                    href={`https://raydium.io/swap?inputCurrency=${token}&outputCurrency=${token}`}
+                    href={`https://solscan.io/account/${token}`}
                     target="_blank"
                     className="ml-[10px]"
                   >
