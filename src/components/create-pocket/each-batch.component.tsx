@@ -7,8 +7,15 @@ export const BatchOption: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setBatchVolume, errorMsgs, setErrorMsgs } =
-    useCreatePocketPage();
+  const {
+    baseTokenAddress,
+    errorMsgs,
+    mintOrderSize,
+    setBatchVolume,
+    setErrorMsgs,
+  } = useCreatePocketPage();
+
+  console.log(mintOrderSize);
 
   return (
     <div className="grid md:grid-cols-5 gap-3">
@@ -26,8 +33,14 @@ export const BatchOption: FC = () => {
           onAmountChange={(val) => {
             setErrorMsgs({
               ...errorMsgs,
-              batchVolume: val < 0.05 && "Minimum deposit must be 0.05 SOL",
+              batchVolume:
+                val < mintOrderSize &&
+                `Batch volume must be greater than Mint Order Size (${mintOrderSize}) `,
             });
+            // setErrorMsgs({
+            //   ...errorMsgs,
+            //   batchVolume: val < 0.05 && "Minimum deposit must be 0.05 SOL",
+            // });
             setBatchVolume(val);
           }}
         />

@@ -25,4 +25,5 @@ export interface LiquidityEntity {
   targetOrders: string;
   version: number;
   withdrawQueue: number;
+  minOrderSizeForBaseMint: number;
 }

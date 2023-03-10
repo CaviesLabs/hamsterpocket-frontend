@@ -37,6 +37,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     createdEnable,
     pocketName,
     // buyCondition,
+    mintOrderSize,
     batchVolume,
     depositedAmount,
   } = useCreatePocketPage();
@@ -68,11 +69,19 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev Watch changes in batch volume and validate it. */
   useEffect(() => {
     if (!createdEnable) return;
+    if (batchVolume < mintOrderSize) {
+      return modifyErrors(
+        "batchVolume",
+        batchVolume <= 0
+          ? `Batch volume must be greater than Mint Order Size(${mintOrderSize})`
+          : ""
+      );
+    }
     modifyErrors(
       "batchVolume",
       batchVolume <= 0 ? "Batch volume must be required" : ""
     );
-  }, [batchVolume, createdEnable]);
+  }, [batchVolume, createdEnable, mintOrderSize]);
 
   /** @dev Watch changes in stop condtions. */
   // useEffect(() => {

@@ -84,6 +84,11 @@ export interface CreatePocketContextState {
   availableBaseTokens: string[];
 
   /**
+   * @dev Mint batch amount volume.
+   */
+  mintOrderSize: number;
+
+  /**
    * @dev Avalable list of tokens to select for target.
    */
   availableTargetTokens: string[];

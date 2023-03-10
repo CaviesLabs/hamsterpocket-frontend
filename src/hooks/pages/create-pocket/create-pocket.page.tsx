@@ -34,6 +34,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
+  /** @dev Mint batch amount volume. */
+  const [mintOrderSize, setMintOrderSize] = useState(0);
+
   /** @dev Avalabible tokens when choose base. */
   const [availableBaseTokens, setAvailableBaseTokens] = useState<string[]>([]);
 
@@ -196,6 +199,22 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     validateForms,
   ]);
 
+  /** @dev Update mint order size. */
+  useEffect(() => {
+    (async () => {
+      if (!baseTokenAddress.length || !targetTokenAddress.length) return;
+      /** @dev Convert address to string. */
+      const [baseAddress, targetAddress] = await Promise.all([
+        baseTokenAddress[0]?.toBase58().toString(),
+        targetTokenAddress[0]?.toBase58().toString(),
+      ]);
+
+      /** @dev Get base and qoute address in liquidity pool. */
+      const ppair = findPairLiquidity(baseAddress, targetAddress);
+      setMintOrderSize(ppair?.[3]);
+    })();
+  }, [baseTokenAddress, targetTokenAddress]);
+
   /**
    * @dev dynamically update a list of available base tokens based on
    * the available liquidity data.
@@ -245,6 +264,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         errorMsgs,
         availableBaseTokens,
         availableTargetTokens,
+        mintOrderSize,
         setPocketName,
         setBaseTokenAddress,
         setTargetTokenAddress,

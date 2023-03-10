@@ -31,7 +31,7 @@ export const WhitelistContext = createContext<{
   findPairLiquidity(
     baseTokenAddress: string,
     targetTokenAddress: string
-  ): [string, string, string];
+  ): [string, string, string, number];
 }>(null);
 
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
@@ -86,7 +86,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     (
       baseTokenAddress: string,
       targetTokenAddress: string
-    ): [string, string, string] => {
+    ): [string, string, string, number] => {
       /** Find ppair available liquidity pool. */
       const ppair = [
         liquidities.find(
@@ -100,7 +100,12 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
             item?.quoteMint === baseTokenAddress
         ) || null,
       ].filter((item) => item !== null)?.[0];
-      return [ppair.baseMint || "", ppair.quoteMint || "", ppair.marketId];
+      return [
+        ppair.baseMint || "",
+        ppair.quoteMint || "",
+        ppair.marketId,
+        ppair.minOrderSizeForBaseMint,
+      ];
     },
     [liquidities]
   );
