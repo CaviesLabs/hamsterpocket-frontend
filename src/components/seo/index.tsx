@@ -281,7 +281,7 @@ export const SeoComponent: FC = () => {
       <meta property="og:url" content="https://pocket.hamsterbox.xyz/" />
       <meta
         property="og:image"
-        content="https://pocket.hamsterbox.xyz/assets/assets/images/banner_seo.png"
+        content="https://pocket.hamsterbox.xyz/assets/images/banner_seo.png"
       />
       <meta
         property="og:image:alt"
