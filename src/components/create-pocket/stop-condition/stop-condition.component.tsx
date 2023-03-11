@@ -42,8 +42,8 @@ export const StopCondition: FC = () => {
       {errorMsgs?.stopConditions && (
         <ErrorLabel message={errorMsgs.stopConditions} />
       )}
-      <div className="mt-[16px]">
-        <p className="text-dark20 text-[14px] normal-text italic">
+      <div className="mt-2">
+        <p className="text-dark20 text-[14px] regular-text italic">
           When one of the conditions below is met, the Pocket will stop running
           the DCA strategy automatically
         </p>
@@ -55,7 +55,7 @@ export const StopCondition: FC = () => {
                   <Button
                     size="small"
                     text="Add End time"
-                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
+                    className="!rounded-[100px] after:!rounded-[100px] !px-4 normal-text font-semibold"
                     theme={{
                       backgroundColor: "#7A6DFF",
                       color: "#FFFFFF",
@@ -70,7 +70,7 @@ export const StopCondition: FC = () => {
                   <Button
                     size="small"
                     text="Add target token amount"
-                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
+                    className="!rounded-[100px] after:!rounded-[100px] !px-4 normal-text font-semibold"
                     theme={{
                       backgroundColor: "#41ADD1",
                       color: "#FFFFFF",
@@ -85,7 +85,7 @@ export const StopCondition: FC = () => {
                   <Button
                     size="small"
                     text="Add target token spent amount"
-                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
+                    className="!rounded-[100px] after:!rounded-[100px] !px-4 normal-text font-semibold"
                     theme={{
                       backgroundColor: "#F47048",
                       color: "#FFFFFF",

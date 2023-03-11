@@ -22,7 +22,7 @@ export const PoolInformation: FC = () => {
           </span>
         </p>
         <Input
-          containerClassName="app-input w-full mt-[10px]"
+          containerClassName="app-input w-full mt-1"
           inputClassName="bg-dark90 !text-white !rounded-[16px] w-full"
           placeholder="Enter pocket name"
           value={pocketName}
