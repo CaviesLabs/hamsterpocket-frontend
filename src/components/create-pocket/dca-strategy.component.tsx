@@ -31,11 +31,11 @@ export const DCAStrategy: FC = () => {
         <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
           Pool start time
         </p>
-        <p className="mt-2 text-dark20 text-[14px] normal-text italic">
+        <p className="mt-2 text-dark20 text-[16px] regular-text italic">
           Select a time to execute the first batch of this Pocket
         </p>
-        <p className="mt-6 text-dark10 text-[14px] normal-text">
-          Start time
+        <p className="mt-6 text-dark10 text-[14px] regular-text">
+          Start time (Local time: UTC {dayjs().format("Z")})
           <span className="text-red300 relative top-[-2px] right-[-2px]">
             *
           </span>
@@ -64,7 +64,7 @@ export const DCAStrategy: FC = () => {
         <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
           DCA strategy
         </p>
-        <p className="text-dark20 text-[14px] normal-text italic mt-2">
+        <p className="text-dark20 text-[16px] regular-text italic mt-2">
           Set the conditions that must be met before each batch of tokens
           purchase is executed
         </p>

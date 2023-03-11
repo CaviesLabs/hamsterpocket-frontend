@@ -74,7 +74,7 @@ export const BuyCondition: FC<{
   return (
     <div className="mt-[24px] ">
       {/* animate={{ x: 0 }} initial={{ x: -100 }} */}
-      <p className="text-dark10 text-[14px] normal-text">
+      <p className="text-dark10 text-[14px] regular-text">
         Buy at market price if
       </p>
       {errorMsgs?.buyCondition && (

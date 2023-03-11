@@ -38,10 +38,10 @@ const Layout: FC = () => {
           <DCAPPair />
           <DCAStrategy />
           <StopCondition />
-          <section className="mt-[30px] flow-root">
+          <section className="mt-14 flow-root">
             <div className="float-right ml-[20px]">
               <Button
-                className="float-right !w-[220px] !h-[56px] !text-[18px]"
+                className="float-right !w-[220px] !h-[56px] !text-[18px] normal-text font-semibold"
                 text="Create pocket"
                 loading={processing}
                 onClick={() => handleCreatePocket()}
@@ -49,7 +49,7 @@ const Layout: FC = () => {
             </div>
             <div className="float-right">
               <Button
-                className="float-right !border-solid !border-purple !border-[2px] !w-[220px] !h-[56px] !text-[18px]"
+                className="float-right !border-solid !border-purple !border-[2px] !w-[220px] !h-[56px] !text-[18px] normal-text font-semibold"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",

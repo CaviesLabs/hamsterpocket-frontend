@@ -63,7 +63,7 @@ export const PoolItemEndConditionComponent = (
     <div className="md:mt-0 mt-[20px] md:pr-[20px] pr-0 w-96">
       <p className="text-dark40 text-[16px] font-bold">End Conditions</p>
       <div className="flex mt-[5px]">
-        <div className="text-white text-[16px] normal-text">
+        <div className="text-white text-[16px] regular-text">
           {conditions.length === 0 && <p>N/A</p>}
           {conditions.map((cond, i) => (
             <p>

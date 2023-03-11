@@ -126,7 +126,7 @@ export const PoolItem = (props: PoolItemProps) => {
               <p className="text-white text-[18px] normal-text uppercase">
                 {targetToken?.symbol}
               </p>
-              <p className="text-white text-[14px] normal-text">
+              <p className="text-white text-[14px] regular-text">
                 {targetToken?.name}
               </p>
             </div>
@@ -239,19 +239,15 @@ export const PoolItem = (props: PoolItemProps) => {
           <p className="text-dark40 text-[16px] font-bold">
             Pocket information
           </p>
-          <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Start date:
-            </p>
-            <p className="text-white text-[16px] normal-text">
+          <div className="flex items-center mt-[5px] regular-text">
+            <p className="w-[200px] text-[14px] text-dark40 ">Start date:</p>
+            <p className="text-white text-[16px]">
               {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
-          <div className="flex items-center mt-[5px]">
-            <p className="w-[200px] text-[14px] text-dark40 normal-text">
-              Total deposited
-            </p>
-            <p className="text-white text-[16px] normal-text">
+          <div className="flex items-center mt-[5px] regular-text">
+            <p className="w-[200px] text-[14px] text-dark40">Total deposited</p>
+            <p className="text-white text-[16px]">
               {convertDecimalAmount(
                 data?.baseTokenAddress,
                 data.remainingBaseTokenBalance
@@ -260,11 +256,11 @@ export const PoolItem = (props: PoolItemProps) => {
             </p>
           </div>
           {data.batchVolume > data.remainingBaseTokenBalance && (
-            <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+            <div className="flex items-center mt-[5px] regular-text">
+              <p className="w-[200px] text-[14px] text-dark40">
                 Outstanding deposit:
               </p>
-              <p className="text-white text-[16px] normal-text">
+              <p className="text-white text-[16px]">
                 {convertDecimalAmount(
                   baseToken?.address,
                   data.batchVolume - data.remainingBaseTokenBalance

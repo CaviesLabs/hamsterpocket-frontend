@@ -29,7 +29,7 @@ export const PocketNote = (props: PocketNoteProps) => {
       <p className="uppercase text-[16px] text-white">NOTE:</p>
       <p
         className={classnames(
-          "text-[16px] regular-text",
+          "text-[14px] regular-text",
           isActive ? "text-white" : "text-red-500"
         )}
       >

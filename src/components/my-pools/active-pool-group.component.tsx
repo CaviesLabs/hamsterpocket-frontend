@@ -91,7 +91,7 @@ export const ActivePoolGroup: FC = () => {
             className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
             onClick={() => router.push("/ended-pockets")}
           >
-            View closed & inactive pockets
+            View Closed & Ended Pockets
           </p>
         </div>
         <div className="flow-root mt-[32px]">
@@ -116,7 +116,7 @@ export const ActivePoolGroup: FC = () => {
                 />
                 <p
                   className={classnames(
-                    "text-center text-[14px] normal-text",
+                    "text-center text-[14px] regular-text",
                     isPauseOnly ? "text-[#B998FB]" : "text-dark50"
                   )}
                 >

@@ -58,13 +58,13 @@ export const DCAPPair: FC = () => {
       <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
         DCA pair
       </p>
-      <div className="mt-[16px]">
-        <p className="text-dark20 text-[14px] normal-text italic">
+      <div className="mt-2">
+        <p className="text-dark20 text-[16px] regular-text italic">
           Enter the buy and sell token pair for this pool
         </p>
         <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
           <div className="md:col-span-2">
-            <p className="text-dark10 text-[14px] normal-text">
+            <p className="text-dark10 text-[14px] regular-text">
               From
               <span className="text-red300 relative top-[-2px] right-[-2px]">
                 *
@@ -79,7 +79,7 @@ export const DCAPPair: FC = () => {
                 handleBaseTokenSelect(address, decimals)
               }
             />
-            <p className="mt-1 text-dark10 text-[14px] normal-text">
+            <p className="mt-1 text-dark10 text-[16px] regular-text">
               Price: ~${baseTokenPrice?.toFixed(2)}
             </p>
           </div>
@@ -89,7 +89,7 @@ export const DCAPPair: FC = () => {
             </div>
           </div>
           <div className="md:col-span-2">
-            <p className="text-dark10 text-[14px] normal-text">
+            <p className="text-dark10 text-[14px] regular-text">
               To
               <span className="text-red300 relative top-[-2px] right-[-2px]">
                 *
@@ -108,7 +108,7 @@ export const DCAPPair: FC = () => {
                 handleTargetTokenSelect(address, decimals)
               }
             />
-            <p className="mt-1 text-dark10 text-[14px] normal-text">
+            <p className="mt-1 text-dark10 text-[16px] regular-text">
               Price: ~${targetTokenPrice?.toFixed(2)}
             </p>
           </div>
