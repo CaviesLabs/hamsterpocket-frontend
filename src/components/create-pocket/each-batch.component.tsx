@@ -20,7 +20,7 @@ export const BatchOption: FC = () => {
   return (
     <div className="grid md:grid-cols-5 gap-3">
       <div className="md:col-span-2">
-        <p className="text-dark10 text-[14px] normal-text mb-1">
+        <p className="text-dark10 text-[14px] regular-text mb-1">
           Amount each batch
           <span className="text-red300 relative top-[-2px] right-[-2px]">
             *

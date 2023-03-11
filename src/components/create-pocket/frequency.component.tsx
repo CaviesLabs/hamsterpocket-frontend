@@ -47,7 +47,7 @@ export const FrequencyOption: FC = () => {
 
   return (
     <div className="mt-[24px] ">
-      <p className="text-dark10 text-[14px] normal-text">
+      <p className="text-dark10 text-[14px] regular-text">
         Frequency
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
       </p>
