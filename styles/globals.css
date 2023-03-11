@@ -233,10 +233,10 @@ table tr th {
 }
 
 
-*:focus {
-  outline: none;
-  border: none;
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+input:focus {
+  outline: none !important;
+  border: none !important;
+  border-color: inherit !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }

@@ -3,6 +3,8 @@ import { DropdownSelect } from "@/src/components/select";
 import { TIME_CONDITIONS } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { FrequencyConditionType } from "@/src/entities/pocket.entity";
+import { RiQuestionnaireFill } from "react-icons/all";
+import { ToolTip } from "@/src/components/tooltip";
 
 export const FrequencyOption: FC = () => {
   /**
@@ -47,9 +49,12 @@ export const FrequencyOption: FC = () => {
 
   return (
     <div className="mt-[24px] ">
-      <p className="text-dark10 text-[14px] normal-text">
+      <p className="text-dark10 text-[14px] normal-text flex">
         Frequency
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
+        <ToolTip message="1 week = 7 days 1 month = 30 days 1 year = 365 days">
+          <RiQuestionnaireFill />
+        </ToolTip>
       </p>
       <DropdownSelect
         className="mt-3 !min-w-[250px]"

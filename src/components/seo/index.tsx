@@ -4,10 +4,9 @@ import { NextSeo } from "next-seo";
 export const SeoComponent: FC = () => {
   const siteName = "pocket.hamsterbox.xyz";
   const url = `https://${siteName}/`;
-  const title =
-    "Hamsterpocket | Trustless P2P Swaps for Digital Collectibles and Assets";
+  const title = "Cavies Labs | Hamsterpocket | Self-Managed DCA Vault";
   const description =
-    "Hamsterpocket provides a trustless peer-to-peer platform for trading digital collectibles and assets, supports both on-chain and off-chain";
+    "Hamsterpocket allows users to create and manage their own dollar-cost averaging pockets that will automatically execute the chosen strategies over time";
   const banner = `${url}main-banner.png`;
 
   return (
@@ -38,22 +37,8 @@ export const SeoComponent: FC = () => {
           cardType: "summary_large_image",
         }}
       />
-      <meta
-        httpEquiv="Cache-Control"
-        content="no-cache, no-store, must-revalidate"
-      />
-      <meta httpEquiv="Pragma" content="no-cache" />
-      <meta httpEquiv="Expires" content="0" />
-      <meta name="language" content="EN" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta
-        name="keywords"
-        content="cavies,hamsterbox,hamsterswap,p2p,web3,gaming,game,gamer,gamefi,crypto,nft,metaverse,unorthodox,infrastructure,multichain,btc,eth,solana,polygon,unorthodox,infrastructure,blockchain"
-      />
-
       {/* TODO: remove this metatag once we go live */}
       {/* <meta name="robots" content="noindex" /> */}
-
       {/*  Icon stuffs */}
       <link
         rel="icon"
@@ -262,20 +247,77 @@ export const SeoComponent: FC = () => {
       />
       <meta name="theme-color" content="#ffffff" />
 
+      <meta
+        http-equiv="Cache-Control"
+        content="no-cache, no-store, must-revalidate"
+      />
+      <meta http-equiv="Pragma" content="no-cache" />
+      <meta http-equiv="Expires" content="0" />
+      <meta name="language" content="EN" />
+
+      <meta
+        name="title"
+        content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta
+        name="description"
+        content="Hamsterpocket allows users to create and manage their own dollar-cost averaging pockets that will automatically execute the chosen strategies over time"
+      />
+      <meta
+        name="keywords"
+        content="cavies,hamsterbox,hamsterpocket,web3,tool,crypto,nft,metaverse,infrastructure,multichain,btc,eth,solana,infrastructure,blockchain"
+      />
+
+      <meta
+        property="og:title"
+        content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
+      />
+      <meta property="og:type" content="website" />
+      <meta
+        property="og:description"
+        content="Hamsterpocket allows users to create and manage their own dollar-cost averaging pockets that will automatically execute the chosen strategies over time"
+      />
+      <meta property="og:url" content="https://pocket.hamsterbox.xyz/" />
+      <meta property="og:image" content="/assets/images/banner_seo.png" />
+      <meta
+        property="og:image:alt"
+        content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
+      />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+
+      <meta name="twitter:card" content="summary" />
+      <meta property="twitter:url" content="https://pocket.hamsterbox.xyz/" />
+      <meta
+        name="twitter:title"
+        content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
+      />
+      <meta
+        name="twitter:description"
+        content="Hamsterpocket allows users to create and manage their own dollar-cost averaging pockets that will automatically execute the chosen strategies over time"
+      />
+      <meta name="twitter:image" content="/assets/images/banner_twitter.png" />
+      <meta
+        name="twitter:image:alt"
+        content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
+      />
+      <meta name="robots" content="noindex" />
+
       {/*  Google Analytics */}
-      <script
+      {/* <script
         async={true}
         src="https://www.googletagmanager.com/gtag/js?id=G-RL35P8RT0R"
-      />
-      <script src="https://cavies.xyz/assets/js/ga.js" />
-      <noscript>
+      /> */}
+      {/* <script src="https://cavies.xyz/assets/js/ga.js" /> */}
+      {/* <noscript>
         <iframe
           src="https://www.googletagmanager.com/ns.html?id=GTM-T379FWM"
           height="0"
           width="0"
           style={{ display: "none", visibility: "hidden" }}
         ></iframe>
-      </noscript>
+      </noscript> */}
     </>
   );
 };
