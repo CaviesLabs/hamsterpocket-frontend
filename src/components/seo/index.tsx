@@ -24,7 +24,7 @@ export const SeoComponent: FC = () => {
           locale: "en_US",
           images: [
             {
-              url: "https://pocket.hamsterbox.xyz/assets/assets/images/banner_seo.png",
+              url: "https://pocket.hamsterbox.xyz/assets/images/banner_seo.png",
               width: 1024,
               height: 512,
               alt: `hero image for ${title}`,
