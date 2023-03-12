@@ -290,7 +290,7 @@ export const SeoComponent: FC = () => {
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
 
-      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content="https://pocket.hamsterbox.xyz/" />
       <meta
         name="twitter:title"
