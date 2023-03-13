@@ -259,6 +259,7 @@ export const SeoComponent: FC = () => {
         name="title"
         content="Hamsterpocket | Trustless, Self-Managed DCA Vault"
       />
+      <title>Hamsterpocket | Trustless, Self-Managed DCA Vault</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta
         name="description"
