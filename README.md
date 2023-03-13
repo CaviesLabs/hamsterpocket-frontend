@@ -110,7 +110,7 @@ yarn
 
 Please refer to the `.env.example` to adjust your desired configuration. Please contact <a href="mailto:khang@cavies.xyz">khang@cavies.xyz</a> or  <a href="mailto:dev@cavies.xyz">dev@cavies.xyz</a> for any inquiries.
 
-### **Step 4: Run the project locally**
+### **Step 4: Run the project locally** 🔥
 
 ```bash
 yarn dev:dev-env
