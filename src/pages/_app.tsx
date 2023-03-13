@@ -23,7 +23,6 @@ import {
   SolflareWalletAdapter,
   SolletWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
-import { SeoComponent } from "@/src/components/seo";
 import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
@@ -67,7 +66,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         ssrInline={true}
         transformers={[legacyLogicalPropertiesTransformer]}
       >
-        <SeoComponent />
         <ThemeProvider>
           {/**
            * @dev

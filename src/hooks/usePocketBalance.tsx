@@ -24,8 +24,11 @@ export const usePocketBalance = (): {
   const handleBalance = useCallback(() => {
     setTotalUSD(() => {
       const arr = portfolios.map((token) => {
+        /** @dev Get decimal amount. */
         const humanValue =
           token.total / Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
+
+        /** @dev Return price of portfolio token in USD. */
         return humanValue * whiteLists[token.tokenAddress]?.estimatedValue || 0;
       });
       return arr.length ? arr.reduce((prev, cur) => cur + prev) : 0;
@@ -46,8 +49,13 @@ export const usePocketBalance = (): {
       const usdPrice = humanValue * tokenInfo?.estimatedValue || 0;
 
       return {
+        /** @dev Token symbol. */
         token: tokenInfo?.symbol,
+
+        /** @dev Price of portfolio token in USD. */
         totalValue: usdPrice,
+
+        /** @dev Percent of price in total pool. */
         percent: usdPrice / totalUSD,
       };
     });
