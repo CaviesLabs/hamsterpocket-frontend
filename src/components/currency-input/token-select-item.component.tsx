@@ -61,7 +61,7 @@ export const SUPPORTED_TOKEN: TokenItemEntity[] = [
  * @extends {TokenItemEntity}
  */
 interface TokenItemProps extends TokenItemEntity {
-  onClick(address: string): void;
+  onClick(address: string, decimals?: number): void;
   addInOwner?: boolean;
   balance: string;
   check: boolean;
@@ -77,7 +77,7 @@ export const TokenItem: FC<TokenItemProps> = (props) => {
     <div className="bg-dark90 color-white cursor-pointer hover:bg-dark80 px-[15px]">
       <div
         className="flow-root items-center pb-[20px] pt-[10px] border-b-solid border-b-[1px] border-b-dark50 hover:border-b-[0px]"
-        onClick={() => props.onClick(props.address)}
+        onClick={() => props.onClick(props.address, props.decimal)}
       >
         <div className="float-left">
           <img src={props.iconUrl} alt="Icon" className="w-[48px] h-[48px]" />

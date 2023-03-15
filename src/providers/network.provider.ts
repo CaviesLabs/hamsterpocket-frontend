@@ -46,8 +46,8 @@ export class NetworkProvider {
     requestConfig: RequestConfig
   ): Promise<RequestResponse> {
     const resp = await axios(url, {
+      baseURL: `${this.BASE_URL}`,
       ...requestConfig,
-      baseURL: `${this.BASE_URL}/api`,
       paramsSerializer: {
         serialize: (params: any) => {
           return qs.stringify(params, { arrayFormat: "repeat" });
@@ -60,7 +60,7 @@ export class NetworkProvider {
     } as any).catch((e) => e.response);
 
     if (!resp || resp?.status >= 400) {
-      throw new Error(`Error when request server, ${resp.statusText}`);
+      throw new Error(`Error when request server, ${resp?.statusText}`);
     }
 
     let jsonData = resp.data;

@@ -5,11 +5,9 @@ import {
   PublicKey,
   TransactionInstruction,
   SystemProgram,
+  // LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
-import {
-  CreateProposalDto,
-  SwapItemActionType,
-} from "@/src/entities/proposal.entity";
+import { CreatePocketDto } from "@/src/dto/pocket.dto";
 import {
   getAssociatedTokenAddress,
   createSyncNativeInstruction,
@@ -17,7 +15,9 @@ import {
   NATIVE_MINT,
 } from "@solana/spl-token";
 import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
-import { SwapIdl } from "./swap.idl";
+import { PocketIdl } from "./pocket.idl";
+import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
+import { WSOL_ADDRESS } from "@/src/utils";
 
 export class InstructionProvider {
   /**
@@ -30,89 +30,65 @@ export class InstructionProvider {
    * @dev This is to indicate whether the program is initialized or not.
    * @private
    */
-  private readonly program: Program<SwapIdl>;
+  private readonly program: Program<PocketIdl>;
+  private readonly programId: string;
 
   /**
    * @dev Swap registry
    * @private
    */
-  private readonly swapRegistry: PublicKey;
+  private readonly pocketRegistry: PublicKey;
   private readonly swapRegistryBump: number;
 
   constructor(
     connection: Connection,
-    program: Program<SwapIdl>,
-    swapRegistry: PublicKey,
+    program: Program<PocketIdl>,
+    programId: string,
+    pocketRegistry: PublicKey,
     swapRegistryBump: number
   ) {
     this.connection = connection;
     this.program = program;
-    this.swapRegistry = swapRegistry;
+    this.pocketRegistry = pocketRegistry;
     this.swapRegistryBump = swapRegistryBump;
+    this.programId = programId;
   }
 
   /**
-   * @dev Find token vault if exists in chain.
-   * @param {PublicKey} pub.
+   * @dev Find pocket account.
+   * @param {string} id Pocket ID.
    */
-  private findTokenVaultAccount(pub: PublicKey): [PublicKey, number] {
-    return PublicKey.findProgramAddressSync(
+  public async findPocketAccount(pocketId: string): Promise<PublicKey> {
+    const [pocketAccount] = PublicKey.findProgramAddressSync(
       [
-        anchor.utils.bytes.utf8.encode("SEED::SWAP::TOKEN_VAULT_SEED"),
-        pub.toBytes(),
-      ],
-      this.program.programId
-    );
-  }
-
-  /**
-   * @dev The function to find and create token vault.
-   * @param {PublicKey} pub.
-   * @returns {TransactionInstruction}
-   */
-  public async createSwapTokenVault(
-    pub: PublicKey
-  ): Promise<TransactionInstruction> {
-    /**
-     * @dev Find token vault if exists in chain.
-     */
-    const [swapTokenVault] = this.findTokenVaultAccount(pub);
-
-    /**
-     * @dev If does not find account info of token vault then create new instruction for one.
-     */
-    if (!(await this.connection.getAccountInfo(swapTokenVault))) {
-      return await this.program.methods
-        .createTokenVault()
-        .accounts({
-          mintAccount: pub,
-          swapRegistry: this.swapRegistry,
-          swapTokenVault,
-        })
-        .instruction();
-    }
-
-    return null;
-  }
-
-  /**
-   * @dev The function to find swap proposal on-chain with id (have to splice before process).
-   * @param {string} pub.
-   * @returns {PublicKey}
-   */
-  public async findSwapProposal(pub: string): Promise<PublicKey> {
-    /**
-     * @dev Find proposal with id.
-     */
-    const [swapProposal] = PublicKey.findProgramAddressSync(
-      [
-        anchor.utils.bytes.utf8.encode("SEED::SWAP::PROPOSAL_SEED"),
-        anchor.utils.bytes.utf8.encode(pub.slice(0, 10)),
+        anchor.utils.bytes.utf8.encode("SEED::POCKET::POCKET_SEED"),
+        anchor.utils.bytes.utf8.encode(pocketId.slice(0, 24)),
       ],
       this.program.programId
     );
 
-    return swapProposal;
+    return pocketAccount;
+  }
+
+  /**
+   * @dev Find token vault account.
+   * @param {PublicKey} pocketAccount pocketAccount.
+   * @param {PublicKey} tokenAccount token account.
+   */
+  public async findTokenVaultAccount(
+    pocketAccount: PublicKey,
+    tokenAccount: PublicKey
+  ): Promise<PublicKey> {
+    const [tokenVualtAccount] = PublicKey.findProgramAddressSync(
+      [
+        anchor.utils.bytes.utf8.encode("SEED::POCKET::TOKEN_VAULT_SEED"),
+        pocketAccount.toBytes(),
+        tokenAccount.toBytes(),
+      ],
+      this.program.programId
+    );
+
+    return tokenVualtAccount;
   }
 
   /**
@@ -134,172 +110,331 @@ export class InstructionProvider {
   }
 
   /**
+   * @dev The function to find and create token vault.
+   * @param {PublicKey} pocketOwner,
+   * @param {PublicKey} pocketAccount,
+   * @param {PublicKey} pub.
+   * @returns {TransactionInstruction}
+   */
+  public async createTokenVaultAccount(
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    mintAccount: PublicKey
+  ): Promise<TransactionInstruction> {
+    /**
+     * @dev Find token vault if exists in chain.
+     */
+    const pocketTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      mintAccount
+    );
+
+    /**
+     * @dev If does not find account info of token vault then create new instruction for one.
+     */
+    if (!(await this.connection.getAccountInfo(pocketTokenVault))) {
+      return await this.program.methods
+        .createTokenVault()
+        .accounts({
+          mintAccount: mintAccount,
+          pocketTokenVault: pocketTokenVault,
+          signer: pocketOwner,
+          pocket: pocketAccount,
+        })
+        .instruction();
+    }
+
+    return null;
+  }
+
+  /**
    * @dev The function to create proposal instruction.
    * @param {CreateProposalDto} createProposalDto.
    * @param {PublicKey} proposalOwner.
    * @param {PublicKey} swapProposal.
    * @returns {TransactionInstruction}
    */
-  public async createProposal(
-    createProposalDto: CreateProposalDto,
-    proposalOwner: PublicKey,
-    swapProposal: PublicKey
+  public async createPocket(
+    createPocketDto: CreatePocketDto,
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey
   ): Promise<TransactionInstruction> {
+    /**
+     * @dev Custom data to create.
+     */
+    console.log({ createPocketDto });
+    const data: any = {
+      id: createPocketDto.id,
+      quoteTokenAddress: createPocketDto.quoteTokenAddress,
+      baseTokenAddress: createPocketDto.baseTokenAddress,
+      stopConditions: createPocketDto.stopConditions,
+      buyCondition: createPocketDto.buyCondition,
+      startAt: createPocketDto.startAt,
+      batchVolume: createPocketDto.batchVolume,
+      name: createPocketDto.name,
+      frequency: createPocketDto.frequency,
+      side: createPocketDto.side,
+      marketKey: new PublicKey(createPocketDto.marketId),
+    };
+
+    /**
+     * @dev Execute instruction creation.
+     */
     return await this.program.methods
-      .createProposal({
-        id: createProposalDto.id.slice(0, 10),
-        swapOptions: createProposalDto.swapOptions,
-        offeredItems: createProposalDto.offeredOptions,
-        expiredAt: new anchor.BN(createProposalDto.expiredAt.getTime()),
-      })
+      .createPocket(data)
       .accounts({
-        proposalOwner,
-        swapProposal,
-        swapRegistry: this.swapRegistry,
-      })
+        pocket: pocketAccount,
+        signer: pocketOwner,
+        pocketRegistry: this.pocketRegistry,
+      } as any)
       .instruction();
   }
 
   /**
-   * @dev the functioon to cancel proposal instruction.
-   * @param {string} proposalId
-   * @param {PublicKey} swapProposal
-   * @param {PublicKey} proposalOwner
+   * @dev Deposit assets to pocket pool
+   * @param {PublicKey} pocketOwner
+   * @param {PublicKey} pocketAccount
+   * @param {PublicKey} tokenAccount
+   * @param {PublicKey} tokenVaultAccount
+   * @param {PublicKey} depositAmount
    * @returns {TransactionInstruction}
    */
-  public async cancelProposal(
-    proposalId: string,
-    swapProposal: PublicKey,
-    proposalOwner: PublicKey
-  ): Promise<TransactionInstruction> {
-    return await this.program.methods
-      .cancelProposal({ id: proposalId.slice(0, 10) })
-      .accounts({
-        swapProposal,
-        signer: proposalOwner,
-      })
-      .instruction();
+  public async depositAsset(
+    walletProvider: WalletProvider,
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey,
+    depositAmount: anchor.BN,
+    mode: "base" | "quote"
+  ): Promise<TransactionInstruction[]> {
+    /**
+     * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
+     */
+    const baseAsociated = await getAssociatedTokenAddress(
+      baseTokenAccount,
+      pocketOwner
+    );
+    const targetAsociated = await getAssociatedTokenAddress(
+      targetTokenAccount,
+      pocketOwner
+    );
+
+    /**
+     * @dev Get @var {PublicKey} tokenVault
+     */
+
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
+    );
+
+    /**
+     * @dev Handle to wrap sol to wsol if offered item is SOL currency.
+     */
+    const wrapSolInstructions = [];
+    if (baseTokenAccount.toBase58().toString() === WSOL_ADDRESS) {
+      try {
+        const [ins1, ins2] = await this.wrapSol(
+          walletProvider.publicKey,
+          depositAmount
+        );
+
+        ins1 && wrapSolInstructions.push(ins1);
+        ins2 && wrapSolInstructions.push(ins2);
+      } catch (err) {
+        console.log("Error when wrap sol", err);
+      }
+    }
+
+    return [
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        walletProvider as any,
+        baseTokenAccount,
+        pocketOwner
+      ),
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        walletProvider as any,
+        targetTokenAccount,
+        pocketOwner
+      ),
+      ...wrapSolInstructions,
+      await this.program.methods
+        .deposit({
+          depositAmount,
+          mode: { [mode]: {} },
+        } as any)
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+          signerBaseTokenAccount: baseAsociated,
+          signerQuoteTokenAccount: targetAsociated,
+        })
+        .instruction(),
+    ];
   }
 
   /**
-   * @dev The function to deposit token to token vault account.
-   * @param {PublicKey} proposalOwner
-   * @param {PublicKey} mintAccount
-   * @param {string} proposalId
-   * @param swapProposal
-   * @param {PublicKey} swapItemId
-   * @param actionType
-   * @param optionId
+   * @dev Instuction to close pool.
+   * @param pocketOwner
+   * @param pocketAccount
    * @returns
    */
-  public async transferTokenToVault(
-    proposalId: string,
-    swapProposal: PublicKey,
-    proposalOwner: PublicKey,
-    mintAccount: PublicKey,
-    swapItemId: string,
-    actionType: SwapItemActionType,
-    optionId?: string
-  ): Promise<TransactionInstruction> {
-    /**
-     * @dev Find token vault if exists in chain.
-     */
-    const [swapTokenVault, swapTokenVaultBump] =
-      await this.findTokenVaultAccount(mintAccount);
-
-    /**
-     * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
-     */
-    const asociatedTokenAccountAddress = await getAssociatedTokenAddress(
-      mintAccount,
-      proposalOwner
-    );
-
-    /**
-     * @dev Initilize params for program.
-     */
-    const params: any = {
-      proposalId: proposalId.slice(0, 10),
-      swapItemId: swapItemId.slice(0, 10),
-      swapTokenVaultBump,
-      actionType: { [actionType]: {} },
-      optionId: optionId ? optionId.slice(0, 10) : "",
-    };
-
-    console.log(params);
-
-    /**
-     * @dev Call to program to create an instruction.
-     */
+  public async closePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
     return await this.program.methods
-      .transferAssetsToVault(params)
+      .updatePocket({
+        status: { closed: {} },
+      } as any)
       .accounts({
-        signer: proposalOwner,
-        signerTokenAccount: asociatedTokenAccountAddress,
-        swapTokenVault,
-        mintAccount,
-        swapProposal,
+        signer: pocketOwner,
+        pocket: pocketAccount,
       })
       .instruction();
   }
 
   /**
-   * @dev The function to transfer token from vault to target account.
-   * @param targetAccount
-   * @param mintAccount
-   * @param swapProposal
-   * @param proposalId
-   * @param swapItemId
-   * @param actionType
-   * @returns {TransactionInstruction}
+   * @dev Instuction to close pocket.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
    */
-  public async transferTokenFromVault(
-    targetAccount: PublicKey,
-    mintAccount: PublicKey,
-    swapProposal: PublicKey,
-    proposalId: string,
-    swapItemId: string,
-    actionType: SwapItemActionType
-  ): Promise<TransactionInstruction> {
-    /**
-     * @dev Find token vault if exists in chain.
-     */
-    const [swapTokenVault, swapTokenVaultBump] =
-      await this.findTokenVaultAccount(mintAccount);
+  public async closePocketAccount(
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey
+  ): Promise<TransactionInstruction[]> {
+    /** @dev Get @var {PublicKey} tokenVault */
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
+    );
 
+    return [
+      await this.program.methods
+        .closePocketAccounts()
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+        })
+        .instruction(),
+    ];
+  }
+
+  /**
+   * @dev Instuction to pause pool.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async pausePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
+    return await this.program.methods
+      .updatePocket({
+        status: { paused: {} },
+      } as any)
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+      })
+      .instruction();
+  }
+
+  /**
+   * @dev Instuction to resume pool.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @returns
+   */
+  public async resumePocket(pocketOwner: PublicKey, pocketAccount: PublicKey) {
+    return await this.program.methods
+      .updatePocket({
+        status: { active: {} },
+      } as any)
+      .accounts({
+        signer: pocketOwner,
+        pocket: pocketAccount,
+      })
+      .instruction();
+  }
+
+  /**
+   * @dev Instruction to withdraw assets.
+   * @param pocketOwner
+   * @param pocketAccount
+   * @param baseTokenAccount
+   * @param targetTokenAccount
+   * @returns
+   */
+  public async withdrawPocket(
+    walletProvider: WalletProvider,
+    pocketOwner: PublicKey,
+    pocketAccount: PublicKey,
+    baseTokenAccount: PublicKey,
+    targetTokenAccount: PublicKey
+  ): Promise<TransactionInstruction[]> {
     /**
      * @dev Get @var {asociatedTokenAccount} to hold mintAccount.
      */
-    const asociatedTokenAccountAddress = await getAssociatedTokenAddress(
-      mintAccount,
-      targetAccount
+    const baseAsociated = await getAssociatedTokenAddress(
+      baseTokenAccount,
+      pocketOwner
+    );
+    const targetAsociated = await getAssociatedTokenAddress(
+      targetTokenAccount,
+      pocketOwner
     );
 
     /**
-     * @dev Initilize params for program.
+     * @dev Get @var {PublicKey} tokenVault
      */
-    const params: any = {
-      proposalId: proposalId.slice(0, 10),
-      swapItemId: swapItemId.slice(0, 10),
-      swapRegistryBump: this.swapRegistryBump,
-      swapTokenVaultBump,
-      actionType: { [actionType]: {} },
-    };
 
-    /**
-     * @dev Call to program to create an instruction.
-     */
-    return this.program.methods
-      .transferAssetsFromVault(params)
-      .accounts({
-        signer: targetAccount,
-        signerTokenAccount: asociatedTokenAccountAddress,
-        swapProposal,
-        swapTokenVault,
-        swapRegistry: this.swapRegistry,
-        mintAccount: mintAccount,
-      })
-      .instruction();
+    const baseTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      baseTokenAccount
+    );
+    const targetTokenVault = await this.findTokenVaultAccount(
+      pocketAccount,
+      targetTokenAccount
+    );
+    return [
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        walletProvider as any,
+        baseTokenAccount,
+        pocketOwner
+      ),
+      await getOrCreateAssociatedTokenAccount(
+        this.connection,
+        walletProvider as any,
+        targetTokenAccount,
+        pocketOwner
+      ),
+      await this.program.methods
+        .withdraw()
+        .accounts({
+          signer: pocketOwner,
+          pocket: pocketAccount,
+          pocketBaseTokenVault: baseTokenVault,
+          pocketQuoteTokenVault: targetTokenVault,
+          signerBaseTokenAccount: baseAsociated,
+          signerQuoteTokenAccount: targetAsociated,
+        })
+        .instruction(),
+    ];
   }
 
   /**
@@ -317,7 +452,8 @@ export class InstructionProvider {
      */
     const associatedTokenAccount = await getAssociatedTokenAddress(
       NATIVE_MINT,
-      walletPublicKey
+      walletPublicKey,
+      false
     );
 
     /**
@@ -356,7 +492,8 @@ export class InstructionProvider {
     return createCloseAccountInstruction(
       associatedTokenAccount,
       walletPublicKey,
-      walletPublicKey
+      walletPublicKey,
+      []
     );
   }
 }

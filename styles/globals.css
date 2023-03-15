@@ -120,7 +120,7 @@ input[type=number] {
 .hamster-modal > .ant-modal-content,
 .hamster-modal .ant-modal-header,
 .hamster-modal .ant-modal-footer {
-  background-color: #F8F9FE;
+  background-color: #20242D;
 }
 .hamster-modal > .ant-modal-content .ant-modal-close {
   top: 40px;
@@ -128,6 +128,7 @@ input[type=number] {
 }
 .hamster-modal .ant-modal-close-icon {
   font-size: 24px;
+  filter: invert(100%) sepia(0%) saturate(7489%) hue-rotate(186deg) brightness(95%) contrast(105%);
 }
 
 .css-ul1er5 {
@@ -176,7 +177,19 @@ input[type=number] {
   background-color: #20242D !important;
   color: white;
 }
-
+.dark-input input::placeholder  {
+  color: white;
+}
+.gray-input input {
+  background-color: #353C4B !important;
+  color: white;
+}
+.gray-input input::placeholder  {
+  color: white;
+}
+.dark-input, .gray-input, .dark-input input, .gray-input input {
+  cursor: pointer !important;
+}
 .ant-picker-panel-container {
   background: #20242D !important;
 }
@@ -184,7 +197,10 @@ input[type=number] {
 .ant-picker-body table th {
   color: white !important;
 }
-.ant-picker-body table tr td {
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range {
+  color: #20242D !important;
+}
+.ant-picker-dropdown .ant-picker-cell-in-view {
   color: #F0F3FA !important;
 }
 .ant-picker-year-btn {
@@ -207,4 +223,20 @@ input[type=number] {
 }
 .h-52.overflow-scroll {
   border-radius: 16px !important;
+}
+
+table tr {
+  border-bottom: solid 1px #4A5469;
+}
+table tr th {
+  text-align: left;
+}
+
+
+input:focus {
+  outline: none !important;
+  border: none !important;
+  border-color: inherit !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }

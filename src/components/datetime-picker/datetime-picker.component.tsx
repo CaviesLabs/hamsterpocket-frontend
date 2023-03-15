@@ -57,12 +57,13 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
       <DatePicker
         format="DD/MM/YYYY"
         size="large"
-        className="rounded-[16px] px-[50px] bg-dark90 !h-[56px] text-dark10 border-none col-span-2"
+        className="rounded-[16px] px-[50px] bg-dark90 !h-[63px] text-dark10 border-none col-span-2"
         placeholder="dd/mm/yyyy"
         defaultValue={dayjs(Date.now())}
         onChange={(v) => handleSelectDate(v)}
         suffixIcon={<CalendarIcon />}
         clearIcon={null}
+        disabledDate={props.disabledDate}
       />
       <div className="ml-[20px] relative col-span-1">
         <DropdownSelect

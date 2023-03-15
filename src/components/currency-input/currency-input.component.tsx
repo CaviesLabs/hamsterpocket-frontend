@@ -1,37 +1,64 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import { Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
 import { TokenItem } from "./token-select-item.component";
-import { WSOL_ADDRESS } from "@/src/utils/constants";
+import { WSOL_ADDRESS } from "@/src/utils";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
+import classNames from "classnames";
+import styles from "./currency-input.module.scss";
 
-const allowCurrencies = [
-  {
-    id: "So11111111111111111111111111111111111111112",
-    image:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
-    name: "Solana",
-    type: "token",
-    decimals: 9,
-  },
-  {
-    id: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
-    image: "https://arweave.net/hQiPZOsRZXGXBJd_82PhVdlM_hACsT_q6wqwf5cSY7I",
-    name: "Bonk",
-    type: "token",
-    decimals: 5,
-  },
-  {
-    id: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
-    image:
-      "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
-    name: "USD Coin",
-    type: "token",
-    decimals: 6,
-  },
-];
+export type CurrencyInputProps = {
+  onAddressSelect?: (address: string, decimals?: number) => void;
+  onAmountChange?: (amount: number) => void;
+  placeholder?: string;
+  addressSelected?: string;
 
-export const CurrencyInput: FC = () => {
+  /**
+   * @dev Overwrite style.
+   */
+  className?: string;
+  inputClassName?: string;
+  dropdownBadgeClassname?: string;
+
+  /**
+   * @dev This props equal True if user want show currency badge only.
+   */
+  currencyBadgeOnly?: boolean | false;
+
+  /**
+   * @dev Restrict disable dropdown to select token.
+   */
+  disableDropdown?: boolean;
+  disabledInput?: boolean;
+
+  /**
+   * @dev List of allowed tokens.
+   */
+  allowedTokens?: string[];
+
+  /**
+   * @dev Condition to show dropdown icon.
+   */
+  dropdownIconDisplayed?: boolean | false;
+
+  /**
+   * @dev Callback function for on click event.
+   */
+  onClick?: () => void;
+};
+
+export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
+  /**
+   * @dev handle value
+   */
+  const [value, setValue] = useState<string>("");
+
+  /**
+   * @dev Inject allow currencies which have been whitelisted in Hamster server.
+   */
+  const { whiteLists: allowCurrencies } = useWhiteList();
+
   /**
    * @dev The condition to display filter for user to select which token want to excute.
    */
@@ -40,7 +67,9 @@ export const CurrencyInput: FC = () => {
   /**
    * @dev The token address which user select.
    */
-  const [addressSelected, setAddressSelected] = useState(WSOL_ADDRESS);
+  const [addressSelected, setAddressSelected] = useState(
+    !props.currencyBadgeOnly ? WSOL_ADDRESS : ""
+  );
 
   /**
    * @dev reference to the button
@@ -52,50 +81,90 @@ export const CurrencyInput: FC = () => {
     setDropdown(false);
   });
 
+  useEffect(
+    () => props.addressSelected && setAddressSelected(props.addressSelected),
+    [props.addressSelected]
+  );
+
   return (
-    <div className="relative">
+    <div className="relative" ref={ref} onClick={props.onClick}>
       <Input
-        data-dropdown-toggle="dropdown"
         size="large"
-        className="rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input"
-        placeholder="Enter SOL amount"
-        prefix={
-          <img
-            className="w-10 h-10"
-            src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png"
-          />
+        className={classNames(
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px]",
+          styles.myInput,
+          props.inputClassName
+        )}
+        placeholder={
+          props.currencyBadgeOnly
+            ? addressSelected
+              ? ""
+              : props.placeholder
+            : props.placeholder
         }
-        type="number"
-        value={0}
-        onChange={(val) => console.log(val)}
+        prefix={
+          addressSelected === "BATCH" ? null : (
+            <img
+              className={classNames(
+                "rounded-full",
+                addressSelected ? "w-10 h-10 mr-4" : "invisible"
+              )}
+              src={allowCurrencies?.[addressSelected]?.image}
+            />
+          )
+        }
+        onChange={(e) => {
+          const value = e.target.value;
+          const validator = /^[+]?([.]\d+|\d+[.]?\d*)$/;
+          if (value !== "" && !validator.exec(value)) return;
+          props.onAmountChange && props.onAmountChange(parseFloat(value));
+          setValue(e.target.value);
+        }}
+        disabled={props.currencyBadgeOnly || props.disabledInput}
+        value={value}
       />
       <p
-        className="absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white"
+        className={classNames(
+          "absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white",
+          props.dropdownBadgeClassname
+        )}
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        SOL
-        <DropdownIcon className="float-right ml-[5px]" />
+        {addressSelected === "BATCH"
+          ? "BATCH"
+          : allowCurrencies?.[addressSelected]?.symbol}
+        {!props.disableDropdown && (
+          <DropdownIcon className="float-right ml-[5px]" />
+        )}
+        {props.dropdownIconDisplayed && (
+          <DropdownIcon className="float-right ml-[5px]" />
+        )}
       </p>
-      {dropDown && (
-        <div
-          ref={ref}
-          className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80"
-        >
+      {!props?.disableDropdown && dropDown && (
+        <div className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80">
           <div className="overflow-y-scroll max-h-64">
-            {allowCurrencies.map((item, key) => (
+            {(props.allowedTokens
+              ? Object.keys(allowCurrencies).filter((item) =>
+                  props.allowedTokens.includes(item)
+                )
+              : Object.keys(allowCurrencies)
+            ).map((address, key) => (
               <TokenItem
                 key={`${Math.random()}-${key}`}
-                name={item.name}
-                iconUrl={item.image}
-                address={item.id}
+                name={allowCurrencies?.[address]?.name}
+                iconUrl={allowCurrencies?.[address]?.image}
+                address={allowCurrencies?.[address]?.address}
+                decimal={allowCurrencies?.[address]?.decimals}
                 balance={"0"}
                 addInOwner={false}
-                onClick={(address) => {
+                onClick={(address, decimals) => {
                   setDropdown(false);
                   setAddressSelected(address);
+                  props.onAddressSelect &&
+                    props.onAddressSelect(address, decimals);
                 }}
-                check={item.id === addressSelected}
+                check={address === addressSelected}
               />
             ))}
           </div>

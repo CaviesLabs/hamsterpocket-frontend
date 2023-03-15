@@ -60,9 +60,7 @@ export const useAuth = () => {
       /**
        * @dev Delayed checking mean when user disconnect completed from wallet, it will reset authentication session.
        */
-      console.log("delayed");
       delayed = setTimeout(async () => {
-        console.log("disconnect");
         await disconnect();
       }, 3000);
     }

@@ -1,0 +1,11 @@
+
+.myInput {
+    :global {
+        input::placeholder {
+            color: #7886A0 !important;
+        }
+    }
+}
+.ant-select-selection-placeholder {
+    color: black;
+}

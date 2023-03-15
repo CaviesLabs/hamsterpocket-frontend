@@ -23,7 +23,6 @@ import {
   SolflareWalletAdapter,
   SolletWalletAdapter,
 } from "@solana/wallet-adapter-wallets";
-import { SeoComponent } from "@/src/components/seo";
 import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
@@ -34,6 +33,7 @@ import {
  */
 import "flowbite";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { WhitelistProvider } from "@/src/hooks/useWhitelist";
 
 const store = makeStore();
 
@@ -66,7 +66,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         ssrInline={true}
         transformers={[legacyLogicalPropertiesTransformer]}
       >
-        <SeoComponent />
         <ThemeProvider>
           {/**
            * @dev
@@ -104,7 +103,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               >
                 <WalletProvider>
                   <MainProvider>
-                    <AppComponent {...{ Component, pageProps }} />
+                    <WhitelistProvider>
+                      <AppComponent {...{ Component, pageProps }} />
+                    </WhitelistProvider>
                   </MainProvider>
                 </WalletProvider>
               </WalletKitProvider>

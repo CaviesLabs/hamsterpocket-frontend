@@ -15,7 +15,7 @@ import {
 import web3 from "@solana/web3.js";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
-// import { SwapProgramProviderV0 } from "@/src/providers/program/swap-program-v0.provider";
+import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { ProgramService, authService } from "@/src/services";
 import { getWalletName } from "./utils";
 // import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
@@ -41,7 +41,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const wallet = useConnectedWallet();
 
   /** @dev Program service */
-  const [programService] = useState<ProgramService>(null);
+  const [programService, initProgram] = useState<ProgramService>(null);
   const [solBalance, setSolBalance] = useState(0);
 
   /**
@@ -93,9 +93,11 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
       /**
        * @dev Get blance if whether address or signer is valid.
        */
-      const balance = await walletConnection.connection.getBalance(
-        address || solanaWallet?.publicKey
-      );
+      const balance = await walletConnection.connection
+        .getBalance(address || solanaWallet?.publicKey)
+        .catch(() => {
+          return 0;
+        });
 
       /**
        * @dev Check signer sol balance if address is null.
@@ -122,35 +124,48 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     /**
      * @dev Force to connect first.
      */
-    solanaWallet?.wallet?.adapter?.connect();
+    solanaWallet?.wallet?.adapter?.connect().catch((e) => {
+      console.log("connect wallet Error:", e);
+    });
   }, [wallet, solanaWallet]);
 
   /**
    * @dev Initilize when wallet changed.
    * */
   useEffect(() => {
-    if (wallet?.publicKey?.toString()) {
-      try {
-        // /**
-        //  * @dev Initlize swap program service with initlized programProvider.
-        //  */
-        // const program = new ProgramService(
-        //   new SwapProgramProviderV0(solanaWallet)
-        // );
+    (async () => {
+      if (wallet?.publicKey?.toString()) {
+        try {
+          /** @dev Init program provider. */
+          const programProvider = new PocketProgramProvider(solanaWallet);
 
-        // /**
-        //  * @dev Init program into state for usage
-        //  */
-        // initProgram(program);
+          /** ---- DEBUG ---  */
+          // setTimeout(async () => {
+          //   try {
+          //     const [, pocketState, root] =
+          //       await programProvider.getPocketState(
+          //         "640856ba92f54d45cd5268ad"
+          //       );
+          //     (window as any).test = root;
+          //     console.log({ pocketState });
+          //   } catch (err) {
+          //     console.log("Error get pocket state: ", err);
+          //   }
+          // }, 4000);
 
-        // /**
-        //  * @dev update sol balance if wallet changes.
-        //  */
-        getSolBalance();
-      } catch (err: any) {
-        console.log(err.message);
+          /** @dev Initlize swap program service with initlized programProvider. */
+          const program = new ProgramService(programProvider);
+
+          /** @dev Init program into state for usage. */
+          initProgram(program);
+
+          /** @dev update sol balance if wallet changes. */
+          getSolBalance();
+        } catch (err: any) {
+          console.log(err.message);
+        }
       }
-    }
+    })();
   }, [wallet, solanaWallet, router.asPath]);
 
   return (

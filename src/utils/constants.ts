@@ -1,4 +1,8 @@
 import type { OptionProps } from "@/src/components/select";
+import {
+  PriceConditionType,
+  FrequencyConditionType,
+} from "@/src/entities/pocket.entity";
 
 /**
  * @dev Define value data to sort NFTs.
@@ -28,28 +32,74 @@ export const categoryOptions = [
  */
 export const TIME_CONDITIONS: OptionProps[] = [
   {
-    value: "Daily",
+    label: "Hourly",
+    value: FrequencyConditionType.HOURLY,
   },
   {
-    value: "Weekly",
+    label: "Daily",
+    value: FrequencyConditionType.DAILY,
   },
   {
-    value: "Every 2 Weeks",
+    label: "Weekly",
+    value: FrequencyConditionType.WEEKLY,
   },
   {
-    value: "Monthly",
+    label: "Every 2 Weeks",
+    value: FrequencyConditionType.E2W,
   },
   {
-    value: "Every 3 Months",
+    label: "Monthly",
+    value: FrequencyConditionType.MONTHLY,
   },
   {
-    value: "Every 6 Months",
+    label: "Every 3 Months",
+    value: FrequencyConditionType.E3M,
   },
   {
-    value: "Yearly",
+    label: "Every 6 Months",
+    value: FrequencyConditionType.E6M,
   },
   {
-    value: "Custom",
+    label: "Yearly",
+    value: FrequencyConditionType.YEARLY,
+  },
+];
+
+/**
+ * @dev Define time option to select for buy condition or stop pool condition.
+ */
+export const PRICE_CONDITIONS: OptionProps[] = [
+  {
+    value: PriceConditionType.GT,
+    label: "Greater than",
+  },
+  {
+    value: PriceConditionType.GTE,
+    label: "Greater than or equal to",
+  },
+  {
+    value: PriceConditionType.LT,
+    label: "Less than",
+  },
+  {
+    value: PriceConditionType.LTE,
+    label: "Less than or equal to",
+  },
+  {
+    value: PriceConditionType.EQ,
+    label: "Is equal to",
+  },
+  {
+    value: PriceConditionType.NEQ,
+    label: "Is not equal to",
+  },
+  {
+    value: PriceConditionType.BW,
+    label: "Is between",
+  },
+  {
+    value: PriceConditionType.NBW,
+    label: "Is not between",
   },
 ];
 
@@ -72,9 +122,44 @@ export const SIGN_MESSAGE =
   "\n" +
   "Your authentication status will reset after 24 hours.";
 
-// export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm (UTC)";
-export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss (UTC)";
+export const DATE_TIME_FORMAT = "YYYY/MM/DD HH:mm";
+export const DATE_FORMAT = "YYYY-MM-DD";
 
 export const WSOL_ADDRESS = "So11111111111111111111111111111111111111112";
 export const BONK_ADDRESS = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
 export const USDC_ADDRESS = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+
+/**
+ * @dev Host to storage user avatar by wallet address.
+ */
+export const AVATAR_ENDPOINT =
+  "https://avatars.hamsterbox.xyz/api/images/beam/120";
+
+// const allowCurrenciess = [
+//   {
+//     id: "So11111111111111111111111111111111111111112",
+//     image:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png",
+//     name: "Solana",
+//     type: "token",
+//     decimals: 9,
+//     symbol: "SOL",
+//   },
+//   {
+//     id: "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+//     image: "https://arweave.net/hQiPZOsRZXGXBJd_82PhVdlM_hACsT_q6wqwf5cSY7I",
+//     name: "Bonk",
+//     type: "token",
+//     decimals: 5,
+//     symbol: "BONK",
+//   },
+//   {
+//     id: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+//     image:
+//       "https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v/logo.png",
+//     name: "USD Coin",
+//     type: "token",
+//     decimals: 6,
+//     symbol: "USDC",
+//   },
+// ];

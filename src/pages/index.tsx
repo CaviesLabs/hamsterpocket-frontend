@@ -1,50 +1,75 @@
-import { FC } from "react";
-import type { NextPage } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
-import { useMain } from "@/src/hooks/pages/main";
 import { LayoutSection } from "@/src/components/layout-section";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
+import { statisticService } from "@/src/services/statistic.service";
+import { StatisticEntity } from "@/src/entities/statistic.entity";
+import { useEffect } from "react";
+import { useWallet } from "../hooks/useWallet";
+import { useWalletKit } from "@gokiprotocol/walletkit";
 
-const Layout: FC = () => {
-  // const proposals = useSelector((state: any) => state.proposals);
-  const {} = useMain();
-
+type LayoutProps = {
+  data: StatisticEntity;
+};
+const Layout = (props: LayoutProps) => {
+  const { data } = props;
   /**
    * @dev Router injected.
    */
   const router = useRouter();
+
+  /**
+   * @dev Wallet hook injected.
+   */
+  const wallet = useWallet();
+  const { connect: connectWallet } = useWalletKit();
+  useEffect(() => {
+    if (wallet?.solanaWallet.publicKey?.toString()) {
+      router.push("/my-pockets");
+    }
+  }, [wallet]);
+
+  const handleCreatePocket = () => {
+    if (wallet?.solanaWallet.publicKey) {
+      router.push("/create-pocket");
+    } else {
+      connectWallet();
+    }
+  };
 
   return (
     <MainLayout>
       <div className={styles.container}>
         <LayoutSection className="pt-[60px] pb-[100px]">
           <section className="md:flex md:items-center">
-            <div className="w-full md:w-[60%] md:pr-[200px] mt-[60px] md:mt-0">
-              <h1 className="banner-title text-center">Amazing DCA Tool</h1>
-              <h2 className="text-[48px] text-white text-center normal-text relative top-[-20px]">
-                HamsterPocket
+            <div className="w-full md:w-[57%]">
+              <h1 className="banner-title">Self-Managed DCA Vault</h1>
+              <h2 className="text-[48px] text-white normal-text relative top-[-20px]">
+                Hamsterpocket
               </h2>
-              <p className="max-w-[498px] mx-auto text-white text-center text-[20px] mt-[15px] regular-text">
-                The purpose of lorem ipsum is to create a natural looking block
-                of text (sentence, paragraph, page, etc.) that doesn't distract
-                from the layout.
-              </p>
-              <div className="text-center mt-[34px]">
-                <Button
-                  className="mx-auto !px-[50px] !border-solid !border-white !border-[2px]"
-                  theme={{
-                    backgroundColor: "transparent",
-                    color: "white",
-                  }}
-                  text="Create a Pocket"
-                  onClick={() => router.push("/my-pools")}
-                />
+              <div className="max-w-[498px] text-center">
+                <p className="text-white text-[20px] mt-[15px] regular-text leading-[33px] tracking-[0.72px]">
+                  Hamsterpocket allows users to create and manage their own
+                  dollar-cost averaging pools (“pockets”) that will
+                  automatically execute the chosen strategies over time.
+                </p>
+                <div className="mt-[34px]">
+                  <Button
+                    className="mx-auto !text-[18px] !px-[50px] !border-solid !border-white !border-[2px]"
+                    theme={{
+                      backgroundColor: "transparent",
+                      color: "white",
+                    }}
+                    text="Create a Pocket"
+                    onClick={() => handleCreatePocket()}
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-full md:w-[40%] md:pt-[90px]">
+            <div className="w-full md:w-[35%] mt-28">
               <img
                 src="/assets/images/banner-icon.png"
                 alt="Image"
@@ -52,17 +77,19 @@ const Layout: FC = () => {
               />
             </div>
           </section>
-          <section className="pt-[50px]">
+          <section className="pt-[50px] max-w-2xl mx-auto">
             <p className="text-center text-purple normal-text text-[24px]">
               Achievements
             </p>
             <p className="text-center text-white text-[32px] normal-text">
-              Some text here about numbers
+              Hamsterpocket provides the most flexible DCA strategies to users
             </p>
-            <div className="grid md:grid-cols-3 gap-3 pt-[50px]">
+          </section>
+          <section className="pt-5 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-3">
               <div>
                 <p className="text-center text-green text-[32px] normal-text">
-                  6,458
+                  {data.users}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Users
@@ -70,7 +97,7 @@ const Layout: FC = () => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] normal-text">
-                  17,934
+                  {data.pockets}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Pockets
@@ -78,7 +105,7 @@ const Layout: FC = () => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] normal-text">
-                  $ 35,293.04
+                  $ {data.totalVolume.toFixed(2)}
                 </p>
                 <p className="text-center text-dark30 text-[18px] normal-text">
                   Total Volume
@@ -92,12 +119,28 @@ const Layout: FC = () => {
   );
 };
 
-const Home: NextPage = () => {
+function Home(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <DashboardPageProvider>
-      <Layout />
+      <Layout data={props.statistic} />
     </DashboardPageProvider>
   );
+}
+
+/**
+ * @dev This function gets called on server-side.
+ * It never runs on the browser, so you can even do
+ * direct database queries.
+ */
+export const getServerSideProps: GetServerSideProps<{
+  statistic: any;
+}> = async () => {
+  const res = await statisticService.getStatistic();
+  return {
+    props: {
+      statistic: res,
+    }, // will be passed to the page component as props
+  };
 };
 
 export default Home;

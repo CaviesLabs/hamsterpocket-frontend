@@ -100,10 +100,10 @@ export interface ExpectedOpitionEntity {
   askingItems: ExpectedItemEntity[];
 }
 
-/** @dev Expose dto to create proposal on-chain. */
+/** @dev Expose dto to create history on-chain. */
 export class CreateProposalDto {
   /**
-   * @dev Proposal ID, call create-proposal to API to get ID first.
+   * @dev Proposal ID, call create-history to API to get ID first.
    * */
   id: string;
 
@@ -118,20 +118,20 @@ export class CreateProposalDto {
   offeredOptions: StuffItemEntity[];
 
   /**
-   * @dev This proposal will be expired in this time.
+   * @dev This history will be expired in this time.
    * */
   expiredAt: any;
 }
 
 /**
- * @dev Expose dto to create proposal backend.
+ * @dev Expose dto to create history backend.
  * */
 export type CreateProposalToServerDto = Omit<
   CreateProposalDto,
   "id" | "expiredAt"
 > & {
   /**
-   * @dev Wallet address of owner proposal.
+   * @dev Wallet address of owner history.
    */
   ownerAddress: string;
 
@@ -215,7 +215,7 @@ export class SwapItemEntity {
   depositedAddress?: string;
 
   /**
-   * @dev Amount of swap item which owner already configured when create proposal.
+   * @dev Amount of swap item which owner already configured when create history.
    */
   amount: number;
 
@@ -261,32 +261,32 @@ export class SwapOptionEntity {
 }
 
 /**
- * @dev Response dto when create new proposal from hamsterbox server.
- * @dev Expose interface for swap proposal entity.
+ * @dev Response dto when create new history from hamsterbox server.
+ * @dev Expose interface for swap history entity.
  */
 export class SwapProposalEntity {
   /**
-   * @dev The unique id of proposal.
+   * @dev The unique id of history.
    */
   id: string;
 
   /**
-   * @dev The index number of proposal in database.
+   * @dev The index number of history in database.
    */
   numberId: number;
 
   /**
-   * @dev The id of user who created this proposal.
+   * @dev The id of user who created this history.
    */
   ownerId: string;
 
   /**
-   * @dev The wallet address of user who created this proposal.
+   * @dev The wallet address of user who created this history.
    */
   ownerAddress: string;
 
   /**
-   * @dev The wallet address of user who created this proposal.
+   * @dev The wallet address of user who created this history.
    */
   owner?: string;
 
@@ -301,47 +301,47 @@ export class SwapProposalEntity {
   swapOptions: SwapOptionEntity[] = [];
 
   /**
-   * @dev The id of user who buy proposal/
+   * @dev The id of user who buy history/
    */
   fulfillBy?: string;
 
   /**
-   * @dev The id of user who buy proposal/
+   * @dev The id of user who buy history/
    */
   fulfillByUserId?: string;
 
   /**
-   * @dev The id of option which user choosen before to buy proposal/
+   * @dev The id of option which user choosen before to buy history/
    */
   fulfilledWithOptionId?: string;
 
   /**
-   * @dev The expired time of this proposal.
+   * @dev The expired time of this history.
    */
   expiredAt: Date;
 
   /**
-   * @dev The status of this proposal.
+   * @dev The status of this history.
    */
   status: SwapProposalStatus;
 
   /**
-   * @dev The specific keywords to search for looking this proposal.
+   * @dev The specific keywords to search for looking this history.
    */
   searchText?: string;
 
   /**
-   * @dev The description of this proposal
+   * @dev The description of this history
    */
   note?: string;
 
   /**
-   * @dev The created time of this proposal.
+   * @dev The created time of this history.
    */
   createdAt: Date;
 
   /**
-   * @dev The updated time of this proposal.
+   * @dev The updated time of this history.
    */
   updatedAt: Date;
 }
@@ -370,12 +370,12 @@ export class GetProposalsDto {
     statuses?: SwapProposalStatus[] | SwapProposalStatus;
 
     /**
-     * @dev The limit of proposal want to find.
+     * @dev The limit of history want to find.
      */
     limit?: number;
 
     /**
-     * @dev The length of proposal.
+     * @dev The length of history.
      */
     offset?: number;
 

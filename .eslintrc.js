@@ -19,5 +19,11 @@ module.exports = {
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-var-requires": "off",
   },
-  ignorePatterns: [".storybook", "**/*.stories.*"],
+  ignorePatterns: [
+    ".storybook",
+    "**/*.stories.*",
+    "node_modules",
+    "node_modules/framer-motion/dist/index.d.ts",
+    "**/*.d.ts",
+  ],
 };

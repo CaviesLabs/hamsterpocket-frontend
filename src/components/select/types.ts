@@ -32,6 +32,11 @@ export type DropdownSelectProps = {
   handleSelectValue(value: string): void;
   format?: (value: string) => string;
   className?: string;
-  value: string;
+  value?: string;
   options: string[] | OptionProps[];
+
+  /**
+   * @dev Auto update value in component scope without ganting value outside.
+   */
+  autoValue?: boolean;
 };

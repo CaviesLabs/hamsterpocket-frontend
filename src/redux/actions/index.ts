@@ -3,10 +3,20 @@ export const SET_USER_CHATS = "SET_USER_CHATS";
 export const SIGNUP_EMAIL = "SIGNUP_EMAIL";
 
 /**
- * Actions for proposal service
+ * Actions for history service
  */
-export const GET_PROPOSALS = "GET_PROPOSALS";
-export const SET_PROPOSALS = "SET_PROPOSALS";
+export const GET_HISTORY = "GET_HISTORY";
+export const SET_HISTORY = "SET_HISTORY";
+export const GET_HISTORIES = "GET_HISTORIES";
+export const SET_HISTORIES = "SET_HISTORIES";
+
+/**
+ * Actions for portfolio service
+ */
+export const GET_PORTFOLIOS = "GET_PORTFOLIOS";
+export const SET_PORTFOLIOS = "SET_PORTFOLIOS";
+export const GET_PORTFOLIO_STATISTIC = "GET_PORTFOLIO_STATISTIC";
+export const SET_PORTFOLIO_STATISTIC = "SET_PORTFOLIO_STATISTIC";
 
 /**
  * Actions for modify user proposals state.
@@ -36,3 +46,16 @@ export const SET_H_PUBLIC_PROFILE = "SET_H_PUBLIC_PROFILE";
  */
 export const GET_PLATFORM_CONFIG = "GET_PLATFORM_CONFIG";
 export const SET_PLATFORM_CONFIG = "SET_PLATFORM_CONFIG";
+
+/**
+ * Actions for pocket service
+ */
+export const GET_ACTIVE_POCKET = "GET_ACTIVE_POCKET";
+export const SET_ACTIVE_POCKET = "SET_ACTIVE_POCKET";
+export const GET_ACTIVE_POCKETS = "GET_ACTIVE_POCKETS";
+export const SET_ACTIVE_POCKETS = "SET_ACTIVE_POCKETS";
+export const GET_CLOSED_POCKET = "GET_CLOSED_POCKET";
+export const SET_CLOSED_POCKET = "SET_CLOSED_POCKET";
+export const GET_CLOSED_POCKETS = "GET_CLOSED_POCKETS";
+export const SET_CLOSED_POCKETS = "SET_CLOSED_POCKETS";
+export const SYNC_WALLET_POCKETS = "SYNC_WALLET_POCKETS";
