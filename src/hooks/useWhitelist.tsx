@@ -39,7 +39,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev Fetch market data. */
   const { data: liquidities } = useSWR(
-    "https://dev-pocket-api.hamsterbox.xyz/api/whitelist/market",
+    `${process.env.API_URL}/whitelist/market`,
     (url) =>
       fetch(url)
         .then((res) => res.json())
