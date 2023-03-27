@@ -12,7 +12,7 @@ export class SplServicce {
        */
       const response =
         await networkProvider.request<GetBalanceSplResponseEntity>(
-          "process.env.SOLANA_RPC_URL",
+          process.env.SOLANA_RPC_URL,
           {
             method: "POST",
             data: {

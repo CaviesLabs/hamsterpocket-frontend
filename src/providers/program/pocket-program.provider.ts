@@ -9,7 +9,6 @@ import { PocketIdl, IDL } from "./pocket.idl";
 import { InstructionProvider } from "./instruction.provider";
 import { TransactionProvider } from "./transaction.provider";
 import { WSOL_ADDRESS } from "@/src/utils/constants";
-import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
 export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
