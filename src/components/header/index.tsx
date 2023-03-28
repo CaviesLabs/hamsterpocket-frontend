@@ -115,7 +115,7 @@ const Header: FC = () => {
 
   return (
     <StyledHeader
-      className={classnames("app-header fixed z-50 w-full", {
+      className={classnames("app-header fixed z-50 w-full  px-[12px] md:px-0", {
         /**
          * @dev Restrict fill purple background & clear border for specific pages.
          */
@@ -132,7 +132,7 @@ const Header: FC = () => {
           <div className="logo-wrapper md:mt-0 flex items-center">
             <a className="cursor-pointer" onClick={() => router.push("/")}>
               <HamsterboxIcon
-                className={classnames("w-[100px] md:w-[180px] hamsterbox-icon")}
+                className={classnames("w-[140px] md:w-[180px] hamsterbox-icon")}
                 color={"white"}
               />
             </a>
@@ -165,7 +165,7 @@ const Header: FC = () => {
                   <div className="relative">
                     {" "}
                     <Button
-                      className="!px-8"
+                      className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
                       size="small"
                       text="Connect Wallet"
                       onClick={connectWallet}

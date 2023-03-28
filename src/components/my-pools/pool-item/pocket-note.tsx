@@ -26,7 +26,7 @@ export const PocketNote = (props: PocketNoteProps) => {
 
   return (
     <div className="mt-[24px]">
-      <p className="uppercase text-[16px] text-white">NOTE:</p>
+      <p className="uppercase text-[14px] md:text-[16px] text-white">NOTE:</p>
       <p
         className={classnames(
           "text-[14px] regular-text",

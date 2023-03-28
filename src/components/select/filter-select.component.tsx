@@ -33,7 +33,7 @@ export const FilterSelect: FC<SelectProps> = (props) => {
           <img className="rounded-[50%] aspect-square" src={option.image} />
         </div>
         <div className="w-full h-18 flex flex-col justify-between">
-          <p className="text-[14px] regular-text">
+          <p className="text-[12px] md:text-[14px] regular-text">
             {option.label || option.value}
           </p>
           <p className="text-[12px] text-gray-400">{option.description}</p>
@@ -82,7 +82,7 @@ export const FilterSelect: FC<SelectProps> = (props) => {
       <div
         className={classnames(
           props.className,
-          "py-[10px] px-3 text-[14px] regular-text rounded-3xl cursor-pointer flex justify-between items-center bg-dark90 text-dark50"
+          "py-[3px] md:py-[10px] px-3 text-[14px] regular-text rounded-3xl cursor-pointer flex justify-between items-center bg-dark90 text-dark50"
         )}
         onClick={() => setIsOpenDropdown(!isOpenDropdown)}
       >

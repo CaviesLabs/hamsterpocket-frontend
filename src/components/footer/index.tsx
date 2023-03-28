@@ -44,8 +44,8 @@ const Footer: FC = () => {
     <div className="footer pb-9">
       <div className="lg:max-w-[1140px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
-          <div className="menu-wrapper md:pt-0 pt-[20px]">
-            <ul className="footer-menu w-[100%] md:flex justify-center flex-wrap md:justify-start">
+          <div className="menu-wrapper md:pt-0">
+            <ul className="footer-menu w-[100%] hidden md:flex justify-center flex-wrap md:justify-start">
               {footers.map((item, index) => (
                 <li
                   key={`footer-item-${index}`}
@@ -62,7 +62,6 @@ const Footer: FC = () => {
               ))}
             </ul>
           </div>
-
           <div className="relative">
             <a onClick={() => router.push("/")}>
               <HamsterboxIcon
@@ -78,6 +77,25 @@ const Footer: FC = () => {
                 <CaviesIcon className="w-[110px] h-auto" />
               </a>
             </div>
+          </div>
+
+          <div className="menu-wrapper md:pt-0 pt-[20px]">
+            <ul className="footer-menu w-[100%] flex md:hidden justify-center flex-wrap md:justify-start">
+              {footers.map((item, index) => (
+                <li
+                  key={`footer-item-${index}`}
+                  className="text-center mr-2 leading-[35px] md:leading-[25px]"
+                >
+                  <a
+                    target={item.newWindow === false ? "" : "_blank"}
+                    href={item.uri}
+                    className="p-2 text-[14px] md:text-[14px] normal-text text-footerItemColor dark:text-footerItemColorDark regular-text"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div className="flex flex-col items-end">
