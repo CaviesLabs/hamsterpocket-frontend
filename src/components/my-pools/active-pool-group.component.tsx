@@ -77,15 +77,17 @@ export const ActivePoolGroup: FC = () => {
   return (
     <section>
       <section className="mt-[60px]">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <p className="md:text-[32px] text-[24px] text-white">
+        <div className="md:flex justify-between items-center">
+          <div className="flow-root md:flex items-center">
+            <p className="float-left md:text-[32px] text-[20px] text-white">
               Current Pockets
             </p>
-            <RefreshButton
-              handleClick={() => handleSync()}
-              loading={fetching}
-            />
+            <div className="float-right">
+              <RefreshButton
+                handleClick={() => handleSync()}
+                loading={fetching}
+              />
+            </div>
           </div>
           <p
             className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
@@ -104,8 +106,8 @@ export const ActivePoolGroup: FC = () => {
               onValueChange={(v) => setSearch(v)}
             />
           </div>
-          <div className="md:float-right md:flex md:mt-0 mt-[20px]">
-            <div className="flex">
+          <div className="md:float-right md:flex md:mt-0">
+            <div className="hidden md:flex">
               <div
                 onClick={() => setIsPauseOnly(!isPauseOnly)}
                 className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto"
@@ -142,7 +144,7 @@ export const ActivePoolGroup: FC = () => {
               </div> */}
             </div>
             <FilterSelect
-              className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px]"
+              className="text-center rounded-3xl text-sm h-[35px] md:h-[50px] !px-12 md:mt-0"
               values={sorter}
               options={sortOptions}
               onChange={(value) => setSorter(value)}

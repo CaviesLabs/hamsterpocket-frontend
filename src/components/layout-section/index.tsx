@@ -11,7 +11,7 @@ export const LayoutSection: FC<ComponentProps & { children: ReactNode }> = (
       className={classnames(
         styles.container,
         props.className,
-        `mx-auto md:max-w-[1140px] sm:px-6 pt-[20px] min-h-[70vh] pt-16`
+        `mx-auto md:max-w-[1140px] sm:px-6 pt-[20px] min-h-[70vh] pt-16 px-[12px] md:px-0`
       )}
     >
       {props.children}

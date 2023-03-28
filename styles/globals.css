@@ -240,3 +240,30 @@ input:focus {
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
 }
+
+@media screen and (max-width: 768px) {
+  .pool-control-btn {
+    font-size: 14px !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    height: 36px;
+    max-width: 110px;
+  }
+
+  .app-input .container {
+    max-width: 100% !important;
+  }
+
+  .app-input .container input {
+    font-size: 12px !important;
+    height: 36px !important;
+  }
+
+  .app-input .container .left-icon {
+    top: 47% !important;  
+  }
+  .app-input .container .left-icon svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}

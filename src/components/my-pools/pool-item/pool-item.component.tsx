@@ -96,11 +96,11 @@ export const PoolItem = (props: PoolItemProps) => {
   return (
     <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
       <div className="flow-root">
-        <p className="text-[24px] text-white normal-text float-left">
+        <p className="text-[16px] md:text-[24px] text-white normal-text float-left">
           {data.name}
         </p>
-        <p className="float-right text-dark50 text-[16px] regular-text relative top-[6px] flex items-center">
-          #{data.id}
+        <p className="float-right text-dark50 text-[12px] md:text-[16px] regular-text relative top-[3px] md:top-[6px] flex items-center">
+          #{utilsProvider.makeShort(data.id)}
           <a
             href={`https://solscan.io/account/${data.address}`}
             target="_blank"
@@ -110,10 +110,10 @@ export const PoolItem = (props: PoolItemProps) => {
           </a>
         </p>
       </div>
-      <div className="flex justify-between mt-[24px]">
+      <div className="md:flex justify-between mt-[24px]">
         <div className="md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
-            <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
+            <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
               {targetToken?.image && (
                 <img
                   src={targetToken?.image}
@@ -123,17 +123,17 @@ export const PoolItem = (props: PoolItemProps) => {
               )}
             </div>
             <div className="pl-[20px]">
-              <p className="text-white text-[18px] normal-text uppercase">
+              <p className="text-white text-[14px] md:text-[18px] normal-text uppercase">
                 {targetToken?.symbol}
               </p>
-              <p className="text-white text-[14px] regular-text">
+              <p className="text-white text-[12px] md:text-[14px] regular-text">
                 {targetToken?.name}
               </p>
             </div>
           </div>
           <div className="flex items-center float-right relative top-[5px]">
-            <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px]">
-              <p className="text-dark50 text-[14px] normal-text">
+            <div className="py-[5px] px-[15px] md:px-[30px] border-solid border-[2px] border-dark70 rounded-[8px]">
+              <p className="text-dark50 text-[12px] md:text-[14px] normal-text">
                 {utilsProvider.makeShort(data.targetTokenAddress)}
               </p>
             </div>
@@ -142,13 +142,14 @@ export const PoolItem = (props: PoolItemProps) => {
               target="_blank"
               className="ml-[10px]"
             >
-              <ShareIcon />
+              <ShareIcon className="hidden md:block" />
+              <ShareIcon className="md:hidden" size="14" />
             </a>
           </div>
         </div>
         <div className="md:mt-0 mt-[20px]">
           <div className="flex">
-            <p className="text-dark40 text-[16px] normal-text mr-20">
+            <p className="text-dark40 text-[14px] md:text-[16px] normal-text mr-20">
               Strategy
             </p>
             <PoolItemBuyConditionComponent
@@ -160,7 +161,9 @@ export const PoolItem = (props: PoolItemProps) => {
         </div>
       </div>
       <div className="mt-[24px]">
-        <p className="text-dark40 text-[16px] font-bold">Progress</p>
+        <p className="text-dark40 text-[14px] md:text-[16px] font-bold">
+          Progress
+        </p>
         {Object.keys(data.stopConditions).length > 0 &&
         !data.stopConditions.endTime ? (
           <>
@@ -195,19 +198,19 @@ export const PoolItem = (props: PoolItemProps) => {
         ) : (
           <>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
                 Batch bought:
               </p>
-              <p className="text-white text-[16px] normal-text">
+              <p className="text-white text-[12px] md:text-[16px] normal-text">
                 {data.currentBatchAmount || 0}{" "}
                 {data.currentBatchAmount > 1 ? "BATCHES" : "BATCH"}
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
                 Token bought:
               </p>
-              <p className="text-white text-[16px] normal-text">
+              <p className="text-white text-[12px] md:text-[16px] normal-text">
                 {formatCurrency(
                   convertDecimalAmount(
                     targetToken?.address,
@@ -218,10 +221,10 @@ export const PoolItem = (props: PoolItemProps) => {
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
                 Spent:
               </p>
-              <p className="text-white text-[16px] normal-text">
+              <p className="text-white text-[12px] md:text-[16px] normal-text">
                 {formatCurrency(
                   convertDecimalAmount(
                     baseToken?.address,
@@ -234,20 +237,24 @@ export const PoolItem = (props: PoolItemProps) => {
           </>
         )}
       </div>
-      <div className="mt-[24px] flex justify-between flex-row">
+      <div className="mt-[24px] md:flex justify-between flex-row">
         <div>
-          <p className="text-dark40 text-[16px] font-bold">
+          <p className="text-dark40 text-[14px] md:text-[16px] font-bold">
             Pocket information
           </p>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px] text-[14px] text-dark40 ">Start date:</p>
-            <p className="text-white text-[16px]">
+            <p className="w-[200px]  text-[12px] md:text-[14px]  text-dark40 ">
+              Start date:
+            </p>
+            <p className="text-white  text-[12px] md:text-[16px] ">
               {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px] text-[14px] text-dark40">Total deposited</p>
-            <p className="text-white text-[16px]">
+            <p className="w-[200px] text-[12px] md:text-[14px] text-dark40">
+              Total deposited
+            </p>
+            <p className="text-white text-[12px] md:text-[16px]">
               {convertDecimalAmount(
                 data?.baseTokenAddress,
                 data.remainingBaseTokenBalance
@@ -276,7 +283,7 @@ export const PoolItem = (props: PoolItemProps) => {
       <div className="mt-[24px] md:flow-root">
         <p
           className={classnames(
-            "md:float-left text-[16px] uppercase text-normal relative top-[10px] text-green",
+            "md:float-left text-[14px] md:text-[16px] uppercase text-normal relative top-[10px] text-green text-center md:text-left",
             {
               "!text-red300": isClosed || isEnded,
               "!text-[#FFAA44]": isPaused,
@@ -285,11 +292,11 @@ export const PoolItem = (props: PoolItemProps) => {
         >
           {hummanStatus}
         </p>
-        <div className="md:float-right md:flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
-          <div className="md:float-right">
+        <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
+          <div className="float-right">
             {(isActive || isPaused) && (
               <Button
-                className="!px-[50px] md:w-auto !w-full"
+                className="!px-[50px] md:w-auto !w-full pool-control-btn"
                 theme={{
                   backgroundColor: "#B998FB",
                   color: "#FFFFFF",
@@ -300,12 +307,12 @@ export const PoolItem = (props: PoolItemProps) => {
               />
             )}
           </div>
-          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
+          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
             {!isClosed &&
               !isEnded &&
               (isPaused ? (
                 <Button
-                  className="!px-[50px] md:w-auto"
+                  className="!px-[50px] md:w-auto pool-control-btn"
                   theme={{
                     backgroundColor: "#B998FB",
                     color: "#FFFFFF",
@@ -316,7 +323,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 />
               ) : (
                 <Button
-                  className="!px-[50px] md:w-auto"
+                  className="!px-[50px] md:w-auto pool-control-btn"
                   theme={{
                     backgroundColor: "#B998FB",
                     color: "#FFFFFF",
@@ -327,10 +334,10 @@ export const PoolItem = (props: PoolItemProps) => {
                 />
               ))}
           </div>
-          <div className="md:float-right md:ml-[10px] mt-[15px] md:mt-0 md:w-auto w-[200px]">
+          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
             {!isEnded && (
               <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px]"
+                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",
@@ -343,7 +350,7 @@ export const PoolItem = (props: PoolItemProps) => {
             )}
             {isEnded && !isClaimed && (
               <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px]"
+                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",

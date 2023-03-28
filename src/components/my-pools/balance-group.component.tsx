@@ -31,7 +31,7 @@ export const BalanceGroup: FC = () => {
 
   return (
     <section>
-      <p className="text-[24px] text-white">Your balance</p>
+      <p className="text-[18px] md:text-[24px] text-white">Your balance</p>
       <section className="md:flex justify-between items-center mt-[20px]">
         <div className="w-full">
           <div className="md:w-[315px] w-full">
@@ -43,7 +43,7 @@ export const BalanceGroup: FC = () => {
               <PocketBalanceComponent />
             </div>
             <Button
-              className="mx-auto mt-[20px] !rounded-[8px] vpbutton"
+              className="mx-auto mt-[20px] !rounded-[8px] vpbutton !text-[14px] md:!text-[16px]"
               width="100%"
               theme={{
                 backgroundColor: "#20242D",
@@ -57,7 +57,7 @@ export const BalanceGroup: FC = () => {
         </div>
         <div className="w-full md:w-[253px] block md:mt-0 mt-[20px]">
           <Button
-            className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full"
+            className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full !text-[14px] md:!text-[16px]"
             theme={{
               backgroundColor: "transparent",
               color: "#B998FB",

@@ -51,7 +51,7 @@ const UserProfile: FC = () => {
         alt="Boring avatar"
       />
       <span
-        className="text-[7px] md:text-[14px] text-white flex items-center"
+        className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
         {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
