@@ -55,14 +55,14 @@ export const DCAPPair: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
+      <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
         DCA pair
       </p>
       <div className="mt-2">
-        <p className="text-dark20 text-[16px] regular-text italic">
+        <p className="text-dark20 text-[14px] md:text-[16px] regular-text italic">
           Enter the buy and sell token pair for this pool
         </p>
-        <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
+        <div className="grid md:grid-cols-5 md:gap-3 mt-[24px]">
           <div className="md:col-span-2">
             <p className="text-dark10 text-[14px] regular-text">
               From
@@ -79,13 +79,14 @@ export const DCAPPair: FC = () => {
                 handleBaseTokenSelect(address, decimals)
               }
             />
-            <p className="mt-1 text-dark10 text-[16px] regular-text">
+            <p className="mt-1 text-dark10 text-[14px] md:text-[16px] regular-text">
               Price: ~${baseTokenPrice?.toFixed(2)}
             </p>
           </div>
           <div className="md:col-span-1 flex items-center justify-center">
-            <div className="rounded-[50%] p-[20px] bg-dark90">
-              <TwoWayArrowIcon />
+            <div className="rounded-[50%] p-[10px] md:p-[20px] bg-dark90">
+              <TwoWayArrowIcon className="mobile:hidden" />
+              <TwoWayArrowIcon className="md:hidden" size="12" />
             </div>
           </div>
           <div className="md:col-span-2">
@@ -108,7 +109,7 @@ export const DCAPPair: FC = () => {
                 handleTargetTokenSelect(address, decimals)
               }
             />
-            <p className="mt-1 text-dark10 text-[16px] regular-text">
+            <p className="mt-1 text-dark10 text-[14px] md:text-[16px] regular-text">
               Price: ~${targetTokenPrice?.toFixed(2)}
             </p>
           </div>

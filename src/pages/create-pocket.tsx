@@ -29,9 +29,9 @@ const Layout: FC = () => {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <LayoutSection className="!pt-[100px] pb-[100px]">
+        <LayoutSection className="md:pt-[100px] pb-[100px]">
           <BreadCrumb data={["Home", "Create a Pocket"]} />
-          <p className="md:text-[32px] text-[24px] text-white mt-[24px]">
+          <p className="md:text-[32px] text-[18px] text-white mt-[24px]">
             Create a new Pocket
           </p>
           <PoolInformation />
@@ -41,7 +41,7 @@ const Layout: FC = () => {
           <section className="mt-14 flow-root">
             <div className="float-right ml-[20px]">
               <Button
-                className="float-right !w-[220px] !h-[56px] !text-[18px] normal-text font-semibold"
+                className="float-right !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0 normal-text font-semibold"
                 text="Create pocket"
                 loading={processing}
                 onClick={() => handleCreatePocket()}
@@ -49,7 +49,7 @@ const Layout: FC = () => {
             </div>
             <div className="float-right">
               <Button
-                className="float-right !border-solid !border-purple !border-[2px] !w-[220px] !h-[56px] !text-[18px] normal-text font-semibold"
+                className="float-right !border-solid !border-purple !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",

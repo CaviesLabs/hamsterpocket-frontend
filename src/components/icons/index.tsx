@@ -672,8 +672,8 @@ export const ShareIcon: FC<IconProps> = (props) => (
 export const TwoWayArrowIcon: FC<IconProps> = (props) => (
   <svg
     className={props.className}
-    width="24"
-    height="24"
+    width={props.size || "24"}
+    height={props.size || "24"}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -726,8 +726,8 @@ export const LoggoutIcon: FC<IconProps> = (props) => (
 export const DeleteIconCircle: FC<IconProps> = (props) => (
   <svg
     className={props.className}
-    width="60"
-    height="60"
+    width={props.size || "60"}
+    height={props.size || "60"}
     viewBox="0 0 60 60"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

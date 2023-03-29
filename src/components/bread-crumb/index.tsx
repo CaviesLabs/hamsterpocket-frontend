@@ -17,7 +17,7 @@ export const BreadCrumb: FC<BreadCrumbProps> = (props) => {
               onClick={() =>
                 index === 0 ? router.push("/") : router.push(router.asPath)
               }
-              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white cursor-pointer"
+              className="inline-flex items-center text-[14px] md:text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white cursor-pointer"
             >
               {index === 0 ? (
                 <svg

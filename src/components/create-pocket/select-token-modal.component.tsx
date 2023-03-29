@@ -46,7 +46,7 @@ export const TargetSelectTokenModal: FC<{
       footer={null}
       className="hamster-modal"
     >
-      <h2 className="mt-4 mb-2 font-bold text-white text-[24px] text-center absolute top-[20px]">
+      <h2 className="mt-4 mb-2 font-bold text-white text-[24px] mobile:text-[18px] text-center absolute top-[20px]">
         Select a token
       </h2>
       <div className="py-6 pt-[70px]">
@@ -58,21 +58,21 @@ export const TargetSelectTokenModal: FC<{
             icon={<SearchIcon />}
             onValueChange={(v) => setSearch(v)}
           />
-          <div className="flow-root mt-[30px] px-[10px]">
+          <div className="flow-root mt-[30px] md:px-[10px]">
             <p className="float-left text-[14px] text-white">Token</p>
             <p className="float-right text-[14px] text-white">Address</p>
           </div>
           <div className="mt-[2px] max-h-[240px] overflow-y-scroll">
             {filterdList.map((token) => (
               <div
-                className="w-full bg-[transparent] hover:bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root cursor-pointer"
+                className="w-full bg-[transparent] hover:bg-dark80 rounded-[8px] md:px-[22px] py-[20px] mobile:py-[10px] flow-root cursor-pointer"
                 key={`ttiterm-${token}`}
                 onClick={(e) =>
                   props.handleOk(e, token, whiteLists[token].decimals)
                 }
               >
                 <div className="flex items-center float-left">
-                  <div className="w-[44px] h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
+                  <div className="w-[44px] h-[44px] mobile:!w-[25px] mobile:!h-[25px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] mobile:border-[3px] border-dark70">
                     {whiteLists[token]?.image && (
                       <img
                         src={whiteLists[token]?.image}
@@ -82,17 +82,17 @@ export const TargetSelectTokenModal: FC<{
                     )}
                   </div>
                   <div className="pl-[20px]">
-                    <p className="text-white text-[18px] normal-text uppercase">
+                    <p className="text-white text-[18px] mobile:!text-[14px] normal-text uppercase">
                       {whiteLists[token]?.symbol}
                     </p>
-                    <p className="text-white text-[14px] normal-text">
+                    <p className="text-white text-[14px] mobile:!text-[12px] normal-text">
                       {whiteLists[token]?.name}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center float-right relative top-[5px]">
-                  <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px] w-[170px]">
-                    <p className="text-dark50 text-[14px] normal-text">
+                  <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px] w-[170px] mobile:w-[100px] mobile:px-[3px]">
+                    <p className="text-dark50 text-[14px] mobile:text-[12px] normal-text">
                       {utilsProvider.makeShort(token)}
                     </p>
                   </div>
@@ -101,7 +101,8 @@ export const TargetSelectTokenModal: FC<{
                     target="_blank"
                     className="ml-[10px]"
                   >
-                    <ShareIcon />
+                    <ShareIcon className="mobile:hidden" />
+                    <ShareIcon className="md:hidden" size="14px" />
                   </a>
                 </div>
               </div>

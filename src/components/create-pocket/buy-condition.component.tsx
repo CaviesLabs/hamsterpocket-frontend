@@ -94,17 +94,21 @@ export const BuyCondition: FC<{
           disabled={props.disabled}
         />
       ) : (
-        <div className="flex items-center mt-[16px] max-w-[100%]">
-          <div className="mr-6 items-center flex">
-            <button onClick={props.toggle} className="relative top-[4px]">
-              <DeleteIconCircle />
+        <div className="md:flex md:items-center mt-[16px] max-w-[100%]">
+          <div className="md:mr-6 items-center flex">
+            <button onClick={props.toggle} className="relative md:top-[4px]">
+              <DeleteIconCircle className="mobile:hidden" />
             </button>
           </div>
-          <div className="mr-6 relative flex items-center">
-            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text">
+          <div className="md:mr-6 relative flex items-center">
+            <DeleteIconCircle
+              className="md:hidden float-left mr-[5px] relative top-[3px]"
+              size="34"
+            />
+            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text">
               Each batch {`(${UtilsProvider.formatLongNumber(batchVolume)}`}
             </p>
-            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol}
             </p>
             <img
@@ -112,13 +116,13 @@ export const BuyCondition: FC<{
                 whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.image
               }
               alt="Image"
-              className="w-[24px] h-[24px] ml-[7px] relative top-[4px]"
+              className="w-[13px] h-[13px] md:w-[24px] md:h-[24px] ml-[7px] relative top-[4px]"
             />
-            <p className="text-dark10 text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               ) can buy
             </p>
           </div>
-          <div className="mr-6">
+          <div className="md:mr-6 mobile:mt-[16px]">
             <DropdownSelect
               handleSelectValue={(val) =>
                 setBuyCondition({
@@ -131,9 +135,9 @@ export const BuyCondition: FC<{
               className="w-full min-w-[230px]"
             />
           </div>
-          <div className="h-[63px] mr-6 relative flex items-center">
+          <div className="h-[63px] md:mr-6 relative flex items-center mobile:mt-[16px]">
             <Input
-              containerClassName="app-input w-52 !h-full"
+              containerClassName="app-input buy-condition w-52 !h-full"
               inputClassName="bg-dark90 !text-white w-full !h-full"
               placeholder={isTwoValue ? "from value" : "value"}
               onValueChange={(val) => {
@@ -177,9 +181,11 @@ export const BuyCondition: FC<{
             />
             {isTwoValue && (
               <>
-                <p className="text-white mx-[5px]">Or</p>
+                <p className="text-white mx-[5px] mobile:text-[14px] relative mobile:top-[-8px]">
+                  Or
+                </p>
                 <Input
-                  containerClassName="app-input w-[110px] !h-full"
+                  containerClassName="app-input buy-condition w-[110px] !h-full"
                   inputClassName="bg-dark90 !text-white w-full !h-full"
                   placeholder="to value"
                   onValueChange={(val) => {
@@ -210,8 +216,24 @@ export const BuyCondition: FC<{
                 />
               </>
             )}
+            <div className="h-full flex items-center relative md:hidden top-[-10px] ml-[3px]">
+              <img
+                src={
+                  whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                    ?.image
+                }
+                alt="Image"
+                className="w-[24px] h-[24px]"
+              />
+              <p className="text-[16px] text-white ml-[5px]">
+                {
+                  whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                    ?.symbol
+                }
+              </p>
+            </div>
           </div>
-          <div className="h-full flex items-center relative">
+          <div className="h-full flex items-center relative mobile:hidden">
             <img
               src={
                 whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]?.image

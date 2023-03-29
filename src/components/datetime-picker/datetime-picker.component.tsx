@@ -57,7 +57,18 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
       <DatePicker
         format="DD/MM/YYYY"
         size="large"
-        className="rounded-[16px] px-[50px] bg-dark90 !h-[63px] text-dark10 border-none col-span-2"
+        className="rounded-[16px] px-[50px] bg-dark90 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 mobile:!hidden"
+        placeholder="dd/mm/yyyy"
+        defaultValue={dayjs(Date.now())}
+        onChange={(v) => handleSelectDate(v)}
+        suffixIcon={<CalendarIcon />}
+        clearIcon={null}
+        disabledDate={props.disabledDate}
+      />
+      <DatePicker
+        format="DD/MM/YYYY"
+        size="small"
+        className="rounded-[16px] px-[10px] bg-dark90 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 md:!hidden"
         placeholder="dd/mm/yyyy"
         defaultValue={dayjs(Date.now())}
         onChange={(v) => handleSelectDate(v)}

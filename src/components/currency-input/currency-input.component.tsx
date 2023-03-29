@@ -91,7 +91,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       <Input
         size="large"
         className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px]",
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px] mobile:!h-[45px] mobile:!text-[14px]",
           styles.myInput,
           props.inputClassName
         )}
@@ -107,7 +107,9 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             <img
               className={classNames(
                 "rounded-full",
-                addressSelected ? "w-10 h-10 mr-4" : "invisible"
+                addressSelected
+                  ? "w-10 h-10 mr-4 mobile:!w-[24px] mobile:!h-[24px]"
+                  : "invisible"
               )}
               src={allowCurrencies?.[addressSelected]?.image}
             />
@@ -125,7 +127,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       />
       <p
         className={classNames(
-          "absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white",
+          "absolute right-[20px] top-[30px] mobile:top-[20px] cursor-pointer semi-bold text-white mobile:!text-[14px]",
           props.dropdownBadgeClassname
         )}
         style={{ zIndex: 3 }}

@@ -49,9 +49,9 @@ export const StopCondition: FC = () => {
         </p>
         <div className="mt-[24px]">
           <div>
-            <div className="mt-[10px] inline-flex">
+            <div className="mt-[10px] md:inline-flex">
               {!endTimeDisplayed && (
-                <div className="float-left mr-[12px]">
+                <div className="md:float-left mr-[12px]">
                   <Button
                     size="small"
                     text="Add End time"
@@ -66,7 +66,7 @@ export const StopCondition: FC = () => {
                 </div>
               )}
               {!targetAmountDisplayed && (
-                <div className="mr-[12px]">
+                <div className="mr-[12px] mobile:mt-[16px]">
                   <Button
                     size="small"
                     text="Add target token amount"
@@ -81,7 +81,7 @@ export const StopCondition: FC = () => {
                 </div>
               )}
               {!baseTokenSpentDisplayed && (
-                <div className="mr-[12px]">
+                <div className="mr-[12px] mobile:mt-[16px]">
                   <Button
                     size="small"
                     text="Add target token spent amount"
@@ -95,21 +95,6 @@ export const StopCondition: FC = () => {
                   />
                 </div>
               )}
-              {/* {!batchAmountDisplayed && (
-                <div className="mr-[12px]">
-                  <Button
-                    size="small"
-                    text="Add target batches purchased"
-                    className="!rounded-[100px] after:!rounded-[100px] !px-4"
-                    theme={{
-                      backgroundColor: "#97B544",
-                      color: "#FFFFFF",
-                    }}
-                    icon={<PlusIcon />}
-                    onClick={() => setBatchAmountDisplayed(true)}
-                  />
-                </div>
-              )} */}
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ export const DepositAmount: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
+      <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
         Deposit amount
       </p>
       <div className="mt-2">
@@ -56,7 +56,7 @@ export const DepositAmount: FC = () => {
               }}
               placeholder="Enter amount"
             />
-            <p className="mt-3 text-white text-[16px] regular-text flex">
+            <p className="mt-3 text-white text-[14px] md:text-[16px] regular-text flex">
               Your balance:
               <img
                 src={baseToken?.image}
