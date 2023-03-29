@@ -11,8 +11,7 @@ import { TransactionProvider } from "./transaction.provider";
 import { WSOL_ADDRESS } from "@/src/utils/constants";
 
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
-export const SOLANA_MAINNET_RPC_RPC_ENDPOINT =
-  process.env.SOLANA_RPC_URL;
+export const SOLANA_MAINNET_RPC_RPC_ENDPOINT = process.env.SOLANA_RPC_URL;
 
 /**
  * @dev Swap Program Provider acts as an interface to interact with hamsterswap program on solana.
