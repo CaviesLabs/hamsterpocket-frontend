@@ -39,23 +39,30 @@ export default function DashboardComponent() {
   }, [totalUSD, totalSOL]);
 
   return (
-    <div className="mt-12 flex justify-between items-center">
-      <div className="py-3 px-6 bg-dark90 w-1/4 rounded border border-gray-500">
-        <div className="text-white normal-text">Total Pockets Balance:</div>
-        <div className="flex mt-4">
-          <img src="/assets/images/solana-icon.svg" />
-          <div className="text-green ml-3">~ {totalSOL.toFixed(2)} SOL</div>
+    <div className="mt-12 md:flex md:justify-between md:items-center">
+      <div className="py-3 px-6 bg-dark90 md:w-1/4 rounded border border-gray-500">
+        <div className="text-white normal-text mobile:text-[14px]">
+          Total Pockets Balance:
         </div>
-        <div className="text-green mt-1 italic regular-text">
+        <div className="flex mt-4">
+          <img
+            src="/assets/images/solana-icon.svg"
+            className="mobile:w-[20px] mobile:h-[20pxs]"
+          />
+          <div className="text-green ml-3 mobile:text-[14px]">
+            ~ {totalSOL.toFixed(2)} SOL
+          </div>
+        </div>
+        <div className="text-green mt-1 italic regular-text mobile:text-[14px]">
           (~ ${totalUSD.toFixed(2)})
         </div>
       </div>
       {totalUSD > 0 && chartData.labels.length > 0 && (
-        <div className="flex items-center mr-36">
+        <div className="flex items-center mr-36 mobile:mt-[20px]">
           <div className="max-w-[190px] relative flex justify-center items-center">
             <Doughnut data={chartData} options={options} />
             <div className="absolute text-white regular-text text-center">
-              <div className="flex items-center">
+              <div className="flex items-center mobile:text-[14px]">
                 Est Balance
                 <AntdTooltip
                   color="rgba(18, 19, 27, 0.9506)"
@@ -75,7 +82,7 @@ export default function DashboardComponent() {
                   <RiQuestionnaireFill />
                 </AntdTooltip>
               </div>
-              <div>${totalUSD.toFixed(2)}</div>
+              <div className="mobile:text-[14px]">${totalUSD.toFixed(2)}</div>
             </div>
           </div>
           <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
@@ -91,9 +98,9 @@ export default function DashboardComponent() {
                       backgroundColor: chartData.datasets[0].backgroundColor[i],
                     }}
                   ></div>
-                  <div className="ml-2">{label}</div>
+                  <div className="ml-2 mobile:text-[14px]">{label}</div>
                 </div>
-                <div className="ml-2 font-bold text-[16px] text-green">
+                <div className="ml-2 font-bold text-[16px] mobile:text-[14px] text-green">
                   {chartData.datasets[0].data[i]}%
                 </div>
               </div>

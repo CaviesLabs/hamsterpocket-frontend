@@ -14,7 +14,7 @@ const Layout: FC = () => {
       <div className={styles.container}>
         <LayoutSection className="pb-[100px]">
           <BreadCrumb data={["Home", "History"]} />
-          <p className="md:text-[32px] text-[24px] text-white mt-[22px]">
+          <p className="md:text-[32px] text-[20px] text-white mt-[22px]">
             History
           </p>
           <HistoryController />

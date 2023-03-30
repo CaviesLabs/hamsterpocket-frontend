@@ -29,8 +29,10 @@ export default function TableComponent() {
                   />
                 </div>
                 <div className="ml-4">
-                  <div className="truncate">{h.tokenSymbol}</div>
-                  <div className="text-dark40">
+                  <div className="truncate mobile:text-[14px]">
+                    {h.tokenSymbol}
+                  </div>
+                  <div className="text-dark40 mobile:text-[14px]">
                     {h.tokenName === "Wrapped SOL" ? "SOL" : h.tokenName}
                   </div>
                 </div>
@@ -41,7 +43,7 @@ export default function TableComponent() {
                   target="_blank"
                   className="flex justify-center items-center"
                 >
-                  <div className="border border-gray-700 rounded text-center py-1 w-[160px]">
+                  <div className="border border-gray-700 rounded text-center py-1 w-[160px] mobile:text-[14px] mobile:w-[120px]">
                     {utilsProvider.makeShort(h.tokenAddress)}
                   </div>
                   <div className="ml-2">
@@ -50,10 +52,10 @@ export default function TableComponent() {
                 </a>
               </td>
               <td className="text-right">
-                <div>
+                <div className="mobile:text-[14px]">
                   {convertDecimalAmount(h.tokenAddress, h.total).toFixed(2)}
                 </div>
-                <div className="text-dark40">
+                <div className="text-dark40 mobile:text-[14px]">
                   ~ ${convertDecimalAmount(h.tokenAddress, h.value).toFixed(2)}
                 </div>
               </td>

@@ -58,8 +58,8 @@ export default function HistoryController() {
   }, [wallet, debouncedSearch, selectedType, date]);
 
   return (
-    <div className="mt-8 flex justify-between">
-      <div className="w-full max-w-[440px]">
+    <div className="mt-8 md:flex md:justify-between">
+      <div className="w-full md:max-w-[440px]">
         <Input
           containerClassName="app-input"
           inputClassName="bg-dark90 !text-white !rounded-[100px]"
@@ -68,12 +68,12 @@ export default function HistoryController() {
           onValueChange={(v) => setSearch(v)}
         />
       </div>
-      <div className="flex">
+      <div className="md:flex mobile:mt-[10px]">
         <RangePicker
           format={PickerFormat}
           size="large"
           className={classnames(
-            "rounded-full w-full min-w-[280px] px-[20px] bg-dark90 !h-[48px] placeholder-gray-500 border-none",
+            "rounded-full w-full min-w-[280px] px-[20px] bg-dark90 !h-[48px] mobile:!h-[40px] placeholder-gray-500 border-none !mt-0",
             styles.customDatePicker
           )}
           placeholder={["From", "To"]}
@@ -85,7 +85,7 @@ export default function HistoryController() {
           options={types}
           handleSelectValue={(v) => setSelectedType(v)}
           value={selectedType}
-          className="!rounded-full !h-[48px] ml-6"
+          className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 mobile:mt-[16px]"
         />
       </div>
     </div>

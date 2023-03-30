@@ -39,7 +39,7 @@ export default function PortfolioController() {
   }, [wallet, debouncedSearch, selectedType]);
 
   return (
-    <div className="mt-10 flex justify-between">
+    <div className="mt-10 md:flex md:justify-between">
       <div className="max-w-[440px]">
         <Input
           containerClassName="app-input w-full md:w-[450px]"
@@ -51,7 +51,7 @@ export default function PortfolioController() {
       </div>
       <div className="flex">
         <FilterSelect
-          className="rounded-3xl text-sm w-[215px] h-[44px] px-[30px] md:mt-0 mt-[20px]"
+          className="rounded-3xl text-sm w-[215px] h-[40px] md:h-[44px] px-[30px] md:mt-0 mt-[20px]"
           placeholder={
             <div className="pl-5 w-full regular-text">Highest value</div>
           }
