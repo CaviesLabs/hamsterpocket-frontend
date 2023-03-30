@@ -37,7 +37,7 @@ const Header: FC = () => {
    * @dev Define Menu Data.
    */
   const menuData = useMemo<MenuItem[]>(
-    () => [{ title: "Home", href: "/create-proposal", button: true }],
+    () => [{ title: "Home", href: "/create-pocket", button: true }],
     []
   );
 
@@ -223,7 +223,7 @@ const Header: FC = () => {
                       {item.button ? (
                         <Button
                           className="!rounded-[100px] after:!rounded-[100px] !px-[20px] mx-auto"
-                          text="Create a Proposal"
+                          text="Create a Pocket"
                           size="small"
                           onClick={() => router.push(item.href)}
                         />
