@@ -6,6 +6,10 @@ export default function Document() {
     <Html>
       <Head>
         <SeoComponent />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        ></meta>
         {typeof window === "undefined" && (
           <style
             id="holderStyle"

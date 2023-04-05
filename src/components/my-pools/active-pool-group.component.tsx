@@ -125,30 +125,18 @@ export const ActivePoolGroup: FC = () => {
                   Paused only
                 </p>
               </div>
-              {/* <div
-                onClick={() => setIsDepositNeeded(!isDepositNeeded)}
-                className="rounded-[100px] bg-dark90 flex items-center px-[35px] mr-[20px] relative cursor-pointer md:py-0 py-[8px] md:w-auto"
-              >
-                <CircleCheckIcon
-                  className="mr-2"
-                  color={isDepositNeeded && "#B998FB"}
-                />
-                <p
-                  className={classnames(
-                    "text-center text-[14px] normal-text",
-                    isDepositNeeded ? "text-[#B998FB]" : "text-dark50"
-                  )}
-                >
-                  Need deposit for next buying
-                </p>
-              </div> */}
             </div>
-            <FilterSelect
-              className="text-center rounded-3xl text-sm h-[35px] md:h-[50px] !px-12 md:mt-0"
-              values={sorter}
-              options={sortOptions}
-              onChange={(value) => setSorter(value)}
-            />
+            <div className="mobile:flow-root mobile:items-center">
+              <p className="md:hidden text-white text-[12px] float-left relative top-[5px]">
+                Sort by:
+              </p>
+              <FilterSelect
+                className="text-center rounded-3xl text-sm h-[35px] md:h-[50px] !px-12 md:mt-0 mobile:float-right"
+                values={sorter}
+                options={sortOptions}
+                onChange={(value) => setSorter(value)}
+              />
+            </div>
           </div>
         </div>
       </section>

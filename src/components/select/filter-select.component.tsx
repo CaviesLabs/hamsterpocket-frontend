@@ -86,13 +86,15 @@ export const FilterSelect: FC<SelectProps> = (props) => {
         )}
         onClick={() => setIsOpenDropdown(!isOpenDropdown)}
       >
-        {mode === "multiple" || !values || !values[0]
-          ? props.placeholder
-          : renderItemInfo(
-              props.options.find((_) => _.value === values[0]),
-              true
-            )}
-        <FilterIcon className="h-5 w-5 absolute right-[15px]" />
+        <div className="flex items-center mx-auto md:w-[160px]">
+          {mode === "multiple" || !values || !values[0]
+            ? props.placeholder
+            : renderItemInfo(
+                props.options.find((_) => _.value === values[0]),
+                true
+              )}
+          <FilterIcon className="relative ml-[5px]" />
+        </div>
       </div>
       {isOpenDropdown && (
         <div

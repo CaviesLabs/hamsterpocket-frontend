@@ -49,9 +49,12 @@ export default function PortfolioController() {
           onValueChange={(v) => setSearch(v)}
         />
       </div>
-      <div className="flex">
+      <div className="flex mobile:flow-root">
+        <p className="md:hidden text-white text-[12px] float-left relative top-[8px] ml-[12px]">
+          Sort by:
+        </p>
         <FilterSelect
-          className="rounded-3xl text-sm w-[215px] h-[40px] md:h-[44px] px-[30px] md:mt-0 mt-[20px]"
+          className="rounded-3xl text-sm w-[215px] h-[40px] md:h-[44px] px-[30px] md:mt-0 mobile:float-right"
           placeholder={
             <div className="pl-5 w-full regular-text">Highest value</div>
           }

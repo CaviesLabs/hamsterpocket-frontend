@@ -65,6 +65,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const isPaused = useMemo(() => data.status === PocketStatus.PAUSED, [data]);
   const isClosed = useMemo(() => data.status === PocketStatus.CLOSED, [data]);
   const isEnded = useMemo(() => data.status === PocketStatus.ENDED, [data]);
+  const isWithdrawed = useMemo(() => !isEnded && isClosed, [isEnded, isClosed]);
 
   useEffect(() => {
     (async () => {
@@ -292,77 +293,96 @@ export const PoolItem = (props: PoolItemProps) => {
         >
           {hummanStatus}
         </p>
-        <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
-          <div className="float-right">
-            {(isActive || isPaused) && (
-              <Button
-                className="!px-[50px] md:w-auto !w-full pool-control-btn"
-                theme={{
-                  backgroundColor: "#B998FB",
-                  color: "#FFFFFF",
-                }}
-                text="Deposit"
-                width="100%"
-                onClick={() => setDepositedDisplayed(true)}
-              />
-            )}
-          </div>
-          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
-            {!isClosed &&
-              !isEnded &&
-              (isPaused ? (
+        {!isWithdrawed && (
+          <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto mobile:grid mobile:grid-cols-3 mobile:gap-3">
+            <div className="md:float-right mobile:col-span-1">
+              {(isActive || isPaused) && (
                 <Button
-                  className="!px-[50px] md:w-auto pool-control-btn"
+                  className="!px-[50px] md:w-auto !w-full pool-control-btn"
                   theme={{
                     backgroundColor: "#B998FB",
                     color: "#FFFFFF",
                   }}
-                  text="Continue"
+                  text="Deposit"
                   width="100%"
-                  onClick={() => setResumedDisplayed(true)}
+                  onClick={() => setDepositedDisplayed(true)}
                 />
-              ) : (
+              )}
+            </div>
+            <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
+              {!isClosed &&
+                !isEnded &&
+                (isPaused ? (
+                  <Button
+                    className="!px-[50px] md:w-auto pool-control-btn"
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
+                    text="Continue"
+                    width="100%"
+                    onClick={() => setResumedDisplayed(true)}
+                  />
+                ) : (
+                  <Button
+                    className="!px-[50px] md:w-auto pool-control-btn"
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
+                    text="Pause"
+                    width="100%"
+                    onClick={() => setPausedDisplayed(true)}
+                  />
+                ))}
+            </div>
+            <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
+              {!isEnded && (
                 <Button
-                  className="!px-[50px] md:w-auto pool-control-btn"
+                  className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
                   theme={{
-                    backgroundColor: "#B998FB",
-                    color: "#FFFFFF",
+                    backgroundColor: "transparent",
+                    color: "#B998FB",
+                    hoverColor: "#B998FB",
                   }}
-                  text="Pause"
+                  text={isClosed ? "Withdraw" : "Close"}
                   width="100%"
-                  onClick={() => setPausedDisplayed(true)}
+                  onClick={() => setClosedDisplayed(true)}
                 />
-              ))}
+              )}
+              {isEnded && !isClaimed && (
+                <Button
+                  className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
+                  theme={{
+                    backgroundColor: "transparent",
+                    color: "#B998FB",
+                    hoverColor: "#B998FB",
+                  }}
+                  text="Claim fee"
+                  width="100%"
+                  onClick={() => setClaimFeeDisplayed(true)}
+                />
+              )}
+            </div>
           </div>
-          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
+        )}
+        {isWithdrawed && (
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
             {!isEnded && (
               <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
+                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn text-center mx-auto"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",
                   hoverColor: "#B998FB",
                 }}
-                text={isClosed ? "Withdraw" : "Close"}
+                text="Withdraw"
                 width="100%"
                 onClick={() => setClosedDisplayed(true)}
               />
             )}
-            {isEnded && !isClaimed && (
-              <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
-                theme={{
-                  backgroundColor: "transparent",
-                  color: "#B998FB",
-                  hoverColor: "#B998FB",
-                }}
-                text="Claim fee"
-                width="100%"
-                onClick={() => setClaimFeeDisplayed(true)}
-              />
-            )}
           </div>
-        </div>
+        )}
       </div>
       {depositedDisplayed && (
         <DepositModal

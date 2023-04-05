@@ -3,7 +3,12 @@ import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
-import { LoggoutIcon } from "@/src/components/icons";
+import {
+  LoggoutIcon,
+  NoneIcon,
+  PlusIcon,
+  BookIcon,
+} from "@/src/components/icons";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import { DownOutlined } from "@ant-design/icons";
@@ -46,7 +51,7 @@ const UserProfile: FC = () => {
       ref={ref}
     >
       <img
-        className="w-[20px] md:w-[40px] h-[auto] mr-[10px]"
+        className="w-[25px] md:w-[40px] h-[auto] mr-[10px]"
         src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
         alt="Boring avatar"
       />
@@ -54,8 +59,10 @@ const UserProfile: FC = () => {
         className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
-        {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
-        <DownOutlined style={{ fontSize: 14 }} className="ml-2" />
+        <span className="mobile:hidden">
+          {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
+        </span>
+        <DownOutlined style={{ fontSize: 14 }} className="md:ml-2" />
       </span>
       <ul
         style={{ display: show ? "block" : "none" }}
@@ -64,22 +71,32 @@ const UserProfile: FC = () => {
         <div className={styles.container}>
           <ul>
             <li
-              onClick={() => router.push(`/my-pockets`)}
-              className="hover:text-purple normal-text"
+              onClick={() => router.push(`/create-pocket`)}
+              className="hover:text-purple normal-text md:hidden flex items-center"
             >
-              My Pockets
+              <PlusIcon />
+              <p className="ml-[5px]">Create Pocket</p>
+            </li>
+            <li
+              onClick={() => router.push(`/my-pockets`)}
+              className="hover:text-purple normal-text flex items-center"
+            >
+              <BookIcon />
+              <p className="ml-[5px]">My Pockets</p>
             </li>
             <li
               onClick={() => router.push(`/portfolio`)}
-              className="hover:text-purple normal-text"
+              className="hover:text-purple normal-text flex items-center"
             >
-              View Portfolio
+              <BookIcon />
+              <p className="ml-[5px]">View Portfolio</p>
             </li>
             <li
               onClick={() => router.push(`/history`)}
-              className="hover:text-purple normal-text"
+              className="hover:text-purple normal-text flex items-center"
             >
-              View History
+              <NoneIcon />
+              <p className="ml-[5px]">View History</p>
             </li>
             <li
               onClick={disconnect}

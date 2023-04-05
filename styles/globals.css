@@ -276,3 +276,13 @@ input:focus {
     height: 14px !important;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .ant-picker-panels {
+    display: block !important;
+    text-align: center;
+  }
+  .ant-picker-dropdown {
+    width: calc(100vw - 30px) !important;
+  }
+}

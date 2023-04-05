@@ -1,22 +1,16 @@
-import { FC, useMemo, useState, useEffect } from "react";
+import { FC, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useWalletKit } from "@gokiprotocol/walletkit";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
 import classnames from "classnames";
-import styles from "./index.module.scss";
 import UserProfile from "@/src/components/header/user-profile";
 import { HamsterboxIcon } from "@/src/components/icons";
 import styled from "@emotion/styled";
 
-interface MenuItem {
-  title: string;
-  href: string;
-  button?: boolean | false;
-}
-
 const Header: FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
   const router = useRouter();
@@ -32,56 +26,6 @@ const Header: FC = () => {
    */
   const { connect: connectWallet } = useWalletKit();
   const wallet = useConnectedWallet();
-
-  /**
-   * @dev Define Menu Data.
-   */
-  const menuData = useMemo<MenuItem[]>(
-    () => [{ title: "Home", href: "/create-pocket", button: true }],
-    []
-  );
-
-  /**
-   * @dev The function to open/close mobile header menu.
-   */
-  const handleToggleMobileMenu = () => {
-    const toggleButton = document.getElementById("mobile-toggle");
-    const mobileMemu = document.getElementById("mobile-menu");
-    toggleButton?.classList?.toggle(styles.active);
-    mobileMemu?.classList?.toggle(styles.active);
-  };
-
-  /**
-   * @dev The function to call when click menu item.
-   * @param {string} slug.
-   * @param {string} spacing.
-   * @returns {void}
-   */
-  const handleOnClickMenu = (slug: string, spacing?: number) => {
-    const url: string = router.asPath;
-    if (url && url !== "/" && !url.startsWith("/#")) {
-      return router.push(`/${slug}`);
-    }
-
-    setCurSlug(slug);
-    const el = document.getElementById(slug?.split("#")[1]);
-    if (!el) return;
-
-    /**
-     * @description
-     * Change location without refresh page
-     * */
-    history.pushState({}, "", `/${slug}`);
-
-    if (!window.location.href.includes("#")) return;
-
-    // Scroll certain amounts from current position
-    window.scrollBy({
-      top: el.getBoundingClientRect().top - (spacing || 200),
-      left: 0,
-      behavior: "smooth",
-    });
-  };
 
   /**
    * @description
@@ -178,76 +122,6 @@ const Header: FC = () => {
                 ) : (
                   <UserProfile />
                 )}
-              </div>
-              <div className="flex items-center float-right">
-                <div
-                  className={classnames(
-                    styles["toggle-button"],
-                    "block md:hidden ml-[20px]"
-                  )}
-                  id="mobile-toggle"
-                  onClick={handleToggleMobileMenu.bind(this)}
-                >
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.top,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.middle,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.bottom,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <div className={classnames(styles["mobile-nav"])}>
-              <div
-                className={classnames(styles["menu-container"], "pt-[20%]")}
-                id="mobile-menu"
-              >
-                <ul className={styles["mobile-menu"]}>
-                  {menuData.map((item: any, index: number) => (
-                    <li key={`mobile-menu-${index}`}>
-                      {item.button ? (
-                        <Button
-                          className="!rounded-[100px] after:!rounded-[100px] !px-[20px] mx-auto"
-                          text="Create a Pocket"
-                          size="small"
-                          onClick={() => router.push(item.href)}
-                        />
-                      ) : (
-                        <a
-                          className={classnames("mt-[30px] md:mt-[60px]", {
-                            active: item.slug === curSlug,
-                          })}
-                          onClick={() => {
-                            handleOnClickMenu(item.slug, 200);
-                            handleToggleMobileMenu();
-                          }}
-                        >
-                          <div className="hidden-layer"></div>
-                          <button className="shown-layer">
-                            <p className="uppercase text-[16px] md:text-[32px] bold-text">
-                              {item.title}
-                            </p>
-                          </button>
-                        </a>
-                      )}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>

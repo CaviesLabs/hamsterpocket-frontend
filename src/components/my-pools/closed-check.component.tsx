@@ -44,7 +44,11 @@ export const ClosedCheckComponent = () => {
         hidden: closedPockets.length === 0 || isClosed,
       })}
     >
-      <div className="w-full rounded-2xl bg-[#FFF9D8] px-5 py-4 flex items-center justify-between">
+      <div className="w-full rounded-2xl bg-[#FFF9D8] px-5 py-4 md:flex md:items-center justify-between mobile:text-[14px] relative">
+        <CloseOutlined
+          className="ml-4 cursor-pointer md:hidden absolute right-[15px] top-[15px]"
+          onClick={() => setIsClosed(true)}
+        />
         <div className="flex items-center">
           <UpdatedIcon className="mr-4" />
           <p className="normal-text text-[#835C00]">
@@ -56,12 +60,12 @@ export const ClosedCheckComponent = () => {
         <div className="flex items-center">
           <div
             onClick={() => router.push("/ended-pockets")}
-            className="cursor-pointer px-6 py-1 rounded-full border border-2 border-[#B998FB] text-[#B998FB]"
+            className="cursor-pointer md:px-6 py-1 rounded-full border border-2 border-[#B998FB] text-[#B998FB] mobile:px-[5px] mobile:text-[14px] mobile:w-full text-center mobile:mt-[10px]"
           >
             View pockets
           </div>
           <CloseOutlined
-            className="ml-4 cursor-pointer"
+            className="ml-4 cursor-pointer mobile:hidden"
             onClick={() => setIsClosed(true)}
           />
         </div>

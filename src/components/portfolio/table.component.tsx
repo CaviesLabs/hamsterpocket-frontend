@@ -22,10 +22,10 @@ export default function TableComponent() {
           {portfoliosData.map((h) => (
             <tr key={h.tokenName} className="">
               <td className="pr-10 py-4 flex">
-                <div className="bg-gray-600 p-2 rounded-full">
+                <div className="bg-gray-600 p-2 rounded-full h-[48px]">
                   <img
                     src={whiteLists[h.tokenAddress]?.image}
-                    className="max-w-[32px] rounded-full"
+                    className="max-w-[32px] rounded-full h-[32px] w-[32px]"
                   />
                 </div>
                 <div className="ml-4">

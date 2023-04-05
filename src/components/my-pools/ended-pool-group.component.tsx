@@ -80,9 +80,9 @@ export const EndedPoolGroupComponent: FC = () => {
   return (
     <section>
       <section className="mt-[60px]">
-        <div className="flex justify-between items-center">
+        <div className="md:flex md:justify-between md:items-center">
           <div className="flex items-center">
-            <p className="md:text-[32px] text-[24px] text-white float-left">
+            <p className="md:text-[32px] text-[20px] text-white float-left">
               Closed & Ended Pockets
             </p>
             <RefreshButton
@@ -91,23 +91,42 @@ export const EndedPoolGroupComponent: FC = () => {
             />
           </div>
           <p
-            className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
+            className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative mobile:mt-[12px]"
             onClick={() => router.push("/my-pockets")}
           >
             View Active Pockets
           </p>
         </div>
         <div className="flow-root mt-[32px]">
-          <div className="md:float-left md:w-[442px] w-full">
+          <div className="md:float-left md:w-[442px] w-full mobile:grid mobile:grid-cols-3 gap-3">
             <Input
-              containerClassName="app-input w-full"
+              containerClassName="app-input w-full mobile:hidden"
               inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
               placeholder="Search by Pocket name, ID, Token"
               icon={<SearchIcon />}
               onValueChange={(v) => setSearch(v)}
             />
+            <div className="mobile:col-span-2 md:hidden">
+              <Input
+                containerClassName="app-input w-full"
+                inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
+                placeholder="Search by Pocket name, ID, Token"
+                icon={<SearchIcon />}
+                onValueChange={(v) => setSearch(v)}
+              />
+            </div>
+            <div className="mobile:col-span-1 md:hidden">
+              <FilterSelect
+                className="text-center rounded-3xl text-sm h-full !h-[40px]"
+                values={sorter}
+                options={sortOptions}
+                onChange={(value) => setSorter(value)}
+                mode="multiple"
+                placeholder="Filter"
+              />
+            </div>
           </div>
-          <div className="md:float-right md:flex md:mt-0 mt-[20px]">
+          <div className="md:float-right md:flex md:mt-0 mt-[12px]">
             <DropdownSelect
               options={PocketTypes}
               handleSelectValue={(v) => setSelectedType(v)}
@@ -115,7 +134,7 @@ export const EndedPoolGroupComponent: FC = () => {
               className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px]"
             />
             <FilterSelect
-              className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px] w-[228px]"
+              className="text-center rounded-3xl text-sm h-[50px] md:mt-0 mt-[12px] w-[228px] mobile:hidden"
               values={sorter}
               options={sortOptions}
               onChange={(value) => setSorter(value)}

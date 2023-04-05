@@ -68,7 +68,7 @@ export const PoolItemEndConditionComponent = (
         <div className="text-white text-[12px] md:text-[16px] regular-text">
           {conditions.length === 0 && <p>N/A</p>}
           {conditions.map((cond, i) => (
-            <p>
+            <p key={`pool-item-${i}`}>
               {cond}{" "}
               {i < conditions.length - 1 && (
                 <span className="text-dark50 text-[14px]">or</span>
