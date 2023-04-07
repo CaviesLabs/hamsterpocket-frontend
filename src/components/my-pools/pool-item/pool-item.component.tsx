@@ -244,18 +244,18 @@ export const PoolItem = (props: PoolItemProps) => {
             Pocket information
           </p>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px]  text-[12px] md:text-[14px]  text-dark40 ">
+            <p className="w-[200px]  text-[12px] md:text-[14px]  text-white ">
               Start date:
             </p>
-            <p className="text-white text-[12px] md:text-[16px] w-full text-right">
+            <p className="text-dark40 text-[12px] md:text-[16px] w-full text-right">
               {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px] text-[12px] md:text-[14px] text-dark40">
+            <p className="w-[200px] text-[12px] md:text-[14px] text-white">
               Total deposited
             </p>
-            <p className="text-white text-[12px] md:text-[16px] w-full text-right">
+            <p className="text-dark40 text-[12px] md:text-[16px] w-full text-right">
               {convertDecimalAmount(
                 data?.baseTokenAddress,
                 data.remainingBaseTokenBalance
@@ -265,10 +265,10 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
           {data.batchVolume > data.remainingBaseTokenBalance && (
             <div className="flex items-center mt-[5px] regular-text">
-              <p className="w-[200px] text-[14px] text-dark40">
+              <p className="w-[200px] text-[14px] text-white">
                 Outstanding deposit:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] w-[50%] text-right">
+              <p className="text-dark40 text-[12px] md:text-[16px] w-[50%] text-right">
                 {convertDecimalAmount(
                   baseToken?.address,
                   data.batchVolume - data.remainingBaseTokenBalance
@@ -293,7 +293,7 @@ export const PoolItem = (props: PoolItemProps) => {
         >
           {hummanStatus}
         </p>
-        {!isWithdrawed && (
+        {!isWithdrawed && !(isEnded && !isClaimed) && (
           <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto mobile:grid mobile:grid-cols-3 mobile:gap-3">
             <div className="md:float-right mobile:col-span-1">
               {(isActive || isPaused) && (
@@ -381,6 +381,21 @@ export const PoolItem = (props: PoolItemProps) => {
                 onClick={() => setClosedDisplayed(true)}
               />
             )}
+          </div>
+        )}
+        {isEnded && !isClaimed && (
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
+            <Button
+              className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn text-center mx-auto mobile:!max-w-[150px]"
+              theme={{
+                backgroundColor: "transparent",
+                color: "#B998FB",
+                hoverColor: "#B998FB",
+              }}
+              text="Claim fee"
+              width="100%"
+              onClick={() => setClaimFeeDisplayed(true)}
+            />
           </div>
         )}
       </div>
