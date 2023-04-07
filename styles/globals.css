@@ -283,6 +283,6 @@ input:focus {
     text-align: center;
   }
   .ant-picker-dropdown {
-    width: calc(100vw - 30px) !important;
+    /* width: calc(100vw - 30px) !important; */
   }
 }

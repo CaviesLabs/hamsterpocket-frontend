@@ -87,7 +87,7 @@ export default function HistoryController() {
           value={selectedType}
           className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 mobile:mt-[16px] mobile:hidden"
         />
-        <div className="md:hidden mt-[16px]">
+        <div className="md:hidden mt-[16px] flow-root">
           <p className="md:hidden text-white text-[12px] float-left relative top-[5px]">
             Sort by:
           </p>

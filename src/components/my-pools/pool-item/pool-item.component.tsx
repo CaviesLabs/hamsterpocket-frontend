@@ -199,19 +199,19 @@ export const PoolItem = (props: PoolItemProps) => {
         ) : (
           <>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Batch bought:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {data.currentBatchAmount || 0}{" "}
                 {data.currentBatchAmount > 1 ? "BATCHES" : "BATCH"}
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Token bought:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {formatCurrency(
                   convertDecimalAmount(
                     targetToken?.address,
@@ -222,10 +222,10 @@ export const PoolItem = (props: PoolItemProps) => {
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Spent:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {formatCurrency(
                   convertDecimalAmount(
                     baseToken?.address,
@@ -265,7 +265,7 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
           {data.batchVolume > data.remainingBaseTokenBalance && (
             <div className="flex items-center mt-[5px] regular-text">
-              <p className="w-[200px] text-[14px] text-white">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white">
                 Outstanding deposit:
               </p>
               <p className="text-dark40 text-[12px] md:text-[16px] w-[50%] text-right">
