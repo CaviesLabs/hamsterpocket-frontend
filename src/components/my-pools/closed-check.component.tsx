@@ -46,7 +46,7 @@ export const ClosedCheckComponent = () => {
     >
       <div className="w-full rounded-2xl bg-[#FFF9D8] px-5 py-4 md:flex md:items-center justify-between mobile:text-[14px] relative">
         <CloseOutlined
-          className="ml-4 cursor-pointer md:hidden absolute right-[15px] top-[15px]"
+          className="ml-4 cursor-pointer md:hidden absolute right-[15px] top-[10px]"
           onClick={() => setIsClosed(true)}
         />
         <div className="flex items-center">

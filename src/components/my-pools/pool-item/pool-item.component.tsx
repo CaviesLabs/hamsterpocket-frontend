@@ -247,7 +247,7 @@ export const PoolItem = (props: PoolItemProps) => {
             <p className="w-[200px]  text-[12px] md:text-[14px]  text-dark40 ">
               Start date:
             </p>
-            <p className="text-white  text-[12px] md:text-[16px] ">
+            <p className="text-white text-[12px] md:text-[16px] w-full text-right">
               {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
@@ -255,7 +255,7 @@ export const PoolItem = (props: PoolItemProps) => {
             <p className="w-[200px] text-[12px] md:text-[14px] text-dark40">
               Total deposited
             </p>
-            <p className="text-white text-[12px] md:text-[16px]">
+            <p className="text-white text-[12px] md:text-[16px] w-full text-right">
               {convertDecimalAmount(
                 data?.baseTokenAddress,
                 data.remainingBaseTokenBalance
@@ -268,7 +268,7 @@ export const PoolItem = (props: PoolItemProps) => {
               <p className="w-[200px] text-[14px] text-dark40">
                 Outstanding deposit:
               </p>
-              <p className="text-white text-[16px]">
+              <p className="text-white text-[12px] md:text-[16px] w-[50%] text-right">
                 {convertDecimalAmount(
                   baseToken?.address,
                   data.batchVolume - data.remainingBaseTokenBalance

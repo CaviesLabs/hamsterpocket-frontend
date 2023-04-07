@@ -126,12 +126,23 @@ export const EndedPoolGroupComponent: FC = () => {
               />
             </div>
           </div>
-          <div className="md:float-right md:flex md:mt-0 mt-[12px]">
+          <div className="md:float-right md:flex md:mt-0 mt-[12px] mobile:flow-root">
+            <p className="md:hidden text-white text-[12px] float-left relative top-[5px] md:hidden">
+              Sort by:
+            </p>
+            <div className="float-right md:hidden">
+              <DropdownSelect
+                options={PocketTypes}
+                handleSelectValue={(v) => setSelectedType(v)}
+                value={selectedType}
+                className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px]"
+              />
+            </div>
             <DropdownSelect
               options={PocketTypes}
               handleSelectValue={(v) => setSelectedType(v)}
               value={selectedType}
-              className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px]"
+              className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px] mobile:hidden"
             />
             <FilterSelect
               className="text-center rounded-3xl text-sm h-[50px] md:mt-0 mt-[12px] w-[228px] mobile:hidden"

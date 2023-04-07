@@ -85,8 +85,21 @@ export default function HistoryController() {
           options={types}
           handleSelectValue={(v) => setSelectedType(v)}
           value={selectedType}
-          className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 mobile:mt-[16px]"
+          className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 mobile:mt-[16px] mobile:hidden"
         />
+        <div className="md:hidden mt-[16px]">
+          <p className="md:hidden text-white text-[12px] float-left relative top-[5px]">
+            Sort by:
+          </p>
+          <div className="float-right">
+            <DropdownSelect
+              options={types}
+              handleSelectValue={(v) => setSelectedType(v)}
+              value={selectedType}
+              className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 px-[20px]"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
