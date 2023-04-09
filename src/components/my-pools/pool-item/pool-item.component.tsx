@@ -95,7 +95,7 @@ export const PoolItem = (props: PoolItemProps) => {
   }, [data]);
 
   return (
-    <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
+    <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px] overflow-hidden">
       <div className="flow-root">
         <p className="text-[16px] md:text-[24px] text-white normal-text float-left">
           {data.name}
