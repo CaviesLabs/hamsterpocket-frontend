@@ -41,7 +41,7 @@ const Footer: FC = () => {
   );
 
   return (
-    <div className="footer pb-9">
+    <div className="footer pb-9 mobile:hidden">
       <div className="lg:max-w-[1140px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
           <div className="menu-wrapper md:pt-0">
