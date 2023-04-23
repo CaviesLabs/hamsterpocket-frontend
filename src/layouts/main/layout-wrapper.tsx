@@ -13,8 +13,8 @@ export const LayoutWrapper: FC<{
    * Render normal layout when screen is desktop and render desktop layout when do not have mobile layout for its version.
    */
   if (!isMobile || !mobileLayout) {
-    return <div>{layout}</div>;
+    return <>{layout}</>;
   }
 
-  return <div>{mobileLayout}</div>;
+  return <>{mobileLayout}</>;
 };

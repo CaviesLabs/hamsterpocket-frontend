@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { useMain } from "@/src/hooks/pages/main";
+import { TabBar } from "@/src/components/tabbar";
 import Footer from "@/src/components/footer";
 import Header from "@/src/components/header";
 import AuthMiddleware from "@/src/components/middlewares/auth";
@@ -17,8 +18,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     <AuthMiddleware>
       <div className="main-layout">
         <Header />
-        <div className="layout-content min-h-[90.5vh]">{children}</div>
+        <div className="layout-content md:min-h-[90.5vh] mobile:h-[87vh] mobile:overflow-y-scroll">
+          {children}
+        </div>
         <Footer />
+        <TabBar />
       </div>
       {fistLoading && (
         <div

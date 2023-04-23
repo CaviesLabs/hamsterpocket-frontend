@@ -59,16 +59,19 @@ const Header: FC = () => {
 
   return (
     <StyledHeader
-      className={classnames("app-header fixed z-50 w-full  px-[12px] md:px-0", {
-        /**
-         * @dev Restrict fill purple background & clear border for specific pages.
-         */
-        "bg-purpleBg border-b-[0px]": PURPLE_HEADER_PAGES.filter((item) =>
-          router.asPath.includes(item)
-        ).length,
-        "text-white": !isScrolled && isHomepage,
-        "scrolled-header shadow-lg": isScrolled,
-      })}
+      className={classnames(
+        "app-header md:fixed md:z-50 w-full px-[12px] md:px-0 mobile:block mobile:shadow-lg mobile:bg-[#060710]",
+        {
+          /**
+           * @dev Restrict fill purple background & clear border for specific pages.
+           */
+          "bg-purpleBg border-b-[0px]": PURPLE_HEADER_PAGES.filter((item) =>
+            router.asPath.includes(item)
+          ).length,
+          "text-white": !isScrolled && isHomepage,
+          "scrolled-header shadow-lg": isScrolled,
+        }
+      )}
       id="app-header"
     >
       <div className="w-full py-[18px] md:py-[25px] flow-root">
@@ -137,5 +140,8 @@ const StyledHeader = styled.div`
   transition: background-color 0.3s ease;
   &.scrolled-header {
     background-color: #000000;
+    @media screen and (max-width: 768px) {
+      background-color: #060710;
+    }
   }
 `;

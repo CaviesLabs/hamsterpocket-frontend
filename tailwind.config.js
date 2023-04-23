@@ -48,6 +48,7 @@ module.exports = {
         black: "#000",
         green: "#44DB8D",
         purple: "#B998FB",
+        purple300: "#735CF7",
         grey: "#9D9EA0",
         dividerColor: "#D2D7DF",
         blurPurple: "rgba(185, 152, 251, 0.8)",

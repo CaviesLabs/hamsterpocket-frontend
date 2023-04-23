@@ -22,6 +22,7 @@
     "@emotion/styled": "^11.8.1",
     "@gokiprotocol/walletkit": "^1.7.3",
     "@hamsterbox/ui-kit": "^0.6.3",
+    "@material-ui/core": "^4.12.4",
     "@metaplex-foundation/mpl-token-metadata": "^2.5.2",
     "@mui/material": "^5.12.0",
     "@next-static/image": "^0.0.10",

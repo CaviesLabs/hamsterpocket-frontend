@@ -5,6 +5,7 @@ Chart.register(ArcElement, Legend, Tooltip);
 import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
+import { PocketBalance } from "./pocket-balance.component";
 
 const options = {
   cutout: 70,
@@ -40,23 +41,7 @@ export default function DashboardComponent() {
 
   return (
     <div className="mt-12 md:flex md:justify-between md:items-center">
-      <div className="py-3 px-6 bg-dark90 md:w-1/4 rounded border border-gray-500">
-        <div className="text-white normal-text mobile:text-[14px]">
-          Total Pockets Balance:
-        </div>
-        <div className="flex mt-4">
-          <img
-            src="/assets/images/solana-icon.svg"
-            className="mobile:w-[20px] mobile:h-[20pxs]"
-          />
-          <div className="text-green ml-3 mobile:text-[14px]">
-            ~ {totalSOL.toFixed(2)} SOL
-          </div>
-        </div>
-        <div className="text-green mt-1 italic regular-text mobile:text-[14px]">
-          (~ ${totalUSD.toFixed(2)})
-        </div>
-      </div>
+      <PocketBalance />
       {totalUSD > 0 && chartData.labels.length > 0 && (
         <div className="flex items-center mr-36 mobile:mt-[20px]">
           <div className="max-w-[190px] relative flex justify-center items-center">
