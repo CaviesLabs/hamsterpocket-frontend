@@ -164,10 +164,10 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
 .avatar-profile {
   position: relative;
   .toggle-container {
+    width: 170px;
     position: absolute;
-    width: 100%;
     bottom: -160px;
-    left: 13px;
+    right: 0px;
     display: none;
     padding-top: 20px;
     background: #20242D;
@@ -191,7 +191,7 @@ $cubic: cubic-bezier(0.4, 0.01, 0.165, 0.99);
 
     @media screen and (max-width: 768px) {
       bottom: -179px;
-      left: -97px;
+      right: 0px;
       width: 155px;
     }
   }

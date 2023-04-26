@@ -81,6 +81,7 @@ module.exports = {
         navyDark: "#96A1B5",
         backgroundDark: "#20242D",
         twhite: "#FFFFFF",
+        dark3: "#242636",
         dark10: "#F0F3FA",
         dark20: "#E2E8F0",
         dark30: "#CBD4E1",

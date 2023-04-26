@@ -1,6 +1,4 @@
-import { FC, useMemo, useRef, useState } from "react";
-import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
-import { useConnectedWallet } from "@saberhq/use-solana";
+import { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
 import {
@@ -8,25 +6,16 @@ import {
   NoneIcon,
   PlusIcon,
   BookIcon,
+  SolanaIcon,
+  DropdownArrowIcon,
 } from "@/src/components/icons";
 import classnames from "classnames";
 import styles from "./index.module.scss";
-import { DownOutlined } from "@ant-design/icons";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
-  const wallet = useConnectedWallet();
   const router = useRouter();
   const { disconnect } = useWallet();
-
-  /**
-   * @dev Get wallet public key address.
-   */
-  const walletPublicKey = useMemo(
-    () => wallet?.publicKey?.toString(),
-    [wallet]
-  );
-
   /**
    * @description Define state of showing profile menu
    */
@@ -45,24 +34,26 @@ const UserProfile: FC = () => {
   return (
     <div
       className={classnames(
-        "relative flex items-center h-full py-[3px] px-[10px] border-solid border-[0px] border-purple rounded-[5px] cursor-pointer avatar-profile",
+        "relative flex items-center h-full border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] px-[10px] md:py-[10px] py-[5px]",
         styles["avatar-profile"]
       )}
       ref={ref}
     >
-      <img
+      {/* <img
         className="w-[25px] md:w-[40px] h-[auto] mr-[10px]"
         src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
         alt="Boring avatar"
-      />
+      /> */}
+      <SolanaIcon className="h-[auto] mr-[10px]" />
       <span
         className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
-        <span className="mobile:hidden">
-          {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
+        <span className="normal-text text-dark50">
+          {/* {utilsProvider.makeShort(walletPublicKey, 3)}{" "} */}
+          Solana
         </span>
-        <DownOutlined style={{ fontSize: 14 }} className="md:ml-2" />
+        <DropdownArrowIcon className="ml-2 text-dark50" />
       </span>
       <ul
         style={{ display: show ? "block" : "none" }}

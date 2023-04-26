@@ -27,6 +27,6 @@
       "@/*": ["./*"],
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/_app.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/_app.jsx", "src/components/create-pocket/mobile-layout/index.tsx=", "src/components/create-pocket/mobile-layout/index.tsx="],
   "exclude": ["node_modules"]
 }

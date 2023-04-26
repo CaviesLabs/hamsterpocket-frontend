@@ -8,6 +8,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import UtilsProvider from "@/src/utils/utils.provider";
 
 export const BuyCondition: FC<{
@@ -111,13 +112,13 @@ export const BuyCondition: FC<{
             <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol}
             </p>
-            <img
+            {/* <img
               src={
                 whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.image
               }
               alt="Image"
               className="w-[13px] h-[13px] md:w-[24px] md:h-[24px] ml-[7px] relative top-[4px]"
-            />
+            /> */}
             <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               ) can buy
             </p>

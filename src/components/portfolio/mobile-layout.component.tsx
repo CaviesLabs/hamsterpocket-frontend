@@ -68,7 +68,7 @@ export const PortfolioMobileLayout: FC = () => {
           </div>
         </div>
         <div>
-          {tab ? (
+          {tab === 0 ? (
             <DashboardComponent />
           ) : (
             <>

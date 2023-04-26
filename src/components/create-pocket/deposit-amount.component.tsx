@@ -61,7 +61,7 @@ export const DepositAmount: FC = () => {
               <img
                 src={baseToken?.image}
                 alt="token balance"
-                className="w-6 mx-1 rounded"
+                className="w-6 mx-1 rounded w-[20px]"
               />
               {formatCurrency(
                 convertDecimalAmount(baseToken?.address, solBalance)

@@ -897,3 +897,99 @@ export const TabProfileIcon: FC<IconProps> = (props) => (
     </defs>
   </svg>
 );
+
+export const DropdownArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width="17"
+    height="16"
+    viewBox="0 0 17 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.6566 5.66675L8.98991 10.3334L4.32324 5.66675"
+      stroke="#7886A0"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const LeftArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clip-path="url(#clip0_3413_12543)">
+      <path
+        d="M4.95837 14.3221L22.4584 14.3221"
+        stroke="#7886A0"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.0165 21.3506L4.95815 14.3226L12.0165 7.29346"
+        stroke="#7886A0"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_3413_12543">
+        <rect
+          width="28"
+          height="28"
+          fill="white"
+          transform="translate(0 0.00195312)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const MobileExchangeIcon: FC<IconProps> = (props) => (
+  <svg
+    width={props.size || "45"}
+    height={props.size || "45"}
+    viewBox="0 0 45 45"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <rect
+      x="44.5"
+      y="0.00195312"
+      width="44"
+      height="44"
+      rx="22"
+      transform="rotate(90 44.5 0.00195312)"
+      fill="#735CF7"
+    />
+    <g clip-path="url(#clip0_3390_23925)">
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M10.5 22.002C10.5 28.6294 15.8726 34.002 22.5 34.002C29.1274 34.002 34.5 28.6294 34.5 22.002C34.5 15.3745 29.1274 10.002 22.5 10.002C15.8726 10.002 10.5 15.3745 10.5 22.002ZM27.323 24.7118C27.559 24.4902 27.559 24.1311 27.323 23.9095C27.087 23.688 26.7044 23.688 26.4684 23.9095L24.1724 26.0649L24.1724 16.5692C24.1724 16.2559 23.9018 16.002 23.5681 16.002C23.2344 16.002 22.9638 16.2559 22.9638 16.5692L22.9638 27.4344C22.9638 27.6638 23.1111 27.8707 23.3369 27.9585C23.5627 28.0463 23.8226 27.9977 23.9954 27.8355L27.323 24.7118ZM22.0362 16.5695C22.0362 16.3401 21.8889 16.1332 21.6631 16.0454C21.4373 15.9576 21.1774 16.0062 21.0046 16.1684L17.677 19.2922C17.441 19.5137 17.441 19.8728 17.677 20.0944C17.913 20.3159 18.2956 20.3159 18.5316 20.0944L20.8276 17.939L20.8276 27.4347C20.8276 27.748 21.0982 28.002 21.4319 28.002C21.7656 28.002 22.0362 27.748 22.0362 27.4347L22.0362 16.5695Z"
+        fill="#D9D9D9"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_3390_23925">
+        <rect
+          width="24"
+          height="24"
+          fill="white"
+          transform="translate(34.5 10.002) rotate(90)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);

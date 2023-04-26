@@ -1,10 +1,12 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { DropdownSelect } from "@/src/components/select";
 import { TIME_CONDITIONS } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { FrequencyConditionType } from "@/src/entities/pocket.entity";
 import { RiQuestionnaireFill } from "react-icons/all";
 import { ToolTip } from "@/src/components/tooltip";
+import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
+import classNames from "classnames";
 
 export const FrequencyOption: FC = () => {
   /**
@@ -13,10 +15,16 @@ export const FrequencyOption: FC = () => {
   const { frequency, setFrequency } = useCreatePocketPage();
 
   /**
+   * @dev Init text value state to adjusting UI.
+   */
+  const [textValue, setTextValue] = useState(TIME_CONDITIONS[0].value);
+
+  /**
    * @dev Handle modify frequency.
    */
   const handleModifyFrequency = useCallback(
     (val: string) => {
+      setTextValue(val);
       switch (val) {
         case FrequencyConditionType.HOURLY:
           setFrequency({ hours: 1 });
@@ -56,11 +64,33 @@ export const FrequencyOption: FC = () => {
           <RiQuestionnaireFill />
         </ToolTip>
       </p>
-      <DropdownSelect
-        className="mt-3 !min-w-[250px]"
-        handleSelectValue={(val) => handleModifyFrequency(val)}
-        options={TIME_CONDITIONS}
-        autoValue={true}
+      <LayoutWrapper
+        layout={
+          <DropdownSelect
+            className="mt-3 !min-w-[250px]"
+            handleSelectValue={(val) => handleModifyFrequency(val)}
+            options={TIME_CONDITIONS}
+            autoValue={true}
+          />
+        }
+        mobileLayout={
+          <div className="flex items-center flex-wrap">
+            {TIME_CONDITIONS.map((item, index) => (
+              <p
+                key={`mobile-option-frequency-${index}`}
+                onClick={() => handleModifyFrequency(item.value)}
+                className={classNames(
+                  "px-[16px] py-[6px] rounded-[30px] text-dark50 bg-dark3 mr-[16px] mt-[16px] normal-text text-[14px]",
+                  {
+                    "!bg-purple300 !text-white": textValue === item.value,
+                  }
+                )}
+              >
+                {item.label}
+              </p>
+            ))}
+          </div>
+        }
       />
     </div>
   );
