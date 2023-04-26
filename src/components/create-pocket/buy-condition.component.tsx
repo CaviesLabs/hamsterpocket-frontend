@@ -8,7 +8,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
+// import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import UtilsProvider from "@/src/utils/utils.provider";
 
 export const BuyCondition: FC<{

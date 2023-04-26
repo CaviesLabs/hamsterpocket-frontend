@@ -9,6 +9,7 @@ import { CreatePocketStep1, CreatePocketStep2 } from "./mobile-layout";
 
 export const CreatePocketMobileLayout: FC = () => {
   /** @dev Injected context to use. */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { handleCreatePocket, setErrorMsgs, processing } =
     useCreatePocketPage();
 
