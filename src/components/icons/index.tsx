@@ -993,3 +993,41 @@ export const MobileExchangeIcon: FC<IconProps> = (props) => (
     </defs>
   </svg>
 );
+
+export const UnCollapseArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9 12.002L14 16.002L19 12.002"
+      stroke="#735CF7"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+export const CollapseArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 16.002L14 12.002L9 16.002"
+      stroke="#735CF7"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);

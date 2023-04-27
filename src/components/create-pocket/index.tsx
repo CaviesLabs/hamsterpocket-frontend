@@ -7,3 +7,4 @@ export * from "./desktop-layout.component";
 export * from "./mobile-layout.component";
 export * from "./each-batch.component";
 export * from "./frequency.component";
+export * from "./buy-condition-mobile.component";

@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { BuyCondition } from "./buy-condition.component";
-import { DepositAmount } from "./deposit-amount.component";
+import { BuyConditionMobile } from "./buy-condition-mobile.component";
 
 export const DCAStrategyMobileLayout: FC = () => {
   /**
@@ -18,7 +17,7 @@ export const DCAStrategyMobileLayout: FC = () => {
     <>
       <section>
         <div className="mt-6">
-          <BuyCondition
+          <BuyConditionMobile
             buyConditionDisplayed={buyConditionDisplayed}
             disabled={!targetTokenAddress.length}
             toggle={() => {
@@ -28,7 +27,6 @@ export const DCAStrategyMobileLayout: FC = () => {
           />
         </div>
       </section>
-      <DepositAmount />
     </>
   );
 };

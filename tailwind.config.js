@@ -86,6 +86,7 @@ module.exports = {
         dark20: "#E2E8F0",
         dark30: "#CBD4E1",
         dark40: "#94A3B8",
+        dark45: "#99A8C6",
         dark50: "#7886A0",
         dark60: "#5F6C87",
         dark70: "#4A5469",
@@ -93,6 +94,7 @@ module.exports = {
         dark90: "#20242D",
         purpleBg: "#EDECFF",
         red300: "#DE2C47",
+        red200: "#F44949",
       },
       boxShadow: {
         xl: "0px 4px 4px rgba(0, 0, 0, 0.25);",
