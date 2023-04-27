@@ -1,0 +1,60 @@
+import { StopConditions } from "@/src/entities/pocket.entity";
+import { DATE_TIME_FORMAT } from "@/src/utils";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import dayjs from "dayjs";
+
+/**
+ * @dev The function to render human text base on stop conditions key.
+ */
+export const stopConditionHumanLabelParser = (key: string) => {
+  switch (key) {
+    case "endTimeReach":
+      return "Time";
+    case "spentBaseTokenAmountReach":
+      return "Target SOL Amount";
+    case "quoteTokenAmountReach":
+      return "Target Tokens Purchased";
+  }
+};
+
+/**
+ * @dev The function to render human text base on stop conditions key.
+ * Must use in create-pocket provider.
+ */
+export const parseStopConditionHumanValue = (condition: StopConditions) => {
+  /**
+   * @dev Injected context.
+   */
+  const { baseTokenAddress, targetTokenAddress } = useCreatePocketPage();
+  const { whiteLists } = useWhiteList();
+
+  /**
+   * @dev Parse date value to human text.
+   */
+  if (condition.endTimeReach) {
+    return dayjs(
+      (condition.endTimeReach?.value as any)?.toNumber() * 1000
+    ).format(DATE_TIME_FORMAT);
+  }
+
+  /**
+   * @dev Parse token big number to human text.
+   */
+  if (condition.spentBaseTokenAmountReach) {
+    return `${
+      (condition.spentBaseTokenAmountReach?.value as any)?.toNumber() /
+      Math.pow(10, baseTokenAddress?.[1])
+    } ${whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+  }
+
+  /**
+   * @dev Parse token big number to human text.
+   */
+  if (condition.quoteTokenAmountReach) {
+    return `${
+      (condition.quoteTokenAmountReach?.value as any)?.toNumber() /
+      Math.pow(10, targetTokenAddress?.[1])
+    } ${whiteLists[targetTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+  }
+};

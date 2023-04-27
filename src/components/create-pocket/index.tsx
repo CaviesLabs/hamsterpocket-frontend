@@ -10,3 +10,5 @@ export * from "./frequency.component";
 export * from "./buy-condition-mobile.component";
 export * from "./take-profit.component";
 export * from "./stop-loss.component";
+export * from "./deposit-amount.component";
+export * from "./parser";

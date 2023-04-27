@@ -31,9 +31,6 @@ export const DepositAmount: FC = () => {
         Deposit amount
       </p>
       <div className="mt-2">
-        <p className="text-dark20 text-[14px] regular-text italic">
-          Deposit amount must be equal or greater than the each batch amount
-        </p>
         <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
           <div className="md:col-span-2">
             <p className="text-dark10 text-[14px] regular-text">
@@ -57,11 +54,11 @@ export const DepositAmount: FC = () => {
               placeholder="Enter amount"
             />
             <p className="mt-3 text-white text-[14px] md:text-[16px] regular-text flex">
-              Your balance:
+              Available:
               <img
                 src={baseToken?.image}
                 alt="token balance"
-                className="w-6 mx-1 rounded w-[20px]"
+                className="!w-6 mx-1 rounded w-[20px]"
               />
               {formatCurrency(
                 convertDecimalAmount(baseToken?.address, solBalance)

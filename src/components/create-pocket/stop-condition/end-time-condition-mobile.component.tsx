@@ -58,8 +58,6 @@ export const EndTimeConditionMobile: FC<{
     }
   }, [currentValue, collapsed, handleChange]);
 
-  console.log(curCondition);
-
   return (
     <div className="mt-[24px]">
       <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px]">

@@ -75,23 +75,27 @@ export const CreatePocketMobileLayout: FC = () => {
         <div className="float-right ml-[20px]">
           <Button
             className="float-right !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0 normal-text font-semibold"
-            text="Create pocket"
+            text={currentStep > 0 ? "Create pocket" : "Continue"}
             loading={processing}
-            // onClick={() => handleCreatePocket()}
-            onClick={() => handleNextStep()}
+            onClick={() =>
+              currentStep ? handleCreatePocket() : handleNextStep()
+            }
           />
         </div>
-        <div className="float-right">
-          <Button
-            className="float-right !border-solid !border-purple !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
-            theme={{
-              backgroundColor: "transparent",
-              color: "#B998FB",
-              hoverColor: "#B998FB",
-            }}
-            text="Back"
-          />
-        </div>
+        {currentStep > 0 && (
+          <div className="float-right">
+            <Button
+              className="float-right !border-solid !border-purple !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
+              theme={{
+                backgroundColor: "transparent",
+                color: "#B998FB",
+                hoverColor: "#B998FB",
+              }}
+              text="Back"
+              onClick={handleBackStep}
+            />
+          </div>
+        )}
       </section>
     </LayoutSection>
   );

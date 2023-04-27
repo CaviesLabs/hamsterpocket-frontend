@@ -77,8 +77,6 @@ export const BuyConditionMobile: FC<{
     (window as any).test = buyCondition;
   }, [isTwoValue, buyCondition]);
 
-  console.log(buyCondition);
-
   return (
     <div className="mt-[24px] ">
       {/* animate={{ x: 0 }} initial={{ x: -100 }} */}

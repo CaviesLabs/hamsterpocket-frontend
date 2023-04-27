@@ -65,8 +65,6 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
         props.addressSelected
       );
       setTokenBalance(balance);
-      console.log(props.addressSelected);
-      console.log(balance);
     })();
   }, [props.addressSelected, solBalance]);
 
