@@ -43,6 +43,11 @@ export type CurrencyInputProps = {
   dropdownIconDisplayed?: boolean | false;
 
   /**
+   * @dev Force to show right prefix.
+   */
+  rightPrefixLabel?: string;
+
+  /**
    * @dev Callback function for on click event.
    */
   onClick?: () => void;
@@ -133,7 +138,9 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        {addressSelected === "BATCH"
+        {props.rightPrefixLabel
+          ? props.rightPrefixLabel
+          : addressSelected === "BATCH"
           ? "BATCH"
           : allowCurrencies?.[addressSelected]?.symbol}
         {!props.disableDropdown && (

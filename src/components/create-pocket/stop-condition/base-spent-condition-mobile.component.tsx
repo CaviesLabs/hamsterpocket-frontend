@@ -1,24 +1,25 @@
 import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { CircleCheckIcon, UnCollapseArrowIcon } from "@/src/components/icons";
-import { DatetimePicker } from "@/src/components/datetime-picker";
+import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { Collapse } from "react-collapse";
 
-export const EndTimeConditionMobile: FC<{
+export const BaseAmountSpendConditionMobile: FC<{
   displyed: boolean;
   toggle(): void;
 }> = (props) => {
   /**
    * @dev Injected context.
    */
-  const { handleModifyStopConditions, stopConditions } = useCreatePocketPage();
+  const { handleModifyStopConditions, stopConditions, baseTokenAddress } =
+    useCreatePocketPage();
 
   /**
    * @dev Current value.
    */
-  const [currentValue, setCurrentValue] = useState<Date>(new Date());
+  const [currentValue, setCurrentValue] = useState(0);
 
   /**
    * @dev Collapse condition.
@@ -27,22 +28,21 @@ export const EndTimeConditionMobile: FC<{
 
   /** @dev Get current condition */
   const curCondition = useMemo(() => {
-    return stopConditions.find((item) => item.endTimeReach !== undefined)
-      ?.endTimeReach;
+    return stopConditions.find(
+      (item) => item.spentBaseTokenAmountReach !== undefined
+    )?.spentBaseTokenAmountReach;
   }, [stopConditions]);
 
-  /** @dev Get primary value of current condition. */
   const primary = useMemo(
     () => (curCondition?.primary == undefined ? false : curCondition?.primary),
     [curCondition]
   );
 
-  /** @dev The function to change value in condition. */
   const handleChange = useCallback(
     (isPrimary: boolean) => {
       handleModifyStopConditions(
-        "endTimeReach",
-        new BN(parseInt((currentValue.getTime() / 1000).toString()).toString()),
+        "spentBaseTokenAmountReach",
+        new BN(currentValue * Math.pow(10, baseTokenAddress[1])),
         isPrimary
       );
     },
@@ -74,7 +74,7 @@ export const EndTimeConditionMobile: FC<{
               <UnCollapseArrowIcon />
             </div>
             <p className="float-left text-[12px] text-white normal-text ml-[12px] relative">
-              Add end time
+              Add target SOL amount
             </p>
           </div>
           {!curCondition ? (
@@ -86,7 +86,7 @@ export const EndTimeConditionMobile: FC<{
               className="float-right bg-[#F4494933] px-[8px] py-[4px] rounded-[19px] normal-text text-red200 text-[12px]"
               onClick={() => {
                 props.toggle();
-                setCurrentValue(new Date());
+                setCurrentValue(0);
                 setCollapsed(true);
               }}
             >
@@ -97,7 +97,11 @@ export const EndTimeConditionMobile: FC<{
         <Collapse isOpened={!collapsed}>
           <div className="grid grid-cols-12 gap-2 items-center justify-center mt-[16px] max-w-[600px]">
             <div className="col-span-10">
-              <DatetimePicker onChange={(v) => setCurrentValue(v)} />
+              <CurrencyInput
+                addressSelected={baseTokenAddress[0]?.toBase58().toString()}
+                disableDropdown={true}
+                onAmountChange={(val) => setCurrentValue(val)}
+              />
             </div>
             <div className="col-span-2">
               <TooltipPrimaryComponent>

@@ -164,3 +164,30 @@ export const AVATAR_ENDPOINT =
 //     symbol: "USDC",
 //   },
 // ];
+
+/**
+ * @dev Type of each function to take profit.
+ */
+export enum TAKE_PROFIT_TYPE {
+  ATPRICE = "AT::PRICE",
+  TOTALTRADINGVOLUME = "TOTAL::TRADING::VOLUME",
+  TARGETPROFIT = "TARGET::PROFIT",
+}
+
+/**
+ * @dev Expose range of kinds to take profit.
+ */
+export const TAKE_PROFIT_KIND_OPTIONS = [
+  {
+    label: "At price",
+    value: TAKE_PROFIT_TYPE.ATPRICE,
+  },
+  {
+    label: "Total trading volume (%)",
+    value: TAKE_PROFIT_TYPE.TOTALTRADINGVOLUME,
+  },
+  {
+    label: "Target profit (SOL)",
+    value: TAKE_PROFIT_TYPE.TARGETPROFIT,
+  },
+];

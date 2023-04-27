@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 import { EndTimeConditionMobile } from "./end-time-condition-mobile.component";
-import { TargetAmountCondition } from "./target-amount-condition.component";
-import { BaseAmountSpendCondition } from "./base-spent-condition.component";
-// import { BatchAmountCondition } from "./batch-amount-condition";
+import { BaseAmountSpendConditionMobile } from "./base-spent-condition-mobile.component";
+import { TargetAmountConditionMobile } from "./target-amount-condition-mobile.component";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
@@ -49,33 +48,20 @@ export const StopConditionMobile: FC = () => {
               setEndTimeDisplayed(false);
             }}
           />
-          {targetAmountDisplayed && (
-            <TargetAmountCondition
-              displyed={targetAmountDisplayed}
-              toggle={() => {
-                handleModifyStopConditions("quoteTokenAmountReach", "delete");
-                setTargetAmountDisplayed(false);
-              }}
-            />
-          )}
-          {baseTokenSpentDisplayed && (
-            <BaseAmountSpendCondition
-              displyed={baseTokenSpentDisplayed}
-              toggle={() => {
-                handleModifyStopConditions(
-                  "spentBaseTokenAmountReach",
-                  "delete"
-                );
-                setBaseTokenSpentDisplayed(false);
-              }}
-            />
-          )}
-          {/* {batchAmountDisplayed && (
-            <BatchAmountCondition
-              displyed={batchAmountDisplayed}
-              toggle={() => setBatchAmountDisplayed(false)}
-            />
-          )} */}
+          <BaseAmountSpendConditionMobile
+            displyed={baseTokenSpentDisplayed}
+            toggle={() => {
+              handleModifyStopConditions("spentBaseTokenAmountReach", "delete");
+              setBaseTokenSpentDisplayed(false);
+            }}
+          />
+          <TargetAmountConditionMobile
+            displyed={targetAmountDisplayed}
+            toggle={() => {
+              handleModifyStopConditions("quoteTokenAmountReach", "delete");
+              setTargetAmountDisplayed(false);
+            }}
+          />
         </div>
       </div>
     </section>

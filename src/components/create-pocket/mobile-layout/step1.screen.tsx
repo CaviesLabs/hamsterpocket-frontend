@@ -6,6 +6,8 @@ import {
   FrequencyOption,
   DCAStrategyMobileLayout,
   StopConditionMobile,
+  TakeProfitOption,
+  StopLossOption,
 } from "@/src/components/create-pocket";
 import { DatetimePicker } from "@/src/components/datetime-picker";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
@@ -61,6 +63,12 @@ export const CreatePocketStep1: FC = () => {
       </div>
       <div className="mt-[16px]">
         <StopConditionMobile />
+      </div>
+      <div className="mt-[16px]">
+        <TakeProfitOption />
+      </div>
+      <div className="mt-[16px]">
+        <StopLossOption />
       </div>
     </>
   );
