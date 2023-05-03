@@ -1,6 +1,9 @@
 import { FC, ReactNode } from "react";
+import { useRouter } from "next/router";
 import { useMain } from "@/src/hooks/pages/main";
 import { TabBar } from "@/src/components/tabbar";
+import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
+import { SideBar } from "@/src/components/sidebar";
 import Footer from "@/src/components/footer";
 import Header from "@/src/components/header";
 import AuthMiddleware from "@/src/components/middlewares/auth";
@@ -12,14 +15,40 @@ export interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+  /**
+   * @dev Import context for supporting ui handle.
+   */
   const { transitionLoading, fistLoading } = useMain();
+
+  /**
+   * @dev Import next router hook.
+   */
+  const router = useRouter();
+
+  console.log(router.asPath);
 
   return (
     <AuthMiddleware>
       <div className="main-layout">
         <Header />
         <div className="layout-content md:min-h-[90.5vh] mobile:h-[87vh] mobile:overflow-y-scroll">
-          {children}
+          <LayoutWrapper
+            mobileLayout={children}
+            layout={
+              router.asPath === "/" ? (
+                children
+              ) : (
+                <div className="flex">
+                  <div className="float-left w-[16%] sidebarBreakpoint:w-[7%] !pt-[120px] !pb-[100px]">
+                    <SideBar />
+                  </div>
+                  <div className="float-left w-[74%] sidebarBreakpoint:w-[93%]">
+                    {children}
+                  </div>
+                </div>
+              )
+            }
+          />
         </div>
         <Footer />
         <TabBar />

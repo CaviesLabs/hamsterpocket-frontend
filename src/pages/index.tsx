@@ -43,7 +43,7 @@ const Layout = (props: LayoutProps) => {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <LayoutSection className="pt-[60px] pb-[100px]">
+        <LayoutSection className="pt-[60px] pb-[100px] !mx-auto">
           <section className="md:flex md:items-center">
             <div className="w-full md:!hidden">
               <img
