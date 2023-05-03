@@ -39,6 +39,7 @@ module.exports = {
       gand: { raw: "(min-height: 800px)" },
       tall: { raw: "(min-height: 700px)" },
       small: { raw: "(min-height: 600px)" },
+      sidebarBreakpoint: { raw: "(max-width: 1250px)" },
     },
     extend: {
       colors: {
@@ -47,6 +48,7 @@ module.exports = {
         white: "#ffffff",
         black: "#000",
         green: "#44DB8D",
+        green300: "#26C673",
         purple: "#B998FB",
         purple300: "#735CF7",
         grey: "#9D9EA0",

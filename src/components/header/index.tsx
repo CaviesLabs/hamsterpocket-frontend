@@ -75,7 +75,7 @@ const Header: FC = () => {
       id="app-header"
     >
       <div className="w-full py-[18px] md:py-[25px] flow-root">
-        <div className="md:max-w-[1140px] mx-auto flex justify-between">
+        <div className="md:max-w-[1440px] mx-auto flex justify-between">
           <div className="logo-wrapper md:mt-0 flex items-center">
             <a className="cursor-pointer" onClick={() => router.push("/")}>
               <HamsterboxIcon

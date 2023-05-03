@@ -108,12 +108,14 @@ export const PoolItemBuyConditionComponent = (
   };
 
   return (
-    <div className="text-white text-[14px] md:text-[18px] normal-text">
+    <div className="text-white normal-text text-center">
       <p>
         {convertDecimalAmount(data.baseTokenAddress, data.batchVolume)}{" "}
         {baseToken?.symbol} {handleRenderFrequency()}
       </p>
-      <p className="mt-4">{humanBuyConditionType()}</p>
+      <p className="mt-[5px] text-[12px] text-dark50">
+        {humanBuyConditionType()}
+      </p>
     </div>
   );
 };
