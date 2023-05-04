@@ -13,7 +13,7 @@ const Layout: FC = () => {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <LayoutSection className="!pt-[160px] pb-[100px]">
+        <LayoutSection className="!pt-[130px] pb-[100px]">
           <BalanceGroup />
           <EndedPoolGroupComponent />
         </LayoutSection>

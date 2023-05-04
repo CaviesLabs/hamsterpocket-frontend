@@ -94,6 +94,7 @@ module.exports = {
         dark70: "#4A5469",
         dark80: "#353C4B",
         dark90: "#20242D",
+        dark100: "#121320",
         purpleBg: "#EDECFF",
         red300: "#DE2C47",
         red200: "#F44949",

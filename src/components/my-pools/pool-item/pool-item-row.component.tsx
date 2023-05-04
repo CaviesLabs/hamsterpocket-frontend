@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
@@ -23,6 +24,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists } = useWhiteList();
   const { programService } = useWallet();
+  const router = useRouter();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -74,7 +76,10 @@ export const PoolItemRow = (props: PoolItemProps) => {
   }, [data, programService]);
 
   return (
-    <div className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden">
+    <div
+      className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden cursor-pointer hover:bg-[#181927]"
+      onClick={() => router.push(`/pocket/${data.id}`)}
+    >
       <div className="md:grid md:grid-cols-12">
         <div className="md:col-span-3">
           <div className="flex items-center">
@@ -140,7 +145,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
         </div>
         <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
           <p className="md:hidden float-left text-dark50">Next batch time</p>
-          <div className="mobile:float-right mobile:flex mobile:items-center">
+          <div className="mobile:float-right mobile:flex mobile:items-center md:text-center">
             <div className="px-[10px] bg-[#4ADE801F] rounded-[8px] inline-block mx-auto">
               <p className="text-center text-green300 normal-text">On going</p>
             </div>

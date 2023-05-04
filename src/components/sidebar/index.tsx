@@ -1,4 +1,4 @@
-import { FC, useMemo, ReactNode } from "react";
+import { FC, useMemo, ReactNode, useCallback } from "react";
 import { useRouter } from "next/router";
 import {
   TabMenuIcon,
@@ -11,6 +11,7 @@ export interface SideBarMenuItem {
   name: string;
   uri: string;
   icon(color: string): ReactNode;
+  sideUris?: string[];
   newWindow?: boolean | true;
 }
 
@@ -25,6 +26,7 @@ export const SideBar: FC = () => {
       {
         name: "My Pockets",
         uri: "/my-pockets",
+        sideUris: ["/pocket/"],
         icon: (color: string) => <TabMenuIcon color={color} />,
       },
       {
@@ -41,6 +43,28 @@ export const SideBar: FC = () => {
     []
   );
 
+  /**
+   * @dev The function to enable ui for active.
+   */
+  const isActive = useCallback(
+    (uri: string, sideUris?: string[]) => {
+      if (uri === router.asPath.toString()) {
+        return true;
+      }
+
+      if (
+        sideUris &&
+        sideUris.filter((uri) => router.asPath.toString().includes(uri)).length
+      ) {
+        return true;
+      }
+
+      /** @dev Return default value.  */
+      return false;
+    },
+    [router]
+  );
+
   return (
     <div className="w-full h-full px-[10px] py-[7px] border-solid border-r-[1px] border-dark90">
       {tabItems.map((item, index) => (
@@ -49,7 +73,7 @@ export const SideBar: FC = () => {
           className={classNames(
             "cursor-pointer flow-root sidebarBreakpoint:flex sidebarBreakpoint:justify-center mb-[20px] py-[20px] px-[20px] hover:bg-[#121320]",
             {
-              "bg-[#121320]": item.uri === router.asPath.toString(),
+              "bg-[#121320]": isActive(item.uri, item.sideUris),
             }
           )}
           key={`tab-menu-item-${index}`}
@@ -57,14 +81,14 @@ export const SideBar: FC = () => {
           <div className="flex sidebarBreakpoint:pl-[40px] pl-[80px]">
             <div className="float-left">
               {item.icon(
-                item.uri === router.asPath.toString() ? "#735CF7" : "#7886A0"
+                isActive(item.uri, item.sideUris) ? "#735CF7" : "#7886A0"
               )}
             </div>
             <p
               className={classNames(
                 "text-[16px] normal-text float-left ml-[10px] sidebarBreakpoint:hidden",
                 {
-                  "text-purple300": item.uri === router.asPath.toString(),
+                  "text-purple300": isActive(item.uri, item.sideUris),
                 }
               )}
             >

@@ -917,6 +917,32 @@ export const DropdownArrowIcon: FC<IconProps> = (props) => (
   </svg>
 );
 
+export const RightArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M20.2051 12.0859L5.20508 12.0859"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M14.1553 6.06233L20.2053 12.0863L14.1553 18.1113"
+      stroke="white"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
 export const LeftArrowIcon: FC<IconProps> = (props) => (
   <svg
     className={props.className}
@@ -952,6 +978,22 @@ export const LeftArrowIcon: FC<IconProps> = (props) => (
         />
       </clipPath>
     </defs>
+  </svg>
+);
+
+export const LeftIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M16.285 3.87695L7.80005 12.362L16.285 20.847L17.7 19.433L10.628 12.362L17.7 5.29095L16.285 3.87695Z"
+      fill="white"
+    />
   </svg>
 );
 

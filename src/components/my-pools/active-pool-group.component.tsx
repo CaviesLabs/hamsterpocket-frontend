@@ -82,8 +82,8 @@ export const ActivePoolGroup: FC = () => {
   );
 
   return (
-    <section>
-      <section>
+    <section className="my-pockets-container">
+      <section className="pool-group">
         <div className="md:flex justify-between items-center">
           <div className="flow-root md:flex items-center">
             <p className="float-left md:text-[32px] text-[20px] text-white">
