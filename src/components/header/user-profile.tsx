@@ -1,21 +1,25 @@
 import { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
+import { useDisconnect as useDisconnectEvm } from "wagmi";
 import {
   LoggoutIcon,
   NoneIcon,
   PlusIcon,
   BookIcon,
-  SolanaIcon,
   DropdownArrowIcon,
 } from "@/src/components/icons";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
   const router = useRouter();
-  const { disconnect } = useWallet();
+  const { chain } = useAppWallet();
+  const { disconnect: disconnectSol } = useWallet();
+  const { disconnect: disconnectEvm } = useDisconnectEvm();
+
   /**
    * @description Define state of showing profile menu
    */
@@ -39,19 +43,16 @@ const UserProfile: FC = () => {
       )}
       ref={ref}
     >
-      {/* <img
-        className="w-[25px] md:w-[40px] h-[auto] mr-[10px]"
-        src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
-        alt="Boring avatar"
-      /> */}
-      <SolanaIcon className="h-[auto] mr-[10px]" />
+      <img
+        className="mr-[10px] w-[24px] h-[24px]"
+        src={`/assets/images/${chain === "SOL" ? "solana.svg" : "bnb.svg"}`}
+      />
       <span
         className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
         <span className="normal-text text-dark50">
-          {/* {utilsProvider.makeShort(walletPublicKey, 3)}{" "} */}
-          Solana
+          {chain === "SOL" ? "Solana" : "BNB Chain"}
         </span>
         <DropdownArrowIcon className="ml-2 text-dark50" />
       </span>
@@ -90,7 +91,13 @@ const UserProfile: FC = () => {
               <p className="ml-[5px]">View History</p>
             </li>
             <li
-              onClick={disconnect}
+              onClick={() => {
+                if (chain === "SOL") {
+                  disconnectSol();
+                } else {
+                  disconnectEvm();
+                }
+              }}
               className="text-red300 flex items-center normal-text"
             >
               <LoggoutIcon />

@@ -326,7 +326,7 @@ export const CopyIcon: FC<IconProps> = (props) => {
         height="9.5"
         rx="1.25"
         stroke="#7886A0"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
       <rect x="4.5" y="4.00195" width="11" height="11" rx="2" fill="#7886A0" />
     </svg>
@@ -804,8 +804,8 @@ export const TabMenuIcon: FC<IconProps> = (props) => (
     className={props.className}
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M5.03988 2.00195H8.41988C9.82988 2.00195 10.9599 3.15195 10.9599 4.56295V7.97195C10.9599 9.39195 9.82988 10.532 8.41988 10.532H5.03988C3.63988 10.532 2.49988 9.39195 2.49988 7.97195V4.56295C2.49988 3.15195 3.63988 2.00195 5.03988 2.00195ZM5.03988 13.4717H8.41988C9.82988 13.4717 10.9599 14.6127 10.9599 16.0327V19.4417C10.9599 20.8517 9.82988 22.0017 8.41988 22.0017H5.03988C3.63988 22.0017 2.49988 20.8517 2.49988 19.4417V16.0327C2.49988 14.6127 3.63988 13.4717 5.03988 13.4717ZM19.96 2.00195H16.58C15.17 2.00195 14.04 3.15195 14.04 4.56295V7.97195C14.04 9.39195 15.17 10.532 16.58 10.532H19.96C21.36 10.532 22.5 9.39195 22.5 7.97195V4.56295C22.5 3.15195 21.36 2.00195 19.96 2.00195ZM16.58 13.4717H19.96C21.36 13.4717 22.5 14.6127 22.5 16.0327V19.4417C22.5 20.8517 21.36 22.0017 19.96 22.0017H16.58C15.17 22.0017 14.04 20.8517 14.04 19.4417V16.0327C14.04 14.6127 15.17 13.4717 16.58 13.4717Z"
       fill={props.color || "#7886A0"}
     />
@@ -824,25 +824,25 @@ export const TabStategyIcon: FC<IconProps> = (props) => (
     <path
       d="M7.4115 14.783L10.4046 10.8928L13.8188 13.5748L16.7479 9.79443"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <circle
       cx="20.1621"
       cy="4.20198"
       r="1.9222"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M15.0912 3.12207H7.82342C4.81198 3.12207 2.9447 5.25479 2.9447 8.26623V16.3486C2.9447 19.3601 4.77537 21.4836 7.82342 21.4836H16.4275C19.439 21.4836 21.3063 19.3601 21.3063 16.3486V9.30971"
       stroke={props.color || "#7886A0"}
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -877,8 +877,8 @@ export const TabProfileIcon: FC<IconProps> = (props) => (
     className={props.className}
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M17.794 7.29301C17.794 10.23 15.4391 12.5851 12.5 12.5851C9.5619 12.5851 7.20601 10.23 7.20601 7.29301C7.20601 4.35598 9.5619 2.00195 12.5 2.00195C15.4391 2.00195 17.794 4.35598 17.794 7.29301ZM12.5 22.002C8.16237 22.002 4.5 21.2969 4.5 18.5769C4.5 15.8559 8.18538 15.1759 12.5 15.1759C16.8386 15.1759 20.5 15.8809 20.5 18.6009C20.5 21.3219 16.8146 22.002 12.5 22.002Z"
       fill="url(#paint0_linear_3402_14400)"
     />
@@ -910,9 +910,9 @@ export const DropdownArrowIcon: FC<IconProps> = (props) => (
     <path
       d="M13.6566 5.66675L8.98991 10.3334L4.32324 5.66675"
       stroke="#7886A0"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -929,16 +929,16 @@ export const RightArrowIcon: FC<IconProps> = (props) => (
     <path
       d="M20.2051 12.0859L5.20508 12.0859"
       stroke="white"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M14.1553 6.06233L20.2053 12.0863L14.1553 18.1113"
       stroke="white"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -956,16 +956,16 @@ export const LeftArrowIcon: FC<IconProps> = (props) => (
       <path
         d="M4.95837 14.3221L22.4584 14.3221"
         stroke="#7886A0"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M12.0165 21.3506L4.95815 14.3226L12.0165 7.29346"
         stroke="#7886A0"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <defs>
@@ -1017,8 +1017,8 @@ export const MobileExchangeIcon: FC<IconProps> = (props) => (
     />
     <g clip-path="url(#clip0_3390_23925)">
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M10.5 22.002C10.5 28.6294 15.8726 34.002 22.5 34.002C29.1274 34.002 34.5 28.6294 34.5 22.002C34.5 15.3745 29.1274 10.002 22.5 10.002C15.8726 10.002 10.5 15.3745 10.5 22.002ZM27.323 24.7118C27.559 24.4902 27.559 24.1311 27.323 23.9095C27.087 23.688 26.7044 23.688 26.4684 23.9095L24.1724 26.0649L24.1724 16.5692C24.1724 16.2559 23.9018 16.002 23.5681 16.002C23.2344 16.002 22.9638 16.2559 22.9638 16.5692L22.9638 27.4344C22.9638 27.6638 23.1111 27.8707 23.3369 27.9585C23.5627 28.0463 23.8226 27.9977 23.9954 27.8355L27.323 24.7118ZM22.0362 16.5695C22.0362 16.3401 21.8889 16.1332 21.6631 16.0454C21.4373 15.9576 21.1774 16.0062 21.0046 16.1684L17.677 19.2922C17.441 19.5137 17.441 19.8728 17.677 20.0944C17.913 20.3159 18.2956 20.3159 18.5316 20.0944L20.8276 17.939L20.8276 27.4347C20.8276 27.748 21.0982 28.002 21.4319 28.002C21.7656 28.002 22.0362 27.748 22.0362 27.4347L22.0362 16.5695Z"
         fill="#D9D9D9"
       />
@@ -1048,9 +1048,9 @@ export const UnCollapseArrowIcon: FC<IconProps> = (props) => (
     <path
       d="M9 12.002L14 16.002L19 12.002"
       stroke="#735CF7"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
@@ -1067,9 +1067,9 @@ export const CollapseArrowIcon: FC<IconProps> = (props) => (
     <path
       d="M19 16.002L14 12.002L9 16.002"
       stroke="#735CF7"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

@@ -25,8 +25,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
    */
   const router = useRouter();
 
-  console.log(router.asPath);
-
   return (
     <AuthMiddleware>
       <div className="main-layout">

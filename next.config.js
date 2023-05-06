@@ -37,7 +37,9 @@ module.exports = withPWA(
       HOST_NAME: process.env.HOST_NAME,
       SWAP_PROGRAM_ADDRESS: process.env.SWAP_PROGRAM_ADDRESS,
       SOLANA_CLUSTER: process.env.SOLANA_CLUSTER,
-      SOLANA_RPC_URL: process.env.SOLANA_RPC_URL
+      SOLANA_RPC_URL: process.env.SOLANA_RPC_URL,
+      ALCHEMY_ID: process.env.ALCHEMY_ID,
+      WALLET_CONNECT_PROJECT_ID: process.env.WALLET_CONNECT_PROJECT_ID,
     },
     serverRuntimeConfig: {
       // Will only be available on the server side
