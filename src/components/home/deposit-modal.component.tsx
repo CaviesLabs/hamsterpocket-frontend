@@ -4,9 +4,12 @@ import { Button } from "@hamsterbox/ui-kit";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
+import { BigNumber } from "ethers";
 
 export const DepositModal: FC<{
   isModalOpen: boolean;
@@ -15,12 +18,25 @@ export const DepositModal: FC<{
   isLoading?: boolean;
   pocket: PocketEntity;
 }> = (props) => {
+  /** @dev Get pocket data from props. */
   const { pocket } = props;
+
+  /** @dev Inject app wallet hooks to get chain info. */
+  const { chain, walletAddress } = useAppWallet();
+
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet, solBalance } = useWallet();
 
+  /** @dev Inject evm program service to use. */
+  const {
+    nativeBalance: ethSolBalance,
+    depositPocket: depositPocketEvm,
+    signer: evmSigner,
+  } = useEvmWallet();
+
   /** @dev Inject whitelist provider to use. */
-  const { whiteLists, convertDecimalAmount } = useWhiteList();
+  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
+    useWhiteList();
 
   /** @dev Deposited amount. */
   const [depositedAmount, setDepositedAmount] = useState<BN>();
@@ -35,17 +51,30 @@ export const DepositModal: FC<{
   /** @dev The function to handle close pocket. */
   const handleDeposit = useCallback(async () => {
     try {
-      if (!programService) throw new Error("Wallet not connected.");
-
+      if (!walletAddress) throw new Error("Wallet not connected.");
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
-      /** @dev Execute transaction. */
-      await programService.depositPocket(
-        solanaWallet,
-        props.pocket,
-        depositedAmount
-      );
+      if (chain === "SOL") {
+        /** @dev Execute transaction. */
+        await programService.depositPocket(
+          solanaWallet,
+          props.pocket,
+          depositedAmount
+        );
+      } else {
+        console.log("depsit in evm");
+        /** @dev Execute transaction. */
+        await depositPocketEvm(
+          props.pocket.id || props.pocket._id,
+          BigNumber.from(
+            (
+              (depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals)) *
+              Math.pow(10, baseToken?.realDecimals)
+            ).toString()
+          )
+        );
+      }
 
       /** @dev Callback function when close successfully. */
       setSuccessModal(true);
@@ -54,10 +83,19 @@ export const DepositModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, depositedAmount]);
+  }, [
+    programService,
+    solanaWallet,
+    props.pocket,
+    depositedAmount,
+    chain,
+    evmSigner,
+  ]);
 
   /** @dev Define base token **/
-  const baseToken = whiteLists[pocket.baseTokenAddress];
+  const baseToken =
+    whiteLists[pocket.baseTokenAddress] ||
+    findEntityByAddress(pocket.baseTokenAddress);
 
   /** @dev Define the button text */
   const [buttonText, setButtonText] = useState<string>("Deposit");
@@ -65,10 +103,14 @@ export const DepositModal: FC<{
   const baseBalance = convertDecimalAmount(pocket.baseTokenAddress, solBalance);
 
   const handleInputChange = (val: number) => {
-    if (val < 0.05) {
-      setButtonText(`Minimum deposit is 0.05 ${baseToken.symbol}`);
-    } else if (val > baseBalance) {
-      setButtonText(`Insufficient ${baseToken.symbol} balance`);
+    if (chain === "SOL") {
+      if (val < 0.05) {
+        setButtonText(`Minimum deposit is 0.05 ${baseToken.symbol}`);
+      } else if (val > baseBalance) {
+        setButtonText(`Insufficient ${baseToken.symbol} balance`);
+      } else {
+        setButtonText("Deposit");
+      }
     } else {
       setButtonText("Deposit");
     }
@@ -106,7 +148,7 @@ export const DepositModal: FC<{
             disableDropdown={true}
             inputClassName="gray-input !bg-[#353C4B]"
             onAmountChange={(val) => handleInputChange(val)}
-            placeholder="Enter SOL amount"
+            placeholder={`Enter ${baseToken?.symbol} amount`}
           />
           <p className="my-4 text-white text-[16px] flex">
             Your balance:
@@ -115,7 +157,8 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {baseBalance.toFixed(4)} {baseToken.symbol}
+            {chain === "SOL" ? baseBalance.toFixed(4) : ethSolBalance}{" "}
+            {baseToken.symbol}
           </p>
           <Button
             shape="primary"
@@ -138,7 +181,11 @@ export const DepositModal: FC<{
         handleCancel={() => props.handleOk()}
         message={`You have deposited ${convertDecimalAmount(
           pocket.baseTokenAddress,
-          depositedAmount?.toNumber()
+          chain === "SOL"
+            ? depositedAmount?.toNumber()
+            : (depositedAmount?.toNumber() /
+                Math.pow(10, baseToken?.decimals)) *
+                Math.pow(10, baseToken?.realDecimals)
         )} ${baseToken?.symbol}`}
         okMessage="Done"
       />

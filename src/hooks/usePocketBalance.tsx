@@ -18,18 +18,22 @@ export const usePocketBalance = (): {
   const [totalSOL, setTotalSOL] = useState(0);
 
   /** @dev Innject whitelist to get info. */
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, findEntityByAddress } = useWhiteList();
 
   /** @dev Handle total balance in USD value. */
   const handleBalance = useCallback(() => {
     setTotalUSD(() => {
       const arr = portfolios.map((token) => {
         /** @dev Get decimal amount. */
+        const tokenInfo =
+          whiteLists[token.tokenAddress] ||
+          findEntityByAddress(token.tokenAddress);
         const humanValue =
-          token.total / Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
+          token.total /
+          Math.pow(10, tokenInfo?.realDecimals || tokenInfo?.decimals);
 
         /** @dev Return price of portfolio token in USD. */
-        return humanValue * whiteLists[token.tokenAddress]?.estimatedValue || 0;
+        return humanValue * token?.usdValue || 0;
       });
       return arr.length ? arr.reduce((prev, cur) => cur + prev) : 0;
     });
@@ -39,14 +43,17 @@ export const usePocketBalance = (): {
   const getTokenBlances = useCallback(() => {
     return portfolios.map((token) => {
       /** @dev Attract token info. */
-      const tokenInfo = whiteLists[token.tokenAddress];
+      const tokenInfo =
+        whiteLists[token.tokenAddress] ||
+        findEntityByAddress(token.tokenAddress);
 
       /** @dev Get decimal amount. */
       const humanValue =
-        token.total / Math.pow(10, whiteLists[token.tokenAddress]?.decimals);
+        token.total /
+        Math.pow(10, tokenInfo?.realDecimals || tokenInfo?.decimals);
 
       /** @dev Get price based on amount. */
-      const usdPrice = humanValue * tokenInfo?.estimatedValue || 0;
+      const usdPrice = humanValue * token?.usdValue || 0;
 
       return {
         /** @dev Token symbol. */

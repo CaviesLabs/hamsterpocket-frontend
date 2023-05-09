@@ -51,6 +51,7 @@ export const SET_PLATFORM_CONFIG = "SET_PLATFORM_CONFIG";
  * Actions for pocket service
  */
 export const GET_ACTIVE_POCKET = "GET_ACTIVE_POCKET";
+export const GET_POCKET_BY_ID = "GET_POCKET_BY_ID";
 export const SET_ACTIVE_POCKET = "SET_ACTIVE_POCKET";
 export const GET_ACTIVE_POCKETS = "GET_ACTIVE_POCKETS";
 export const SET_ACTIVE_POCKETS = "SET_ACTIVE_POCKETS";

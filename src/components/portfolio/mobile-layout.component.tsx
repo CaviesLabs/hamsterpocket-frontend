@@ -5,7 +5,7 @@ import { useConnectedWallet } from "@saberhq/use-solana";
 import { CopyIcon } from "@/src/components/icons";
 import PortfolioController from "@/src/components/portfolio/controller.component";
 import TableComponent from "@/src/components/portfolio/table.component";
-import DashboardComponent from "@/src/components/portfolio/dashboard.component";
+import DashboardComponentMobile from "@/src/components/portfolio/dashboard-mobile.component";
 import classnames from "classnames";
 
 export const PortfolioMobileLayout: FC = () => {
@@ -69,7 +69,7 @@ export const PortfolioMobileLayout: FC = () => {
         </div>
         <div>
           {tab === 0 ? (
-            <DashboardComponent />
+            <DashboardComponentMobile />
           ) : (
             <>
               <PortfolioController />

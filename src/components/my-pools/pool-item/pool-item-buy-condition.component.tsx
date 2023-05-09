@@ -17,16 +17,19 @@ export const PoolItemBuyConditionComponent = (
 
   const humanBuyConditionType = () => {
     const baseAmount = convertDecimalAmount(
-      data.baseTokenAddress,
-      data.batchVolume
+      data?.baseTokenAddress,
+      data?.batchVolume
     );
     const targetLeftAmount = convertDecimalAmount(
-      data.targetTokenAddress,
-      data.buyCondition?.value?.[0]
+      data?.targetTokenAddress,
+      data?.buyCondition?.value?.[0]
     );
     const targetRightAmount =
-      data.buyCondition?.value?.[1] &&
-      convertDecimalAmount(data.targetTokenAddress, data.buyCondition.value[1]);
+      data?.buyCondition?.value?.[1] &&
+      convertDecimalAmount(
+        data?.targetTokenAddress,
+        data?.buyCondition?.value[1]
+      );
     const baseSymbol = baseToken?.symbol;
     const targetSymbol = targetToken?.symbol;
 
@@ -73,7 +76,12 @@ export const PoolItemBuyConditionComponent = (
   };
 
   const handleRenderFrequency = () => {
-    const res = convertHoursToDurationsTime(data?.frequency?.hours);
+    let convertedHours = data?.frequency?.hours;
+    if (data?.frequency?.seconds) {
+      convertedHours = (data?.frequency?.seconds || 0) / 3600;
+    }
+
+    const res = convertHoursToDurationsTime(convertedHours);
     if (res.hours) {
       if (res.hours === 1) {
         return "hourly";
@@ -110,7 +118,7 @@ export const PoolItemBuyConditionComponent = (
   return (
     <div className="text-white normal-text text-center">
       <p>
-        {convertDecimalAmount(data.baseTokenAddress, data.batchVolume)}{" "}
+        {convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)}{" "}
         {baseToken?.symbol} {handleRenderFrequency()}
       </p>
       <p className="mt-[5px] text-[12px] text-dark50">

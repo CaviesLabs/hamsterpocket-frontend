@@ -35,6 +35,12 @@ export const SideBar: FC = () => {
         icon: (color: string) => <TabHistoryIcon color={color} />,
       },
       {
+        name: "Stagegy",
+        uri: "/stragery",
+        sideUris: ["/create-pocket"],
+        icon: (color: string) => <TabHistoryIcon color={color} />,
+      },
+      {
         name: "Profile",
         uri: "/portfolio",
         icon: (color: string) => <TabProfileIcon color={color} />,

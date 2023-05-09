@@ -304,3 +304,8 @@ input:focus {
   background-position: center;
   border-radius: 10px;
 }
+
+.pocket-bg {
+  background-image: url(../public/assets/images/pocket-bg.png);
+  background-position: center;
+}

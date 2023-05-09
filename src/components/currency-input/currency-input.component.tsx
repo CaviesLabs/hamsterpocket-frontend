@@ -62,7 +62,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
    */
-  const { whiteLists: allowCurrencies } = useWhiteList();
+  const { whiteLists: allowCurrencies, findEntityByAddress } = useWhiteList();
 
   /**
    * @dev The condition to display filter for user to select which token want to excute.
@@ -116,7 +116,12 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
                   ? "w-10 h-10 mr-4 mobile:!w-[24px] mobile:!h-[24px]"
                   : "invisible"
               )}
-              src={allowCurrencies?.[addressSelected]?.image}
+              src={
+                (
+                  allowCurrencies?.[addressSelected] ||
+                  findEntityByAddress(addressSelected)
+                )?.image
+              }
             />
           )
         }

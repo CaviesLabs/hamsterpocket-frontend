@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useDispatch, useSelector } from "react-redux";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import State from "@/src/redux/entities/state";
 import { useRouter } from "next/router";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 
 export const ClosedCheckComponent = () => {
@@ -19,20 +19,21 @@ export const ClosedCheckComponent = () => {
   /** @dev */
   const [isClosed, setIsClosed] = useState(false);
 
-  /** @dev wallet Injected */
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  /** @dev Inject wallet info. */
+  const { walletAddress, chain } = useAppWallet();
 
   /** @dev Call API to get closed pockets */
   useEffect(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
 
     dispatch(
       getClosedPockets({
-        ownerAddress: wallet,
+        ownerAddress: walletAddress,
         statuses: [PocketStatus.CLOSED],
+        chainId: chain === "SOL" ? "solana" : "mumbai",
       })
     );
-  }, [wallet]);
+  }, [walletAddress]);
 
   /** @dev Get fetched closed pools. */
   const closedPockets = useSelector((state: State) => state.closedPockets);

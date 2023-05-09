@@ -38,6 +38,8 @@ export class GetPocketsDto {
 
   search?: string;
   sortBy?: string;
+
+  chainId: "solana" | "bsc_mainnet" | "mumbai";
 }
 
 /**

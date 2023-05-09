@@ -37,6 +37,28 @@ export function* getActivePockets({
 /**
  * @param callback
  * @description
+ * Fetch pocket data by id.
+ */
+export function* getPocketById({
+  payload,
+  callback,
+}: SagaPayload<{ pocketId: string }, PocketEntity[]>) {
+  try {
+    const pocket: PocketEntity[] = yield call(
+      poolService.getPocketById,
+      payload
+    );
+
+    callback && callback(pocket);
+  } catch (err) {
+    console.error(err);
+    callback && callback(null);
+  }
+}
+
+/**
+ * @param callback
+ * @description
  * Fetch closed pockets data
  */
 export function* getClosedPockets({
@@ -67,9 +89,13 @@ export function* getClosedPockets({
 export function* syncWalletPockets({
   payload,
   callback,
-}: SagaPayload<{ walletAddress: string }, boolean>) {
+}: SagaPayload<{ walletAddress: string; evm?: boolean }, boolean>) {
   try {
-    yield call(poolService.syncWalletPockets, payload.walletAddress);
+    yield call(
+      poolService.syncWalletPockets,
+      payload.walletAddress,
+      payload.evm
+    );
     yield call(portfolioService.syncWalletPortfolio, payload.walletAddress);
     callback && callback(true);
   } catch (err) {

@@ -18,4 +18,5 @@ export type PortfolioEntity = {
   value: number;
   total: number;
   image?: string; // for developing
+  usdValue?: number;
 };

@@ -25,5 +25,10 @@ module.exports = {
     "node_modules",
     "node_modules/framer-motion/dist/index.d.ts",
     "**/*.d.ts",
+    "client/dist/",
+    "node_modules/*",
+    "./node_modules/@wagmi/*",
+    "./src/providers/program/evm/typechain-types",
+    "./src/providers/program/evm/artifacts",
   ],
 };

@@ -27,7 +27,10 @@ import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
 } from "@ant-design/cssinjs";
-import { EvmWalletKitProvider } from "@/src/hooks/useEvmWallet";
+import {
+  EvmWalletKitProvider,
+  EvmWalletProvider,
+} from "@/src/hooks/useEvmWallet";
 import { AppWalletProvider } from "@/src/hooks/useAppWallet";
 import { WhitelistProvider } from "@/src/hooks/useWhitelist";
 
@@ -106,13 +109,15 @@ function MyApp({ Component, pageProps }: AppProps) {
               >
                 <WalletProvider>
                   <MainProvider>
-                    <WhitelistProvider>
-                      <EvmWalletKitProvider>
+                    <EvmWalletKitProvider>
+                      <EvmWalletProvider>
                         <AppWalletProvider>
-                          <AppComponent {...{ Component, pageProps }} />
+                          <WhitelistProvider>
+                            <AppComponent {...{ Component, pageProps }} />
+                          </WhitelistProvider>
                         </AppWalletProvider>
-                      </EvmWalletKitProvider>
-                    </WhitelistProvider>
+                      </EvmWalletProvider>
+                    </EvmWalletKitProvider>
                   </MainProvider>
                 </WalletProvider>
               </WalletKitProvider>

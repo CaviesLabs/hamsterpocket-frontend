@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getHistories } from "../../redux/actions/history/history.action";
 import useDebounce from "../../hooks/useDebounce";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import { PoolType } from "@/src/entities/history.entity";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 import styles from "./styles.module.scss";
 import dayjs from "dayjs";
@@ -31,7 +31,7 @@ export default function HistoryController() {
   /**
    * @desc Wallet injected
    */
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const { walletAddress, chain } = useAppWallet();
 
   const [selectedType, setSelectedType] = useState<string>(types[0].value);
   const [search, setSearch] = useState("");
@@ -39,12 +39,18 @@ export default function HistoryController() {
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   useEffect(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     const [start, end] = date;
     dispatch(
       getHistories({
         limit: 999,
-        ownerAddress: wallet,
+        ownerAddress: walletAddress,
+        chainId:
+          chain === "SOL"
+            ? "solana"
+            : process.env.EVM_CHAIN_ID === "matic"
+            ? "mumbai"
+            : "bsc_mainnet",
         search,
         statuses: selectedType === types[0].value ? undefined : [selectedType],
         timeFrom: start
@@ -55,7 +61,7 @@ export default function HistoryController() {
           : undefined,
       })
     );
-  }, [wallet, debouncedSearch, selectedType, date]);
+  }, [debouncedSearch, selectedType, date, walletAddress]);
 
   return (
     <div className="mt-8 md:flex md:justify-between">

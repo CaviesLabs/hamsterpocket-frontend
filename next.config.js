@@ -40,6 +40,7 @@ module.exports = withPWA(
       SOLANA_RPC_URL: process.env.SOLANA_RPC_URL,
       ALCHEMY_ID: process.env.ALCHEMY_ID,
       WALLET_CONNECT_PROJECT_ID: process.env.WALLET_CONNECT_PROJECT_ID,
+      EVM_CHAIN_ID: process.env.EVM_CHAIN_ID,
     },
     serverRuntimeConfig: {
       // Will only be available on the server side
@@ -49,6 +50,20 @@ module.exports = withPWA(
     publicRuntimeConfig: {},
     devIndicators: {
       buildActivity: false,
+    },
+    webpack: (config, { isServer }) => {
+      if (!isServer) {
+        config.module.rules.push({
+          test: /\.node$/,
+          use: {
+            loader: "file-loader",
+            options: {
+              name: "[name].[ext]",
+            },
+          },
+        });
+      }
+      return config;
     },
   })
 );

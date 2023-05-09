@@ -8,4 +8,5 @@ export type WhitelistEntity = {
   name: string;
   symbol: string;
   estimatedValue: number;
+  realDecimals?: number;
 };

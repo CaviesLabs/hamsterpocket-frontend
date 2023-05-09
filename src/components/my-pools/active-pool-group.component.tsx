@@ -5,7 +5,6 @@ import { Input, toast } from "@hamsterbox/ui-kit";
 import { SearchIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useDispatch } from "react-redux";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import {
   getActivePockets,
   syncWalletPockets,
@@ -18,6 +17,7 @@ import State from "@/src/redux/entities/state";
 import classnames from "classnames";
 import { RefreshButton } from "@/src/components/refresh-button";
 import { DropdownSelect } from "@/src/components/select";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 export const ActivePoolGroup: FC = () => {
   /**
@@ -26,7 +26,7 @@ export const ActivePoolGroup: FC = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const { walletAddress, chain } = useAppWallet();
   const [search, setSearch] = useState("");
   const [isPauseOnly, setIsPauseOnly] = useState(false);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
@@ -42,11 +42,12 @@ export const ActivePoolGroup: FC = () => {
 
   /** @dev The function to handle request pockets from server. */
   const handleFetch = useCallback(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     dispatch(
       getActivePockets({
+        chainId: chain === "SOL" ? "solana" : "mumbai",
         limit: 999,
-        ownerAddress: wallet,
+        ownerAddress: walletAddress,
         search,
         sortBy: sorter[0],
         statuses: isPauseOnly
@@ -56,17 +57,18 @@ export const ActivePoolGroup: FC = () => {
           : [PocketStatus.CLOSED, PocketStatus.ENDED],
       })
     );
-  }, [wallet, debouncedSearch, isPauseOnly, sorter, endedSelect]);
+  }, [debouncedSearch, isPauseOnly, sorter, endedSelect, walletAddress, chain]);
 
   /** @dev Handle fetching data */
   const [fetching, setFetching] = useState(false);
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
-    if (!wallet) return;
+    console.log(walletAddress);
+    if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress: wallet }, () => {
+      syncWalletPockets({ walletAddress, evm: chain === "ETH" }, () => {
         setFetching(false);
         handleFetch();
         toast("The latest data is now available", {
@@ -74,11 +76,11 @@ export const ActivePoolGroup: FC = () => {
         });
       })
     );
-  }, [wallet, debouncedSearch, isPauseOnly, sorter]);
+  }, [walletAddress, debouncedSearch, isPauseOnly, sorter, chain]);
 
   useEffect(
     () => handleFetch(),
-    [wallet, debouncedSearch, isPauseOnly, sorter, endedSelect]
+    [walletAddress, debouncedSearch, isPauseOnly, sorter, endedSelect]
   );
 
   return (
@@ -177,7 +179,7 @@ export const ActivePoolGroup: FC = () => {
       <section className="mt-[10px]">
         {activePockets.length ? (
           activePockets.map((_: PocketEntity) => (
-            <PoolItemRow data={_} key={_.id} handleFetch={handleFetch} />
+            <PoolItemRow data={_} key={_.id} handleFetch={handleSync} />
           ))
         ) : (
           <div className="py-[70px]">

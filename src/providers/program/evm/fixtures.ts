@@ -134,8 +134,6 @@ export async function deployFixtures() {
   await Chef.connect(owner).setRegistry(Registry.address);
   await Chef.connect(owner).setVault(Vault.address);
 
-  Chef.interface.abi
-
   /**
    * @dev return
    */

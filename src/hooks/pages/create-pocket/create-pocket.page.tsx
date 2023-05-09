@@ -9,16 +9,38 @@ import { BN } from "@project-serum/anchor";
 import { ProgramService } from "@/src/services/program.service";
 import {
   WSOL_ADDRESS,
+  ALIAS_WMATIC_ADDRESS,
   convertDurationsTimeToHours,
   processStopConditions,
+  ethWhiteLists,
 } from "@/src/utils";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
 import { SideMethod } from "@/src/dto/pocket.dto";
 import { union } from "lodash";
+import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
+import { createdPocketPramsParserEvm } from "@/src/utils/evm.parser";
+import { BigNumber } from "ethers";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
+  /** @dev Inject router to use. */
+  const router = useRouter();
+
+  /** @dev Inject wallet provider. */
+  const { solanaWallet, programService } = useWallet();
+
+  /** @dev Inject app wallet to get both sol & eth account info. */
+  const { chain, walletAddress } = useAppWallet();
+
+  /** @dev Inject eth function. */
+  const { createPocket: createEvmPocket } = useEvmWallet();
+
+  /** @dev Inject functions from whitelist hook to use. */
+  const { findPairLiquidity, liquidities } = useWhiteList();
+
   const [pocketName, setPocketName] = useState("");
   const [baseTokenAddress, setBaseTokenAddress] = useState<[PublicKey, number]>(
     [new PublicKey(WSOL_ADDRESS), 9]
@@ -45,9 +67,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     []
   );
 
-  /** @dev Inject functions from whitelist hook to use. */
-  const { findPairLiquidity, liquidities } = useWhiteList();
-
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
 
@@ -56,12 +75,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev Define variable presenting whenther program is creating pool. */
   const [processing, setProcessing] = useState(false);
-
-  /** @dev Inject router to use. */
-  const router = useRouter();
-
-  /** @dev Inject wallet provider. */
-  const { solanaWallet, programService } = useWallet();
 
   /** @dev The function to validate. */
   const validateForms = useCallback(() => {
@@ -149,7 +162,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       !createdEnable && setCreatedEnable(true);
 
       /** @dev Return when wallet not connected. */
-      if (!solanaWallet) return;
+      if (!walletAddress) return;
 
       /** @dev Validate if all form be valid. */
       if (!validateForms()) {
@@ -158,8 +171,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
-        baseTokenAddress[0].toBase58().toString(),
-        targetTokenAddress[0].toBase58().toString(),
+        baseTokenAddress[0]?.toBase58().toString(),
+        targetTokenAddress[0]?.toBase58().toString(),
       ]);
 
       /** @dev Get base and qoute address in liquidity pool. */
@@ -177,7 +190,10 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         processStopConditions(condition, sideMethod)
       );
 
-      const response = await programService.createPocket(solanaWallet, {
+      /**
+       * @dev Initalize pocket data for sol blockchain.
+       */
+      const solCreatedPocketData: SolCreatePocketDto = {
         id: ProgramService.generatePocketId(),
         name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
@@ -210,9 +226,46 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
             isPrimary: (item as any)[Object.keys(item)[0] as string]?.primary,
           },
         })),
-      });
+      };
 
-      console.log(response);
+      if (chain === "SOL") {
+        /**
+         * @dev Execute interact with solana blockchain.
+         */
+        const response = await programService.createPocket(
+          solanaWallet,
+          solCreatedPocketData
+        );
+
+        console.log(response);
+      } else {
+        /**
+         * @dev Execute interact with eth blockchain.
+         */
+        const response = await createEvmPocket(
+          BigNumber.from(
+            (
+              depositedAmount *
+              Math.pow(
+                10,
+                ethWhiteLists[baseTokenAddress[0].toBase58().toString()]
+                  .realDecimals
+              )
+            ).toString()
+          ),
+          createdPocketPramsParserEvm(
+            solCreatedPocketData,
+            baseTokenAddress[1],
+            targetTokenAddress[1],
+            ethWhiteLists[baseTokenAddress[0].toBase58().toString()]
+              .realDecimals,
+            ethWhiteLists[targetTokenAddress[0].toBase58().toString()]
+              .realDecimals,
+            walletAddress
+          )
+        );
+        console.log(response);
+      }
       setSuccessCreated(true);
     } catch (err) {
       console.log(err);
@@ -232,6 +285,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     stopConditions,
     depositedAmount,
     createdEnable,
+    chain,
+    walletAddress,
     validateForms,
   ]);
 
@@ -250,6 +305,16 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       setMintOrderSize(ppair?.[3]);
     })();
   }, [baseTokenAddress, targetTokenAddress]);
+
+  /**
+   * @dev Update base token when chain changed.
+   */
+  useEffect(() => {
+    if (chain === "ETH") {
+      console.log(chain);
+      setBaseTokenAddress([new PublicKey(ALIAS_WMATIC_ADDRESS), 8]);
+    }
+  }, [chain]);
 
   /**
    * @dev dynamically update a list of available base tokens based on
@@ -318,7 +383,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       <SuccessTransactionModal
         isModalOpen={successCreated}
         handleOk={() => router.push("/my-pockets")}
-        handleCancel={() => {}}
+        handleCancel={() => setSuccessCreated(false)}
         okMessage="Back to Home"
         message="You have created pocket and deposited successful"
       />

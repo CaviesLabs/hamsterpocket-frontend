@@ -129,6 +129,8 @@ export class PocketEntity {
 
   endedAt: Date;
 
+  nextExecutionAt: Date;
+
   closedAt: Date;
 
   depositedAmount: number;
@@ -165,4 +167,6 @@ export class PocketEntity {
   mainProgressBy: MainProgressBy | undefined;
 
   progressPercent: number;
+
+  currentTargetTokenBalance: number;
 }

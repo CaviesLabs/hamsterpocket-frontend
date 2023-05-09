@@ -4,6 +4,8 @@ import { Button } from "@hamsterbox/ui-kit";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 
 export const ClosePocketModal: FC<{
   isModalOpen: boolean;
@@ -12,6 +14,7 @@ export const ClosePocketModal: FC<{
   isLoading?: boolean;
   closed?: boolean;
   pocket: PocketEntity;
+  withdrawFnc?: boolean;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet } = useWallet();
@@ -22,20 +25,28 @@ export const ClosePocketModal: FC<{
   /** @dev Define variable presenting for successful pocket close. */
   const [succcessClose, setSuccessClosed] = useState(false);
 
+  const { closePocket: closePocketEvm, withdrawPocket: withdrawPocketEvm } =
+    useEvmWallet();
+  const { chain, walletAddress } = useAppWallet();
+
   /** @dev The function to handle close pocket. */
   const handleClosePocket = useCallback(async () => {
     try {
-      if (!programService) throw new Error("Wallet not connected.");
-
-      console.log(props.pocket);
+      if (!walletAddress) throw new Error("Wallet not connected.");
 
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
-      console.log(solanaWallet);
-
-      /** @dev Execute transaction. */
-      await programService.closePocket(solanaWallet, props.pocket);
+      if (chain === "SOL") {
+        /** @dev Execute transaction. */
+        await programService.closePocket(solanaWallet, props.pocket);
+      } else {
+        if (props.closed) {
+          await withdrawPocketEvm(props.pocket.id);
+        } else {
+          await closePocketEvm(props.pocket.id);
+        }
+      }
 
       /** @dev Callback function when close successfully. */
       setSuccessClosed(true);
@@ -44,7 +55,7 @@ export const ClosePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket]);
+  }, [programService, solanaWallet, props.pocket, chain]);
 
   return (
     <Modal
