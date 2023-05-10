@@ -94,10 +94,10 @@ export const PocketInfo: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">View by</p>
         <ProgressBar
-          completed={0.24 * 100}
+          completed={props.pocket?.progressPercent * 100}
           bgColor="#735CF7"
           baseBgColor="#060710"
-          customLabel={`${0.24 * 100}%`}
+          customLabel={`${props.pocket?.progressPercent * 100}%`}
           labelAlignment="center"
           labelClassName="progress-label app-font"
           className="mt-[30px]"
@@ -114,7 +114,8 @@ export const PocketInfo: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
           </div>
           <div className="float-left">
             <p className="text-dark50 normal-text">Time left</p>
-            <p className="text-white normal-text">234 day(s)</p>
+            {/* <p className="text-white normal-text">234 day(s)</p> */}
+            {/* <p className="text-white normal-text">234 day(s)</p> */}
           </div>
         </div>
       </div>

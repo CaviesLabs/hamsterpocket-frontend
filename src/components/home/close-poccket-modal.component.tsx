@@ -25,8 +25,7 @@ export const ClosePocketModal: FC<{
   /** @dev Define variable presenting for successful pocket close. */
   const [succcessClose, setSuccessClosed] = useState(false);
 
-  const { closePocket: closePocketEvm, withdrawPocket: withdrawPocketEvm } =
-    useEvmWallet();
+  const { closePocket: closePocketEvm } = useEvmWallet();
   const { chain, walletAddress } = useAppWallet();
 
   /** @dev The function to handle close pocket. */
@@ -41,11 +40,11 @@ export const ClosePocketModal: FC<{
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
-        if (props.closed) {
-          await withdrawPocketEvm(props.pocket.id);
-        } else {
-          await closePocketEvm(props.pocket.id);
-        }
+        await closePocketEvm(props.pocket.id || props.pocket._id);
+        // if (props.closed) {
+        //   await withdrawPocketEvm(props.pocket.id);
+        // } else {
+        // }
       }
 
       /** @dev Callback function when close successfully. */
@@ -79,7 +78,10 @@ export const ClosePocketModal: FC<{
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
             Confirm the transaction to {props?.closed ? "withdraw" : "close "}{" "}
-            Pocket <span className="text-green">#{props.pocket.id}</span>
+            Pocket{" "}
+            <span className="text-green">
+              #{props.pocket?.id || props.pocket?._id}
+            </span>
           </p>
           <Button
             shape="primary"

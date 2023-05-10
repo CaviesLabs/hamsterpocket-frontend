@@ -9,7 +9,8 @@ import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { groupHistoryByDate } from "./parser";
 
 export default function TableComponent() {
-  const { whiteLists, convertDecimalAmount } = useWhiteList();
+  const { whiteLists, convertDecimalAmount, findEntityByAddress } =
+    useWhiteList();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -33,6 +34,7 @@ export default function TableComponent() {
       case PoolType.VAULT_CREATED:
         return "VAULT CREATED";
       case PoolType.POCKET_CONFIG_UPDATED:
+      case PoolType.UPDATED:
         return "POCKET CONFIG UPDATED";
       default:
         return raw;
@@ -59,8 +61,12 @@ export default function TableComponent() {
                 <tbody className="normal-text">
                   {historiesData.map((h) => {
                     const poolDoc = h.pool_docs[0];
-                    const baseToken = whiteLists[poolDoc.baseTokenAddress];
-                    const targetToken = whiteLists[poolDoc.targetTokenAddress];
+                    const baseToken =
+                      whiteLists[poolDoc.baseTokenAddress] ||
+                      findEntityByAddress(poolDoc.baseTokenAddress);
+                    const targetToken =
+                      whiteLists[poolDoc.targetTokenAddress] ||
+                      findEntityByAddress(poolDoc.targetTokenAddress);
 
                     return (
                       <tr key={h._id} className="">
@@ -97,15 +103,7 @@ export default function TableComponent() {
                           h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
-                              <div>
-                                {convertDecimalAmount(
-                                  baseToken?.address,
-                                  h.baseTokenAmount
-                                )}
-                              </div>
-                              {/*<div className="text-dark40">*/}
-                              {/*  Price at: $ {h.nativeTokenPrice}*/}
-                              {/*</div>*/}
+                              <div>{h?.baseTokenAmount}</div>
                             </>
                           ) : (
                             <div className="text-dark40">--</div>
@@ -115,15 +113,7 @@ export default function TableComponent() {
                           {h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
-                              <div>
-                                {convertDecimalAmount(
-                                  targetToken?.address,
-                                  h.targetTokenAmount
-                                )}
-                              </div>
-                              {/*<div className="text-dark40">*/}
-                              {/*  Price at: $ {h.tokenPrice}*/}
-                              {/*</div>*/}
+                              <div>{h?.targetTokenAmount}</div>
                             </>
                           ) : (
                             <div className="text-dark40">--</div>

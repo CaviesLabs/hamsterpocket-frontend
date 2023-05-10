@@ -6,7 +6,7 @@ import { LeftIcon, ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import { useDispatch } from "react-redux";
 import { getPocketById } from "@/src/redux/actions/pocket/pocket.action";
-import { PocketEntity } from "@/src/entities/pocket.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { utilsProvider } from "@/src/utils";
 import {
@@ -15,6 +15,7 @@ import {
   PocketProgress,
   BoughtTransaction,
 } from "@/src/components/pocket-details";
+import { ClosePocketModal } from "@/src/components/home";
 import { useWallet } from "@/src/hooks/useWallet";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { evmProgramService } from "@/src/services/evm-program.service";
@@ -30,6 +31,9 @@ const PocketDetailPage: NextPage = () => {
   const { whiteLists, findEntityByAddress } = useWhiteList();
   const { walletAddress, chain } = useAppWallet();
   const { programService: solProgram } = useWallet();
+
+  /** @dev Condition to show modal to close pocket. */
+  const [closedDisplayed, setClosedDisplayed] = useState(false);
 
   /** @dev Define pocket entity. */
   const [pocket, setPocket] = useState<PocketEntity>();
@@ -154,15 +158,18 @@ const PocketDetailPage: NextPage = () => {
                     <PocketInfo pocket={pocket} handleFetch={syncAndFetch} />
                   </div>
                   <div className="mt-[12px]">
-                    <Button
-                      className="!px-[50px] md:w-auto !w-full pool-control-btn"
-                      theme={{
-                        backgroundColor: "#735CF7",
-                        color: "#FFFFFF",
-                      }}
-                      text="Close Pocket"
-                      width="100%"
-                    />
+                    {pocket?.status !== PocketStatus.ENDED && (
+                      <Button
+                        className="!px-[50px] md:w-auto !w-full pool-control-btn"
+                        theme={{
+                          backgroundColor: "#735CF7",
+                          color: "#FFFFFF",
+                        }}
+                        text="Close Pocket"
+                        width="100%"
+                        onClick={() => setClosedDisplayed(true)}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -176,6 +183,18 @@ const PocketDetailPage: NextPage = () => {
           </section>
         </LayoutSection>
       </div>
+      {closedDisplayed && pocket && (
+        <ClosePocketModal
+          isModalOpen={closedDisplayed}
+          handleOk={() => {
+            setClosedDisplayed(false);
+            syncAndFetch();
+          }}
+          handleCancel={() => setClosedDisplayed(false)}
+          pocket={pocket}
+          // closed={!isEnded && isClosed}
+        />
+      )}
     </MainLayout>
   );
 };

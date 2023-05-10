@@ -78,7 +78,16 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   const closePocket = useCallback(
     async (pocketId: string) => {
-      await contract.closePocket(pocketId);
+      await contract
+        .connect(signer)
+        .multicall([
+          contract
+            .connect(signer)
+            .interface.encodeFunctionData("closePocket", [pocketId]),
+          contract
+            .connect(signer)
+            .interface.encodeFunctionData("withdraw", [pocketId]),
+        ]);
     },
     [signer, contract]
   );
