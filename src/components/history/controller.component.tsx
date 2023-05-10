@@ -16,13 +16,13 @@ const { RangePicker } = DatePicker;
 
 const types = [
   { label: "All type", value: "ALL" },
-  { label: "Create", value: PoolType.CREATE },
-  { label: "Pause", value: PoolType.PAUSE },
+  { label: "Create", value: PoolType.CREATED },
+  { label: "Pause", value: PoolType.PAUSED },
   { label: "Resume", value: PoolType.CONTINUE },
-  { label: "Deposit", value: PoolType.DEPOSIT },
+  { label: "Deposit", value: PoolType.DEPOSITED },
   { label: "Swap", value: PoolType.SWAPPED },
-  { label: "Close", value: PoolType.CLOSE },
-  { label: "Withdraw", value: PoolType.WITHDRAW },
+  { label: "Close", value: PoolType.CLOSED },
+  { label: "Withdraw", value: PoolType.WITHDRAWN },
 ];
 const PickerFormat = "DD/MM/YYYY";
 

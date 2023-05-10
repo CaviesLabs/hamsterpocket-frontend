@@ -168,7 +168,7 @@ const PocketDetailPage: NextPage = () => {
                 <p className="text-dark45 text-[20px]">Bought transaction</p>
               </div>
               <div className="mt-[12px]">
-                <BoughtTransaction />
+                <BoughtTransaction pocket={pocket} />
               </div>
             </div>
           </section>

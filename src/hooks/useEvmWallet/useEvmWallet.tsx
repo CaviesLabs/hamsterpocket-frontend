@@ -51,6 +51,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       createdPocketParams: Params.CreatePocketParamsStruct
     ) => {
       /** @dev Execute off-chain */
+      console.log(signer);
       const pocketId = await evmProgramService.createPocketOffChain(
         await signer.getAddress()
       );

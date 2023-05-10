@@ -2,7 +2,7 @@ import { Params } from "@/src/providers/program/evm/typechain-types/contracts/Po
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { BigNumber } from "ethers";
 import {
-  ethWhiteLists,
+  // ethWhiteLists,
   BSC_UNIVERSAL_ROUTER,
   MATIC_UNIVERSAL_ROUTER,
 } from "@/src/utils";
@@ -11,6 +11,9 @@ import {
   StopConditionsOnChain as SolStopConditionsOnChain,
   PriceConditionType,
 } from "@/src/entities/pocket.entity";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { Keypair } from "@solana/web3.js";
+import { WSOL_ADDRESS } from "@/src/utils";
 
 /**
  * @dev The function to convert number to big ether number.
@@ -74,7 +77,6 @@ export const convertToEtherBuyCondition = (
 ) => {
   let operator;
   const type = Object.keys(solBuyCondition)[0];
-
   switch (type) {
     case PriceConditionType.GT:
       operator = "1";
@@ -138,6 +140,7 @@ export const convertToEtherBuyCondition = (
  * @returns
  */
 export const createdPocketPramsParserEvm = (
+  ethWhiteLists: { [key: string]: WhitelistEntity },
   solCreatedPocketDto: SolCreatePocketDto,
   baseTokenDecimals: number,
   targetTokenDecimals: number,
@@ -145,7 +148,6 @@ export const createdPocketPramsParserEvm = (
   realTargetTokenDecimals: number,
   walletAddress: string
 ): Params.CreatePocketParamsStruct => {
-  console.log(new Date(solCreatedPocketDto.startAt.toNumber() * 1000));
   return {
     id: solCreatedPocketDto.id,
     owner: walletAddress,
@@ -216,4 +218,25 @@ export const createdPocketPramsParserEvm = (
       value: "0",
     },
   };
+};
+
+/**
+ * @dev The function to convert list of tokens in evm to support sol chain.
+ */
+export const makeAliasForEvmWhitelist = (
+  source: WhitelistEntity[]
+): WhitelistEntity[] => {
+  let evmFilerted = source.filter((item) => item.chainId !== "solana");
+  evmFilerted = evmFilerted.map((item) => {
+    return {
+      ...item,
+      aliasAddress:
+        item?.name !== "Wrapped Matic"
+          ? Keypair.generate().publicKey.toBase58().toString()
+          : WSOL_ADDRESS,
+      realDecimals: item.decimals,
+      decimals: 9,
+    };
+  });
+  return evmFilerted;
 };

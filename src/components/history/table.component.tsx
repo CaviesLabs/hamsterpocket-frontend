@@ -14,17 +14,17 @@ export default function TableComponent() {
 
   const typeHumanize = (raw: PoolType) => {
     switch (raw) {
-      case PoolType.CREATE:
+      case PoolType.CREATED:
         return "CREATE";
-      case PoolType.PAUSE:
+      case PoolType.PAUSED:
         return "PAUSE";
       case PoolType.CONTINUE:
         return "CONTINUE";
-      case PoolType.DEPOSIT:
+      case PoolType.DEPOSITED:
         return "DEPOSIT";
-      case PoolType.CLOSE:
+      case PoolType.CLOSED:
         return "CLOSE";
-      case PoolType.WITHDRAW:
+      case PoolType.WITHDRAWN:
         return "WITHDRAW";
       case PoolType.SWAPPED:
         return "SWAPPED";
@@ -93,8 +93,8 @@ export default function TableComponent() {
                         </td>
                         <td>{typeHumanize(h.type)}</td>
                         <td>
-                          {h.type === PoolType.DEPOSIT ||
-                          h.type === PoolType.WITHDRAW ||
+                          {h.type === PoolType.DEPOSITED ||
+                          h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
                               <div>
@@ -112,7 +112,7 @@ export default function TableComponent() {
                           )}
                         </td>
                         <td>
-                          {h.type === PoolType.WITHDRAW ||
+                          {h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
                               <div>
@@ -199,8 +199,8 @@ export default function TableComponent() {
                           Base Amount
                         </div>
                         <div className="float-right text-[14px] text-dark50">
-                          {h.type === PoolType.DEPOSIT ||
-                          h.type === PoolType.WITHDRAW ||
+                          {h.type === PoolType.DEPOSITED ||
+                          h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
                               <div>
@@ -223,7 +223,7 @@ export default function TableComponent() {
                           Token Amount
                         </div>
                         <div className="float-right text-[14px] text-dark50">
-                          {h.type === PoolType.WITHDRAW ||
+                          {h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
                               <div>

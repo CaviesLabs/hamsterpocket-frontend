@@ -9,6 +9,7 @@ export const GET_HISTORY = "GET_HISTORY";
 export const SET_HISTORY = "SET_HISTORY";
 export const GET_HISTORIES = "GET_HISTORIES";
 export const SET_HISTORIES = "SET_HISTORIES";
+export const GET_POCKET_ACTIVITIES = "GET_POCKET_ACTIVITIES";
 
 /**
  * Actions for portfolio service

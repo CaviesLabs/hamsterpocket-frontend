@@ -3,6 +3,7 @@ import {
   GET_HISTORIES,
   SET_HISTORIES,
   GET_HISTORY,
+  GET_POCKET_ACTIVITIES,
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
@@ -27,6 +28,20 @@ export const setHistory = (data: HistoryEntity) => ({
 export const getHistories = (data: GetHistoriesDto) => ({
   type: GET_HISTORIES,
   payload: data,
+});
+
+/**
+ * @dev Get activities of a pocket by pocket id.
+ * @param {HistoryEntity[]} data
+ * @returns reducer.
+ */
+export const getPocketActivities = (
+  data: { pocketId: string },
+  callback?: CallBackSaga<HistoryEntity[]>
+) => ({
+  type: GET_POCKET_ACTIVITIES,
+  payload: data,
+  callback,
 });
 
 /**

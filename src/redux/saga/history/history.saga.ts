@@ -36,6 +36,29 @@ export function* getHistories({
 /**
  * @param callback
  * @description
+ * Fetch activites of each pocket.
+ */
+export function* getPocketActivities({
+  payload,
+  callback,
+}: SagaPayload<{ pocketId: string }, HistoryEntity[]>) {
+  try {
+    console.log("get pocket activities");
+    const histories: HistoryEntity[] = yield call(
+      historyService.getPocketActivities,
+      payload
+    );
+
+    callback && callback(histories);
+  } catch (err) {
+    console.error(err);
+    callback && callback(null);
+  }
+}
+
+/**
+ * @param callback
+ * @description
  * Fetch history data
  */
 export function* getHistory({

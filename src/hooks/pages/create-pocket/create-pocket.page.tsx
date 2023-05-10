@@ -36,10 +36,11 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const { chain, walletAddress } = useAppWallet();
 
   /** @dev Inject eth function. */
-  const { createPocket: createEvmPocket } = useEvmWallet();
+  const { createPocket: createEvmPocket, signer: evmSigner } = useEvmWallet();
 
   /** @dev Inject functions from whitelist hook to use. */
-  const { findPairLiquidity, liquidities } = useWhiteList();
+  const { findPairLiquidity, findEntityByAddress, liquidities, whiteLists } =
+    useWhiteList();
 
   const [pocketName, setPocketName] = useState("");
   const [baseTokenAddress, setBaseTokenAddress] = useState<[PublicKey, number]>(
@@ -176,14 +177,23 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       ]);
 
       /** @dev Get base and qoute address in liquidity pool. */
-      const [liqBase, liqQoute, marketId] = findPairLiquidity(
-        baseAddress,
-        targetAddress
-      );
+      let liqQoute;
+      let marketId = "1111";
+      let sideMethod: SideMethod = { sell: {} };
 
-      /** @dev Handle to attract side method of pool.  */
-      const sideMethod: SideMethod =
-        liqBase === baseAddress ? { sell: {} } : { buy: {} };
+      if (chain === "SOL") {
+        const [liqBase, _liqQoute, _marketId] = findPairLiquidity(
+          baseAddress,
+          targetAddress
+        );
+
+        /** @dev Desire for global vars. */
+        liqQoute = _liqQoute;
+        marketId = _marketId;
+
+        /** @dev Handle to attract side method of pool.  */
+        sideMethod = liqBase === baseAddress ? { sell: {} } : { buy: {} };
+      }
 
       /** @dev Process stopConditions. */
       const processedStopConditions = stopConditions.map((condition) =>
@@ -197,7 +207,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         id: ProgramService.generatePocketId(),
         name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
-        quoteTokenAddress: new PublicKey(liqQoute),
+        quoteTokenAddress: new PublicKey(
+          chain === "SOL" ? liqQoute : targetAddress
+        ),
         startAt: new BN(
           parseInt((startAt.getTime() / 1000).toString()).toString()
         ),
@@ -254,13 +266,13 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
             ).toString()
           ),
           createdPocketPramsParserEvm(
+            whiteLists,
             solCreatedPocketData,
             baseTokenAddress[1],
             targetTokenAddress[1],
-            ethWhiteLists[baseTokenAddress[0].toBase58().toString()]
-              .realDecimals,
-            ethWhiteLists[targetTokenAddress[0].toBase58().toString()]
-              .realDecimals,
+            whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
+            whiteLists[targetTokenAddress[0].toBase58().toString()]
+              ?.realDecimals,
             walletAddress
           )
         );
@@ -287,13 +299,20 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     createdEnable,
     chain,
     walletAddress,
+    evmSigner,
+    whiteLists,
     validateForms,
   ]);
 
   /** @dev Update mint order size. */
   useEffect(() => {
     (async () => {
-      if (!baseTokenAddress.length || !targetTokenAddress.length) return;
+      if (
+        !baseTokenAddress.length ||
+        !targetTokenAddress.length ||
+        chain === "ETH"
+      )
+        return;
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
         baseTokenAddress[0]?.toBase58().toString(),
@@ -304,7 +323,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       const ppair = findPairLiquidity(baseAddress, targetAddress);
       setMintOrderSize(ppair?.[3]);
     })();
-  }, [baseTokenAddress, targetTokenAddress]);
+  }, [baseTokenAddress, targetTokenAddress, chain]);
 
   /**
    * @dev Update base token when chain changed.
@@ -333,20 +352,30 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
    * the selected base token and the available liquidity data.
    */
   useEffect(() => {
+    if (chain === "ETH") {
+      return setAvailableTargetTokens(() => {
+        return Object.keys(whiteLists).filter((address) => {
+          return whiteLists?.[address].name !== "Wrapped Matic";
+        });
+      });
+    }
     setAvailableTargetTokens(() => {
+      const tokenAddress = baseTokenAddress[0]?.toBase58()?.toString();
+      const tokenInfo =
+        whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
       return union(
         liquidities
           ?.filter(
             (item) =>
-              item.baseMint === baseTokenAddress[0].toBase58().toString() ||
-              item.quoteMint === baseTokenAddress[0].toBase58().toString()
+              item.baseMint === tokenInfo?.address ||
+              item.quoteMint === tokenInfo?.address
           )
           .map((item) => [item.baseMint, item.quoteMint])
           .flat(1)
           .filter((item) => item !== baseTokenAddress[0].toBase58().toString())
       );
     });
-  }, [liquidities, baseTokenAddress]);
+  }, [liquidities, baseTokenAddress, chain, whiteLists]);
 
   return (
     <CreatePocketContext.Provider
