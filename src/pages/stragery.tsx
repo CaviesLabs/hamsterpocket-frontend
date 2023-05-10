@@ -14,7 +14,7 @@ const StrageryPage: NextPage = () => {
           <p className="md:text-[32px] text-[20px] text-white mt-[22px] mt-20">
             Strategy
           </p>
-          <div className="md:grid md:grid-cols-2 md:gap-2">
+          <div className="md:grid md:grid-cols-2 md:gap-2 mt-[20px]">
             <div
               className="md:cols-span-1 mobile:w-full rounded-[12px] bg-dark100 px-[20px] py-[40px] cursor-pointer hover:bg-[#181927]"
               onClick={() => router.push("/create-pocket")}
