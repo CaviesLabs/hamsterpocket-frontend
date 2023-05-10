@@ -101,6 +101,7 @@
     "tweetnacl": "^1.0.3",
     "uuid": "^9.0.0",
     "uuidv4": "^6.2.13",
+    "viem": "^0.3.19",
     "wagmi": "^0.12.13"
   },
   "devDependencies": {

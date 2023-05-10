@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createContext, useContext, ReactNode, FC, useCallback } from "react";
 import { useSigner, useBalance } from "wagmi";
-import pocketChefContract from "@/src/providers/program/evm/artifacts/contracts/PocketChef.sol/PocketChef.json";
+// import pocketChefContract from "@/src/providers/program/evm/artifacts/contracts/PocketChef.sol/PocketChef.json";
 import { BigNumber } from "ethers";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { PocketChef__factory } from "@/src/providers/program/evm/typechain-types";
@@ -19,6 +18,7 @@ export const EvmWalletContext = createContext<{
   closePocket(pocketId: string): Promise<void>;
   pausePocket(pocketId: string): Promise<void>;
   withdrawPocket(pocketId: string): Promise<void>;
+  resumePocket(pocketId: string): Promise<void>;
   signer: unknown;
 }>(null);
 
@@ -89,6 +89,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     [signer, contract]
   );
 
+  const resumePocket = useCallback(
+    async (pocketId: string) => {
+      await contract.restartPocket(pocketId);
+    },
+    [signer, contract]
+  );
+
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
       await contract.withdraw(pocketId);
@@ -104,6 +111,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         closePocket,
         pausePocket,
         withdrawPocket,
+        resumePocket,
         signer: signer,
         nativeBalance: nativeBalanceData?.formatted,
       }}

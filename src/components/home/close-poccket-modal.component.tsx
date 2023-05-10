@@ -97,7 +97,6 @@ export const ClosePocketModal: FC<{
             shape="primary"
             size="large"
             onClick={() => {
-              console.log("can");
               props.handleCancel();
             }}
             text="Cancel"

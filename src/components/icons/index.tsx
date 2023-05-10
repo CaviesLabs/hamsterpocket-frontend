@@ -891,8 +891,8 @@ export const TabProfileIcon: FC<IconProps> = (props) => (
         y2="19.1539"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color={props.color || "#735CF7"} />
-        <stop offset="1" stop-color={props.color || "#735CF7"} />
+        <stop stopColor={props.color || "#735CF7"} />
+        <stop offset="1" stopColor={props.color || "#735CF7"} />
       </linearGradient>
     </defs>
   </svg>

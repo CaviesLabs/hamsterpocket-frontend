@@ -4,6 +4,8 @@ import { Button } from "@hamsterbox/ui-kit";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 
 export const ResumePocketModal: FC<{
   isModalOpen: boolean;
@@ -14,6 +16,8 @@ export const ResumePocketModal: FC<{
 }> = (props) => {
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet } = useWallet();
+  const { walletAddress, chain } = useAppWallet();
+  const { resumePocket: resumePocketEvm } = useEvmWallet();
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -24,13 +28,17 @@ export const ResumePocketModal: FC<{
   /** @dev The function to handle close pocket. */
   const handleClosePocket = useCallback(async () => {
     try {
-      if (!programService) throw new Error("Wallet not connected.");
+      if (!walletAddress) throw new Error("Wallet not connected.");
 
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
       /** @dev Execute transaction. */
-      await programService.resumePocket(solanaWallet, props.pocket);
+      if (chain === "SOL") {
+        await programService.resumePocket(solanaWallet, props.pocket);
+      } else {
+        await resumePocketEvm(props.pocket.id || props.pocket._id);
+      }
 
       /** @dev Callback function when close successfully. */
       setSuccessClosed(true);
@@ -39,7 +47,7 @@ export const ResumePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket]);
+  }, [programService, solanaWallet, props.pocket, walletAddress, chain]);
 
   return (
     <Modal

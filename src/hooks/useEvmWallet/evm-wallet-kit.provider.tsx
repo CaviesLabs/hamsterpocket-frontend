@@ -21,7 +21,7 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
     chains,
   });
 
-  const wagmiClient = createClient({
+  const wagmiConfig = createClient({
     autoConnect: true,
     connectors,
     provider,
@@ -29,7 +29,7 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
 
   return (
     <WalletKitContext.Provider value={{}}>
-      <WagmiConfig client={wagmiClient}>
+      <WagmiConfig client={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
           {props.children}
         </RainbowKitProvider>

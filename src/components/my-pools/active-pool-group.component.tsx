@@ -98,12 +98,12 @@ export const ActivePoolGroup: FC = () => {
               />
             </div>
           </div>
-          <p
+          {/* <p
             className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
             onClick={() => router.push("/ended-pockets")}
           >
             View Closed & Ended Pockets
-          </p>
+          </p> */}
         </div>
         <div className="flex mt-[32px]">
           <div className="float-left w-[10%]">

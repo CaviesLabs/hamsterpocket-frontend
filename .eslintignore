@@ -7,3 +7,5 @@ node_modules/*
 ./node_modules/@wagmi/*
 ./src/providers/program/evm/typechain-types
 ./src/providers/program/evm/artifacts
+node_modules/@wagmi/**
+node_module/abitype/d/**"
