@@ -63,12 +63,12 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
         }
       )
     );
-  });
+  }, [props.pocket]);
 
   return (
     <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px]">
       {activitiesHistory
-        .filter((item) => item.type === PoolType.SWAPPED)
+        ?.filter((item) => item.type === PoolType.SWAPPED)
         .map((item, index) => (
           <div
             className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]"
@@ -80,9 +80,9 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 {dayjs(item.createdAt).format(DATE_TIME_FORMAT)}
               </div>
               <div className="col-span-4 text-center flex items-center justify-center">
-                <p>{`${item.baseTokenAmount} ${baseToken.symbol}`}</p>
+                <p>{`${item.baseTokenAmount} ${baseToken?.symbol}`}</p>
                 <RightArrowIcon className="mx-[20px]" />
-                <p>{`${item.targetTokenAmount} ${targetToken.symbol}`}</p>
+                <p>{`${item.targetTokenAmount} ${targetToken?.symbol}`}</p>
               </div>
               <div className="col-span-3 text-center">
                 <div className="float-right mobile:flex mobile:items-center md:text-center">

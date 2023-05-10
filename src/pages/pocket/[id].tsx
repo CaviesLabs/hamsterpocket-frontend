@@ -82,9 +82,11 @@ const PocketDetailPage: NextPage = () => {
    * @dev Fetch pocket data from hamster server.
    */
   useEffect(() => {
-    if (!router?.query?.id) return;
+    if (!router?.query?.id || !walletAddress) return;
     syncAndFetch();
-  }, [router]);
+  }, [router, walletAddress]);
+
+  if (!walletAddress) return <div></div>;
 
   return (
     <MainLayout>
