@@ -44,7 +44,7 @@ const Layout = (props: LayoutProps) => {
           openModalEvm();
         }
       }
-      router.push("/create-pocket");
+      router.push("/strategy");
     },
     [walletAddress, chain]
   );

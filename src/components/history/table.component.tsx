@@ -1,5 +1,4 @@
 import { PoolType } from "@/src/entities/history.entity";
-import { DATE_TIME_FORMAT, utilsProvider } from "@/src/utils";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
@@ -7,10 +6,19 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon } from "@/src/components/icons";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { groupHistoryByDate } from "./parser";
+import {
+  utilsProvider,
+  DATE_TIME_FORMAT,
+  SOL_EXPLORE,
+  MUMBAI_EXPLORE,
+  BSC_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 export default function TableComponent() {
   const { whiteLists, convertDecimalAmount, findEntityByAddress } =
     useWhiteList();
+  const { chain } = useAppWallet();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -75,7 +83,13 @@ export default function TableComponent() {
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
                             <a
-                              href={`https://solscan.io/account/${poolDoc.address}`}
+                              href={
+                                chain === "SOL"
+                                  ? `${SOL_EXPLORE}/account/${poolDoc.address}`
+                                  : process.env.EVM_CHAIN_ID === "matic"
+                                  ? `${MUMBAI_EXPLORE}/address/${poolDoc.address}`
+                                  : `${BSC_EXPLORE}/address/${poolDoc.address}`
+                              }
                               target="_blank"
                               className="ml-2"
                             >

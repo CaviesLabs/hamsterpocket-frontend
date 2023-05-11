@@ -107,7 +107,7 @@ const Header: FC = () => {
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
                       size="small"
-                      onClick={() => router.push("/create-pocket")}
+                      onClick={() => router.push("/strategy")}
                       theme={{
                         backgroundColor: "#735CF7",
                         color: "#FFFFFF",
