@@ -38,6 +38,9 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
       if (isAuth() && !wallet?.walletAddress) {
         router.push("/");
       }
+      if (router.asPath === "/" && wallet?.walletAddress) {
+        router.push("/my-pockets");
+      }
     }, 1000);
     return () => clearTimeout(myTimer);
   }, [router.asPath, wallet]);

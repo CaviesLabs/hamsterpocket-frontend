@@ -47,7 +47,7 @@ export const TabBar: FC = () => {
     []
   );
 
-  return (
+  return router.asPath !== "/" ? (
     <div className="tabbar fixed z-50 w-full h-[100px] bottom-0 hidden mobile:block pt-[10px] border-t-[1px] border-t-solid border-t-[#242636] bg-[#060710]">
       <div className="w-full px-[10px] py-[7px] grid grid-cols-4">
         {tabItems.map((item, index) => (
@@ -75,5 +75,5 @@ export const TabBar: FC = () => {
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };
