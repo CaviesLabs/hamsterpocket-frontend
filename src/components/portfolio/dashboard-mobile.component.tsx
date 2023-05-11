@@ -30,7 +30,7 @@ export default function DashboardComponentMobile() {
       labels,
       datasets: [
         {
-          data: mapData.map((item) => (item.percent * 100).toFixed(2)),
+          data: mapData.map((item) => (item.percent * 100)?.toFixed(2)),
           backgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
           hoverBackgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
           borderWidth: 0,
@@ -67,10 +67,10 @@ export default function DashboardComponentMobile() {
                   <RiQuestionnaireFill />
                 </AntdTooltip>
               </div>
-              <div className="mobile:text-[14px]">${totalUSD.toFixed(2)}</div>
+              <div className="mobile:text-[14px]">${totalUSD?.toFixed(2)}</div>
             </div>
           </div>
-          <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
+          <div className="ml-12 flex flex-col justify-between w-40 mobile:ml-[10px] h-[160px]">
             {chartData.labels.map((label, i) => (
               <div
                 key={label}

@@ -62,9 +62,12 @@ export const TabBar: FC = () => {
               )}
             </div>
             <p
-              className={classNames("mt-[10px] text-[12px] normal-text", {
-                "text-purple300": item.uri === router.asPath.toString(),
-              })}
+              className={classNames(
+                "mt-[10px] text-[12px] normal-text text-dark50",
+                {
+                  "text-purple300": item.uri === router.asPath.toString(),
+                }
+              )}
             >
               {item.name}
             </p>

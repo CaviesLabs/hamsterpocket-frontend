@@ -206,14 +206,14 @@ export const PoolItemRow = (props: PoolItemProps) => {
                   : "text-green300"
               } normal-text"`}
             >
-              {data?.realizedROIValue.toFixed(3) || 0} {baseToken?.symbol}
+              {data?.realizedROIValue?.toFixed(3) || 0} {baseToken?.symbol}
             </p>
             <p
               className={`md:text-center md:mt-[5px] ${
                 (data?.currentROI || 0) < 0 ? "text-red300" : "text-green300"
               } mobile:ml-[5px]`}
             >
-              ({data?.currentROI.toFixed(3) || 0}%)
+              ({data?.currentROI?.toFixed(3) || 0}%)
             </p>
           </div>
         </div>
@@ -228,7 +228,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             </p>
             {averagePrice ? (
               <p className="text-center md:mt-[5px] md:text-[12px] text-white">
-                = {averagePrice.toFixed(3)} {targetToken?.symbol}
+                = {averagePrice?.toFixed(3)} {targetToken?.symbol}
               </p>
             ) : null}
           </div>

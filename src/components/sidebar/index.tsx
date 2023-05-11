@@ -93,7 +93,7 @@ export const SideBar: FC = () => {
             </div>
             <p
               className={classNames(
-                "text-[16px] normal-text float-left ml-[10px] sidebarBreakpoint:hidden text-[#7886A0]",
+                "text-[16px] normal-text float-left ml-[10px] sidebarBreakpoint:hidden text-dark50",
                 {
                   "!text-purple300": isActive(item.uri, item.sideUris),
                 }

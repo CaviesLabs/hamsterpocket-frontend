@@ -77,14 +77,14 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
             {convertDecimalAmount(
               baseToken?.address,
               pocket?.remainingBaseTokenBalance
-            ).toFixed(3)}{" "}
+            )?.toFixed(3)}{" "}
             {baseToken?.symbol}
           </p>
           <p className="text-white normal-text mt-[10px]">
             {convertDecimalAmount(
               targetToken?.address,
               pocket?.currentReceivedTargetToken
-            ).toFixed(3)}{" "}
+            )?.toFixed(3)}{" "}
             {targetToken?.symbol}
           </p>
         </div>
@@ -93,7 +93,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
         <p className="float-left text-dark50 normal-text">Average price</p>
         <p className="text-white normal-text float-right">
           {convertDecimalAmount(baseToken?.address, pocket?.batchVolume)}{" "}
-          {baseToken?.symbol} = {averagePrice.toFixed(3)} {targetToken?.symbol}
+          {baseToken?.symbol} = {averagePrice?.toFixed(3)} {targetToken?.symbol}
         </p>
       </div>
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
@@ -105,8 +105,8 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
               : "text-green300"
           } normal-text float-right`}
         >
-          {pocket?.realizedROIValue.toFixed(3) || 0} {baseToken?.symbol} (
-          {pocket?.currentROI.toFixed(3) || 0}%)
+          {pocket?.realizedROIValue?.toFixed(3) || 0} {baseToken?.symbol} (
+          {pocket?.currentROI?.toFixed(3) || 0}%)
         </p>
       </div>
     </div>

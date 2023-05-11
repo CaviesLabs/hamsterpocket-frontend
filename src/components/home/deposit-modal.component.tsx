@@ -157,7 +157,7 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {chain === "SOL" ? baseBalance.toFixed(4) : ethSolBalance}{" "}
+            {chain === "SOL" ? baseBalance?.toFixed(4) : ethSolBalance}{" "}
             {baseToken.symbol}
           </p>
           <Button

@@ -57,10 +57,10 @@ export default function TableComponent() {
               </div>
               <div className="text-right col-span-1">
                 <div className="mobile:text-[14px]">
-                  {convertDecimalAmount(h.tokenAddress, h.total).toFixed(2)}
+                  {convertDecimalAmount(h.tokenAddress, h.total)?.toFixed(2)}
                 </div>
                 <div className="text-dark40 mobile:text-[14px]">
-                  ~ ${convertDecimalAmount(h.tokenAddress, h.value).toFixed(2)}
+                  ~ ${convertDecimalAmount(h.tokenAddress, h.value)?.toFixed(2)}
                 </div>
               </div>
             </div>

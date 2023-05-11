@@ -184,7 +184,7 @@ export const PoolItem = (props: PoolItemProps) => {
               <p className="float-left text-green text-[14px] regular-text">
                 {data.progressPercent > 1
                   ? 100
-                  : (data.progressPercent * 100).toFixed(2)}
+                  : (data.progressPercent * 100)?.toFixed(2)}
                 %
               </p>
               <div className="float-right">

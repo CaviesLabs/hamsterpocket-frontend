@@ -132,7 +132,7 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
         style={{ zIndex: 2 }}
       >
         <p className="text-dark50 mobile:text-[12px] normal-text">
-          Balance: {tokenBalance.toFixed(2)}
+          Balance: {tokenBalance?.toFixed(2)}
         </p>
       </div>
     </div>

@@ -84,7 +84,7 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
             {convertDecimalAmount(
               baseToken?.address,
               pocket?.remainingBaseTokenBalance
-            ).toFixed(3)}{" "}
+            )?.toFixed(3)}{" "}
             {baseToken?.symbol}
           </p>
         </div>
