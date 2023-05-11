@@ -87,7 +87,7 @@ export const PocketStatusComponent: FC<{
       <div className="mt-[12px]">
         {pocket?.status !== PocketStatus.ENDED && (
           <Button
-            className="!px-[50px] md:w-auto !w-full pool-control-btn"
+            className="!px-[50px] md:w-auto w-full"
             theme={{
               backgroundColor: "#735CF7",
               color: "#FFFFFF",

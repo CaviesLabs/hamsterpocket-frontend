@@ -76,17 +76,21 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]"
                 key={`transaction-item-${index}`}
               >
-                <div className="grid grid-cols-12 text-white text-[14px]">
+                <div className="grid grid-cols-12 text-white text-[14px] mobile:text-[12px]">
                   <div className="col-span-1 text-center">{index + 1}</div>
-                  <div className="col-span-3 text-center">
+                  <div className="col-span-3 text-center mobile:col-span-5">
                     {dayjs(item.createdAt).format(DATE_TIME_FORMAT)}
                   </div>
-                  <div className="col-span-4 text-center flex items-center justify-center">
-                    <p>{`${item.baseTokenAmount} ${baseToken?.symbol}`}</p>
+                  <div className="col-span-4 text-center flex items-center justify-center mobile:col-span-5">
+                    <p>{`${item.baseTokenAmount?.toFixed(3)} ${
+                      baseToken?.symbol
+                    }`}</p>
                     <RightArrowIcon className="mx-[20px]" />
-                    <p>{`${item.targetTokenAmount} ${targetToken?.symbol}`}</p>
+                    <p>{`${item.targetTokenAmount?.toFixed(3)} ${
+                      targetToken?.symbol
+                    }`}</p>
                   </div>
-                  <div className="col-span-3 text-center">
+                  <div className="col-span-3 text-center mobile:hidden">
                     <div className="float-right mobile:flex mobile:items-center md:text-center">
                       <div
                         style={{
