@@ -1,5 +1,12 @@
-import { createContext, useContext, ReactNode, FC, useCallback, useEffect } from "react";
-import { useSigner, useBalance, useFeeData } from "wagmi";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  FC,
+  useCallback,
+  useEffect,
+} from "react";
+import { useSigner, useBalance } from "wagmi";
 // import pocketChefContract from "@/src/providers/program/evm/artifacts/contracts/PocketChef.sol/PocketChef.json";
 import { BigNumber } from "ethers";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
