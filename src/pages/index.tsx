@@ -43,8 +43,9 @@ const Layout = (props: LayoutProps) => {
         } else {
           openModalEvm();
         }
+      } else {
+        router.push("/strategy");
       }
-      router.push("/strategy");
     },
     [walletAddress, chain]
   );
@@ -76,7 +77,7 @@ const Layout = (props: LayoutProps) => {
                 </p>
                 <div className="mt-[34px]">
                   <ConnectButton.Custom>
-                    {({ account, chain, openConnectModal, mounted }) => {
+                    {({ openConnectModal, mounted }) => {
                       return (
                         <div
                           {...(!mounted && {
@@ -89,21 +90,19 @@ const Layout = (props: LayoutProps) => {
                           })}
                         >
                           {(() => {
-                            if (!mounted || !account || !chain) {
-                              return (
-                                <Button
-                                  className="mx-auto !text-[18px] mobile:!text-[14px] !px-[50px]"
-                                  theme={{
-                                    backgroundColor: "#735CF7",
-                                    color: "#FFFFFF",
-                                  }}
-                                  text="Create a Pocket"
-                                  onClick={() =>
-                                    handleCreatePocket(openConnectModal)
-                                  }
-                                />
-                              );
-                            }
+                            return (
+                              <Button
+                                className="mx-auto !text-[18px] mobile:!text-[14px] !px-[50px]"
+                                theme={{
+                                  backgroundColor: "#735CF7",
+                                  color: "#FFFFFF",
+                                }}
+                                text="Create a Pocket"
+                                onClick={() =>
+                                  handleCreatePocket(openConnectModal)
+                                }
+                              />
+                            );
                           })()}
                         </div>
                       );

@@ -35,6 +35,7 @@ export const convertToEtherStopCondition = (
     switch (type) {
       case "endTimeReach":
         conditionOperator = "0";
+        ethValue = (condition as any)[type]?.value?.toNumber()?.toString();
         break;
       case "batchAmountReach":
         conditionOperator = "1";

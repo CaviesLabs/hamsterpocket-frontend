@@ -14,7 +14,7 @@ export const PocketTpSl: FC<{ pocket: PocketEntity }> = (props) => {
     () =>
       whiteLists[pocket?.baseTokenAddress] ||
       findEntityByAddress(pocket?.baseTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   return (

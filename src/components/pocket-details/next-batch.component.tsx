@@ -34,7 +34,7 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
     () =>
       whiteLists[pocket?.baseTokenAddress] ||
       findEntityByAddress(pocket?.baseTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   /** @dev Get target token info. */
@@ -42,25 +42,25 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
     () =>
       whiteLists[pocket?.targetTokenAddress] ||
       findEntityByAddress(pocket?.targetTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   /** @dev Condition filter pockets which is paused only. */
   const isActive = useMemo(
     () => pocket?.status === PocketStatus.ACTIVE,
-    [pocket]
+    [pocket, props]
   );
   const isPaused = useMemo(
     () => pocket?.status === PocketStatus.PAUSED,
-    [pocket]
+    [pocket, props]
   );
   const isClosed = useMemo(
     () => pocket?.status === PocketStatus.CLOSED,
-    [pocket]
+    [pocket, props]
   );
   const isEnded = useMemo(
     () => pocket?.status === PocketStatus.ENDED,
-    [pocket]
+    [pocket, props]
   );
   const isWithdrawed = useMemo(() => !isEnded && isClosed, [isEnded, isClosed]);
 

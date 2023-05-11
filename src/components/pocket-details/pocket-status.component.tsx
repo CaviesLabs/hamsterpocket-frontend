@@ -56,11 +56,17 @@ export const PocketStatusComponent: FC<{
     } else if (isClosed) {
       return (
         <div className="px-[10px] bg-[#F755551F] rounded-[8px] inline-block mx-auto">
+          <p className="text-center text-red300 normal-text">Closed</p>
+        </div>
+      );
+    } else if (isEnded) {
+      return (
+        <div className="px-[10px] bg-[#F755551F] rounded-[8px] inline-block mx-auto">
           <p className="text-center text-red300 normal-text">Ended</p>
         </div>
       );
     }
-  }, [isActive, isPaused, isClosed]);
+  }, [isActive, isPaused, isClosed, isEnded]);
 
   return (
     <div className="mt-[30px]">

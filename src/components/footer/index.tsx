@@ -40,7 +40,7 @@ const Footer: FC = () => {
     []
   );
 
-  return (
+  return router.asPath === "/" ? (
     <div className="footer pb-9 mobile:hidden">
       <div className="lg:max-w-[1440px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
@@ -145,7 +145,7 @@ const Footer: FC = () => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Footer;

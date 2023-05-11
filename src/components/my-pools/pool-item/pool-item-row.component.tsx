@@ -12,6 +12,7 @@ import {
   PausePocketModal,
   ResumePocketModal,
   ClaimFeeModal,
+  ReversePocketModal,
 } from "@/src/components/home";
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
 import {
@@ -41,6 +42,9 @@ export const PoolItemRow = (props: PoolItemProps) => {
 
   /** @dev Condition to show modal to close pocket. */
   const [closedDisplayed, setClosedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to close pocket. */
+  const [reversedDisplayed, setReversedDisplayed] = useState(false);
 
   /** @dev Condition to show modal to pause pocket. */
   const [pausedDisplayed, setPausedDisplayed] = useState(false);
@@ -106,10 +110,16 @@ export const PoolItemRow = (props: PoolItemProps) => {
     } else if (isPaused) {
       return (
         <div className="px-[10px] bg-[#FACC151F] rounded-[8px] inline-block mx-auto">
-          <p className="text-center text-[#E8AB35] normal-text">Pause</p>
+          <p className="text-center text-[#E8AB35] normal-text">Paused</p>
         </div>
       );
     } else if (isClosed) {
+      return (
+        <div className="px-[10px] bg-[#F755551F] rounded-[8px] inline-block mx-auto">
+          <p className="text-center text-red300 normal-text">Closed</p>
+        </div>
+      );
+    } else if (isEnded) {
       return (
         <div className="px-[10px] bg-[#F755551F] rounded-[8px] inline-block mx-auto">
           <p className="text-center text-red300 normal-text">Ended</p>
@@ -235,14 +245,20 @@ export const PoolItemRow = (props: PoolItemProps) => {
         </div>
         <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
           <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
-            Next batch time
+            {isClosed || isEnded || isClaimed
+              ? "Close at time"
+              : "Next batch time"}
           </p>
           <div className="mobile:float-right mobile:flex mobile:items-center md:text-center mobile:text-[14px]">
             <div className="mobile:hidden">{statusComponent}</div>
             <p className="text-center md:mt-[5px] text-[12px] text-dark50 mobile:ml-[5px]">
-              {dayjs(data?.nextExecutionAt?.toLocaleString()).format(
-                DATE_TIME_FORMAT
-              )}
+              {isClosed || isEnded || isClaimed
+                ? dayjs(data?.closedAt?.toLocaleString()).format(
+                    DATE_TIME_FORMAT
+                  )
+                : dayjs(data?.nextExecutionAt?.toLocaleString()).format(
+                    DATE_TIME_FORMAT
+                  )}
             </p>
           </div>
         </div>
@@ -301,17 +317,19 @@ export const PoolItemRow = (props: PoolItemProps) => {
             </div>
             <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
               {!isEnded && (
-                <Button
-                  className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn"
-                  theme={{
-                    backgroundColor: "transparent",
-                    color: "#735CF7",
-                    hoverColor: "#735CF7",
-                  }}
-                  text={isClosed ? "Withdraw" : "Close"}
-                  width="100%"
-                  onClick={() => setClosedDisplayed(true)}
-                />
+                <>
+                  <Button
+                    className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn"
+                    theme={{
+                      backgroundColor: "transparent",
+                      color: "#735CF7",
+                      hoverColor: "#735CF7",
+                    }}
+                    text={isClosed ? "Withdraw" : "Close"}
+                    width="100%"
+                    onClick={() => setClosedDisplayed(true)}
+                  />
+                </>
               )}
               {isEnded && !isClaimed && chain === "SOL" && (
                 <Button
@@ -329,21 +347,33 @@ export const PoolItemRow = (props: PoolItemProps) => {
             </div>
           </div>
         )}
-        {isWithdrawed && (
-          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
-            {!isEnded && (
+        {isWithdrawed && !isEnded && (
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1 flex mobile:grid mobile:grid-cols-5">
+            <div className="mobile:col-span-2">
               <Button
-                className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn text-center mx-auto"
+                className="!px-[50px] !border-solid !border-purple300 !border-[2px] md:pool-control-btn text-center"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#735CF7",
                   hoverColor: "#735CF7",
                 }}
                 text="Withdraw"
-                width="100%"
                 onClick={() => setClosedDisplayed(true)}
+                width="100%"
               />
-            )}
+            </div>
+            <div className="mobile:col-span-3">
+              <Button
+                className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
+                theme={{
+                  backgroundColor: "#735CF7",
+                  color: "#ffffff",
+                }}
+                text={`Reverse to ${baseToken?.symbol}`}
+                onClick={() => setReversedDisplayed(true)}
+                width="100%"
+              />
+            </div>
           </div>
         )}
         {isEnded && !isClaimed && chain === "SOL" && (
@@ -383,6 +413,17 @@ export const PoolItemRow = (props: PoolItemProps) => {
           handleCancel={() => setClosedDisplayed(false)}
           pocket={data}
           closed={!isEnded && isClosed}
+        />
+      )}
+      {reversedDisplayed && (
+        <ReversePocketModal
+          isModalOpen={reversedDisplayed}
+          handleOk={() => {
+            setReversedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setReversedDisplayed(false)}
+          pocket={data}
         />
       )}
       {resumedDisplayed && (

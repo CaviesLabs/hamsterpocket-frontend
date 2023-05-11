@@ -13,7 +13,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
     () =>
       whiteLists[pocket?.baseTokenAddress] ||
       findEntityByAddress(pocket?.baseTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   /** @dev Get target token info. */
@@ -21,16 +21,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
     () =>
       whiteLists[pocket?.targetTokenAddress] ||
       findEntityByAddress(pocket?.targetTokenAddress),
-    [pocket]
-  );
-
-  console.log(pocket);
-  console.log(
-    convertDecimalAmount(
-      targetToken?.address,
-      pocket?.currentReceivedTargetToken
-    ),
-    convertDecimalAmount(baseToken?.address, pocket?.currentSpentBaseToken)
+    [pocket, props]
   );
 
   /**
@@ -50,7 +41,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
     );
 
     return targetTokenBought / baseTokenSpent;
-  }, [pocket, baseToken, targetToken]);
+  }, [pocket, baseToken, targetToken, props]);
 
   return (
     <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px]">

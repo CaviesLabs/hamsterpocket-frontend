@@ -1,19 +1,10 @@
-import {
-  createContext,
-  useContext,
-  ReactNode,
-  FC,
-  useCallback,
-  useEffect,
-} from "react";
-import { useSigner, useBalance } from "wagmi";
+import { createContext, useContext, ReactNode, FC, useCallback } from "react";
+import { useSigner, useBalance, useAccount } from "wagmi";
 // import pocketChefContract from "@/src/providers/program/evm/artifacts/contracts/PocketChef.sol/PocketChef.json";
 import { BigNumber } from "ethers";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { PocketChef__factory } from "@/src/providers/program/evm/typechain-types";
 import { evmProgramService } from "@/src/services/evm-program.service";
-import { MATIC_ADDRESS } from "@/src/utils";
-import { fetchBalance } from "@wagmi/core";
 
 /** @dev Initiize context. */
 export const EvmWalletContext = createContext<{
@@ -24,6 +15,7 @@ export const EvmWalletContext = createContext<{
   ): Promise<void>;
   depositPocket(pocketId: string, depositedAmount: BigNumber): Promise<void>;
   closePocket(pocketId: string): Promise<void>;
+  closePositionPocket(pocketId: string): Promise<void>;
   pausePocket(pocketId: string): Promise<void>;
   withdrawPocket(pocketId: string): Promise<void>;
   resumePocket(pocketId: string): Promise<void>;
@@ -32,6 +24,10 @@ export const EvmWalletContext = createContext<{
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
+  /**
+  /* @dev Inject context of eth wallet. */
+  const ethWallet = useAccount();
+
   /** @dev Get Signer provider from wagmi. */
   const { data: signer } = useSigner({
     onSuccess(data) {
@@ -47,29 +43,16 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev Get chain native token balance. */
   const { data: nativeBalanceData } = useBalance({
-    address: MATIC_ADDRESS,
-    formatUnits: "gwei",
+    address: ethWallet?.address,
   });
 
-  useEffect(() => {
-    console.log("get balace");
-    (async () => {
-      console.log("get balace");
-      const balance = await fetchBalance({
-        address: "0xA0Cf798816D4b9b9866b5330EEa46a18382f251e",
-        chainId: 80001,
-      });
-      console.log({ balance });
-    })();
-  });
-
-  console.log({ signer });
   const createPocket = useCallback(
     async (
       depositedAmount: BigNumber,
       createdPocketParams: Params.CreatePocketParamsStruct
     ) => {
       /** @dev Execute off-chain */
+      console.log({ signer });
       const pocketId = await evmProgramService.createPocketOffChain(
         await signer.getAddress()
       );
@@ -109,6 +92,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     [signer, contract]
   );
 
+  const closePositionPocket = useCallback(
+    async (pocketId: string) => {
+      await contract.closePosition(pocketId);
+    },
+    [signer, contract]
+  );
+
   const pausePocket = useCallback(
     async (pocketId: string) => {
       await contract.pausePocket(pocketId);
@@ -137,11 +127,12 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         createPocket,
         depositPocket,
         closePocket,
+        closePositionPocket,
         pausePocket,
         withdrawPocket,
         resumePocket,
         signer: signer,
-        nativeBalance: nativeBalanceData?.formatted,
+        nativeBalance: parseFloat(nativeBalanceData?.formatted).toFixed(3),
       }}
     >
       {props.children}

@@ -12,6 +12,8 @@ const AUTH_ROUTES = [
   "/my-pockets",
   "/portfolio",
   "/history",
+  "/pocket",
+  "/strategy",
 ];
 
 const AuthMiddleware: FC<Props> = ({ children }) => {
@@ -23,7 +25,11 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
   const wallet = useAppWallet();
 
   const isAuth = useCallback(() => {
-    return !(AUTH_ROUTES.find((item) => router.asPath === item) === undefined);
+    return !(
+      AUTH_ROUTES.find(
+        (item) => router.asPath === item || router.asPath.includes(item)
+      ) === undefined
+    );
   }, [router.asPath]);
 
   useEffect(() => {
@@ -32,7 +38,7 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
       if (isAuth() && !wallet?.walletAddress) {
         router.push("/");
       }
-    }, 2000);
+    }, 1000);
     return () => clearTimeout(myTimer);
   }, [router.asPath, wallet]);
 

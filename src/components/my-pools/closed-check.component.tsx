@@ -1,18 +1,16 @@
-import { UpdatedIcon } from "@/src/components/icons/updated";
-import { CloseOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { CloseIcon } from "@/src/components/icons";
+import { FC, useEffect, useState } from "react";
 import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useDispatch, useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
-import { useRouter } from "next/router";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 
-export const ClosedCheckComponent = () => {
-  /** @dev Router injected */
-  const router = useRouter();
-
+export const ClosedCheckComponent: FC<{
+  routeToClosePockets(): void;
+  isCloseView: boolean;
+}> = (props) => {
   /** @dev dispatch Injected */
   const dispatch = useDispatch();
 
@@ -41,34 +39,32 @@ export const ClosedCheckComponent = () => {
   /** @dev Only display popup when client has the closed pockets */
   return (
     <section
-      className={classnames("mt-14", {
-        hidden: closedPockets.length === 0 || isClosed,
+      className={classnames("mobile:mt-14", {
+        hidden: closedPockets.length === 0 || isClosed || props.isCloseView,
       })}
     >
-      <div className="w-full rounded-2xl bg-[#FFF9D8] px-5 py-4 md:flex md:items-center justify-between mobile:text-[14px] relative">
-        <CloseOutlined
-          className="ml-4 cursor-pointer md:hidden absolute right-[15px] top-[10px]"
-          onClick={() => setIsClosed(true)}
-        />
-        <div className="flex items-center">
-          <UpdatedIcon className="mr-4" />
-          <p className="normal-text text-[#835C00]">
+      <div className="w-full rounded-2xl bg-[#2C264F] px-5 py-[20px] mobile:text-[14px] relative">
+        <button onClick={() => setIsClosed(true)}>
+          <CloseIcon
+            className="ml-4 cursor-pointer absolute right-[15px] top-[5px]"
+            color="#ffffff"
+          />
+        </button>
+        <div className="flex items-center mt-[10px]">
+          {/* <UpdatedIcon className="mr-4" /> */}
+          <p className="normal-text text-white text-[12px]">
             You have {closedPockets.length} closed{" "}
             {closedPockets.length > 1 ? "pockets" : "pocket"}, you can withdraw
             your funds.
           </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center mt-[10px]">
           <div
-            onClick={() => router.push("/ended-pockets")}
-            className="cursor-pointer md:px-6 py-1 rounded-full border border-2 border-[#B998FB] text-[#B998FB] mobile:px-[5px] mobile:text-[14px] mobile:w-full text-center mobile:mt-[10px]"
+            onClick={() => props.routeToClosePockets()}
+            className="cursor-pointer md:px-6 py-1 rounded-full border border-2 border-purple300 text-purple300 mobile:px-[5px] mobile:text-[14px] mobile:w-full text-center mobile:mt-[10px] w-full text-[14px]"
           >
-            View pockets
+            Withdraw fund
           </div>
-          <CloseOutlined
-            className="ml-4 cursor-pointer mobile:hidden"
-            onClick={() => setIsClosed(true)}
-          />
         </div>
       </div>
     </section>

@@ -129,6 +129,8 @@ export class PocketEntity {
 
   endedAt: Date;
 
+  updatedAt: Date;
+
   nextExecutionAt: Date;
 
   closedAt: Date;

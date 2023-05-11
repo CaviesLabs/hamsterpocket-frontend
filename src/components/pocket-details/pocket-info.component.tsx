@@ -21,7 +21,7 @@ export const PocketInfo: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
     () =>
       whiteLists[pocket?.baseTokenAddress] ||
       findEntityByAddress(pocket?.baseTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   return (

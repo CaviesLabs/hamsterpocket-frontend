@@ -64,14 +64,36 @@ export default function HistoryController() {
         <div className="float-left md:w-[10%]">
           <DropdownSelect
             handleSelectValue={(val) => console.log(val)}
-            value={"SOL"}
             className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
-            options={[
-              {
-                value: "SOL",
-                label: "SOL",
-              },
-            ]}
+            value={
+              chain === "SOL"
+                ? "SOL"
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? "MATIC"
+                : "BNB"
+            }
+            options={
+              chain === "SOL"
+                ? [
+                    {
+                      value: "SOL",
+                      label: "SOL",
+                    },
+                  ]
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? [
+                    {
+                      value: "MATIC",
+                      label: "MATIC",
+                    },
+                  ]
+                : [
+                    {
+                      value: "BNB",
+                      label: "BNB",
+                    },
+                  ]
+            }
           />
         </div>
         <div className="float-left w-[90%] mobile:w-[80%] pr-[10px] ml-[10px]">

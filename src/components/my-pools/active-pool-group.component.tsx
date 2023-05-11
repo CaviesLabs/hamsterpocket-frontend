@@ -14,16 +14,13 @@ import { useSelector } from "react-redux";
 import { PoolItemRow } from "@/src/components/my-pools/pool-item/pool-item-row.component";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import State from "@/src/redux/entities/state";
-import classnames from "classnames";
 import { RefreshButton } from "@/src/components/refresh-button";
 import { DropdownSelect } from "@/src/components/select";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { ClosedCheckComponent } from "./closed-check.component";
+import classnames from "classnames";
 
 export const ActivePoolGroup: FC = () => {
-  /**
-   * @dev Router injected.
-   */
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const { walletAddress, chain } = useAppWallet();
@@ -76,7 +73,7 @@ export const ActivePoolGroup: FC = () => {
         });
       })
     );
-  }, [walletAddress, debouncedSearch, isPauseOnly, sorter, chain]);
+  }, [walletAddress, debouncedSearch, isPauseOnly, sorter, chain, endedSelect]);
 
   useEffect(
     () => handleFetch(),
@@ -86,7 +83,7 @@ export const ActivePoolGroup: FC = () => {
   return (
     <section className="my-pockets-container">
       <section className="pool-group">
-        <div className="md:flex justify-between items-center">
+        <div className="md:flex md:justify-between md:items-center">
           <div className="flow-root md:flex items-center">
             <p className="float-left md:text-[32px] text-[20px] text-white">
               My Pockets
@@ -98,12 +95,10 @@ export const ActivePoolGroup: FC = () => {
               />
             </div>
           </div>
-          {/* <p
-            className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
-            onClick={() => router.push("/ended-pockets")}
-          >
-            View Closed & Ended Pockets
-          </p> */}
+          <ClosedCheckComponent
+            isCloseView={endedSelect}
+            routeToClosePockets={() => setEndedSelect(true)}
+          />
         </div>
         <div className="float-root md:hidden">
           <div className="grid grid-cols-2 w-full rounded mt-4 normal-text bg-[#121320] py-[8px] px-[10px] text-[14px] rounded-[12px]">
@@ -144,14 +139,36 @@ export const ActivePoolGroup: FC = () => {
           <div className="float-left md:w-[10%]">
             <DropdownSelect
               handleSelectValue={(val) => console.log(val)}
-              value={"SOL"}
               className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
-              options={[
-                {
-                  value: "SOL",
-                  label: "SOL",
-                },
-              ]}
+              value={
+                chain === "SOL"
+                  ? "SOL"
+                  : process.env.EVM_CHAIN_ID === "matic"
+                  ? "MATIC"
+                  : "BNB"
+              }
+              options={
+                chain === "SOL"
+                  ? [
+                      {
+                        value: "SOL",
+                        label: "SOL",
+                      },
+                    ]
+                  : process.env.EVM_CHAIN_ID === "matic"
+                  ? [
+                      {
+                        value: "MATIC",
+                        label: "MATIC",
+                      },
+                    ]
+                  : [
+                      {
+                        value: "BNB",
+                        label: "BNB",
+                      },
+                    ]
+              }
             />
           </div>
         </div>
@@ -199,7 +216,9 @@ export const ActivePoolGroup: FC = () => {
           <p className="text-center text-dark50 normal-text">Average price</p>
         </div>
         <div className="col-span-2">
-          <p className="text-center text-dark50 normal-text">Next batch time</p>
+          <p className="text-center text-dark50 normal-text">
+            {endedSelect ? "Status" : "Next batch time"}
+          </p>
         </div>
       </section>
       <section className="mt-[10px]">

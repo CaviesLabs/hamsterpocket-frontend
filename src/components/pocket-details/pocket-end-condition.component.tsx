@@ -34,7 +34,7 @@ export const EndCondition: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
     () =>
       whiteLists[pocket?.baseTokenAddress] ||
       findEntityByAddress(pocket?.baseTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   /** @dev Get target token info. */
@@ -42,14 +42,17 @@ export const EndCondition: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
     () =>
       whiteLists[pocket?.targetTokenAddress] ||
       findEntityByAddress(pocket?.targetTokenAddress),
-    [pocket]
+    [pocket, props]
   );
 
   const conditions = [];
   const stopConditions = pocket?.stopConditions;
 
   if (stopConditions?.endTime) {
-    conditions.push(dayjs(stopConditions?.endTime).format(DATE_TIME_FORMAT));
+    conditions.push([
+      "End time",
+      `${dayjs(stopConditions?.endTime).format(DATE_TIME_FORMAT)}`,
+    ]);
   }
   if (stopConditions?.baseTokenReach) {
     conditions.push([
@@ -75,7 +78,7 @@ export const EndCondition: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
       `${convertDecimalAmount(
         baseToken?.address,
         stopConditions?.spentBaseTokenReach
-      )} ${targetToken?.symbol}`,
+      )} ${baseToken?.symbol}`,
     ]);
   }
   if (stopConditions?.batchAmountReach) {
