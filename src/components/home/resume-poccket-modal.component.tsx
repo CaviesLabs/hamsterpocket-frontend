@@ -29,6 +29,7 @@ export const ResumePocketModal: FC<{
   const handleClosePocket = useCallback(async () => {
     try {
       if (!walletAddress) throw new Error("Wallet not connected.");
+      console.log("resume pocket", chain);
 
       /** @dev Disable UX interaction when processing. */
       setLoading(true);

@@ -105,12 +105,47 @@ export const ActivePoolGroup: FC = () => {
             View Closed & Ended Pockets
           </p> */}
         </div>
+        <div className="float-root md:hidden">
+          <div className="grid grid-cols-2 w-full rounded mt-4 normal-text bg-[#121320] py-[8px] px-[10px] text-[14px] rounded-[12px]">
+            <span
+              onClick={() => setEndedSelect(false)}
+              className={classnames(
+                "inline-block py-[8px] hover:bg-purple300 cursor-pointer normal-text px-[50px] rounded-[8px] text-dark50 hover:text-white col-span-1 text-center",
+                {
+                  "bg-purple300 text-white": !endedSelect,
+                }
+              )}
+            >
+              Running
+            </span>
+            <span
+              onClick={() => setEndedSelect(true)}
+              className={classnames(
+                "inline-block py-[8px] hover:bg-purple300 cursor-pointer normal-text px-[50px] rounded-[8px] text-dark50 hover:text-white col-span-1 text-center",
+                {
+                  "bg-purple300 text-white": endedSelect,
+                }
+              )}
+            >
+              History
+            </span>
+          </div>
+        </div>
         <div className="flex mt-[32px]">
-          <div className="float-left w-[10%]">
+          <div className="float-left w-[90%] mobile:w-[80%] pr-[10px]">
+            <Input
+              containerClassName="app-input psi w-full mobile:!h-[40px]"
+              inputClassName="bg-dark90 !text-white !rounded-[8px]"
+              placeholder="Search by Pocket name, ID, Token"
+              icon={<SearchIcon />}
+              onValueChange={(v) => setSearch(v)}
+            />
+          </div>
+          <div className="float-left md:w-[10%]">
             <DropdownSelect
               handleSelectValue={(val) => console.log(val)}
               value={"SOL"}
-              className="w-full !h-[47px]"
+              className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
               options={[
                 {
                   value: "SOL",
@@ -119,17 +154,8 @@ export const ActivePoolGroup: FC = () => {
               ]}
             />
           </div>
-          <div className="float-left w-full pl-[10px]">
-            <Input
-              containerClassName="app-input w-full"
-              inputClassName="bg-dark90 !text-white !rounded-[8px] w-full"
-              placeholder="Search by Pocket name, ID, Token"
-              icon={<SearchIcon />}
-              onValueChange={(v) => setSearch(v)}
-            />
-          </div>
         </div>
-        <div className="float-root">
+        <div className="float-root mobile:hidden">
           <div className="flex flex-col md:flex-row flex-wrap border-solid border-b-[1px] border-[#1F2937] w-full rounded mt-4 normal-text">
             <span
               onClick={() => setEndedSelect(false)}
@@ -158,7 +184,7 @@ export const ActivePoolGroup: FC = () => {
       </section>
       <section className="mobile:hidden grid grid-cols-12 mt-[20px]">
         <div className="col-span-3">
-          <p className="text-center text-dark50 normal-text">Blockasset</p>
+          <p className="text-center text-dark50 normal-text">Pair</p>
         </div>
         <div className="col-span-2">
           <p className="text-center text-dark50 normal-text">Strategy</p>

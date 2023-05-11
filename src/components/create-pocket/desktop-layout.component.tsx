@@ -7,6 +7,8 @@ import {
   DCAPPair,
   DCAStrategy,
   StopCondition,
+  TakeProfitAmount,
+  StopLossAmount,
 } from "@/src/components/create-pocket";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useValidate } from "@/src/hooks/pages/create-pocket/useValidate";
@@ -31,6 +33,8 @@ export const CreatePocketDesktopLayout: FC = () => {
       <PoolInformation />
       <DCAPPair />
       <DCAStrategy />
+      <TakeProfitAmount />
+      <StopLossAmount />
       <StopCondition />
       <section className="mt-14 flow-root">
         <div className="float-right ml-[20px]">

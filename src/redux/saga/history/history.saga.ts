@@ -43,7 +43,6 @@ export function* getPocketActivities({
   callback,
 }: SagaPayload<{ pocketId: string }, HistoryEntity[]>) {
   try {
-    console.log("get pocket activities");
     const histories: HistoryEntity[] = yield call(
       historyService.getPocketActivities,
       payload

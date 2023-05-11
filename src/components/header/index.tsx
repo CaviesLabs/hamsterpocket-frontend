@@ -14,7 +14,7 @@ const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [chain, setChain] = useState<"SOL" | "ETH">("SOL");
+  const [chain] = useState<"SOL" | "ETH">("ETH");
   const router = useRouter();
 
   /**
@@ -121,7 +121,7 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    <div
+                    {/* <div
                       className="mr-[10px] bg-dark3 px-[20px] flex py-[7px] rounded-[20px] cursor-pointer"
                       onClick={() => setChain(chain === "SOL" ? "ETH" : "SOL")}
                     >
@@ -146,7 +146,7 @@ const Header: FC = () => {
                           fill="#7886A0"
                         />
                       </svg>
-                    </div>{" "}
+                    </div>{" "} */}
                     {chain === "SOL" ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"

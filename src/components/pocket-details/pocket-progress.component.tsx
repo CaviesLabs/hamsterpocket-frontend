@@ -55,6 +55,16 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
   return (
     <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px]">
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
+        <p className="float-left text-dark50 normal-text">Total invested</p>
+        <p className="text-white normal-text float-right">
+          {convertDecimalAmount(
+            baseToken?.address,
+            pocket?.currentSpentBaseToken
+          )}{" "}
+          {baseToken?.symbol}
+        </p>
+      </div>
+      <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">Batch bought</p>
         <p className="text-white normal-text float-right">
           {pocket?.currentBatchAmount} BATCHES

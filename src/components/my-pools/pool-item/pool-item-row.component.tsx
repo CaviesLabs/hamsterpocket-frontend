@@ -14,10 +14,14 @@ import {
   ClaimFeeModal,
 } from "@/src/components/home";
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
-import { utilsProvider } from "@/src/utils";
-import { DATE_TIME_FORMAT } from "@/src/utils";
+import {
+  utilsProvider,
+  DATE_TIME_FORMAT,
+  SOL_EXPLORE,
+  MUMBAI_EXPLORE,
+  BSC_EXPLORE,
+} from "@/src/utils";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
-
 import dayjs from "dayjs";
 
 type PoolItemProps = {
@@ -132,10 +136,10 @@ export const PoolItemRow = (props: PoolItemProps) => {
     <div className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden cursor-pointer hover:bg-[#181927]">
       <div className="md:grid md:grid-cols-12">
         <div
-          className="md:col-span-3 cursor-pointer"
+          className="md:col-span-3 cursor-pointer mobile:flow-root mobile:bg-dark3 mobile:py-[10px] mobile:px-[10px] mobile:rounded-[12px]"
           onClick={() => router.push(`/pocket/${data.id}`)}
         >
-          <div className="flex items-center">
+          <div className="flex items-center mobile:float-left">
             <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
               {targetToken?.image && (
                 <img
@@ -145,23 +149,31 @@ export const PoolItemRow = (props: PoolItemProps) => {
                 />
               )}
             </div>
-            <p className="text-white text-[16px] regular-text flex items-center ml-[10px]">
+            <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`https://solscan.io/account/${data.address}`}
+                href={
+                  chain === "SOL"
+                    ? `${SOL_EXPLORE}/account/${data.address}`
+                    : process.env.EVM_CHAIN_ID === "matic"
+                    ? `${MUMBAI_EXPLORE}/address/${data.address}`
+                    : `${BSC_EXPLORE}/address/${data.address}`
+                }
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >
-                <ShareIcon />
+                <ShareIcon size="20" />
               </a>
             </p>
           </div>
-          <p className="text-dark50 text-[12px] regular-text relative top-[3px] md:top-[6px] flex items-center mt-[5px]">
+          <p className="text-dark50 text-[12px] regular-text relative top-[3px] md:top-[6px] flex items-center mt-[5px] mobile:float-right mobile:text-right relative">
             #{utilsProvider.makeShort(data.id)}
           </p>
         </div>
-        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
-          <p className="md:hidden float-left text-dark50">Strategy</p>
+        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px] mobile:mt-[30px]">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            Strategy
+          </p>
           <div className="mobile:float-right">
             <PoolItemBuyConditionComponent
               data={data}
@@ -170,9 +182,11 @@ export const PoolItemRow = (props: PoolItemProps) => {
             />
           </div>
         </div>
-        <div className="md:col-span-1 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
-          <p className="md:hidden float-left text-dark50">Total invested</p>
-          <p className="md:text-center text-white normal-text mobile:float-right">
+        <div className="md:col-span-1 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            Total invested
+          </p>
+          <p className="md:text-center text-white normal-text mobile:float-right mobile:text-[14px]">
             {convertDecimalAmount(
               baseToken?.address,
               data?.currentSpentBaseToken
@@ -180,38 +194,54 @@ export const PoolItemRow = (props: PoolItemProps) => {
             {baseToken?.symbol}
           </p>
         </div>
-        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
-          <p className="md:hidden float-left text-dark50">APL(ROI)</p>
-          <div className="mobile:float-right mobile:flex mobile:items-center">
+        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            APL(ROI)
+          </p>
+          <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px]">
             <p className="md:text-center text-green300 normal-text">
-              + 0.00 USDC
+              + {data?.realizedROIValue || 0} {baseToken?.symbol}
             </p>
-            <p className="md:text-center md:mt-[5px] text-[12px] text-green300 mobile:ml-[5px]">
-              (0.00%)
+            <p className="md:text-center md:mt-[5px] text-green300 mobile:ml-[5px]">
+              ({data?.currentROI || 0}%)
             </p>
           </div>
         </div>
-        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
-          <p className="md:hidden float-left text-dark50">Average price</p>
-          <div className="mobile:float-right mobile:flex mobile:items-center">
+        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            Average price
+          </p>
+          <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px]">
             <p className="text-center text-white normal-text">
               {convertDecimalAmount(baseToken?.address, data?.batchVolume)}{" "}
               {baseToken?.symbol}
             </p>
-            <p className="text-center md:mt-[5px] md:text-[12px] text-white">
-              = {averagePrice.toFixed(3)} {targetToken?.symbol}
-            </p>
+            {averagePrice ? (
+              <p className="text-center md:mt-[5px] md:text-[12px] text-white">
+                = {averagePrice.toFixed(3)} {targetToken?.symbol}
+              </p>
+            ) : null}
           </div>
         </div>
-        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-dark50  mobile:py-[12px]">
-          <p className="md:hidden float-left text-dark50">Next batch time</p>
-          <div className="mobile:float-right mobile:flex mobile:items-center md:text-center">
-            {statusComponent}
+        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            Next batch time
+          </p>
+          <div className="mobile:float-right mobile:flex mobile:items-center md:text-center mobile:text-[14px]">
+            <div className="mobile:hidden">{statusComponent}</div>
             <p className="text-center md:mt-[5px] text-[12px] text-dark50 mobile:ml-[5px]">
               {dayjs(data?.nextExecutionAt?.toLocaleString()).format(
                 DATE_TIME_FORMAT
               )}
             </p>
+          </div>
+        </div>
+        <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px] md:hidden">
+          <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
+            Status
+          </p>
+          <div className="mobile:float-right mobile:flex mobile:items-center md:text-center mobile:text-[14px]">
+            {statusComponent}
           </div>
         </div>
       </div>

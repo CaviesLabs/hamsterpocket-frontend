@@ -4,6 +4,7 @@ import {
   TabMenuIcon,
   TabHistoryIcon,
   TabProfileIcon,
+  TabStrategyIcon,
 } from "@/src/components/icons";
 import classNames from "classnames";
 
@@ -35,10 +36,10 @@ export const SideBar: FC = () => {
         icon: (color: string) => <TabHistoryIcon color={color} />,
       },
       {
-        name: "Stagegy",
-        uri: "/stragery",
+        name: "Strategy",
+        uri: "/strategy",
         sideUris: ["/create-pocket"],
-        icon: (color: string) => <TabHistoryIcon color={color} />,
+        icon: (color: string) => <TabStrategyIcon color={color} />,
       },
       {
         name: "Profile",
@@ -92,9 +93,9 @@ export const SideBar: FC = () => {
             </div>
             <p
               className={classNames(
-                "text-[16px] normal-text float-left ml-[10px] sidebarBreakpoint:hidden",
+                "text-[16px] normal-text float-left ml-[10px] sidebarBreakpoint:hidden text-[#7886A0]",
                 {
-                  "text-purple300": isActive(item.uri, item.sideUris),
+                  "!text-purple300": isActive(item.uri, item.sideUris),
                 }
               )}
             >

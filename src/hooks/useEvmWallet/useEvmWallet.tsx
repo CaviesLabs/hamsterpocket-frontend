@@ -51,13 +51,11 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       createdPocketParams: Params.CreatePocketParamsStruct
     ) => {
       /** @dev Execute off-chain */
-      console.log(signer);
       const pocketId = await evmProgramService.createPocketOffChain(
         await signer.getAddress()
       );
 
       /** @dev Execute on-chain */
-      console.log(pocketId);
       console.log({ ...createdPocketParams, id: pocketId });
       await contract.createPocketAndDepositEther(
         { ...createdPocketParams, id: pocketId },
@@ -101,6 +99,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   const resumePocket = useCallback(
     async (pocketId: string) => {
+      console.log("resume pocket", pocketId);
       await contract.restartPocket(pocketId);
     },
     [signer, contract]

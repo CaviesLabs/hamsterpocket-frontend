@@ -12,7 +12,6 @@ import {
   ALIAS_WMATIC_ADDRESS,
   convertDurationsTimeToHours,
   processStopConditions,
-  ethWhiteLists,
 } from "@/src/utils";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
@@ -54,6 +53,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
+  const [takeProfitAmount, setTakeProfitAmount] = useState<number>(0);
+  const [stopLossAmount, setStopLossAmount] = useState<number>(0);
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
@@ -252,30 +253,47 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         console.log(response);
       } else {
         /**
+         * @dev Process data from sol for evm.
+         */
+        const evmParams = createdPocketPramsParserEvm(
+          whiteLists,
+          solCreatedPocketData,
+          baseTokenAddress[1],
+          targetTokenAddress[1],
+          whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
+          whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
+          walletAddress
+        );
+
+        /** @dev Process to get deposited amount in evm decimals. */
+        const plufixWithDecimals = Math.pow(
+          10,
+          whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals
+        );
+        const evmDespositedAmount = BigNumber.from(
+          (depositedAmount * plufixWithDecimals).toString()
+        );
+        const evmTakeProfitAmount = BigNumber.from(
+          (takeProfitAmount * plufixWithDecimals).toString()
+        );
+        const evmStopLossAmount = BigNumber.from(
+          (stopLossAmount * plufixWithDecimals).toString()
+        );
+
+        /**
          * @dev Execute interact with eth blockchain.
          */
-        const response = await createEvmPocket(
-          BigNumber.from(
-            (
-              depositedAmount *
-              Math.pow(
-                10,
-                ethWhiteLists[baseTokenAddress[0].toBase58().toString()]
-                  .realDecimals
-              )
-            ).toString()
-          ),
-          createdPocketPramsParserEvm(
-            whiteLists,
-            solCreatedPocketData,
-            baseTokenAddress[1],
-            targetTokenAddress[1],
-            whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
-            whiteLists[targetTokenAddress[0].toBase58().toString()]
-              ?.realDecimals,
-            walletAddress
-          )
-        );
+        const response = await createEvmPocket(evmDespositedAmount, {
+          ...evmParams,
+          takeProfitCondition: {
+            stopType: "1",
+            value: evmTakeProfitAmount,
+          },
+          stopLossCondition: {
+            stopType: "1",
+            value: evmStopLossAmount,
+          },
+        });
         console.log(response);
       }
       setSuccessCreated(true);
@@ -296,6 +314,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     buyCondition,
     stopConditions,
     depositedAmount,
+    takeProfitAmount,
+    stopLossAmount,
     createdEnable,
     chain,
     walletAddress,
@@ -395,6 +415,10 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         availableBaseTokens,
         availableTargetTokens,
         mintOrderSize,
+        takeProfitAmount,
+        stopLossAmount,
+        setTakeProfitAmount,
+        setStopLossAmount,
         setPocketName,
         setBaseTokenAddress,
         setTargetTokenAddress,

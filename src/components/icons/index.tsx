@@ -867,6 +867,41 @@ export const TabHistoryIcon: FC<IconProps> = (props) => (
   </svg>
 );
 
+export const TabStrategyIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M7.41162 14.781L10.4048 10.8909L13.8189 13.5728L16.748 9.79248"
+      stroke="#7886A0"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle
+      cx="20.1622"
+      cy="4.20003"
+      r="1.9222"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.0913 3.12012H7.82354C4.8121 3.12012 2.94482 5.25284 2.94482 8.26428V16.3467C2.94482 19.3581 4.77549 21.4817 7.82354 21.4817H16.4277C19.4391 21.4817 21.3064 19.3581 21.3064 16.3467V9.30776"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const TabProfileIcon: FC<IconProps> = (props) => (
   <svg
     width="25"

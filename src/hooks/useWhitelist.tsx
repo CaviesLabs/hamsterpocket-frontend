@@ -11,7 +11,6 @@ import { whitelistService } from "@/src/services/whitelist.service";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
-// import { ethWhiteLists } from "@/src/utils";
 import { makeAliasForEvmWhitelist } from "@/src/utils/evm.parser";
 import useSWR from "swr";
 
@@ -65,7 +64,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       try {
         /** @dev Fetch whitelist in sol chain. */
         const result = await whitelistService.getWhitelist();
-        console.log("whitelist", result);
         if (chain === "SOL") {
           const res: WhiteListConfigs = {};
           result.forEach((_) => {
@@ -78,7 +76,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           setWhitelist(res);
         } else if (chain === "ETH") {
           const processedList = makeAliasForEvmWhitelist(result);
-          console.log(processedList);
           const res: WhiteListConfigs = {};
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;
@@ -99,7 +96,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       const tokenEntity =
         whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
 
-      console.log(tokenEntity, source);
       return (
         source /
         Math.pow(10, tokenEntity?.realDecimals || tokenEntity?.decimals || 1)

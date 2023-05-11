@@ -3,7 +3,6 @@ import {
   PriceConditionType,
   FrequencyConditionType,
 } from "@/src/entities/pocket.entity";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 
 /**
  * @dev Define value data to sort NFTs.
@@ -206,34 +205,6 @@ export const TAKE_PROFIT_KIND_OPTIONS = [
   },
 ];
 
-/**
- * @dev Expose default whitelist for eth chain.
- */
-export const ethWhiteLists: { [key: string]: WhitelistEntity } = {
-  [ALIAS_WMATIC_ADDRESS]: {
-    _id: "matic",
-    address: MATIC_ADDRESS,
-    coinGeckoId: "polygon",
-    decimals: 8,
-    realDecimals: 18,
-    entityType: "",
-    image:
-      "https://assets.coingecko.com/coins/images/4713/small/matic-token-icon.png?1624446912",
-    name: "Polygon",
-    symbol: "MATIC",
-    estimatedValue: 0,
-  },
-  [ALIAS_UASDC_ADDRESS]: {
-    _id: "usdc",
-    address: ETH_USDC_ADDRESS,
-    coinGeckoId: "usdc",
-    decimals: 8,
-    realDecimals: 18,
-    entityType: "",
-    image:
-      "https://assets.coingecko.com/coins/images/6319/small/USD_Coin_icon.png?1547042389",
-    name: "USD Coin",
-    symbol: "USDC",
-    estimatedValue: 0,
-  },
-};
+export const SOL_EXPLORE = "https://solscan.io";
+export const MUMBAI_EXPLORE = "https://mumbai.polygonscan.com";
+export const BSC_EXPLORE = "https://bscscan.com";

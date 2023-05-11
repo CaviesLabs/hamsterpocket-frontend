@@ -168,5 +168,13 @@ export class PocketEntity {
 
   progressPercent: number;
 
+  /** ROI */
   currentTargetTokenBalance: number;
+  currentROIValue: number;
+  currentROI: number;
+  realizedROI: number;
+  realizedROIValue: number;
+
+  stopLossCondition: { stopType: string; value: number };
+  takeProfitCondition: { stopType: string; value: number };
 }

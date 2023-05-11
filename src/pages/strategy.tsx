@@ -10,7 +10,7 @@ const StrageryPage: NextPage = () => {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <LayoutSection className="!pt-[130px] pb-[100px]">
+        <LayoutSection className="md:!pt-[130px] pb-[100px]">
           <p className="md:text-[32px] text-[20px] text-white mt-[22px] mt-20">
             Strategy
           </p>

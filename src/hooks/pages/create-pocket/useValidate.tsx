@@ -10,6 +10,8 @@ export interface ErrorValidateContext {
   buyCondition: string;
   stopConditions: string;
   depositedAmount: string;
+  takeProfitAmount: string;
+  stopLossAmount: string;
   batchVolume: string;
   startAt: string;
 }
@@ -41,6 +43,8 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     batchVolume,
     depositedAmount,
     startAt,
+    takeProfitAmount,
+    stopLossAmount,
   } = useCreatePocketPage();
 
   /** @dev Init */
@@ -55,6 +59,8 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       depositedAmount: "",
       batchVolume: "",
       startAt: "",
+      takeProfitAmount: "",
+      stopLossAmount: "",
     });
   }, []);
 
@@ -132,6 +138,26 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
         : ""
     );
   }, [depositedAmount, createdEnable, batchVolume]);
+
+  useEffect(() => {
+    if (!createdEnable) return;
+    modifyErrors(
+      "takeProfitAmount",
+      takeProfitAmount <= 0 || !takeProfitAmount
+        ? "Must to set token amount to take profit"
+        : ""
+    );
+  }, [takeProfitAmount, createdEnable]);
+
+  useEffect(() => {
+    if (!createdEnable) return;
+    modifyErrors(
+      "stopLossAmount",
+      stopLossAmount <= 0 || !stopLossAmount
+        ? "Must to set token amount stop loss"
+        : ""
+    );
+  }, [stopLossAmount, createdEnable]);
 
   return {
     errors,

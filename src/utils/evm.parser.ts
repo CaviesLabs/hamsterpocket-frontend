@@ -1,11 +1,7 @@
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { BigNumber } from "ethers";
-import {
-  // ethWhiteLists,
-  BSC_UNIVERSAL_ROUTER,
-  MATIC_UNIVERSAL_ROUTER,
-} from "@/src/utils";
+import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
@@ -52,14 +48,14 @@ export const convertToEtherStopCondition = (
         break;
       case "quoteTokenAmountReach":
         conditionOperator = "3";
+        console.log(condition[type].value.toNumber());
         const solReverd1 =
           condition[type].value.toNumber() / Math.pow(10, targetTokenDecimals);
         const ethReverd1 = solReverd1 * Math.pow(10, realTargetTokenDecimals);
+        console.log(ethReverd1);
         ethValue = convertToEtherBigNumber(ethReverd1);
         break;
     }
-    console.log(type);
-    console.log(conditionOperator);
     return {
       operator: conditionOperator,
       value: ethValue,

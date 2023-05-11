@@ -3,19 +3,21 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import { LayoutSection } from "@/src/components/layout-section";
 import { LeftIcon, ShareIcon } from "@/src/components/icons";
-import { Button } from "@hamsterbox/ui-kit";
 import { useDispatch } from "react-redux";
 import { getPocketById } from "@/src/redux/actions/pocket/pocket.action";
-import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { utilsProvider } from "@/src/utils";
 import {
-  TotalInvest,
+  PocketStrategy,
   PocketInfo,
   PocketProgress,
   BoughtTransaction,
+  NextBatch,
+  EndCondition,
+  PocketStatusComponent,
+  PocketTpSl,
 } from "@/src/components/pocket-details";
-import { ClosePocketModal } from "@/src/components/home";
 import { useWallet } from "@/src/hooks/useWallet";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { evmProgramService } from "@/src/services/evm-program.service";
@@ -31,9 +33,6 @@ const PocketDetailPage: NextPage = () => {
   const { whiteLists, findEntityByAddress } = useWhiteList();
   const { walletAddress, chain } = useAppWallet();
   const { programService: solProgram } = useWallet();
-
-  /** @dev Condition to show modal to close pocket. */
-  const [closedDisplayed, setClosedDisplayed] = useState(false);
 
   /** @dev Define pocket entity. */
   const [pocket, setPocket] = useState<PocketEntity>();
@@ -56,27 +55,23 @@ const PocketDetailPage: NextPage = () => {
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(async () => {
-    console.log(walletAddress, pocket, chain);
     if (!walletAddress) return;
     if (!pocket) return;
     if (chain === "SOL") {
       await solProgram.sync(pocket?._id);
     } else {
-      console.log("fetching eth");
       await evmProgramService.sync(pocket?._id);
     }
   }, [walletAddress, chain, solProgram, pocket]);
 
   /** @dev The function to sync and refetch. */
   const syncAndFetch = useCallback(async () => {
-    console.log("fetching");
     /** @dev Sync first. */
     await handleSync();
 
     /** @dev Now fetch data from hamster server. */
     dispatch(
       getPocketById({ pocketId: router.query?.id as string }, (pocket) => {
-        console.log("pocket data", pocket);
         setPocket(pocket);
       })
     );
@@ -133,8 +128,17 @@ const PocketDetailPage: NextPage = () => {
               </div>
               <div className="md:grid md:grid-cols-2 mt-[20px] md:gap-5">
                 <div className="md:col-span-1">
-                  <TotalInvest />
+                  <PocketStrategy pocket={pocket} />
+                  <div className="mt-[40px]">
+                    <p className="text-dark45 text-[20px]">Pool Info</p>
+                    <p className="text-purple300 text-[20px]">
+                      Auto-invest DCA
+                    </p>
+                  </div>
                   <div className="mt-[12px]">
+                    <PocketInfo pocket={pocket} handleFetch={syncAndFetch} />
+                  </div>
+                  <div className="mt-[40px]">
                     <p className="text-dark45 text-[20px]">Progress</p>
                   </div>
                   <div className="mt-[12px]">
@@ -142,59 +146,28 @@ const PocketDetailPage: NextPage = () => {
                   </div>
                 </div>
                 <div className="md:col-span-1">
-                  <p className="text-dark45 text-[20px]">Pool Info</p>
-                  <p className="text-purple300 text-[20px]">Auto-invest DCA</p>
-                  <div className="flow-root mt-[12px]">
-                    <p className="float-left text-dark50 text-[14px]">Status</p>
-                    <div className="float-right mobile:flex mobile:items-center md:text-center">
-                      <div className="px-[10px] bg-[#4ADE801F] rounded-[8px] inline-block mx-auto">
-                        <p className="text-center text-green300 normal-text">
-                          On going
-                        </p>
-                      </div>
-                    </div>
+                  <div className="mt-[12px]">
+                    <NextBatch pocket={pocket} handleFetch={syncAndFetch} />
                   </div>
                   <div className="mt-[12px]">
-                    <PocketInfo pocket={pocket} handleFetch={syncAndFetch} />
+                    <EndCondition pocket={pocket} handleFetch={syncAndFetch} />
                   </div>
                   <div className="mt-[12px]">
-                    {pocket?.status !== PocketStatus.ENDED && (
-                      <Button
-                        className="!px-[50px] md:w-auto !w-full pool-control-btn"
-                        theme={{
-                          backgroundColor: "#735CF7",
-                          color: "#FFFFFF",
-                        }}
-                        text="Close Pocket"
-                        width="100%"
-                        onClick={() => setClosedDisplayed(true)}
-                      />
-                    )}
+                    <PocketTpSl pocket={pocket} />
+                  </div>
+                  <div className="mt-[12px]">
+                    <PocketStatusComponent
+                      pocket={pocket}
+                      handleFetch={syncAndFetch}
+                    />
                   </div>
                 </div>
               </div>
-              <div className="mt-[12px]">
-                <p className="text-dark45 text-[20px]">Bought transaction</p>
-              </div>
-              <div className="mt-[12px]">
-                <BoughtTransaction pocket={pocket} />
-              </div>
+              <BoughtTransaction pocket={pocket} />
             </div>
           </section>
         </LayoutSection>
       </div>
-      {closedDisplayed && pocket && (
-        <ClosePocketModal
-          isModalOpen={closedDisplayed}
-          handleOk={() => {
-            setClosedDisplayed(false);
-            syncAndFetch();
-          }}
-          handleCancel={() => setClosedDisplayed(false)}
-          pocket={pocket}
-          // closed={!isEnded && isClosed}
-        />
-      )}
     </MainLayout>
   );
 };
