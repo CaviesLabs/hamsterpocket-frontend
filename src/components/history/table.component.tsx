@@ -41,6 +41,12 @@ export default function TableComponent() {
         return "SKIPPED";
       case PoolType.VAULT_CREATED:
         return "VAULT CREATED";
+      case PoolType.CLOSED_POSITION:
+        return "CLOSE POSITION";
+      case PoolType.STOP_LOSS:
+        return "STOP LOSS";
+      case PoolType.TAKE_PROFIT:
+        return "TAKE PROFIT";
       case PoolType.POCKET_CONFIG_UPDATED:
       case PoolType.UPDATED:
         return "POCKET CONFIG UPDATED";
