@@ -33,7 +33,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
   const { whiteLists, findEntityByAddress, convertDecimalAmount } =
     useWhiteList();
   const { programService } = useWallet();
-  const { chain } = useAppWallet();
+  const { chain, walletAddress } = useAppWallet();
   const router = useRouter();
 
   /** @dev Condition to show modal to deposit. */
@@ -56,7 +56,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.targetTokenAddress] ||
       findEntityByAddress(data.targetTokenAddress),
-    [data]
+    [props, chain, walletAddress]
   );
 
   /** @dev Get base token database on address. */
@@ -64,7 +64,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.baseTokenAddress] ||
       findEntityByAddress(data.baseTokenAddress),
-    [data]
+    [props, chain, walletAddress]
   );
 
   /** @dev Condition whether pocket account is closed completedly  before. */
@@ -198,12 +198,22 @@ export const PoolItemRow = (props: PoolItemProps) => {
           <p className="md:hidden float-left text-dark50 mobile:text-[14px]">
             APL(ROI)
           </p>
-          <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px]">
-            <p className="md:text-center text-green300 normal-text">
-              + {data?.realizedROIValue || 0} {baseToken?.symbol}
+          <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px] md:text-center">
+            <p
+              className={`"md:text-center ${
+                (data?.realizedROIValue || 0) < 0
+                  ? "text-red300"
+                  : "text-green300"
+              } normal-text"`}
+            >
+              {data?.realizedROIValue.toFixed(3) || 0} {baseToken?.symbol}
             </p>
-            <p className="md:text-center md:mt-[5px] text-green300 mobile:ml-[5px]">
-              ({data?.currentROI || 0}%)
+            <p
+              className={`md:text-center md:mt-[5px] ${
+                (data?.currentROI || 0) < 0 ? "text-red300" : "text-green300"
+              } mobile:ml-[5px]`}
+            >
+              ({data?.currentROI.toFixed(3) || 0}%)
             </p>
           </div>
         </div>

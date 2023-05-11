@@ -1,6 +1,5 @@
-import { CalendarIcon, SearchIcon } from "@/src/components/icons";
+import { SearchIcon } from "@/src/components/icons";
 import { Input } from "@hamsterbox/ui-kit";
-import { DatePicker } from "antd";
 import { DropdownSelect } from "@/src/components/select";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,11 +7,7 @@ import { getHistories } from "../../redux/actions/history/history.action";
 import useDebounce from "../../hooks/useDebounce";
 import { PoolType } from "@/src/entities/history.entity";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
-import classnames from "classnames";
-import styles from "./styles.module.scss";
 import dayjs from "dayjs";
-
-const { RangePicker } = DatePicker;
 
 const types = [
   { label: "All type", value: "ALL" },
@@ -33,9 +28,9 @@ export default function HistoryController() {
    */
   const { walletAddress, chain } = useAppWallet();
 
-  const [selectedType, setSelectedType] = useState<string>(types[0].value);
+  const [selectedType] = useState<string>(types[0].value);
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState([]);
+  const [date] = useState([]);
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   useEffect(() => {
@@ -64,47 +59,29 @@ export default function HistoryController() {
   }, [debouncedSearch, selectedType, date, walletAddress]);
 
   return (
-    <div className="mt-8 md:flex md:justify-between">
-      <div className="w-full md:max-w-[440px]">
-        <Input
-          containerClassName="app-input"
-          inputClassName="bg-dark90 !text-white !rounded-[100px]"
-          placeholder="Search by Pocket name/ID"
-          icon={<SearchIcon />}
-          onValueChange={(v) => setSearch(v)}
-        />
-      </div>
-      <div className="md:flex mobile:mt-[10px]">
-        <RangePicker
-          format={PickerFormat}
-          size="large"
-          className={classnames(
-            "rounded-full w-full min-w-[280px] px-[20px] bg-dark90 !h-[48px] mobile:!h-[40px] placeholder-gray-500 border-none !mt-0",
-            styles.customDatePicker
-          )}
-          placeholder={["From", "To"]}
-          onChange={(_, dateString) => setDate(dateString)}
-          suffixIcon={<CalendarIcon />}
-          clearIcon={null}
-        />
-        <DropdownSelect
-          options={types}
-          handleSelectValue={(v) => setSelectedType(v)}
-          value={selectedType}
-          className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 mobile:mt-[16px] mobile:hidden"
-        />
-        <div className="md:hidden mt-[16px] flow-root">
-          <p className="md:hidden text-white text-[12px] float-left relative top-[5px]">
-            Sort by:
-          </p>
-          <div className="float-right">
-            <DropdownSelect
-              options={types}
-              handleSelectValue={(v) => setSelectedType(v)}
-              value={selectedType}
-              className="!rounded-full !h-[48px] mobile:!h-[40px] md:ml-6 px-[20px]"
-            />
-          </div>
+    <div className="mt-8 md:justify-between">
+      <div className="flex mt-[32px]">
+        <div className="float-left md:w-[10%]">
+          <DropdownSelect
+            handleSelectValue={(val) => console.log(val)}
+            value={"SOL"}
+            className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
+            options={[
+              {
+                value: "SOL",
+                label: "SOL",
+              },
+            ]}
+          />
+        </div>
+        <div className="float-left w-[90%] mobile:w-[80%] pr-[10px] ml-[10px]">
+          <Input
+            containerClassName="app-input psi w-full mobile:!h-[40px]"
+            inputClassName="!bg-dark90 !text-white !rounded-[8px]"
+            placeholder="Search by Pocket name/ID"
+            icon={<SearchIcon />}
+            onValueChange={(v) => setSearch(v)}
+          />
         </div>
       </div>
     </div>

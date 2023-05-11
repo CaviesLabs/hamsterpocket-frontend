@@ -89,22 +89,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   }, [chain]);
 
   /**
-   * @dev The function to convert amount of token to normal number by dividing its decimals.
-   */
-  const convertDecimalAmount = useCallback(
-    (tokenAddress: string, source: number) => {
-      const tokenEntity =
-        whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
-
-      return (
-        source /
-        Math.pow(10, tokenEntity?.realDecimals || tokenEntity?.decimals || 1)
-      );
-    },
-    [whiteLists]
-  );
-
-  /**
    * @dev The function to find pair liquidity data.
    * @returns ppair[]
    */
@@ -148,7 +132,22 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
 
       return keyFound ? whiteLists[keyFound] : null;
     },
-    [whiteLists]
+    [whiteLists, chain]
+  );
+
+  /**
+   * @dev The function to convert amount of token to normal number by dividing its decimals.
+   */
+  const convertDecimalAmount = useCallback(
+    (tokenAddress: string, source: number) => {
+      const tokenEntity =
+        whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
+      return (
+        source /
+        Math.pow(10, tokenEntity?.realDecimals || tokenEntity?.decimals || 1)
+      );
+    },
+    [whiteLists, chain, findEntityByAddress]
   );
 
   return (

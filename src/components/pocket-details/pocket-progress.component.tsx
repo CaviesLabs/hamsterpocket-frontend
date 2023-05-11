@@ -98,8 +98,15 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
       </div>
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">APL (ROI)</p>
-        <p className="text-green300 normal-text float-right">
-          + 0.00 SOL (0.00%)
+        <p
+          className={`${
+            (pocket?.realizedROIValue || 0) < 0
+              ? "text-red300"
+              : "text-green300"
+          } normal-text float-right`}
+        >
+          {pocket?.realizedROIValue.toFixed(3) || 0} {baseToken?.symbol} (
+          {pocket?.currentROI.toFixed(3) || 0}%)
         </p>
       </div>
     </div>

@@ -238,7 +238,7 @@ input[type=number] {
 }
 
 table tr {
-  border-bottom: solid 1px #4A5469;
+  border-bottom: 1px solid #1C1D2C;
 }
 table tr th {
   text-align: left;
@@ -372,4 +372,14 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.boardslist::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5em;
+ }
+
+.boardslist::-webkit-scrollbar-thumb {
+  background-color: #735CF7;
+  border-radius: 3px;
 }

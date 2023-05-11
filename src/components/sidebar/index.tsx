@@ -85,7 +85,7 @@ export const SideBar: FC = () => {
           )}
           key={`tab-menu-item-${index}`}
         >
-          <div className="flex sidebarBreakpoint:pl-[40px] pl-[80px]">
+          <div className="flex float-right w-[150px]">
             <div className="float-left">
               {item.icon(
                 isActive(item.uri, item.sideUris) ? "#735CF7" : "#7886A0"

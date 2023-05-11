@@ -56,23 +56,27 @@ export default function TableComponent() {
   };
 
   return (
-    <div className="mt-11 text-white md:max-h-[650px] md:overflow-y-auto">
+    <div className="mt-11 text-white">
       {historiesData.length ? (
         <LayoutWrapper
           layout={
             <>
-              <table className="table-fixed w-full mobile:!hidden">
-                <thead>
-                  <tr>
-                    <th className="max-w-xl pb-4 mobile:text-[12px]">Pocket</th>
-                    <th className="mobile:text-[12px]">Pair</th>
-                    <th className="mobile:text-[12px]">Type</th>
-                    <th className="mobile:text-[12px]">Base amount</th>
-                    <th className="mobile:text-[12px]">Target amount</th>
-                    <th className="max-w-[160px] mobile:text-[12px]">Time</th>
-                  </tr>
-                </thead>
-                <tbody className="normal-text">
+              <div className="table-fixed w-full mobile:!hidden">
+                <div className="grid grid-cols-12">
+                  <th className="max-w-xl pb-4 mobile:text-[12px] col-span-2">
+                    Pocket
+                  </th>
+                  <th className="mobile:text-[12px] col-span-2">Pair</th>
+                  <th className="mobile:text-[12px] col-span-2">Type</th>
+                  <th className="mobile:text-[12px] col-span-2">Base amount</th>
+                  <th className="mobile:text-[12px] col-span-2">
+                    Target amount
+                  </th>
+                  <th className="max-w-[160px] mobile:text-[12px] col-span-1">
+                    Time
+                  </th>
+                </div>
+                <div className="normal-text bg-dark100 rounded-[12px] px-[10px] md:max-h-[650px] md:overflow-y-auto boardslist">
                   {historiesData.map((h) => {
                     const poolDoc = h.pool_docs[0];
                     const baseToken =
@@ -83,8 +87,11 @@ export default function TableComponent() {
                       findEntityByAddress(poolDoc.targetTokenAddress);
 
                     return (
-                      <tr key={h._id} className="">
-                        <td className="pr-10 py-4">
+                      <div
+                        key={h._id}
+                        className="grid grid-cols-12 px-[5px] py-[30px]"
+                      >
+                        <div className="col-span-2 text-center">
                           <div className="truncate">{poolDoc.name}</div>
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
@@ -102,8 +109,8 @@ export default function TableComponent() {
                               <ShareIcon />
                             </a>
                           </div>
-                        </td>
-                        <td>
+                        </div>
+                        <div className="col-span-2 text-center">
                           <div className="flex">
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
@@ -116,9 +123,11 @@ export default function TableComponent() {
                               </a>
                             )}
                           </div>
-                        </td>
-                        <td>{typeHumanize(h.type)}</td>
-                        <td>
+                        </div>
+                        <div className="col-span-2 text-center">
+                          {typeHumanize(h.type)}
+                        </div>
+                        <div className="col-span-2 text-center">
                           {h.type === PoolType.DEPOSITED ||
                           h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
@@ -128,8 +137,8 @@ export default function TableComponent() {
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
-                        </td>
-                        <td>
+                        </div>
+                        <div className="col-span-2 text-center">
                           {h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
@@ -138,24 +147,30 @@ export default function TableComponent() {
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
-                        </td>
-                        <td>
+                        </div>
+                        <div className="col-span-2 text-center">
                           <div className="flex items-center">
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
-                              href={`https://solscan.io/tx/${h.transactionId}`}
+                              href={
+                                chain === "SOL"
+                                  ? `${SOL_EXPLORE}/tx/${h.transactionId}`
+                                  : process.env.EVM_CHAIN_ID === "matic"
+                                  ? `${MUMBAI_EXPLORE}/tx/${h.transactionId}`
+                                  : `${BSC_EXPLORE}/tx/${h.transactionId}`
+                              }
                               target="_blank"
                               className="ml-2"
                             >
                               <ShareIcon />
                             </a>
                           </div>
-                        </td>
-                      </tr>
+                        </div>
+                      </div>
                     );
                   })}
-                </tbody>
-              </table>
+                </div>
+              </div>
               <div className="md:hidden rounded-[10px] px-[8px] py-[20px] border-solid border-[1px] border-dark50">
                 {historiesData.map((h) => {
                   const poolDoc = h.pool_docs[0];
