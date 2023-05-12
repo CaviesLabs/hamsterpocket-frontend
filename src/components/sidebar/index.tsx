@@ -102,7 +102,7 @@ export const SideBar: FC = () => {
         <div
           onClick={() => router.push(item.uri)}
           className={classNames(
-            "cursor-pointer flow-root sidebarBreakpoint:flex sidebarBreakpoint:justify-center mb-[20px] py-[20px] px-[20px] hover:bg-[#121320]",
+            "cursor-pointer flow-root sidebarBreakpoint:flex sidebarBreakpoint:justify-center mb-[20px] py-[20px] px-[20px] hover:bg-[#121320] rounded-[8px]",
             {
               "bg-[#121320]": isActive(item.uri, item.sideUris),
             }
