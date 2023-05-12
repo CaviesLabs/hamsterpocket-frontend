@@ -6,7 +6,7 @@ import { CreatePocketProvider } from "@/src/hooks/pages/create-pocket";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import {
   CreatePocketDesktopLayout,
-  CreatePocketMobileLayout,
+  // CreatePocketMobileLayout,
 } from "@/src/components/create-pocket";
 
 const Layout: FC = () => {
@@ -15,7 +15,7 @@ const Layout: FC = () => {
       <div className={styles.container}>
         <LayoutWrapper
           layout={<CreatePocketDesktopLayout />}
-          mobileLayout={<CreatePocketMobileLayout />}
+          // mobileLayout={<CreatePocketMobileLayout />}
         />
       </div>
     </MainLayout>
