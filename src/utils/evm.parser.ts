@@ -73,8 +73,7 @@ export const convertToEtherBuyCondition = (
   realTargetTokenDecimals: number
 ) => {
   let operator;
-  const type = Object.keys(solBuyCondition)[0];
-  if (!type) {
+  if (!solBuyCondition || !Object.keys(solBuyCondition)?.length) {
     return {
       operator: "0",
       value0: "0",
@@ -82,6 +81,7 @@ export const convertToEtherBuyCondition = (
     };
   }
 
+  const type = Object.keys(solBuyCondition)[0];
   switch (type) {
     case PriceConditionType.GT:
       operator = "1";

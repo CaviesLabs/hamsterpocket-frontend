@@ -42,7 +42,7 @@ export const ClosePocketModal: FC<{
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
         if (props.pocket.status === PocketStatus.CLOSED) {
-          await withdrawPocketEvm(props.pocket.id);
+          await withdrawPocketEvm(props.pocket.id || props.pocket._id);
         } else {
           await closePocketEvm(props.pocket.id || props.pocket._id);
         }
@@ -75,10 +75,15 @@ export const ClosePocketModal: FC<{
           />
 
           <h2 className="mt-4 mb-2 font-bold text-white text-2xl text-center">
-            {props?.closed ? "Withdraw" : "Close"}
+            {props?.pocket?.status === PocketStatus.CLOSED
+              ? "Withdraw"
+              : "Close"}
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
-            Confirm the transaction to {props?.closed ? "withdraw" : "close "}{" "}
+            Confirm the transaction to{" "}
+            {props?.pocket?.status === PocketStatus.CLOSED
+              ? "withdraw"
+              : "close "}{" "}
             Pocket{" "}
             <span className="text-green">
               #{props.pocket?.id || props.pocket?._id}
@@ -88,7 +93,11 @@ export const ClosePocketModal: FC<{
             shape="primary"
             size="large"
             onClick={handleClosePocket}
-            text={props.closed ? "Withdraw Pocket" : "Close Pocket"}
+            text={
+              props?.pocket?.status === PocketStatus.CLOSED
+                ? "Withdraw Pocket"
+                : "Close Pocket"
+            }
             className="mb-3"
             loading={loading}
             theme={{

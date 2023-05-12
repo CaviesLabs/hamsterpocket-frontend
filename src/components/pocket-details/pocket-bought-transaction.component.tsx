@@ -78,7 +78,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
         }
       )
     );
-  }, [props.pocket]);
+  }, [props, props.pocket]);
 
   return proccessedActivities?.length ? (
     <div className="mt-[12px]">

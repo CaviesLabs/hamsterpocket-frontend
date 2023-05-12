@@ -1,11 +1,14 @@
 import { FC, useMemo, useState } from "react";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import {
   ClosePocketModal,
   ResumePocketModal,
   PausePocketModal,
+  ReversePocketModal,
 } from "@/src/components/home";
 import { Button } from "@hamsterbox/ui-kit";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const PocketStatusComponent: FC<{
   pocket: PocketEntity;
@@ -13,11 +16,16 @@ export const PocketStatusComponent: FC<{
 }> = (props) => {
   const pocket = props.pocket;
 
+  const { whiteLists, findEntityByAddress } = useWhiteList();
+
   /** @dev Condition to show modal to close pocket. */
   const [closedDisplayed, setClosedDisplayed] = useState(false);
 
   /** @dev Condition to show modal to pause pocket. */
   const [pausedDisplayed, setPausedDisplayed] = useState(false);
+
+  /** @dev Condition to show modal to close pocket. */
+  const [reversedDisplayed, setReversedDisplayed] = useState(false);
 
   /** @dev Condition to show modal to resume pocket. */
   const [resumedDisplayed, setResumedDisplayed] = useState(false);
@@ -39,6 +47,14 @@ export const PocketStatusComponent: FC<{
     return pocket?.status === PocketStatus.ENDED;
   }, [pocket]);
   const isWithdrawed = useMemo(() => !isEnded && isClosed, [isEnded, isClosed]);
+
+  /** @dev Get base token database on address. */
+  const baseToken = useMemo<WhitelistEntity>(
+    () =>
+      whiteLists[pocket?.baseTokenAddress] ||
+      findEntityByAddress(pocket?.baseTokenAddress),
+    [props, pocket]
+  );
 
   const statusComponent = useMemo(() => {
     if (isActive) {
@@ -91,18 +107,51 @@ export const PocketStatusComponent: FC<{
         </div>
       </div>
       <div className="mt-[12px]">
-        {pocket?.status !== PocketStatus.ENDED && (
-          <Button
-            className="!px-[50px] md:w-auto w-full"
-            theme={{
-              backgroundColor: "#735CF7",
-              color: "#FFFFFF",
-            }}
-            text="Close Pocket"
-            width="100%"
-            onClick={() => setClosedDisplayed(true)}
-          />
-        )}
+        {pocket?.status !== PocketStatus.ENDED &&
+          pocket?.status !== PocketStatus.CLOSED && (
+            <Button
+              className="!px-[50px] md:w-auto w-full"
+              theme={{
+                backgroundColor: "#735CF7",
+                color: "#FFFFFF",
+              }}
+              text="Close Pocket"
+              width="100%"
+              onClick={() => setClosedDisplayed(true)}
+            />
+          )}
+        {pocket?.status !== PocketStatus.ENDED &&
+          pocket?.status === PocketStatus.CLOSED && (
+            <div className="w-full flex md:grid md:grid-cols-5">
+              <div className="md:col-span-2">
+                <Button
+                  className="!px-[50px] !border-solid !border-purple300 !border-[2px] md:pool-control-btn text-center"
+                  theme={{
+                    backgroundColor: "transparent",
+                    color: "#735CF7",
+                    hoverColor: "#735CF7",
+                  }}
+                  text="Withdraw"
+                  onClick={() => {
+                    setClosedDisplayed(true);
+                  }}
+                  width="100%"
+                />
+              </div>
+              <div className="md:col-span-3">
+                <Button
+                  className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
+                  theme={{
+                    backgroundColor: "#735CF7",
+                    color: "#ffffff",
+                  }}
+                  text={`Reverse to ${baseToken?.symbol}`}
+                  onClick={() => setReversedDisplayed(true)}
+                  width="100%"
+                />
+              </div>
+            </div>
+          )}
       </div>
       {closedDisplayed && pocket && (
         <ClosePocketModal
@@ -114,6 +163,17 @@ export const PocketStatusComponent: FC<{
           handleCancel={() => setClosedDisplayed(false)}
           pocket={pocket}
           // closed={!isEnded && isClosed}
+        />
+      )}
+      {reversedDisplayed && pocket && (
+        <ReversePocketModal
+          isModalOpen={reversedDisplayed}
+          handleOk={() => {
+            setReversedDisplayed(false);
+            props.handleFetch();
+          }}
+          handleCancel={() => setReversedDisplayed(false)}
+          pocket={pocket}
         />
       )}
       {resumedDisplayed && (

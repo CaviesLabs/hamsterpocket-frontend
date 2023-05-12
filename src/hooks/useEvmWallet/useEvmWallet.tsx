@@ -116,6 +116,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
+      console.log(pocketId);
       await contract.withdraw(pocketId);
     },
     [signer, contract]
