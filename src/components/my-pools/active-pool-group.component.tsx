@@ -13,10 +13,10 @@ import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useSelector } from "react-redux";
 import { PoolItemRow } from "@/src/components/my-pools/pool-item/pool-item-row.component";
 import { PocketEntity } from "@/src/entities/pocket.entity";
-import State from "@/src/redux/entities/state";
 import { RefreshButton } from "@/src/components/refresh-button";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { ClosedCheckComponent } from "./closed-check.component";
+import State from "@/src/redux/entities/state";
 import classnames from "classnames";
 
 export const ActivePoolGroup: FC = () => {
@@ -129,7 +129,7 @@ export const ActivePoolGroup: FC = () => {
           <div className="float-left w-[100%] mobile:w-[100%] pr-[10px]">
             <Input
               containerClassName="app-input psi w-full mobile:!h-[40px]"
-              inputClassName="bg-dark90 !text-white !rounded-[8px]"
+              inputClassName="bg-dark100 !text-white !rounded-[8px]"
               placeholder="Search by Pocket name, ID, Token"
               icon={<SearchIcon />}
               onValueChange={(v) => setSearch(v)}

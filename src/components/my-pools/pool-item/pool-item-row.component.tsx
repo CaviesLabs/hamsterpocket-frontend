@@ -206,22 +206,31 @@ export const PoolItemRow = (props: PoolItemProps) => {
             APL(ROI)
           </p>
           <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px] md:text-center">
-            <p
-              className={`"md:text-center ${
-                (data?.currentROIValue || 0) < 0
-                  ? "text-red300"
-                  : "text-green300"
-              } normal-text"`}
-            >
-              {data?.currentROIValue?.toFixed(5) || 0} {baseToken?.symbol}
-            </p>
-            <p
-              className={`md:text-center md:mt-[5px] ${
-                (data?.currentROI || 0) < 0 ? "text-red300" : "text-green300"
-              } mobile:ml-[5px]`}
-            >
-              ({data?.currentROI?.toFixed(3) || 0}%)
-            </p>
+            {data?.currentROIValue !== 0 &&
+            data?.status !== PocketStatus.ENDED ? (
+              <>
+                <p
+                  className={`"md:text-center ${
+                    (data?.currentROIValue || 0) < 0
+                      ? "text-red300"
+                      : "text-green300"
+                  } normal-text"`}
+                >
+                  {data?.currentROIValue?.toFixed(5) || 0} {baseToken?.symbol}
+                </p>
+                <p
+                  className={`md:text-center md:mt-[5px] ${
+                    (data?.currentROI || 0) < 0
+                      ? "text-red300"
+                      : "text-green300"
+                  } mobile:ml-[5px]`}
+                >
+                  ({data?.currentROI?.toFixed(3) || 0}%)
+                </p>
+              </>
+            ) : (
+              <p className="text-center text-white">N/A</p>
+            )}
           </div>
         </div>
         <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
@@ -348,7 +357,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
           </div>
         )}
         {isWithdrawed && !isEnded && (
-          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1 flex mobile:grid mobile:grid-cols-5">
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1 flex mobile:grid mobile:grid-cols-6">
             <div className="mobile:col-span-2">
               <Button
                 className="!px-[50px] !border-solid !border-purple300 !border-[2px] md:pool-control-btn text-center"
@@ -365,7 +374,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
               />
             </div>
             {data?.currentTargetTokenBalance > 0 ? (
-              <div className="mobile:col-span-3">
+              <div className="mobile:col-span-4">
                 <Button
                   className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
                   theme={{

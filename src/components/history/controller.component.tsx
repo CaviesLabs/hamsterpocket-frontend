@@ -99,7 +99,7 @@ export default function HistoryController() {
         <div className="float-left w-[100%] mobile:w-[100%] pr-[10px] ml-[10px]">
           <Input
             containerClassName="app-input psi w-full mobile:!h-[40px]"
-            inputClassName="!bg-dark90 !text-white !rounded-[8px]"
+            inputClassName="!bg-dark100 !text-white !rounded-[8px]"
             placeholder="Search by Pocket name/ID"
             icon={<SearchIcon />}
             onValueChange={(v) => setSearch(v)}

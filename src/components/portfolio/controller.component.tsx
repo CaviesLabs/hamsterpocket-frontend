@@ -49,7 +49,7 @@ export default function PortfolioController() {
       <div className="max-w-[440px] float-right">
         <Input
           containerClassName="app-input w-full md:w-[450px]"
-          inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
+          inputClassName="bg-dark100 !text-white !rounded-[100px] w-full"
           placeholder="Search by Token, Address"
           icon={<SearchIcon />}
           onValueChange={(v) => setSearch(v)}

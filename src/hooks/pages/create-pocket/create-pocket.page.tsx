@@ -276,7 +276,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
         if (takeProfitAmount) {
           const evmTakeProfitAmount = BigNumber.from(
-            (takeProfitAmount * plufixWithDecimals).toString()
+            `0x${(takeProfitAmount * plufixWithDecimals).toString()}`
           );
           evmParams = {
             ...evmParams,
@@ -289,7 +289,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
         if (stopLossAmount) {
           const evmStopLossAmount = BigNumber.from(
-            (stopLossAmount * plufixWithDecimals).toString()
+            `0x${(stopLossAmount * plufixWithDecimals).toString()}`
           );
           evmParams = {
             ...evmParams,
