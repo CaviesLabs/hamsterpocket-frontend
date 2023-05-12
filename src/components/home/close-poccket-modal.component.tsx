@@ -1,7 +1,7 @@
 import { FC, MouseEvent, useCallback, useState } from "react";
 import { Modal } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
-import { PocketEntity } from "@/src/entities/pocket.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
@@ -25,7 +25,8 @@ export const ClosePocketModal: FC<{
   /** @dev Define variable presenting for successful pocket close. */
   const [succcessClose, setSuccessClosed] = useState(false);
 
-  const { closePocket: closePocketEvm } = useEvmWallet();
+  const { closePocket: closePocketEvm, withdrawPocket: withdrawPocketEvm } =
+    useEvmWallet();
   const { chain, walletAddress } = useAppWallet();
 
   /** @dev The function to handle close pocket. */
@@ -40,11 +41,11 @@ export const ClosePocketModal: FC<{
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
-        await closePocketEvm(props.pocket.id || props.pocket._id);
-        // if (props.closed) {
-        //   await withdrawPocketEvm(props.pocket.id);
-        // } else {
-        // }
+        if (props.pocket.status === PocketStatus.CLOSED) {
+          await withdrawPocketEvm(props.pocket.id);
+        } else {
+          await closePocketEvm(props.pocket.id || props.pocket._id);
+        }
       }
 
       /** @dev Callback function when close successfully. */

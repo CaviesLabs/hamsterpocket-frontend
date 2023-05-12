@@ -354,7 +354,9 @@ export const PoolItemRow = (props: PoolItemProps) => {
                   hoverColor: "#735CF7",
                 }}
                 text="Withdraw"
-                onClick={() => setClosedDisplayed(true)}
+                onClick={() => {
+                  setClosedDisplayed(true);
+                }}
                 width="100%"
               />
             </div>
