@@ -83,8 +83,14 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">Average price</p>
         <p className="text-white normal-text float-right">
-          1 {baseToken?.symbol} = {averagePrice?.toFixed(3)}{" "}
-          {targetToken?.symbol}
+          {averagePrice ? (
+            <>
+              1 {baseToken?.symbol} = {averagePrice?.toFixed(3)}{" "}
+              {targetToken?.symbol}
+            </>
+          ) : (
+            "N/A"
+          )}
         </p>
       </div>
       {pocket?.status !== PocketStatus.ENDED ? (

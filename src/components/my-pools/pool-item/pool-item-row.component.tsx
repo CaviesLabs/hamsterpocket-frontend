@@ -229,14 +229,18 @@ export const PoolItemRow = (props: PoolItemProps) => {
             Average price
           </p>
           <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px]">
-            <p className="text-center text-white normal-text">
-              1 {baseToken?.symbol}
-            </p>
             {averagePrice ? (
-              <p className="text-center md:mt-[5px] md:text-[12px] text-white">
-                = {averagePrice?.toFixed(3)} {targetToken?.symbol}
-              </p>
-            ) : null}
+              <>
+                <p className="text-center text-white normal-text">
+                  1 {baseToken?.symbol}
+                </p>
+                <p className="text-center md:mt-[5px] md:text-[12px] text-white">
+                  = {averagePrice?.toFixed(3)} {targetToken?.symbol}
+                </p>
+              </>
+            ) : (
+              <p className="text-center text-white normal-text">N/A</p>
+            )}
           </div>
         </div>
         <div className="md:col-span-2 mobile:flow-root mobile:border-b-[1px] mobile:border-solid mobile:border-[#1C1D2C]  mobile:py-[12px]">
