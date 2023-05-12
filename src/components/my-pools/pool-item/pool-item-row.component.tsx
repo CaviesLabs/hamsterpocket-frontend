@@ -364,18 +364,20 @@ export const PoolItemRow = (props: PoolItemProps) => {
                 width="100%"
               />
             </div>
-            <div className="mobile:col-span-3">
-              <Button
-                className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
-                theme={{
-                  backgroundColor: "#735CF7",
-                  color: "#ffffff",
-                }}
-                text={`Reverse to ${baseToken?.symbol}`}
-                onClick={() => setReversedDisplayed(true)}
-                width="100%"
-              />
-            </div>
+            {data?.currentTargetTokenBalance > 0 ? (
+              <div className="mobile:col-span-3">
+                <Button
+                  className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
+                  theme={{
+                    backgroundColor: "#735CF7",
+                    color: "#ffffff",
+                  }}
+                  text={`Reverse to ${baseToken?.symbol}`}
+                  onClick={() => setReversedDisplayed(true)}
+                  width="100%"
+                />
+              </div>
+            ) : null}
           </div>
         )}
         {isEnded && !isClaimed && chain === "SOL" && (

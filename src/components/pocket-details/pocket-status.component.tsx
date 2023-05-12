@@ -138,18 +138,20 @@ export const PocketStatusComponent: FC<{
                   width="100%"
                 />
               </div>
-              <div className="md:col-span-3">
-                <Button
-                  className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
-                  theme={{
-                    backgroundColor: "#735CF7",
-                    color: "#ffffff",
-                  }}
-                  text={`Reverse to ${baseToken?.symbol}`}
-                  onClick={() => setReversedDisplayed(true)}
-                  width="100%"
-                />
-              </div>
+              {pocket?.currentTargetTokenBalance > 0 ? (
+                <div className="md:col-span-3">
+                  <Button
+                    className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
+                    theme={{
+                      backgroundColor: "#735CF7",
+                      color: "#ffffff",
+                    }}
+                    text={`Reverse to ${baseToken?.symbol}`}
+                    onClick={() => setReversedDisplayed(true)}
+                    width="100%"
+                  />
+                </div>
+              ) : null}
             </div>
           )}
       </div>
