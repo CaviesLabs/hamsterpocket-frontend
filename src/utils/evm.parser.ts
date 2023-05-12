@@ -15,7 +15,7 @@ import { WSOL_ADDRESS } from "@/src/utils";
  * @dev The function to convert number to big ether number.
  */
 export const convertToEtherBigNumber = (value: number) =>
-  BigNumber.from(value.toString());
+  BigNumber.from(`0x${value.toString(16)}`);
 
 /**
  * @param solStopConditions
@@ -49,11 +49,9 @@ export const convertToEtherStopCondition = (
         break;
       case "quoteTokenAmountReach":
         conditionOperator = "3";
-        console.log(condition[type].value.toNumber());
         const solReverd1 =
           condition[type].value.toNumber() / Math.pow(10, targetTokenDecimals);
         const ethReverd1 = solReverd1 * Math.pow(10, realTargetTokenDecimals);
-        console.log(ethReverd1);
         ethValue = convertToEtherBigNumber(ethReverd1);
         break;
     }
@@ -70,10 +68,20 @@ export const convertToEtherStopCondition = (
 export const convertToEtherBuyCondition = (
   solBuyCondition: SolBuyConditionOnChain,
   baseTokenDecimals: number,
-  realBaseTokenDecimals: number
+  realBaseTokenDecimals: number,
+  targetTokenDecimals: number,
+  realTargetTokenDecimals: number
 ) => {
   let operator;
   const type = Object.keys(solBuyCondition)[0];
+  if (!type) {
+    return {
+      operator: "0",
+      value0: "0",
+      value1: "0",
+    };
+  }
+
   switch (type) {
     case PriceConditionType.GT:
       operator = "1";
@@ -105,8 +113,8 @@ export const convertToEtherBuyCondition = (
       ),
       value1: convertToEtherBigNumber(
         (solBuyCondition[type].toValue.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-          Math.pow(10, realBaseTokenDecimals)
+          Math.pow(10, targetTokenDecimals)) *
+          Math.pow(10, realTargetTokenDecimals)
       ),
     };
   } else {
@@ -204,7 +212,9 @@ export const createdPocketPramsParserEvm = (
     openingPositionCondition: convertToEtherBuyCondition(
       solCreatedPocketDto.buyCondition,
       baseTokenDecimals,
-      realBaseTokenDecimals
+      realBaseTokenDecimals,
+      targetTokenDecimals,
+      realTargetTokenDecimals
     ),
     takeProfitCondition: {
       stopType: "0",

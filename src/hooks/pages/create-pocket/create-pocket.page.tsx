@@ -363,7 +363,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   useEffect(() => {
     if (chain === "ETH") {
       console.log(chain);
-      setBaseTokenAddress([new PublicKey(ALIAS_WMATIC_ADDRESS), 8]);
+      setBaseTokenAddress([new PublicKey(ALIAS_WMATIC_ADDRESS), 9]);
     }
   }, [chain]);
 
