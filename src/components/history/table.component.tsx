@@ -112,8 +112,8 @@ export default function TableComponent() {
                               <a
                                 href={
                                   chain === "SOL"
-                                    ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
-                                    : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                                    ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
+                                    : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
                                 }
                                 target="_blank"
                                 className="ml-[10px]"
