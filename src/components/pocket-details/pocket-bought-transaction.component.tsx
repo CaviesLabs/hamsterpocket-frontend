@@ -105,7 +105,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                       targetToken?.symbol
                     }`}</p>
                   )}
-                  <RightArrowIcon className="mx-[20px]" />
+                  <RightArrowIcon className="md:mx-[20px]" />
                   {item.type === PoolType.SWAPPED ? (
                     <p>{`${item.targetTokenAmount?.toFixed(3)} ${
                       targetToken?.symbol
