@@ -3,6 +3,7 @@ import { LayoutSection } from "@/src/components/layout-section";
 import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
 import { useConnectedWallet } from "@saberhq/use-solana";
 import { CopyIcon } from "@/src/components/icons";
+import { PocketBalance } from "./pocket-balance.component";
 import PortfolioController from "@/src/components/portfolio/controller.component";
 import TableComponent from "@/src/components/portfolio/table.component";
 import DashboardComponentMobile from "@/src/components/portfolio/dashboard-mobile.component";
@@ -40,6 +41,7 @@ export const PortfolioMobileLayout: FC = () => {
           <CopyIcon className="ml-2" />
         </p>
       </div>
+      <PocketBalance />
       <div className="mt-[20px]">
         <div className="grid grid-cols-2">
           <div

@@ -213,7 +213,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                   : "text-green300"
               } normal-text"`}
             >
-              {data?.currentROIValue?.toFixed(3) || 0} {baseToken?.symbol}
+              {data?.currentROIValue?.toFixed(5) || 0} {baseToken?.symbol}
             </p>
             <p
               className={`md:text-center md:mt-[5px] ${

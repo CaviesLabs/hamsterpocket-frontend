@@ -81,10 +81,12 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
             Outstanding deposit
           </p>
           <p className="text-white normal-text float-right">
-            {convertDecimalAmount(
-              baseToken?.address,
-              pocket?.remainingBaseTokenBalance
-            )?.toFixed(3)}{" "}
+            {pocket?.batchVolume - pocket?.remainingBaseTokenBalance < 0
+              ? 0
+              : convertDecimalAmount(
+                  baseToken?.address,
+                  pocket?.batchVolume - pocket?.remainingBaseTokenBalance
+                )?.toFixed(3)}{" "}
             {baseToken?.symbol}
           </p>
         </div>

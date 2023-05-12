@@ -15,7 +15,6 @@ import { PoolItemRow } from "@/src/components/my-pools/pool-item/pool-item-row.c
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import State from "@/src/redux/entities/state";
 import { RefreshButton } from "@/src/components/refresh-button";
-import { DropdownSelect } from "@/src/components/select";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { ClosedCheckComponent } from "./closed-check.component";
 import classnames from "classnames";

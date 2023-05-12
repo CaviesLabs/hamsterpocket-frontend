@@ -5,7 +5,6 @@ Chart.register(ArcElement, Legend, Tooltip);
 import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
-import { PocketBalance } from "./pocket-balance.component";
 
 const options = {
   cutout: 70,
@@ -41,7 +40,6 @@ export default function DashboardComponentMobile() {
 
   return (
     <div className="mt-12 md:flex md:justify-between md:items-center">
-      <PocketBalance />
       {totalUSD > 0 && chartData.labels.length > 0 && (
         <div className="flex items-center mr-36 mobile:mt-[20px]">
           <div className="max-w-[190px] relative flex justify-center items-center">

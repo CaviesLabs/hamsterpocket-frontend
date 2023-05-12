@@ -3,7 +3,7 @@ import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
 import { LayoutSection } from "@/src/components/layout-section";
 import { LeftIcon, ShareIcon } from "@/src/components/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getPocketById } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
@@ -22,6 +22,9 @@ import { useWallet } from "@/src/hooks/useWallet";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { evmProgramService } from "@/src/services/evm-program.service";
 import { ClosedCheckComponent } from "@/src/components/my-pools/closed-check.component";
+import { getActivePockets } from "@/src/redux/actions/pocket/pocket.action";
+import { PocketStatus } from "@/src/entities/pocket.entity";
+import State from "@/src/redux/entities/state";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
 
@@ -34,6 +37,9 @@ const PocketDetailPage: NextPage = () => {
   const { whiteLists, findEntityByAddress } = useWhiteList();
   const { walletAddress, chain } = useAppWallet();
   const { programService: solProgram } = useWallet();
+
+  /** @dev Get lastest pockets. */
+  const activePockets = useSelector((state: State) => state.activePockets);
 
   /** @dev Define pocket entity. */
   const [pocket, setPocket] = useState<PocketEntity>();
@@ -79,12 +85,30 @@ const PocketDetailPage: NextPage = () => {
   }, [router, walletAddress, chain, solProgram, pocket]);
 
   /**
+   * @dev Fetch lastest 5 pockets.
+   */
+  useEffect(() => {
+    if (!walletAddress) return;
+    dispatch(
+      getActivePockets({
+        chainId: chain === "SOL" ? "solana" : "mumbai",
+        limit: 5,
+        ownerAddress: walletAddress,
+        sortBy: "DATE_CREATED_DESC",
+        statuses: [PocketStatus.PAUSED, PocketStatus.ACTIVE],
+      })
+    );
+  }, [chain, walletAddress]);
+
+  /**
    * @dev Fetch pocket data from hamster server.
    */
   useEffect(() => {
     if (!router?.query?.id || !walletAddress) return;
     syncAndFetch();
   }, [router, walletAddress]);
+
+  console.log(activePockets);
 
   return (
     <MainLayout>
@@ -175,6 +199,47 @@ const PocketDetailPage: NextPage = () => {
                 <BoughtTransaction pocket={pocket} />
               </div>
               <div className="md:float-left mobile:hidden w-[20%] pt-[80px] pl-[20px]">
+                {activePockets?.length ? (
+                  <div>
+                    <p className="text-dark45 text-[20px] normal-text mb-[10px]">
+                      My Pockets
+                    </p>
+                    {activePockets?.map((pocket) => {
+                      const baseTokenPocket =
+                        whiteLists[pocket?.baseTokenAddress] ||
+                        findEntityByAddress(pocket?.baseTokenAddress);
+                      const targetTokenPocket =
+                        whiteLists[pocket?.targetTokenAddress] ||
+                        findEntityByAddress(pocket?.targetTokenAddress);
+                      return (
+                        <div
+                          className="md:w-full mobile:max-w-[200px] flex px-[10px] py-[10px] border-solid border-[3px] border-dark80 rounded-[12px] md:mb-[20px] cursor-pointer hover:bg-dark80"
+                          onClick={() =>
+                            router.push(`/pocket/${pocket.id || pocket._id}`)
+                          }
+                        >
+                          <div className="float:left">
+                            <div className="w-[30px] md:w-[34px] md:h-[34px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white float-left">
+                              <img
+                                src={targetTokenPocket?.image}
+                                className="rounded-[50%]"
+                              />
+                            </div>
+                          </div>
+                          <div className="float-left ml-[10px]">
+                            <p className="text-white text-[14px] normal-text">
+                              {targetTokenPocket?.symbol}/
+                              {baseTokenPocket?.symbol}
+                            </p>
+                            <p className="text-dark50 text-[12px] normal-text">
+                              #{utilsProvider.makeShort(pocket?._id)}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : null}
                 <ClosedCheckComponent
                   routeToClosePockets={() => router.push("/my-pockets")}
                   isCloseView={false}
