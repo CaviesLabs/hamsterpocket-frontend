@@ -127,7 +127,7 @@ export const ActivePoolGroup: FC = () => {
           </div>
         </div>
         <div className="flex mt-[32px]">
-          <div className="float-left w-[90%] mobile:w-[80%] pr-[10px]">
+          <div className="float-left w-[100%] mobile:w-[100%] pr-[10px]">
             <Input
               containerClassName="app-input psi w-full mobile:!h-[40px]"
               inputClassName="bg-dark90 !text-white !rounded-[8px]"
@@ -136,7 +136,7 @@ export const ActivePoolGroup: FC = () => {
               onValueChange={(v) => setSearch(v)}
             />
           </div>
-          <div className="float-left md:w-[10%]">
+          {/* <div className="float-left md:w-[10%]">
             <DropdownSelect
               handleSelectValue={(val) => console.log(val)}
               className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
@@ -170,7 +170,7 @@ export const ActivePoolGroup: FC = () => {
                     ]
               }
             />
-          </div>
+          </div> */}
         </div>
         <div className="float-root mobile:hidden">
           <div className="flex flex-col md:flex-row flex-wrap border-solid border-b-[1px] border-[#1F2937] w-full rounded mt-4 normal-text">

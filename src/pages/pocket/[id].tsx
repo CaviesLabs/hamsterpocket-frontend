@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { getPocketById } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { utilsProvider } from "@/src/utils";
+import { utilsProvider, RADYUM_EXPLORE, UNISWAP_EXPLORE } from "@/src/utils";
 import {
   PocketStrategy,
   PocketInfo,
@@ -117,14 +117,17 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={`https://solscan.io/account/`}
+                      href={
+                        chain === "SOL"
+                          ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                          : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                      }
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >
                       <ShareIcon color="#ffffff" />
                     </a>
                   </div>
-                  <p className="md:text-[40px] text-white mt-[20px]">100%</p>
                   <p className="md:text-[14px] text-white mt-[10px]">
                     #{utilsProvider.makeShort(pocket?._id)}
                   </p>

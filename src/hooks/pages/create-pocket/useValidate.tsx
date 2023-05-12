@@ -3,7 +3,6 @@ import { useCreatePocketPage } from "./types";
 
 /** @dev Define validated schemas. */
 export interface ErrorValidateContext {
-  pocketName: string;
   baseTokenAddress: string;
   targetTokenAddress: string;
   batchVersion: string;
@@ -38,7 +37,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   const {
     // buyCondition,
     createdEnable,
-    pocketName,
     mintOrderSize,
     batchVolume,
     depositedAmount,
@@ -50,7 +48,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev Init */
   useEffect(() => {
     setErrors({
-      pocketName: "",
       baseTokenAddress: "",
       targetTokenAddress: "",
       batchVersion: "",
@@ -63,15 +60,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       stopLossAmount: "",
     });
   }, []);
-
-  /** @dev Watch changes in pocket name and validate it. */
-  useEffect(() => {
-    if (!createdEnable) return;
-    modifyErrors(
-      "pocketName",
-      !pocketName ? "Pocket Name must be required" : ""
-    );
-  }, [pocketName, createdEnable]);
 
   /** @dev Watch changes in pocket start at. */
   useEffect(() => {
@@ -102,24 +90,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
   }, [batchVolume, createdEnable, mintOrderSize]);
 
   /** @dev Watch changes in stop condtions. */
-  // useEffect(() => {
-  //   if (!createdEnable) return;
-  //   modifyErrors(
-  //     "stopConditions",
-  //     !stopConditions.length ? "Must add at least one stop condition" : ""
-  //   );
-  // }, [stopConditions, createdEnable]);
-
-  /** @dev Watch changes in stop condtions. */
-  // useEffect(() => {
-  //   if (!createdEnable) return;
-  //   modifyErrors(
-  //     "buyCondition",
-  //     !buyCondition ? "Buy condition must be required" : ""
-  //   );
-  // }, [buyCondition, createdEnable]);
-
-  /** @dev Watch changes in stop condtions. */
   useEffect(() => {
     if (!createdEnable) return;
 
@@ -143,7 +113,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     if (!createdEnable) return;
     modifyErrors(
       "takeProfitAmount",
-      takeProfitAmount <= 0 || !takeProfitAmount
+      takeProfitAmount !== undefined && takeProfitAmount <= 0
         ? "Must to set token amount to take profit"
         : ""
     );
@@ -153,7 +123,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     if (!createdEnable) return;
     modifyErrors(
       "stopLossAmount",
-      stopLossAmount <= 0 || !stopLossAmount
+      stopLossAmount !== undefined && stopLossAmount <= 0
         ? "Must to set token amount stop loss"
         : ""
     );

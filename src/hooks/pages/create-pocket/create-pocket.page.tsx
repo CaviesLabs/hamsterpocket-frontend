@@ -53,8 +53,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
-  const [takeProfitAmount, setTakeProfitAmount] = useState<number>(0);
-  const [stopLossAmount, setStopLossAmount] = useState<number>(0);
+  const [takeProfitAmount, setTakeProfitAmount] = useState<number>();
+  const [stopLossAmount, setStopLossAmount] = useState<number>();
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
@@ -206,7 +206,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
        */
       const solCreatedPocketData: SolCreatePocketDto = {
         id: ProgramService.generatePocketId(),
-        name: pocketName,
+        name: "pocketName",
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(
           chain === "SOL" ? liqQoute : targetAddress
@@ -255,7 +255,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         /**
          * @dev Process data from sol for evm.
          */
-        const evmParams = createdPocketPramsParserEvm(
+        let evmParams = createdPocketPramsParserEvm(
           whiteLists,
           solCreatedPocketData,
           baseTokenAddress[1],
@@ -273,26 +273,38 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         const evmDespositedAmount = BigNumber.from(
           (depositedAmount * plufixWithDecimals).toString()
         );
-        const evmTakeProfitAmount = BigNumber.from(
-          (takeProfitAmount * plufixWithDecimals).toString()
-        );
-        const evmStopLossAmount = BigNumber.from(
-          (stopLossAmount * plufixWithDecimals).toString()
-        );
+
+        if (takeProfitAmount) {
+          const evmTakeProfitAmount = BigNumber.from(
+            (takeProfitAmount * plufixWithDecimals).toString()
+          );
+          evmParams = {
+            ...evmParams,
+            takeProfitCondition: {
+              stopType: "1",
+              value: evmTakeProfitAmount,
+            },
+          };
+        }
+
+        if (stopLossAmount) {
+          const evmStopLossAmount = BigNumber.from(
+            (stopLossAmount * plufixWithDecimals).toString()
+          );
+          evmParams = {
+            ...evmParams,
+            stopLossCondition: {
+              stopType: "1",
+              value: evmStopLossAmount,
+            },
+          };
+        }
 
         /**
          * @dev Execute interact with eth blockchain.
          */
         const response = await createEvmPocket(evmDespositedAmount, {
           ...evmParams,
-          takeProfitCondition: {
-            stopType: "1",
-            value: evmTakeProfitAmount,
-          },
-          stopLossCondition: {
-            stopType: "1",
-            value: evmStopLossAmount,
-          },
         });
         console.log(response);
       }

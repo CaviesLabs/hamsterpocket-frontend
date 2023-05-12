@@ -1,5 +1,5 @@
 import { FC, useMemo } from "react";
-import { PocketEntity } from "@/src/entities/pocket.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
@@ -64,14 +64,14 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">Token hold</p>
         <div className="float-right">
-          <p className="text-white normal-text">
+          {/* <p className="text-white normal-text">
             {convertDecimalAmount(
               baseToken?.address,
               pocket?.remainingBaseTokenBalance
             )?.toFixed(3)}{" "}
             {baseToken?.symbol}
-          </p>
-          <p className="text-white normal-text mt-[10px]">
+          </p> */}
+          <p className="text-white normal-text">
             {convertDecimalAmount(
               targetToken?.address,
               pocket?.currentReceivedTargetToken
@@ -83,23 +83,25 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">Average price</p>
         <p className="text-white normal-text float-right">
-          {convertDecimalAmount(baseToken?.address, pocket?.batchVolume)}{" "}
-          {baseToken?.symbol} = {averagePrice?.toFixed(3)} {targetToken?.symbol}
+          1 {baseToken?.symbol} = {averagePrice?.toFixed(3)}{" "}
+          {targetToken?.symbol}
         </p>
       </div>
-      <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
-        <p className="float-left text-dark50 normal-text">APL (ROI)</p>
-        <p
-          className={`${
-            (pocket?.realizedROIValue || 0) < 0
-              ? "text-red300"
-              : "text-green300"
-          } normal-text float-right`}
-        >
-          {pocket?.realizedROIValue?.toFixed(3) || 0} {baseToken?.symbol} (
-          {pocket?.currentROI?.toFixed(3) || 0}%)
-        </p>
-      </div>
+      {pocket?.status !== PocketStatus.ENDED ? (
+        <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
+          <p className="float-left text-dark50 normal-text">APL (ROI)</p>
+          <p
+            className={`${
+              (pocket?.currentROIValue || 0) < 0
+                ? "text-red300"
+                : "text-green300"
+            } normal-text float-right`}
+          >
+            {pocket?.currentROIValue?.toFixed(3) || 0} {baseToken?.symbol} (
+            {pocket?.currentROI?.toFixed(3) || 0}%)
+          </p>
+        </div>
+      ) : null}
     </div>
   );
 };

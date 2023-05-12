@@ -1,6 +1,6 @@
 import { SearchIcon } from "@/src/components/icons";
 import { Input } from "@hamsterbox/ui-kit";
-import { DropdownSelect } from "@/src/components/select";
+// import { DropdownSelect } from "@/src/components/select";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getHistories } from "../../redux/actions/history/history.action";
@@ -61,7 +61,7 @@ export default function HistoryController() {
   return (
     <div className="mt-8 md:justify-between">
       <div className="flex mt-[32px]">
-        <div className="float-left md:w-[10%]">
+        {/* <div className="float-left md:w-[10%]">
           <DropdownSelect
             handleSelectValue={(val) => console.log(val)}
             className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
@@ -95,8 +95,8 @@ export default function HistoryController() {
                   ]
             }
           />
-        </div>
-        <div className="float-left w-[90%] mobile:w-[80%] pr-[10px] ml-[10px]">
+        </div> */}
+        <div className="float-left w-[100%] mobile:w-[100%] pr-[10px] ml-[10px]">
           <Input
             containerClassName="app-input psi w-full mobile:!h-[40px]"
             inputClassName="!bg-dark90 !text-white !rounded-[8px]"

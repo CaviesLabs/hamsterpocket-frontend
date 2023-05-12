@@ -20,9 +20,6 @@ export const StopLossAmount: FC = () => {
           <div className="md:col-span-2">
             <p className="text-dark10 text-[14px] regular-text">
               At fixed price stop loss
-              <span className="text-red300 relative top-[-2px] right-[-2px]">
-                *
-              </span>
             </p>
             <CurrencyInput
               addressSelected={baseTokenAddress[0]?.toBase58().toString()}

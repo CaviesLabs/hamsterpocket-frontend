@@ -64,7 +64,7 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
   );
   const isWithdrawed = useMemo(() => !isEnded && isClosed, [isEnded, isClosed]);
 
-  return (
+  return !isEnded && !isClosed && !isWithdrawed ? (
     <div>
       <p className="text-dark45 text-[20px]">Next Batch</p>
       <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px] mt-[12px]">
@@ -113,5 +113,5 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
         )}
       </div>
     </div>
-  );
+  ) : null;
 };

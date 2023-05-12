@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, useMemo } from "react";
-import { RightArrowIcon } from "@/src/components/icons";
+import { RightArrowIcon, ShareIcon } from "@/src/components/icons";
 import { useDispatch } from "react-redux";
 import { getPocketActivities } from "@/src/redux/actions/history/history.action";
 import { PocketEntity } from "@/src/entities/pocket.entity";
@@ -9,7 +9,13 @@ import {
   HistoryEntity,
 } from "@/src/entities/history.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { DATE_TIME_FORMAT } from "@/src/utils";
+import {
+  DATE_TIME_FORMAT,
+  SOL_EXPLORE,
+  MUMBAI_EXPLORE,
+  BSC_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
 
 export type TransactionItem = {
@@ -27,20 +33,21 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
     []
   );
 
+  const { chain } = useAppWallet();
   const { whiteLists, findEntityByAddress } = useWhiteList();
 
   const baseToken = useMemo(
     () =>
       whiteLists?.[props?.pocket?.baseTokenAddress] ||
       findEntityByAddress(props?.pocket?.baseTokenAddress),
-    [props.pocket]
+    [props]
   );
 
   const targetToken = useMemo(
     () =>
       whiteLists?.[props?.pocket?.targetTokenAddress] ||
       findEntityByAddress(props?.pocket?.targetTokenAddress),
-    [props.pocket]
+    [props]
   );
 
   const statusTheme = (status: PoolActivityStatus) => {
@@ -51,6 +58,16 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
         return ["Failed", "#F755551F", "#F44949"];
     }
   };
+
+  const proccessedActivities = useMemo(
+    () =>
+      activitiesHistory?.filter(
+        (item) =>
+          item.type === PoolType.SWAPPED ||
+          item.type === PoolType.CLOSED_POSITION
+      ),
+    [props, activitiesHistory]
+  );
 
   useEffect(() => {
     dispatch(
@@ -63,53 +80,77 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
     );
   }, [props.pocket]);
 
-  return activitiesHistory?.filter((item) => item.type === PoolType.SWAPPED)
-    .length ? (
+  return proccessedActivities?.length ? (
     <div className="mt-[12px]">
       <p className="text-dark45 text-[20px]">Bought transaction</p>
       <div className="mt-[12px]">
         <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px]">
-          {activitiesHistory
-            ?.filter((item) => item.type === PoolType.SWAPPED)
-            .map((item, index) => (
-              <div
-                className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]"
-                key={`transaction-item-${index}`}
-              >
-                <div className="grid grid-cols-12 text-white text-[14px] mobile:text-[12px]">
-                  <div className="col-span-1 text-center">{index + 1}</div>
-                  <div className="col-span-3 text-center mobile:col-span-5">
-                    {dayjs(item.createdAt).format(DATE_TIME_FORMAT)}
-                  </div>
-                  <div className="col-span-4 text-center flex items-center justify-center mobile:col-span-5">
+          {proccessedActivities.map((item, index) => (
+            <div
+              className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]"
+              key={`transaction-item-${index}`}
+            >
+              <div className="grid grid-cols-12 text-white text-[14px] mobile:text-[12px] items-center">
+                <div className="col-span-1 text-center">{index + 1}</div>
+                <div className="col-span-3 text-center mobile:col-span-4">
+                  {dayjs(item.createdAt).format(DATE_TIME_FORMAT)}
+                </div>
+                <div className="col-span-4 text-center flex items-center justify-center mobile:col-span-5">
+                  {item.type === PoolType.SWAPPED ? (
                     <p>{`${item.baseTokenAmount?.toFixed(3)} ${
                       baseToken?.symbol
                     }`}</p>
-                    <RightArrowIcon className="mx-[20px]" />
+                  ) : (
                     <p>{`${item.targetTokenAmount?.toFixed(3)} ${
                       targetToken?.symbol
                     }`}</p>
-                  </div>
-                  <div className="col-span-3 text-center mobile:hidden">
-                    <div className="float-right mobile:flex mobile:items-center md:text-center">
-                      <div
-                        style={{
-                          backgroundColor: statusTheme(item.status)?.[1],
-                        }}
-                        className={`py-[5px] rounded-[8px] inline-block mx-auto w-[100px]`}
+                  )}
+                  <RightArrowIcon className="mx-[20px]" />
+                  {item.type === PoolType.SWAPPED ? (
+                    <p>{`${item.targetTokenAmount?.toFixed(3)} ${
+                      targetToken?.symbol
+                    }`}</p>
+                  ) : (
+                    <p>{`${item.baseTokenAmount?.toFixed(3)} ${
+                      baseToken?.symbol
+                    }`}</p>
+                  )}
+                </div>
+                <div className="col-span-2 text-center mobile:hidden">
+                  <div className="float-right mobile:flex mobile:items-center md:text-center">
+                    <div
+                      style={{
+                        backgroundColor: statusTheme(item.status)?.[1],
+                      }}
+                      className={`py-[5px] rounded-[8px] inline-block mx-auto w-[100px]`}
+                    >
+                      <p
+                        style={{ color: statusTheme(item.status)?.[2] }}
+                        className={`text-center normal-text`}
                       >
-                        <p
-                          style={{ color: statusTheme(item.status)?.[2] }}
-                          className={`text-center normal-text`}
-                        >
-                          {statusTheme(item.status)?.[0]}
-                        </p>
-                      </div>
+                        {statusTheme(item.status)?.[0]}
+                      </p>
                     </div>
                   </div>
                 </div>
+                <div className="col-span-2 ml-[10px] relative top-[-3px] mobile:col-span-1">
+                  <a
+                    href={
+                      chain === "SOL"
+                        ? `${SOL_EXPLORE}/tx/${item.transactionId}`
+                        : process.env.EVM_CHAIN_ID === "matic"
+                        ? `${MUMBAI_EXPLORE}/tx/${item.transactionId}`
+                        : `${BSC_EXPLORE}/tx/${item.transactionId}`
+                    }
+                    target="_blank"
+                    className="ml-[10px] relative top-[-5px]"
+                  >
+                    <ShareIcon />
+                  </a>
+                </div>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>

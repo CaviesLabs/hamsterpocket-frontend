@@ -12,6 +12,8 @@ import {
   SOL_EXPLORE,
   MUMBAI_EXPLORE,
   BSC_EXPLORE,
+  RADYUM_EXPLORE,
+  UNISWAP_EXPLORE,
 } from "@/src/utils";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 
@@ -95,13 +97,7 @@ export default function TableComponent() {
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
                             <a
-                              href={
-                                chain === "SOL"
-                                  ? `${SOL_EXPLORE}/account/${poolDoc.address}`
-                                  : process.env.EVM_CHAIN_ID === "matic"
-                                  ? `${MUMBAI_EXPLORE}/address/${poolDoc.address}`
-                                  : `${BSC_EXPLORE}/address/${poolDoc.address}`
-                              }
+                              href={`/pocket/${poolDoc.address}`}
                               target="_blank"
                               className="ml-2"
                             >
@@ -114,7 +110,11 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={`https://raydium.io/swap?inputCurrency=${baseToken.address}&outputCurrency=${targetToken.address}`}
+                                href={
+                                  chain === "SOL"
+                                    ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                                    : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                                }
                                 target="_blank"
                                 className="ml-[10px]"
                               >
@@ -127,7 +127,12 @@ export default function TableComponent() {
                           {typeHumanize(h.type)}
                         </div>
                         <div className="col-span-2 text-center">
-                          {h.type === PoolType.DEPOSITED ||
+                          {h?.baseTokenAmount ? (
+                            <div>{h?.baseTokenAmount.toFixed(3)}</div>
+                          ) : (
+                            <div className="text-dark40">--</div>
+                          )}
+                          {/* {h.type === PoolType.DEPOSITED ||
                           h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
@@ -135,14 +140,19 @@ export default function TableComponent() {
                             </>
                           ) : (
                             <div className="text-dark40">--</div>
-                          )}
+                          )} */}
                         </div>
                         <div className="col-span-2 text-center">
-                          {h.type === PoolType.WITHDRAWN ||
+                          {/* {h.type === PoolType.WITHDRAWN ||
                           h.type === PoolType.SWAPPED ? (
                             <>
                               <div>{h?.targetTokenAmount}</div>
                             </>
+                          ) : (
+                            <div className="text-dark40">--</div>
+                          )} */}
+                          {h?.targetTokenAmount ? (
+                            <div>{h?.targetTokenAmount.toFixed(3)}</div>
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
@@ -215,7 +225,11 @@ export default function TableComponent() {
                                 {baseToken?.symbol}/{targetToken?.symbol}
                                 {baseToken?.address && targetToken?.address && (
                                   <a
-                                    href={`https://raydium.io/swap?inputCurrency=${baseToken.address}&outputCurrency=${targetToken.address}`}
+                                    href={
+                                      chain === "SOL"
+                                        ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                                        : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
+                                    }
                                     target="_blank"
                                     className="ml-[10px]"
                                   >

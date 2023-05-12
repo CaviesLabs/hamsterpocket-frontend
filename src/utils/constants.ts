@@ -205,6 +205,17 @@ export const TAKE_PROFIT_KIND_OPTIONS = [
   },
 ];
 
+export enum UNISWAP_CHAIN {
+  POLYGON_MUMBAI = "polygon_mumbai",
+  BNB = "bnb",
+}
+
 export const SOL_EXPLORE = "https://solscan.io";
 export const MUMBAI_EXPLORE = "https://mumbai.polygonscan.com";
 export const BSC_EXPLORE = "https://bscscan.com";
+export const UNISWAP_EXPLORE = `https://app.uniswap.org/#/swap?chain=${
+  process.env.EVM_CHAIN_ID === "matic"
+    ? UNISWAP_CHAIN.POLYGON_MUMBAI
+    : UNISWAP_CHAIN.BNB
+}`;
+export const RADYUM_EXPLORE = "https://raydium.io/swap";

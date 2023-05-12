@@ -18,9 +18,8 @@ import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-it
 import {
   utilsProvider,
   DATE_TIME_FORMAT,
-  SOL_EXPLORE,
-  MUMBAI_EXPLORE,
-  BSC_EXPLORE,
+  UNISWAP_EXPLORE,
+  RADYUM_EXPLORE,
 } from "@/src/utils";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
@@ -143,10 +142,10 @@ export const PoolItemRow = (props: PoolItemProps) => {
   }, [data, programService, chain]);
 
   return (
-    <div className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden cursor-pointer hover:bg-[#181927]">
+    <div className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden">
       <div className="md:grid md:grid-cols-12">
         <div
-          className="md:col-span-3 cursor-pointer mobile:flow-root mobile:bg-dark3 mobile:py-[10px] mobile:px-[10px] mobile:rounded-[12px]"
+          className="md:col-span-3 cursor-pointer mobile:flow-root mobile:bg-dark3 mobile:py-[10px] mobile:px-[10px] mobile:rounded-[12px] cursor-poiter"
           onClick={() => router.push(`/pocket/${data.id}`)}
         >
           <div className="flex items-center mobile:float-left">
@@ -164,10 +163,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
               <a
                 href={
                   chain === "SOL"
-                    ? `${SOL_EXPLORE}/account/${data.address}`
-                    : process.env.EVM_CHAIN_ID === "matic"
-                    ? `${MUMBAI_EXPLORE}/address/${data.address}`
-                    : `${BSC_EXPLORE}/address/${data.address}`
+                    ? `${RADYUM_EXPLORE}?inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
+                    : `${UNISWAP_EXPLORE}&inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
                 }
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
@@ -211,12 +208,12 @@ export const PoolItemRow = (props: PoolItemProps) => {
           <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px] md:text-center">
             <p
               className={`"md:text-center ${
-                (data?.realizedROIValue || 0) < 0
+                (data?.currentROIValue || 0) < 0
                   ? "text-red300"
                   : "text-green300"
               } normal-text"`}
             >
-              {data?.realizedROIValue?.toFixed(3) || 0} {baseToken?.symbol}
+              {data?.currentROIValue?.toFixed(3) || 0} {baseToken?.symbol}
             </p>
             <p
               className={`md:text-center md:mt-[5px] ${
@@ -233,8 +230,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
           </p>
           <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px]">
             <p className="text-center text-white normal-text">
-              {convertDecimalAmount(baseToken?.address, data?.batchVolume)}{" "}
-              {baseToken?.symbol}
+              1 {baseToken?.symbol}
             </p>
             {averagePrice ? (
               <p className="text-center md:mt-[5px] md:text-[12px] text-white">
