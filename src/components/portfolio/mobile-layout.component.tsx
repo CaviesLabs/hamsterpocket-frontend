@@ -1,7 +1,8 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useState, useEffect, useMemo } from "react";
+import { ToolTip } from "@/src/components/tooltip";
 import { LayoutSection } from "@/src/components/layout-section";
 import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
-import { useConnectedWallet } from "@saberhq/use-solana";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { CopyIcon } from "@/src/components/icons";
 import { PocketBalance } from "./pocket-balance.component";
 import PortfolioController from "@/src/components/portfolio/controller.component";
@@ -11,35 +12,43 @@ import classnames from "classnames";
 
 export const PortfolioMobileLayout: FC = () => {
   const [tab, setTab] = useState(0);
-  const wallet = useConnectedWallet();
+
   /**
    * @description Define state of showing profile menu
    */
   const [show, setShow] = useState(false);
+  const { walletAddress, chain } = useAppWallet();
 
-  /**
-   * @dev Get wallet public key address.
-   */
-  const walletPublicKey = useMemo(
-    () => wallet?.publicKey?.toString(),
-    [wallet]
-  );
+  /** @dev Auto hide tooltip. */
+  useEffect(() => {
+    show &&
+      setTimeout(() => {
+        setShow(false);
+      }, 1000);
+  }, [show]);
 
   return (
     <LayoutSection className="pb-[100px]">
       <div className="mt-[70px]">
-        <img
-          className="w-[95px] h-[95px] mx-auto"
-          src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
-          alt="Boring avatar"
-        />
-        <p
-          className="text-[16px] text-purple300 flex items-center mx-auto justify-center mt-[16px]"
-          onClick={() => setShow(!show)}
-        >
-          <span>{utilsProvider.makeShort(walletPublicKey, 3)} </span>
-          <CopyIcon className="ml-2" />
-        </p>
+        <div className="my-[20px]">
+          <img
+            className="w-[95px] h-[95px] mx-auto"
+            src={`${AVATAR_ENDPOINT}/${walletAddress}.png`}
+            alt="Boring avatar"
+          />
+          <ToolTip message="Copied" open={show}>
+            <p
+              className="text-[20px] text-purple300 flex items-center mx-auto justify-center mt-[16px] cursor-pointer"
+              onClick={() => {
+                navigator.clipboard.writeText(walletAddress);
+                setShow(!show);
+              }}
+            >
+              <span>{utilsProvider.makeShort(walletAddress, 3)} </span>
+              <CopyIcon className="ml-2" />
+            </p>
+          </ToolTip>
+        </div>
       </div>
       <PocketBalance />
       <div className="mt-[20px]">
@@ -70,14 +79,17 @@ export const PortfolioMobileLayout: FC = () => {
           </div>
         </div>
         <div>
-          {tab === 0 ? (
-            <TableComponent />
-          ) : (
-            <>
-              <PortfolioController />
-              <DashboardComponentMobile />
-            </>
-          )}
+          {tab === 0
+            ? useMemo(() => <TableComponent />, [walletAddress, tab, chain])
+            : useMemo(
+                () => (
+                  <>
+                    <PortfolioController />
+                    <DashboardComponentMobile />
+                  </>
+                ),
+                [walletAddress, tab, chain]
+              )}
         </div>
       </div>
     </LayoutSection>
