@@ -10,7 +10,7 @@ const AUTH_ROUTES = [
   "/create-pocket",
   "/ended-pockets",
   "/my-pockets",
-  "/portfolio",
+  "/profile",
   "/history",
   "/pocket",
   "/strategy",

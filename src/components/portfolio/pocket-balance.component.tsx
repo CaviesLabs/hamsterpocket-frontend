@@ -26,7 +26,7 @@ export const PocketBalance: FC = () => {
           />
         </div>
         <div className="text-white ml-3 text-[32px] mobile:text-[14px]">
-          ~ {totalSOL?.toFixed(2)}{" "}
+          ~ {totalSOL?.toFixed(5)}{" "}
           {chain === "SOL"
             ? "SOL"
             : process.env.EVM_CHAIN_ID === "matic"

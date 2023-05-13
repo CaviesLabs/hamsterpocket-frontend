@@ -51,7 +51,7 @@ export const BalanceGroup: FC = () => {
                 hoverColor: "#B998FB",
               }}
               text="View Portfolio"
-              onClick={() => router.push("/portfolio")}
+              onClick={() => router.push("/profile")}
             />
           </div>
         </div>

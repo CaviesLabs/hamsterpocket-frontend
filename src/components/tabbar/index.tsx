@@ -40,7 +40,7 @@ export const TabBar: FC = () => {
       },
       {
         name: "Profile",
-        uri: "/portfolio",
+        uri: "/profile",
         icon: (color: string) => <TabProfileIcon color={color} />,
       },
     ],
