@@ -10,6 +10,7 @@ import {
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Keypair } from "@solana/web3.js";
 import { WSOL_ADDRESS } from "@/src/utils";
+import bigDecimal from "js-big-decimal";
 
 /**
  * @dev The function to convert number to big ether number.
@@ -19,8 +20,9 @@ export const convertToEtherBigNumber = (value: number) =>
 
 export const convertBigNumber = (value: number, decimals: number) => {
   if (decimals > 10 ** 10) {
+    console.log(bigDecimal.multiply(value, decimals).toString());
     return BigNumber.from(
-      `0x${(value * 10 ** 10 * (decimals / 10 ** 10)).toString(16)}`
+      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
     );
   } else {
     return BigNumber.from(`0x${(value * decimals).toString(16)}`);

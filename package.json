@@ -65,6 +65,7 @@
     "fs": "^0.0.1-security",
     "hardhat": "^2.12.6",
     "husky": "^8.0.1",
+    "js-big-decimal": "^1.4.1",
     "jsbi": "^4.3.0",
     "lodash": "^4.17.21",
     "luxon": "^3.2.1",
