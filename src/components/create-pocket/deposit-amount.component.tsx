@@ -4,6 +4,8 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { useWallet } from "@/src/hooks/useWallet";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { formatCurrency } from "@/src/utils";
 
 export const DepositAmount: FC = () => {
@@ -17,6 +19,9 @@ export const DepositAmount: FC = () => {
     setErrorMsgs,
     batchVolume,
   } = useCreatePocketPage();
+
+  const { nativeBalance: evmBalance } = useEvmWallet();
+  const { chain } = useAppWallet();
 
   const { whiteLists, convertDecimalAmount } = useWhiteList();
 
@@ -61,7 +66,9 @@ export const DepositAmount: FC = () => {
                 className="!w-6 mx-1 rounded w-[20px]"
               />
               {formatCurrency(
-                convertDecimalAmount(baseToken?.address, solBalance)
+                chain === "SOL"
+                  ? convertDecimalAmount(baseToken?.address, solBalance)
+                  : evmBalance
               )}{" "}
               {baseToken?.symbol}
             </p>
