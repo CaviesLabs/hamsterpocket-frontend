@@ -41,7 +41,7 @@ module.exports = withPWA(
       ALCHEMY_ID: process.env.ALCHEMY_ID,
       WALLET_CONNECT_PROJECT_ID: process.env.WALLET_CONNECT_PROJECT_ID,
       EVM_CHAIN_ID: process.env.EVM_CHAIN_ID,
-      EVM_CONTRACT_ADDRESS: env.EVM_CONTRACT_ADDRESS,
+      EVM_CONTRACT_ADDRESS: process.env.EVM_CONTRACT_ADDRESS,
     },
     serverRuntimeConfig: {
       // Will only be available on the server side
