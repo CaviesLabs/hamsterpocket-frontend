@@ -7,9 +7,11 @@ import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
 import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useWallet } from "../hooks/useWallet";
 import { useWalletKit } from "@gokiprotocol/walletkit";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 type LayoutProps = {
   data: StatisticEntity;
@@ -25,6 +27,7 @@ const Layout = (props: LayoutProps) => {
    * @dev Wallet hook injected.
    */
   const wallet = useWallet();
+  const { chain, walletAddress } = useAppWallet();
   const { connect: connectWallet } = useWalletKit();
   useEffect(() => {
     if (wallet?.solanaWallet.publicKey?.toString()) {
@@ -32,13 +35,20 @@ const Layout = (props: LayoutProps) => {
     }
   }, [wallet]);
 
-  const handleCreatePocket = () => {
-    if (wallet?.solanaWallet.publicKey) {
-      router.push("/create-pocket");
-    } else {
-      connectWallet();
-    }
-  };
+  const handleCreatePocket = useCallback(
+    (openModalEvm: () => void) => {
+      if (!walletAddress) {
+        if (chain === "SOL") {
+          connectWallet();
+        } else {
+          openModalEvm();
+        }
+      } else {
+        router.push("/strategy");
+      }
+    },
+    [walletAddress, chain]
+  );
 
   return (
     <MainLayout>
@@ -66,15 +76,38 @@ const Layout = (props: LayoutProps) => {
                   automatically execute the chosen strategies over time.
                 </p>
                 <div className="mt-[34px]">
-                  <Button
-                    className="mx-auto !text-[18px] mobile:!text-[14px] !px-[50px] !border-solid !border-white !border-[2px]"
-                    theme={{
-                      backgroundColor: "transparent",
-                      color: "white",
+                  <ConnectButton.Custom>
+                    {({ openConnectModal, mounted }) => {
+                      return (
+                        <div
+                          {...(!mounted && {
+                            "aria-hidden": true,
+                            style: {
+                              opacity: 0,
+                              pointerEvents: "none",
+                              userSelect: "none",
+                            },
+                          })}
+                        >
+                          {(() => {
+                            return (
+                              <Button
+                                className="mx-auto !text-[18px] mobile:!text-[14px] !px-[50px]"
+                                theme={{
+                                  backgroundColor: "#735CF7",
+                                  color: "#FFFFFF",
+                                }}
+                                text="Create a Pocket"
+                                onClick={() =>
+                                  handleCreatePocket(openConnectModal)
+                                }
+                              />
+                            );
+                          })()}
+                        </div>
+                      );
                     }}
-                    text="Create a Pocket"
-                    onClick={() => handleCreatePocket()}
-                  />
+                  </ConnectButton.Custom>
                 </div>
               </div>
             </div>
@@ -87,7 +120,7 @@ const Layout = (props: LayoutProps) => {
             </div>
           </section>
           <section className="pt-[50px] max-w-2xl mx-auto">
-            <p className="text-center text-purple normal-text text-[24px] mobile:text-[18px]">
+            <p className="text-center text-purple300 normal-text text-[24px] mobile:text-[18px]">
               Achievements
             </p>
             <p className="text-center text-white text-[32px]  mobile:text-[20px] normal-text">
@@ -114,7 +147,7 @@ const Layout = (props: LayoutProps) => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] mobile:text-[20px] normal-text">
-                  $ {data.totalVolume.toFixed(2)}
+                  $ {data.totalVolume?.toFixed(2)}
                 </p>
                 <p className="text-center text-dark30 text-[18px] mobile:text-[16px] normal-text">
                   Total Volume

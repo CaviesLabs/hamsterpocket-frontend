@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useMemo } from "react";
 import {
   CurrencyInput,
   CurrencyInputBadge,
@@ -9,11 +9,15 @@ import { PublicKey } from "@solana/web3.js";
 import { getPriceBySolana } from "@/src/services/coingecko";
 import { TargetSelectTokenModal } from "./select-token-modal.component";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 export const DCAPPair: FC = () => {
   /**
    * @dev Injected context.
    */
+  const { chain } = useAppWallet();
+  const { whiteLists } = useWhiteList();
   const {
     baseTokenAddress,
     targetTokenAddress,
@@ -35,27 +39,44 @@ export const DCAPPair: FC = () => {
   /**
    * @desc handle change token and update token price from coingecko
    */
+  const baseToken = useMemo(
+    () => whiteLists?.[baseTokenAddress[0]?.toBase58()?.toString()],
+    [baseTokenAddress]
+  );
+  const targetToken = useMemo(
+    () => whiteLists?.[targetTokenAddress[0]?.toBase58()?.toString()],
+    [targetTokenAddress]
+  );
 
   const handleBaseTokenSelect = (address: string, decimals?: number) => {
     setBaseTokenAddress([new PublicKey(address), decimals]);
   };
   useEffect(() => {
-    const address = baseTokenAddress[0]?.toBase58()?.toString();
-    getPriceBySolana(address).then((resp: any) =>
-      setBaseTokenPrice(resp[address]?.usd)
-    );
-  }, [baseTokenAddress]);
+    if (chain === "SOL") {
+      const address = baseTokenAddress[0]?.toBase58()?.toString();
+      getPriceBySolana(address).then((resp: any) =>
+        setBaseTokenPrice(resp[address]?.usd)
+      );
+    } else {
+      setBaseTokenPrice(baseToken?.estimatedValue);
+    }
+  }, [baseTokenAddress, baseToken, chain]);
 
   const handleTargetTokenSelect = (address: string, decimals?: number) => {
     setTargetTokenAddress([new PublicKey(address), decimals]);
   };
+
   useEffect(() => {
-    const address = targetTokenAddress[0]?.toBase58()?.toString();
-    if (!address) return;
-    getPriceBySolana(address).then((resp: any) =>
-      setTargetTokenPrice(resp[address]?.usd)
-    );
-  }, [targetTokenAddress]);
+    if (chain === "SOL") {
+      const address = targetTokenAddress[0]?.toBase58()?.toString();
+      if (!address) return;
+      getPriceBySolana(address).then((resp: any) =>
+        setTargetTokenPrice(resp[address]?.usd)
+      );
+    } else {
+      setTargetTokenPrice(targetToken?.estimatedValue);
+    }
+  }, [targetTokenAddress, targetToken, chain]);
 
   return (
     <section>

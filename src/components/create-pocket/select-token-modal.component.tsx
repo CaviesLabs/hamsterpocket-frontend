@@ -3,7 +3,13 @@ import { Modal } from "antd";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon, SearchIcon } from "@/src/components/icons";
-import { utilsProvider } from "@/src/utils";
+import {
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { Input } from "@hamsterbox/ui-kit";
 
 export const TargetSelectTokenModal: FC<{
@@ -20,6 +26,9 @@ export const TargetSelectTokenModal: FC<{
 
   /** @dev Inject whitelist info. */
   const { whiteLists } = useWhiteList();
+
+  /** @dev Inject wallet account info. */
+  const { chain } = useAppWallet();
 
   /** @dev Search token value. */
   const [search, setSearch] = useState("");
@@ -63,50 +72,58 @@ export const TargetSelectTokenModal: FC<{
             <p className="float-right text-[14px] text-white">Address</p>
           </div>
           <div className="mt-[2px] max-h-[240px] overflow-y-scroll">
-            {filterdList.map((token) => (
-              <div
-                className="w-full bg-[transparent] hover:bg-dark80 rounded-[8px] md:px-[22px] py-[20px] mobile:py-[10px] flow-root cursor-pointer"
-                key={`ttiterm-${token}`}
-                onClick={(e) =>
-                  props.handleOk(e, token, whiteLists[token].decimals)
-                }
-              >
-                <div className="flex items-center float-left">
-                  <div className="w-[44px] h-[44px] mobile:!w-[25px] mobile:!h-[25px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] mobile:border-[3px] border-dark70">
-                    {whiteLists[token]?.image && (
-                      <img
-                        src={whiteLists[token]?.image}
-                        className="rounded-[50%]"
-                        alt={"token image"}
-                      />
-                    )}
+            {filterdList
+              .filter((token) => whiteLists[token])
+              .map((token) => (
+                <div
+                  className="w-full bg-[transparent] hover:bg-dark80 rounded-[8px] md:px-[22px] py-[20px] mobile:py-[10px] flow-root cursor-pointer"
+                  key={`ttiterm-${token}`}
+                  onClick={(e) =>
+                    props.handleOk(e, token, whiteLists[token].decimals)
+                  }
+                >
+                  <div className="flex items-center float-left">
+                    <div className="w-[44px] h-[44px] mobile:!w-[25px] mobile:!h-[25px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] mobile:border-[3px] border-dark70">
+                      {whiteLists[token]?.image && (
+                        <img
+                          src={whiteLists[token]?.image}
+                          className="rounded-[50%]"
+                          alt={"token image"}
+                        />
+                      )}
+                    </div>
+                    <div className="pl-[20px]">
+                      <p className="text-white text-[18px] mobile:!text-[14px] normal-text uppercase">
+                        {whiteLists[token]?.symbol}
+                      </p>
+                      <p className="text-white text-[14px] mobile:!text-[12px] normal-text">
+                        {whiteLists[token]?.name}
+                      </p>
+                    </div>
                   </div>
-                  <div className="pl-[20px]">
-                    <p className="text-white text-[18px] mobile:!text-[14px] normal-text uppercase">
-                      {whiteLists[token]?.symbol}
-                    </p>
-                    <p className="text-white text-[14px] mobile:!text-[12px] normal-text">
-                      {whiteLists[token]?.name}
-                    </p>
+                  <div className="flex items-center float-right relative top-[5px]">
+                    <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px] w-[170px] mobile:w-[100px] mobile:px-[3px]">
+                      <p className="text-dark50 text-[14px] mobile:text-[12px] normal-text">
+                        {utilsProvider.makeShort(whiteLists[token]?.address)}
+                      </p>
+                    </div>
+                    <a
+                      href={
+                        chain === "SOL"
+                          ? `${SOL_EXPLORE}/account/${token}`
+                          : process.env.EVM_CHAIN_ID === "matic"
+                          ? `${MUMBAI_EXPLORE}/token/${token}`
+                          : `${BSC_EXPLORE}/token/${token}`
+                      }
+                      target="_blank"
+                      className="ml-[10px]"
+                    >
+                      <ShareIcon className="mobile:hidden" />
+                      <ShareIcon className="md:hidden" size="14px" />
+                    </a>
                   </div>
                 </div>
-                <div className="flex items-center float-right relative top-[5px]">
-                  <div className="py-[5px] px-[30px] border-solid border-[2px] border-dark70 rounded-[8px] w-[170px] mobile:w-[100px] mobile:px-[3px]">
-                    <p className="text-dark50 text-[14px] mobile:text-[12px] normal-text">
-                      {utilsProvider.makeShort(token)}
-                    </p>
-                  </div>
-                  <a
-                    href={`https://solscan.io/account/${token}`}
-                    target="_blank"
-                    className="ml-[10px]"
-                  >
-                    <ShareIcon className="mobile:hidden" />
-                    <ShareIcon className="md:hidden" size="14px" />
-                  </a>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

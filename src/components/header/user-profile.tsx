@@ -1,21 +1,26 @@
 import { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
+import { disconnect as disconnectEvm } from "@wagmi/core";
 import {
   LoggoutIcon,
-  NoneIcon,
-  PlusIcon,
+  // NoneIcon,
+  // PlusIcon,
   BookIcon,
-  SolanaIcon,
   DropdownArrowIcon,
 } from "@/src/components/icons";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
   const router = useRouter();
-  const { disconnect } = useWallet();
+  const { chain, walletAddress } = useAppWallet();
+  const { disconnect: disconnectSol } = useWallet();
+  // const { disconnect: disconnectEvm } = useDisconnectEvm();
+
   /**
    * @description Define state of showing profile menu
    */
@@ -39,19 +44,17 @@ const UserProfile: FC = () => {
       )}
       ref={ref}
     >
-      {/* <img
-        className="w-[25px] md:w-[40px] h-[auto] mr-[10px]"
-        src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
-        alt="Boring avatar"
-      /> */}
-      <SolanaIcon className="h-[auto] mr-[10px]" />
+      <img
+        className="mr-[10px] w-[24px] h-[24px]"
+        src={`${AVATAR_ENDPOINT}/${walletAddress}.png`}
+      />
       <span
         className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
         <span className="normal-text text-dark50">
-          {/* {utilsProvider.makeShort(walletPublicKey, 3)}{" "} */}
-          Solana
+          {/* {chain === "SOL" ? "Solana" : "BNB Chain"} */}
+          {utilsProvider.makeShort(walletAddress, 3)}
         </span>
         <DropdownArrowIcon className="ml-2 text-dark50" />
       </span>
@@ -62,18 +65,18 @@ const UserProfile: FC = () => {
         <div className={styles.container}>
           <ul>
             <li
-              onClick={() => router.push(`/create-pocket`)}
-              className="hover:text-purple normal-text md:hidden flex items-center"
-            >
-              <PlusIcon />
-              <p className="ml-[5px]">Create Pocket</p>
-            </li>
-            <li
               onClick={() => router.push(`/my-pockets`)}
               className="hover:text-purple normal-text flex items-center"
             >
               <BookIcon />
               <p className="ml-[5px]">My Pockets</p>
+            </li>
+            {/* <li
+              onClick={() => router.push(`/create-pocket`)}
+              className="hover:text-purple normal-text md:hidden flex items-center"
+            >
+              <PlusIcon />
+              <p className="ml-[5px]">Create Pocket</p>
             </li>
             <li
               onClick={() => router.push(`/portfolio`)}
@@ -88,9 +91,15 @@ const UserProfile: FC = () => {
             >
               <NoneIcon />
               <p className="ml-[5px]">View History</p>
-            </li>
+            </li> */}
             <li
-              onClick={disconnect}
+              onClick={async () => {
+                if (chain === "SOL") {
+                  disconnectSol();
+                } else {
+                  await disconnectEvm();
+                }
+              }}
               className="text-red300 flex items-center normal-text"
             >
               <LoggoutIcon />

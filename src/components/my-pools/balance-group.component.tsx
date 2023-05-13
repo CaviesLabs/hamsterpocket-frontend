@@ -2,32 +2,32 @@ import { FC, useEffect } from "react";
 import { Button } from "@hamsterbox/ui-kit";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { useWallet } from "@/src/hooks/useWallet";
 import { UserBalanceComponent } from "@/src/components/my-pools/user-balance.component";
 import { PocketBalanceComponent } from "@/src/components/my-pools/pocket-balance.component";
 import { getPortfolios } from "@/src/redux/actions/portfolio/portfolio.action";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 export const BalanceGroup: FC = () => {
   /**
    * @dev Inject router module to use.
    */
   const router = useRouter();
-  const { solanaWallet } = useWallet();
   const dispatch = useDispatch();
+  const { walletAddress } = useAppWallet();
 
   /**
    * @dev Fetch
    */
   useEffect(() => {
-    if (!solanaWallet) return;
+    if (!walletAddress) return;
     dispatch(
       getPortfolios({
-        ownerAddress: solanaWallet?.publicKey?.toBase58()?.toString(),
+        ownerAddress: walletAddress,
         sortBy: ["VALUE_DESC"],
         search: "",
       })
     );
-  }, [solanaWallet]);
+  }, [walletAddress]);
 
   return (
     <section>

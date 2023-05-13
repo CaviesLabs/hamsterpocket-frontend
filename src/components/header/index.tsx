@@ -1,18 +1,20 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useWalletKit } from "@gokiprotocol/walletkit";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
+import { HamsterboxIcon } from "@/src/components/icons";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
-import { HamsterboxIcon } from "@/src/components/icons";
 import styled from "@emotion/styled";
 
 const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [chain] = useState<"SOL" | "ETH">("ETH");
   const router = useRouter();
 
   /**
@@ -25,8 +27,17 @@ const Header: FC = () => {
    * @dev Import GoGi providers.
    */
   const { connect: connectWallet } = useWalletKit();
-  const wallet = useConnectedWallet();
+  const { walletAddress } = useAppWallet();
+  // const wallet = useConnectedWallet();
 
+  /**
+   * @dev The function to desire which blockchain to connect.
+   */
+  const handleConnect = useCallback(() => {
+    if (chain === "SOL") {
+      connectWallet();
+    }
+  }, [chain]);
   /**
    * @description
    * This function set current selected section based on the location user are in
@@ -91,36 +102,79 @@ const Header: FC = () => {
             >
               {
                 <ul className="menu-container float-left">
-                  {wallet && (
+                  {/* {walletAddress && (
                     <Button
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
                       size="small"
-                      onClick={() => router.push("/create-pocket")}
+                      onClick={() => router.push("/strategy")}
                       theme={{
-                        backgroundColor: "#B998FB",
+                        backgroundColor: "#735CF7",
                         color: "#FFFFFF",
                       }}
                     />
+                  )} */}
+                  {walletAddress && (
+                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] pr-[30px]">
+                      <img
+                        className="w-[24px] h-[24px]"
+                        src="/assets/images/bnb.svg"
+                      />
+                    </div>
                   )}
                 </ul>
               }
             </div>
             <div className="relative flex items-center right-[16px]">
               <div className="float-right relative">
-                {!wallet ? (
-                  <div className="relative">
-                    {" "}
-                    <Button
-                      className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
-                      size="small"
-                      text="Connect Wallet"
-                      onClick={connectWallet}
-                      theme={{
-                        backgroundColor: "#B998FB",
-                        color: "#FFFFFF",
-                      }}
-                    />{" "}
+                {!walletAddress ? (
+                  <div className="relative flex items-center">
+                    {chain === "SOL" ? (
+                      <Button
+                        className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
+                        size="small"
+                        text="Connect Wallet"
+                        onClick={handleConnect}
+                        theme={{
+                          backgroundColor: "#735CF7",
+                          color: "#FFFFFF",
+                        }}
+                      />
+                    ) : (
+                      <ConnectButton.Custom>
+                        {({ account, chain, openConnectModal, mounted }) => {
+                          return (
+                            <div
+                              {...(!mounted && {
+                                "aria-hidden": true,
+                                style: {
+                                  opacity: 0,
+                                  pointerEvents: "none",
+                                  userSelect: "none",
+                                },
+                              })}
+                            >
+                              {(() => {
+                                if (!mounted || !account || !chain) {
+                                  return (
+                                    <Button
+                                      className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
+                                      size="small"
+                                      text="Connect Wallet"
+                                      onClick={openConnectModal}
+                                      theme={{
+                                        backgroundColor: "#735CF7",
+                                        color: "#FFFFFF",
+                                      }}
+                                    />
+                                  );
+                                }
+                              })()}
+                            </div>
+                          );
+                        }}
+                      </ConnectButton.Custom>
+                    )}{" "}
                   </div>
                 ) : (
                   <UserProfile />
@@ -139,9 +193,9 @@ export default Header;
 const StyledHeader = styled.div`
   transition: background-color 0.3s ease;
   &.scrolled-header {
-    background-color: #000000;
+    background-color: #121320;
     @media screen and (max-width: 768px) {
-      background-color: #060710;
+      background-color: #121320;
     }
   }
 `;

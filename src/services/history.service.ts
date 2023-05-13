@@ -13,6 +13,17 @@ export class HistoryService {
     });
   }
 
+  public async getPocketActivities(payload: {
+    pocketId: string;
+  }): Promise<HistoryEntity[]> {
+    return networkProvider.request<HistoryEntity[]>(
+      `/pool/${payload.pocketId}/activities`,
+      {
+        method: "GET",
+      }
+    );
+  }
+
   public async getHistory(payload: DetailDto): Promise<HistoryEntity> {
     return networkProvider.request<HistoryEntity>(`/histories/${payload.id}`, {
       method: "GET",

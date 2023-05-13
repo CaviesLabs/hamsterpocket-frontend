@@ -130,6 +130,19 @@ export const WSOL_ADDRESS = "So11111111111111111111111111111111111111112";
 export const BONK_ADDRESS = "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263";
 export const USDC_ADDRESS = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 
+export const ALIAS_WMATIC_ADDRESS =
+  "So11111111111111111111111111111111111111112";
+export const ALIAS_UASDC_ADDRESS =
+  "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+
+export const MATIC_ADDRESS = "0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889";
+export const ETH_USDC_ADDRESS = "0x6041fE60d443480F96546C927E0cE6E14A5741D4";
+
+export const MATIC_UNIVERSAL_ROUTER =
+  "0x4648a43B2C14Da09FdF82B161150d3F634f40491";
+export const BSC_UNIVERSAL_ROUTER =
+  "0x5Dc88340E1c5c6366864Ee415d6034cadd1A9897";
+
 /**
  * @dev Host to storage user avatar by wallet address.
  */
@@ -191,3 +204,18 @@ export const TAKE_PROFIT_KIND_OPTIONS = [
     value: TAKE_PROFIT_TYPE.TARGETPROFIT,
   },
 ];
+
+export enum UNISWAP_CHAIN {
+  POLYGON_MUMBAI = "polygon_mumbai",
+  BNB = "bnb",
+}
+
+export const SOL_EXPLORE = "https://solscan.io";
+export const MUMBAI_EXPLORE = "https://mumbai.polygonscan.com";
+export const BSC_EXPLORE = "https://bscscan.com";
+export const UNISWAP_EXPLORE = `https://app.uniswap.org/#/swap?chain=${
+  process.env.EVM_CHAIN_ID === "matic"
+    ? UNISWAP_CHAIN.POLYGON_MUMBAI
+    : UNISWAP_CHAIN.BNB
+}`;
+export const RADYUM_EXPLORE = "https://raydium.io/swap";

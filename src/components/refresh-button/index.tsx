@@ -9,7 +9,6 @@ type RefreshButtonProps = {
 export const RefreshButton = (props: RefreshButtonProps) => {
   return (
     <AntdTooltip
-      color="rgba(18, 19, 27, 0.9506)"
       placement="bottom"
       title="Click button to refresh the displayed data"
       className="ml-2 text-[12px]"
@@ -21,15 +20,15 @@ export const RefreshButton = (props: RefreshButtonProps) => {
         fontSize: 12,
         textAlign: "center",
         padding: "20px 12px",
-        border: "solid 1px rgba(255, 255, 255, 0.1985)",
+        border: "solid 1px #735CF7",
       }}
     >
       <button
-        className="relative ml-4 bg-dark90 text-dark40 hover:text-white rounded-full px-4 py-2 flex items-center"
+        className="relative ml-4 border-solid border-[2px] border-purple300 text-purple300 hover:text-white rounded-full px-4 py-2 flex items-center"
         onClick={props.handleClick}
       >
         <SyncOutlined spin={props.loading} style={{ fontSize: 18 }} />
-        <p className="regular-text ml-4">Refresh</p>
+        <p className="regular-text ml-4">Sync</p>
       </button>
     </AntdTooltip>
   );

@@ -1,12 +1,13 @@
 import { FC, useEffect } from "react";
 import { LayoutSection } from "@/src/components/layout-section";
-import { BreadCrumb } from "@/src/components/bread-crumb";
 import { Button } from "@hamsterbox/ui-kit";
 import {
-  PoolInformation,
+  // PoolInformation,
   DCAPPair,
   DCAStrategy,
   StopCondition,
+  TakeProfitAmount,
+  StopLossAmount,
 } from "@/src/components/create-pocket";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useValidate } from "@/src/hooks/pages/create-pocket/useValidate";
@@ -24,13 +25,14 @@ export const CreatePocketDesktopLayout: FC = () => {
 
   return (
     <LayoutSection className="md:pt-[100px] pb-[100px]">
-      <BreadCrumb data={["Home", "Create a Pocket"]} />
       <p className="md:text-[32px] text-[18px] text-white mt-[24px]">
         Create a new Pocket
       </p>
-      <PoolInformation />
+      {/* <PoolInformation /> */}
       <DCAPPair />
       <DCAStrategy />
+      <TakeProfitAmount />
+      <StopLossAmount />
       <StopCondition />
       <section className="mt-14 flow-root">
         <div className="float-right ml-[20px]">

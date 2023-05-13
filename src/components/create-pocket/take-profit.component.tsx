@@ -23,12 +23,7 @@ export const TakeProfitOption: FC = () => {
   return (
     <div className="grid md:grid-cols-5 gap-3">
       <div className="md:col-span-2">
-        <p className="text-dark10 text-[14px] regular-text mb-1">
-          Take Profit
-          <span className="text-red300 relative top-[-2px] right-[-2px]">
-            *
-          </span>
-        </p>
+        <p className="text-dark10 text-[14px] regular-text mb-1">Take Profit</p>
         <p className="text-dark50 text-[12px] normal-text">
           Reference for Take Profit
         </p>

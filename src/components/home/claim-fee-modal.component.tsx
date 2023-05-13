@@ -83,7 +83,6 @@ export const ClaimFeeModal: FC<{
             shape="primary"
             size="large"
             onClick={() => {
-              console.log("can");
               props.handleCancel();
             }}
             text="Cancel"

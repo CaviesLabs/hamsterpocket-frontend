@@ -1,65 +1,45 @@
-import { FC } from "react";
-import ProgressBar from "@ramonak/react-progress-bar";
-import { Button } from "@hamsterbox/ui-kit";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FC, useMemo } from "react";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
+import { DATE_TIME_FORMAT } from "@/src/utils";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import dayjs from "dayjs";
 Chart.register(ArcElement, Legend, Tooltip);
 
-export const PocketInfo: FC = () => {
+export const PocketInfo: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
+  props
+) => {
+  const pocket = props.pocket;
+
+  /** @dev Inject needed modules to get token account. */
+  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
+    useWhiteList();
+
+  /** @dev Get base token info. */
+  const baseToken = useMemo(
+    () =>
+      whiteLists[pocket?.baseTokenAddress] ||
+      findEntityByAddress(pocket?.baseTokenAddress),
+    [pocket, props]
+  );
+
   return (
-    <div className="bg-dark100 rounded-[12px] min-h-[200px] p-[16px]">
+    <div className="bg-dark100 rounded-[12px] p-[16px]">
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
         <p className="float-left text-dark50 normal-text">Total deposited</p>
-        <p className="text-white normal-text float-right">78 SOL</p>
-      </div>
-      <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
-        <p className="float-left text-dark50 normal-text">Strategy</p>
-        <p className="text-white normal-text float-right">10 SOL monthly</p>
-      </div>
-      <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
-        <p className="float-left text-dark50 normal-text">Next batch time</p>
         <p className="text-white normal-text float-right">
-          16/02/2023 16:00 (+07)
+          {convertDecimalAmount(baseToken?.address, pocket?.depositedAmount)}{" "}
+          {baseToken?.symbol}
         </p>
       </div>
       <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
-        <p className="float-left text-dark50 normal-text">View by</p>
-        <ProgressBar
-          completed={0.24 * 100}
-          bgColor="#735CF7"
-          baseBgColor="#060710"
-          customLabel={`${0.24 * 100}%`}
-          labelAlignment="center"
-          labelClassName="progress-label app-font"
-          className="mt-[30px]"
-          height="10px"
-        />
-        <div className="flow-root mt-[16px]">
-          <div className="float-right">
-            <p className="text-dark50 normal-text">Start date</p>
-            <p className="text-white normal-text">16/02/2023</p>
-          </div>
-          <div className="float-left">
-            <p className="text-dark50 normal-text">Time left</p>
-            <p className="text-white normal-text">234 day(s)</p>
-          </div>
-        </div>
-      </div>
-      <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
-        <div className="float-left">
-          <p className="text-dark50 normal-text">Outstanding deposit</p>
-          <p className="text-white normal-text">3.4 SOL</p>
-        </div>
-        <div className="float-right">
-          <Button
-            className="!px-[50px] md:w-auto !w-full pool-control-btn"
-            theme={{
-              backgroundColor: "#735CF7",
-              color: "#FFFFFF",
-            }}
-            text="Deposit Now"
-            width="100%"
-          />
-        </div>
+        <p className="float-left text-dark50 normal-text">Start date</p>
+        <p className="text-white normal-text float-right">
+          {dayjs(props.pocket?.startTime?.toLocaleString()).format(
+            DATE_TIME_FORMAT
+          )}
+        </p>
       </div>
     </div>
   );

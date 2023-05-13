@@ -11,4 +11,6 @@ export * from "./buy-condition-mobile.component";
 export * from "./take-profit.component";
 export * from "./stop-loss.component";
 export * from "./deposit-amount.component";
+export * from "./take-profit-amount.component";
+export * from "./stop-loss-amount.component";
 export * from "./parser";

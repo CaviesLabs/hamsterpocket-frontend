@@ -129,6 +129,10 @@ export class PocketEntity {
 
   endedAt: Date;
 
+  updatedAt: Date;
+
+  nextExecutionAt: Date;
+
   closedAt: Date;
 
   depositedAmount: number;
@@ -165,4 +169,14 @@ export class PocketEntity {
   mainProgressBy: MainProgressBy | undefined;
 
   progressPercent: number;
+
+  /** ROI */
+  currentTargetTokenBalance: number;
+  currentROIValue: number;
+  currentROI: number;
+  realizedROI: number;
+  realizedROIValue: number;
+
+  stopLossCondition: { stopType: string; value: number };
+  takeProfitCondition: { stopType: string; value: number };
 }

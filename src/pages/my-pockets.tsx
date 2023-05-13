@@ -10,7 +10,7 @@ const Layout: FC = () => {
   return (
     <MainLayout>
       <div className={styles.container}>
-        <LayoutSection className="!pt-[130px] pb-[100px]">
+        <LayoutSection className="md:!pt-[130px] pb-[100px]">
           <ActivePoolGroup />
         </LayoutSection>
       </div>

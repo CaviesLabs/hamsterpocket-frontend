@@ -5,7 +5,6 @@ import { DropdownSelect, FilterSelect } from "@/src/components/select";
 import { SearchIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useDispatch } from "react-redux";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import {
   getClosedPockets,
   syncWalletPockets,
@@ -15,6 +14,7 @@ import { RefreshButton } from "@/src/components/refresh-button";
 import { useSelector } from "react-redux";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import State from "@/src/redux/entities/state";
 
 export const EndedPoolGroupComponent: FC = () => {
@@ -27,7 +27,7 @@ export const EndedPoolGroupComponent: FC = () => {
   /** @dev Get fetched closed pools. */
   const closedPockets = useSelector((state: State) => state.closedPockets);
 
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const { chain, walletAddress } = useAppWallet();
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState(PocketTypes[0].value);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
@@ -38,31 +38,37 @@ export const EndedPoolGroupComponent: FC = () => {
   const [fetching, setFetching] = useState(false);
 
   const handleFetch = useCallback(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     setFetching(true);
     dispatch(
       getClosedPockets(
         {
           limit: 999,
-          ownerAddress: wallet,
+          ownerAddress: walletAddress,
           search,
           sortBy: sorter[0],
           statuses:
             selectedType === PocketTypes[2].value
               ? [PocketStatus.CLOSED, PocketStatus.ENDED]
               : [selectedType as PocketStatus.ENDED],
+          chainId:
+            chain === "SOL"
+              ? "solana"
+              : process.env.EVM_CHAIN_ID === "matic"
+              ? "mumbai"
+              : "bsc_mainnet",
         },
         () => setFetching(false)
       )
     );
-  }, [wallet, debouncedSearch, selectedType, sorter]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter, chain]);
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress: wallet }, () => {
+      syncWalletPockets({ walletAddress }, () => {
         setFetching(false);
         handleFetch();
         toast("The latest data is now available", {
@@ -70,11 +76,11 @@ export const EndedPoolGroupComponent: FC = () => {
         });
       })
     );
-  }, [wallet, debouncedSearch, selectedType, sorter]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter]);
 
   useEffect(
     () => handleFetch(),
-    [wallet, debouncedSearch, selectedType, sorter]
+    [walletAddress, debouncedSearch, selectedType, sorter]
   );
 
   return (

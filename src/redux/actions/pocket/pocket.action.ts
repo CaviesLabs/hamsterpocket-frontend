@@ -8,6 +8,7 @@ import {
   GET_CLOSED_POCKETS,
   SET_CLOSED_POCKETS,
   SYNC_WALLET_POCKETS,
+  GET_POCKET_BY_ID,
 } from "@/src/redux/actions";
 import { CallBackSaga } from "@/src/redux/entities";
 import { DetailDto } from "@/src/dto/detail.dto";
@@ -23,6 +24,19 @@ export const getActivePocket = (
   callback?: CallBackSaga<PocketEntity>
 ) => ({
   type: GET_ACTIVE_POCKET,
+  payload,
+  callback,
+});
+
+/**
+ * GET pocket by id.
+ * @returns.
+ */
+export const getPocketById = (
+  payload: { pocketId: string },
+  callback?: CallBackSaga<PocketEntity>
+) => ({
+  type: GET_POCKET_BY_ID,
   payload,
   callback,
 });
@@ -114,7 +128,7 @@ export const setClosedPockets = (data: PocketEntity[]) => ({
  * @returns {boolean}
  */
 export const syncWalletPockets = (
-  data: { walletAddress: string },
+  data: { walletAddress: string; evm?: boolean },
   callback?: CallBackSaga<any>
 ) => ({
   type: SYNC_WALLET_POCKETS,
