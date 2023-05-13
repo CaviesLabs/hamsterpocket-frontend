@@ -168,7 +168,7 @@ export const DepositModal: FC<{
             className="my-3"
             loading={loading}
             theme={{
-              backgroundColor: isDisabled ? "gray" : "#B998FB",
+              backgroundColor: isDisabled ? "gray" : "#735CF7",
               color: "#FFFFFF",
             }}
             disabled={isDisabled}

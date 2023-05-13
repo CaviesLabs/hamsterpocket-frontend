@@ -317,7 +317,7 @@ export const PoolItem = (props: PoolItemProps) => {
                 <Button
                   className="!px-[50px] md:w-auto !w-full pool-control-btn"
                   theme={{
-                    backgroundColor: "#B998FB",
+                    backgroundColor: "#735CF7",
                     color: "#FFFFFF",
                   }}
                   text="Deposit"
@@ -333,7 +333,7 @@ export const PoolItem = (props: PoolItemProps) => {
                   <Button
                     className="!px-[50px] md:w-auto pool-control-btn"
                     theme={{
-                      backgroundColor: "#B998FB",
+                      backgroundColor: "#735CF7",
                       color: "#FFFFFF",
                     }}
                     text="Continue"
@@ -344,7 +344,7 @@ export const PoolItem = (props: PoolItemProps) => {
                   <Button
                     className="!px-[50px] md:w-auto pool-control-btn"
                     theme={{
-                      backgroundColor: "#B998FB",
+                      backgroundColor: "#735CF7",
                       color: "#FFFFFF",
                     }}
                     text="Pause"
@@ -356,11 +356,11 @@ export const PoolItem = (props: PoolItemProps) => {
             <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
               {!isEnded && (
                 <Button
-                  className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
+                  className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn"
                   theme={{
                     backgroundColor: "transparent",
-                    color: "#B998FB",
-                    hoverColor: "#B998FB",
+                    color: "#735CF7",
+                    hoverColor: "#735CF7",
                   }}
                   text={isClosed ? "Withdraw" : "Close"}
                   width="100%"
@@ -372,8 +372,8 @@ export const PoolItem = (props: PoolItemProps) => {
                   className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
                   theme={{
                     backgroundColor: "transparent",
-                    color: "#B998FB",
-                    hoverColor: "#B998FB",
+                    color: "#735CF7",
+                    hoverColor: "#735CF7",
                   }}
                   text="Claim fee"
                   width="100%"

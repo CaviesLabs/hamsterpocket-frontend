@@ -115,7 +115,7 @@ const Header: FC = () => {
                     />
                   )}
                   {walletAddress && (
-                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]">
+                    <div className="border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]">
                       <img
                         className="w-[24px] h-[24px]"
                         src="/assets/images/bnb.svg"

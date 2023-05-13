@@ -45,11 +45,11 @@ export const CreatePocketDesktopLayout: FC = () => {
         </div>
         <div className="float-right">
           <Button
-            className="float-right !border-solid !border-purple !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
+            className="float-right !border-solid !border-purple300 !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
             theme={{
               backgroundColor: "transparent",
-              color: "#B998FB",
-              hoverColor: "#B998FB",
+              color: "#735CF7",
+              hoverColor: "#735CF7",
             }}
             text="Back"
           />

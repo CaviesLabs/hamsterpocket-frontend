@@ -38,7 +38,7 @@ export const SuccessTransactionModal: FC<{
             text={props.okMessage}
             className="mb-3"
             theme={{
-              backgroundColor: "#B998FB",
+              backgroundColor: "#735CF7",
               color: "#FFFFFF",
             }}
           />

@@ -101,7 +101,7 @@ export const ClosePocketModal: FC<{
             className="mb-3"
             loading={loading}
             theme={{
-              backgroundColor: "#B998FB",
+              backgroundColor: "#735CF7",
               color: "#FFFFFF",
             }}
           />
@@ -112,11 +112,11 @@ export const ClosePocketModal: FC<{
               props.handleCancel();
             }}
             text="Cancel"
-            className="mb-3 !border-solid !border-purple !border-[2px]"
+            className="mb-3 !border-solid !border-purple300 !border-[2px]"
             theme={{
               backgroundColor: "transparent",
-              color: "#B998FB",
-              hoverColor: "#B998FB",
+              color: "#735CF7",
+              hoverColor: "#735CF7",
             }}
           />
         </div>

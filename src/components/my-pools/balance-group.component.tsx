@@ -47,8 +47,8 @@ export const BalanceGroup: FC = () => {
               width="100%"
               theme={{
                 backgroundColor: "#20242D",
-                color: "#B998FB",
-                hoverColor: "#B998FB",
+                color: "#735CF7",
+                hoverColor: "#735CF7",
               }}
               text="View Portfolio"
               onClick={() => router.push("/profile")}
@@ -57,11 +57,11 @@ export const BalanceGroup: FC = () => {
         </div>
         <div className="w-full md:w-[253px] block md:mt-0 mt-[20px]">
           <Button
-            className="float-right !px-[50px] !border-solid !border-purple !border-[2px] md:w-auto !w-full !text-[14px] md:!text-[16px]"
+            className="float-right !px-[50px] !border-solid !border-purple300 !border-[2px] md:w-auto !w-full !text-[14px] md:!text-[16px]"
             theme={{
               backgroundColor: "transparent",
-              color: "#B998FB",
-              hoverColor: "#B998FB",
+              color: "#735CF7",
+              hoverColor: "#735CF7",
             }}
             text="View history"
             width="100%"

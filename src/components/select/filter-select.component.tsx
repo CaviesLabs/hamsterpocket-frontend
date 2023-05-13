@@ -124,7 +124,7 @@ export const FilterSelect: FC<SelectProps> = (props) => {
                 <div className="flex items-center border-b py-4 border-dark50 hover:text-purple">
                   {renderItemInfo(option)}
                   {values?.indexOf(option.value) > -1 && (
-                    <CheckIcon color="#B998FB" />
+                    <CheckIcon color="#735CF7" />
                   )}
                 </div>
               </div>

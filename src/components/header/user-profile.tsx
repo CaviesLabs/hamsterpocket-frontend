@@ -39,7 +39,7 @@ const UserProfile: FC = () => {
   return (
     <div
       className={classnames(
-        "relative flex items-center h-full border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] px-[10px] md:py-[10px] py-[5px]",
+        "relative flex items-center h-full border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] px-[10px] md:py-[10px] py-[5px]",
         styles["avatar-profile"]
       )}
       ref={ref}
