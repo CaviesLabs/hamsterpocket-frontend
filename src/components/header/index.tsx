@@ -102,7 +102,7 @@ const Header: FC = () => {
             >
               {
                 <ul className="menu-container float-left">
-                  {walletAddress && (
+                  {/* {walletAddress && (
                     <Button
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
@@ -113,6 +113,14 @@ const Header: FC = () => {
                         color: "#FFFFFF",
                       }}
                     />
+                  )} */}
+                  {walletAddress && (
+                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] pr-[30px]">
+                      <img
+                        className="w-[24px] h-[24px]"
+                        src="/assets/images/bnb.svg"
+                      />
+                    </div>
                   )}
                 </ul>
               }
@@ -121,32 +129,6 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    {/* <div
-                      className="mr-[10px] bg-dark3 px-[20px] flex py-[7px] rounded-[20px] cursor-pointer"
-                      onClick={() => setChain(chain === "SOL" ? "ETH" : "SOL")}
-                    >
-                      <img
-                        className="w-[24px] h-[24px]"
-                        src={`/assets/images/${
-                          chain === "SOL" ? "solana.svg" : "bnb.svg"
-                        }`}
-                      />
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="ml-[5px]"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M20.3913 10.75C20.6947 10.75 20.9681 10.5673 21.0842 10.287C21.2003 10.0068 21.1362 9.68417 20.9217 9.46967L15.9217 4.46967C15.6288 4.17678 15.1539 4.17678 14.861 4.46967C14.5681 4.76256 14.5681 5.23744 14.861 5.53033L18.5807 9.25H3.00003C2.58581 9.25 2.25003 9.58579 2.25003 10C2.25003 10.4142 2.58581 10.75 3.00003 10.75H20.3913ZM3.00002 13.25C2.69668 13.25 2.4232 13.4327 2.30711 13.713C2.19103 13.9932 2.25519 14.3158 2.46969 14.5303L7.46969 19.5303C7.76259 19.8232 8.23746 19.8232 8.53035 19.5303C8.82325 19.2374 8.82325 18.7626 8.53035 18.4697L4.81068 14.75H20.3913C20.8055 14.75 21.1413 14.4142 21.1413 14C21.1413 13.5858 20.8055 13.25 20.3913 13.25H3.00002Z"
-                          fill="#7886A0"
-                        />
-                      </svg>
-                    </div>{" "} */}
                     {chain === "SOL" ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
@@ -211,9 +193,9 @@ export default Header;
 const StyledHeader = styled.div`
   transition: background-color 0.3s ease;
   &.scrolled-header {
-    background-color: #000000;
+    background-color: #121320;
     @media screen and (max-width: 768px) {
-      background-color: #060710;
+      background-color: #121320;
     }
   }
 `;
