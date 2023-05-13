@@ -27,8 +27,11 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
 
   return (
     <Dropdown
-      overlayStyle={{ height: "63px" }}
-      className={classnames("!bg-dark90", props.className)}
+      // overlayStyle={{ height: "63px" }}
+      className={classnames(
+        "!bg-dark90 h-[63px] mobile:!h-[40px]",
+        props.className
+      )}
       menu={{
         items: props.options.map((item) => {
           /**
@@ -39,7 +42,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
             key: data?.value || data,
             label: (
               <div
-                className="w-full px-4 py-2 text-sm text-gray-700 text-center relative left-[-10px] regular-text !text-dark10"
+                className="w-full px-4 py-2 text-sm mobile:!text-[14px] text-gray-700 text-center relative left-[-10px] regular-text !text-dark10"
                 onClick={() => {
                   const value = data?.value || data;
                   props.handleSelectValue(value);
@@ -59,7 +62,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
       )}
     >
       <div className="flex items-center w-full rounded-[16px] cursor-pointer">
-        <div className="flex items-center justify-center text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full">
+        <div className="flex items-center justify-center text-center !text-dark10 focus:ring-0 text-center regular-text rounded-[16px] !h-[63px] w-full !text-[16px] mobile:!text-[14px]">
           {useMemo(() => {
             if (!props.autoValue) {
               if (props.format) {

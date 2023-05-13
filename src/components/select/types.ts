@@ -21,6 +21,7 @@ export type SelectProps = {
   showSearch?: boolean;
   mode?: "multiple";
   values?: string[];
+  showLabelOnly?: boolean;
   onChange?: (v: any) => void;
   onSearch?: (v: any) => void;
 };

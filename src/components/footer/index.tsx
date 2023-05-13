@@ -40,9 +40,9 @@ const Footer: FC = () => {
     []
   );
 
-  return (
-    <div className="footer pb-9">
-      <div className="lg:max-w-[1140px] lg:mx-auto">
+  return router.asPath === "/" ? (
+    <div className="footer pb-9 mobile:hidden">
+      <div className="lg:max-w-[1440px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
           <div className="menu-wrapper md:pt-0">
             <ul className="footer-menu w-[100%] hidden md:flex justify-center flex-wrap md:justify-start">
@@ -62,7 +62,7 @@ const Footer: FC = () => {
               ))}
             </ul>
           </div>
-          <div className="relative">
+          <div className="relative left-[120px]">
             <a onClick={() => router.push("/")}>
               <HamsterboxIcon
                 className="w-[155px] h-auto  mx-auto cursor-pointer"
@@ -145,7 +145,7 @@ const Footer: FC = () => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Footer;

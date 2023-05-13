@@ -5,7 +5,6 @@ import { DropdownSelect, FilterSelect } from "@/src/components/select";
 import { SearchIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
 import { useDispatch } from "react-redux";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import {
   getClosedPockets,
   syncWalletPockets,
@@ -15,6 +14,7 @@ import { RefreshButton } from "@/src/components/refresh-button";
 import { useSelector } from "react-redux";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import State from "@/src/redux/entities/state";
 
 export const EndedPoolGroupComponent: FC = () => {
@@ -27,7 +27,7 @@ export const EndedPoolGroupComponent: FC = () => {
   /** @dev Get fetched closed pools. */
   const closedPockets = useSelector((state: State) => state.closedPockets);
 
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const { chain, walletAddress } = useAppWallet();
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState(PocketTypes[0].value);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
@@ -38,31 +38,37 @@ export const EndedPoolGroupComponent: FC = () => {
   const [fetching, setFetching] = useState(false);
 
   const handleFetch = useCallback(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     setFetching(true);
     dispatch(
       getClosedPockets(
         {
           limit: 999,
-          ownerAddress: wallet,
+          ownerAddress: walletAddress,
           search,
           sortBy: sorter[0],
           statuses:
             selectedType === PocketTypes[2].value
               ? [PocketStatus.CLOSED, PocketStatus.ENDED]
               : [selectedType as PocketStatus.ENDED],
+          chainId:
+            chain === "SOL"
+              ? "solana"
+              : process.env.EVM_CHAIN_ID === "matic"
+              ? "mumbai"
+              : "bsc_mainnet",
         },
         () => setFetching(false)
       )
     );
-  }, [wallet, debouncedSearch, selectedType, sorter]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter, chain]);
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress: wallet }, () => {
+      syncWalletPockets({ walletAddress }, () => {
         setFetching(false);
         handleFetch();
         toast("The latest data is now available", {
@@ -70,19 +76,19 @@ export const EndedPoolGroupComponent: FC = () => {
         });
       })
     );
-  }, [wallet, debouncedSearch, selectedType, sorter]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter]);
 
   useEffect(
     () => handleFetch(),
-    [wallet, debouncedSearch, selectedType, sorter]
+    [walletAddress, debouncedSearch, selectedType, sorter]
   );
 
   return (
     <section>
       <section className="mt-[60px]">
-        <div className="flex justify-between items-center">
+        <div className="md:flex md:justify-between md:items-center">
           <div className="flex items-center">
-            <p className="md:text-[32px] text-[24px] text-white float-left">
+            <p className="md:text-[32px] text-[20px] text-white float-left">
               Closed & Ended Pockets
             </p>
             <RefreshButton
@@ -91,31 +97,61 @@ export const EndedPoolGroupComponent: FC = () => {
             />
           </div>
           <p
-            className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative"
+            className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative mobile:mt-[12px]"
             onClick={() => router.push("/my-pockets")}
           >
             View Active Pockets
           </p>
         </div>
         <div className="flow-root mt-[32px]">
-          <div className="md:float-left md:w-[442px] w-full">
+          <div className="md:float-left md:w-[442px] w-full mobile:grid mobile:grid-cols-3 gap-3">
             <Input
-              containerClassName="app-input w-full"
+              containerClassName="app-input w-full mobile:hidden"
               inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
               placeholder="Search by Pocket name, ID, Token"
               icon={<SearchIcon />}
               onValueChange={(v) => setSearch(v)}
             />
+            <div className="mobile:col-span-2 md:hidden">
+              <Input
+                containerClassName="app-input w-full"
+                inputClassName="bg-dark90 !text-white !rounded-[100px] w-full"
+                placeholder="Search by Pocket name, ID, Token"
+                icon={<SearchIcon />}
+                onValueChange={(v) => setSearch(v)}
+              />
+            </div>
+            <div className="mobile:col-span-1 md:hidden">
+              <FilterSelect
+                className="text-center rounded-3xl text-sm h-full !h-[40px]"
+                values={sorter}
+                options={sortOptions}
+                onChange={(value) => setSorter(value)}
+                mode="multiple"
+                placeholder="Filter"
+              />
+            </div>
           </div>
-          <div className="md:float-right md:flex md:mt-0 mt-[20px]">
+          <div className="md:float-right md:flex md:mt-0 mt-[12px] mobile:flow-root">
+            <p className="md:hidden text-white text-[12px] float-left relative top-[5px] md:hidden">
+              Sort by:
+            </p>
+            <div className="float-right md:hidden">
+              <DropdownSelect
+                options={PocketTypes}
+                handleSelectValue={(v) => setSelectedType(v)}
+                value={selectedType}
+                className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px]"
+              />
+            </div>
             <DropdownSelect
               options={PocketTypes}
               handleSelectValue={(v) => setSelectedType(v)}
               value={selectedType}
-              className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px]"
+              className="!rounded-full !h-[48px] mr-4 max-w-[230px] !w-[210px] mobile:hidden"
             />
             <FilterSelect
-              className="text-center rounded-3xl text-sm h-[50px] !px-12 md:mt-0 mt-[20px] w-[228px]"
+              className="text-center rounded-3xl text-sm h-[50px] md:mt-0 mt-[12px] w-[228px] mobile:hidden"
               values={sorter}
               options={sortOptions}
               onChange={(value) => setSorter(value)}

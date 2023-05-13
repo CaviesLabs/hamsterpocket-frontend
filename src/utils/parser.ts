@@ -2,6 +2,13 @@ import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
 import { StopConditions } from "@/src/entities/pocket.entity";
 import { SideMethod } from "@/src/dto/pocket.dto";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+/** @dev Hook to check if breakpoint mobile. */
+export const useMobileBreakpoint = () => useMediaQuery("(max-width:768px)");
+
+/** @dev Hook to check if breakpoint desktop. */
+export const useDesktopBreakpoint = () => useMediaQuery("(min-width:768px)");
 
 /** @dev Export date arrays/ */
 export const TIME_ARRAYS = Array.from(Array(24).keys())

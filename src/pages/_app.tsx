@@ -27,13 +27,19 @@ import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
 } from "@ant-design/cssinjs";
+import {
+  EvmWalletKitProvider,
+  EvmWalletProvider,
+} from "@/src/hooks/useEvmWallet";
+import { AppWalletProvider } from "@/src/hooks/useAppWallet";
+import { WhitelistProvider } from "@/src/hooks/useWhitelist";
 
 /**
  * @dev Import needed third-party styled.
  */
 import "flowbite";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { WhitelistProvider } from "@/src/hooks/useWhitelist";
+import "@rainbow-me/rainbowkit/styles.css";
 
 const store = makeStore();
 
@@ -103,9 +109,15 @@ function MyApp({ Component, pageProps }: AppProps) {
               >
                 <WalletProvider>
                   <MainProvider>
-                    <WhitelistProvider>
-                      <AppComponent {...{ Component, pageProps }} />
-                    </WhitelistProvider>
+                    <EvmWalletKitProvider>
+                      <EvmWalletProvider>
+                        <AppWalletProvider>
+                          <WhitelistProvider>
+                            <AppComponent {...{ Component, pageProps }} />
+                          </WhitelistProvider>
+                        </AppWalletProvider>
+                      </EvmWalletProvider>
+                    </EvmWalletKitProvider>
                   </MainProvider>
                 </WalletProvider>
               </WalletKitProvider>

@@ -63,6 +63,18 @@ export interface CreatePocketContextState {
   depositedAmount: number;
 
   /**
+   * @dev The amount of base token which user want take profit.
+   * @type {number}
+   */
+  takeProfitAmount: number;
+
+  /**
+   * @dev The amount of base token which user want stop loss.
+   * @type {number}
+   */
+  stopLossAmount: number;
+
+  /**
    * @dev The value is true if user click create pocket.
    * @type {boolean}
    */
@@ -140,6 +152,18 @@ export interface CreatePocketContextState {
    * @param {number}
    */
   setDepositedAmount(v: number): void;
+
+  /**
+   * @dev The function to modify take-profit amount.
+   * @param {number}
+   */
+  setTakeProfitAmount(v: number): void;
+
+  /**
+   * @dev The function to modify stop-loss amount.
+   * @param {number}
+   */
+  setStopLossAmount(v: number): void;
 
   /**
    * @dev The function to modify arrays of conditions that the pool will pause if the market siutuation match one in conditions.

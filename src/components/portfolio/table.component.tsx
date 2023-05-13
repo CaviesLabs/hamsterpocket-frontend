@@ -1,66 +1,85 @@
 import { MdOpenInNew } from "react-icons/all";
 import { useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
-import { utilsProvider } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import {
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import State from "@/src/redux/entities/state";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
-  const { whiteLists, convertDecimalAmount } = useWhiteList();
+  const { chain } = useAppWallet();
+  const { whiteLists, convertDecimalAmount, findEntityByAddress } =
+    useWhiteList();
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
-      <table className="table-fixed w-full">
-        <thead>
-          <tr>
-            <th className="pb-4">Token</th>
-            <th className="pb-4 text-center">Address</th>
-            <th className="pb-4 text-right">Total</th>
-          </tr>
-        </thead>
-        <tbody className="normal-text">
-          {portfoliosData.map((h) => (
-            <tr key={h.tokenName} className="">
-              <td className="pr-10 py-4 flex">
-                <div className="bg-gray-600 p-2 rounded-full">
+      <div className="!border-[0px] grid grid-cols-3 gap-3">
+        <div className="pb-4 col-span-1">Token</div>
+        <div className="pb-4 text-center col-span-1">Address</div>
+        <div className="pb-4 text-right col-span-1">Total</div>
+      </div>
+      <div>
+        {portfoliosData.map((h) => {
+          const tokenInfo =
+            whiteLists[h.tokenAddress] || findEntityByAddress(h.tokenAddress);
+          return (
+            <div
+              key={h.tokenName}
+              className="!border-[0px] bg-[#121320] rounded-[12px] grid grid-cols-3 mobile:grid-cols-5 gap-3 mt-[5px] mobile:mt-[12px] px-[15px] py-[10px]"
+            >
+              <div className="col-span-1 mobile:col-span-2 flex">
+                <div className="bg-gray-600 p-2 rounded-full h-[48px]">
                   <img
-                    src={whiteLists[h.tokenAddress]?.image}
-                    className="max-w-[32px] rounded-full"
+                    src={tokenInfo?.image}
+                    className="max-w-[32px] rounded-full h-[32px] w-[32px]"
                   />
                 </div>
                 <div className="ml-4">
-                  <div className="truncate">{h.tokenSymbol}</div>
-                  <div className="text-dark40">
+                  <div className="truncate mobile:text-[14px]">
+                    {h.tokenSymbol}
+                  </div>
+                  <div className="text-dark40 mobile:text-[14px]">
                     {h.tokenName === "Wrapped SOL" ? "SOL" : h.tokenName}
                   </div>
                 </div>
-              </td>
-              <td>
+              </div>
+              <div className="col-span-1 mobile:col-span-2 mobile:pt-[10px]">
                 <a
-                  href={`https://solscan.io/account/${h.tokenAddress}`}
+                  href={
+                    chain === "SOL"
+                      ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
+                      : process.env.EVM_CHAIN_ID === "matic"
+                      ? `${MUMBAI_EXPLORE}/token/${h.tokenAddress}`
+                      : `${BSC_EXPLORE}/token/${h.tokenAddress}`
+                  }
                   target="_blank"
                   className="flex justify-center items-center"
                 >
-                  <div className="border border-gray-700 rounded text-center py-1 w-[160px]">
+                  <div className="border border-gray-700 rounded text-center py-1 w-[160px] mobile:text-[12px] mobile:w-[120px] px-[3px]">
                     {utilsProvider.makeShort(h.tokenAddress)}
                   </div>
                   <div className="ml-2">
                     <MdOpenInNew className="text-gray-500 text-xl" />
                   </div>
                 </a>
-              </td>
-              <td className="text-right">
-                <div>
-                  {convertDecimalAmount(h.tokenAddress, h.total).toFixed(2)}
+              </div>
+              <div className="text-right col-span-1">
+                <div className="mobile:text-[14px]">
+                  {convertDecimalAmount(h.tokenAddress, h.total)?.toFixed(2)}
                 </div>
-                <div className="text-dark40">
-                  ~ ${convertDecimalAmount(h.tokenAddress, h.value).toFixed(2)}
+                <div className="text-dark40 mobile:text-[14px]">
+                  ~ ${convertDecimalAmount(h.tokenAddress, h.value)?.toFixed(2)}
                 </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

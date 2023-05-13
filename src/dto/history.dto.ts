@@ -13,4 +13,5 @@ export class GetHistoriesDto {
 
   ownerAddress: string;
   search?: string;
+  chainId: "solana" | "bsc_mainnet" | "mumbai";
 }

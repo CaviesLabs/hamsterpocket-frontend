@@ -65,7 +65,8 @@ export const BaseAmountSpendCondition: FC<{
             }}
             className="relative top-[3px]"
           >
-            <DeleteIconCircle />
+            <DeleteIconCircle className="mobile:hidden" />
+            <DeleteIconCircle className="md:hidden" size="34" />
           </button>
         </div>
         <div className="col-span-8">
@@ -84,6 +85,12 @@ export const BaseAmountSpendCondition: FC<{
               <CircleCheckIcon
                 size="27"
                 color={primary ? "#3CBF7C" : "#7886A0"}
+                className="mobile:hidden"
+              />
+              <CircleCheckIcon
+                size="24"
+                color={primary ? "#3CBF7C" : "#7886A0"}
+                className="md:hidden"
               />
             </button>
           </TooltipPrimaryComponent>

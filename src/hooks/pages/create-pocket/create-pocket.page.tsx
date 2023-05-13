@@ -9,6 +9,7 @@ import { BN } from "@project-serum/anchor";
 import { ProgramService } from "@/src/services/program.service";
 import {
   WSOL_ADDRESS,
+  ALIAS_WMATIC_ADDRESS,
   convertDurationsTimeToHours,
   processStopConditions,
 } from "@/src/utils";
@@ -17,8 +18,32 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ErrorValidateContext } from "./useValidate";
 import { SideMethod } from "@/src/dto/pocket.dto";
 import { union } from "lodash";
+import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
+import {
+  createdPocketPramsParserEvm,
+  convertBigNumber,
+} from "@/src/utils/evm.parser";
+import { BigNumber } from "ethers";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
+  /** @dev Inject router to use. */
+  const router = useRouter();
+
+  /** @dev Inject wallet provider. */
+  const { solanaWallet, programService } = useWallet();
+
+  /** @dev Inject app wallet to get both sol & eth account info. */
+  const { chain, walletAddress } = useAppWallet();
+
+  /** @dev Inject eth function. */
+  const { createPocket: createEvmPocket, signer: evmSigner } = useEvmWallet();
+
+  /** @dev Inject functions from whitelist hook to use. */
+  const { findPairLiquidity, findEntityByAddress, liquidities, whiteLists } =
+    useWhiteList();
+
   const [pocketName, setPocketName] = useState("");
   const [baseTokenAddress, setBaseTokenAddress] = useState<[PublicKey, number]>(
     [new PublicKey(WSOL_ADDRESS), 9]
@@ -31,6 +56,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
+  const [takeProfitAmount, setTakeProfitAmount] = useState<number>();
+  const [stopLossAmount, setStopLossAmount] = useState<number>();
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
 
@@ -45,9 +72,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     []
   );
 
-  /** @dev Inject functions from whitelist hook to use. */
-  const { findPairLiquidity, liquidities } = useWhiteList();
-
   /** @dev Default is every day */
   const [frequency, setFrequency] = useState<DurationObjectUnits>({ hours: 1 });
 
@@ -56,12 +80,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev Define variable presenting whenther program is creating pool. */
   const [processing, setProcessing] = useState(false);
-
-  /** @dev Inject router to use. */
-  const router = useRouter();
-
-  /** @dev Inject wallet provider. */
-  const { solanaWallet, programService } = useWallet();
 
   /** @dev The function to validate. */
   const validateForms = useCallback(() => {
@@ -149,7 +167,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       !createdEnable && setCreatedEnable(true);
 
       /** @dev Return when wallet not connected. */
-      if (!solanaWallet) return;
+      if (!walletAddress) return;
 
       /** @dev Validate if all form be valid. */
       if (!validateForms()) {
@@ -158,30 +176,44 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
-        baseTokenAddress[0].toBase58().toString(),
-        targetTokenAddress[0].toBase58().toString(),
+        baseTokenAddress[0]?.toBase58().toString(),
+        targetTokenAddress[0]?.toBase58().toString(),
       ]);
 
       /** @dev Get base and qoute address in liquidity pool. */
-      const [liqBase, liqQoute, marketId] = findPairLiquidity(
-        baseAddress,
-        targetAddress
-      );
+      let liqQoute;
+      let marketId = "1111";
+      let sideMethod: SideMethod = { sell: {} };
 
-      /** @dev Handle to attract side method of pool.  */
-      const sideMethod: SideMethod =
-        liqBase === baseAddress ? { sell: {} } : { buy: {} };
+      if (chain === "SOL") {
+        const [liqBase, _liqQoute, _marketId] = findPairLiquidity(
+          baseAddress,
+          targetAddress
+        );
+
+        /** @dev Desire for global vars. */
+        liqQoute = _liqQoute;
+        marketId = _marketId;
+
+        /** @dev Handle to attract side method of pool.  */
+        sideMethod = liqBase === baseAddress ? { sell: {} } : { buy: {} };
+      }
 
       /** @dev Process stopConditions. */
       const processedStopConditions = stopConditions.map((condition) =>
         processStopConditions(condition, sideMethod)
       );
 
-      const response = await programService.createPocket(solanaWallet, {
+      /**
+       * @dev Initalize pocket data for sol blockchain.
+       */
+      const solCreatedPocketData: SolCreatePocketDto = {
         id: ProgramService.generatePocketId(),
-        name: pocketName,
+        name: "pocketName",
         baseTokenAddress: new PublicKey(baseAddress),
-        quoteTokenAddress: new PublicKey(liqQoute),
+        quoteTokenAddress: new PublicKey(
+          chain === "SOL" ? liqQoute : targetAddress
+        ),
         startAt: new BN(
           parseInt((startAt.getTime() / 1000).toString()).toString()
         ),
@@ -210,9 +242,77 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
             isPrimary: (item as any)[Object.keys(item)[0] as string]?.primary,
           },
         })),
-      });
+      };
 
-      console.log(response);
+      if (chain === "SOL") {
+        /**
+         * @dev Execute interact with solana blockchain.
+         */
+        const response = await programService.createPocket(
+          solanaWallet,
+          solCreatedPocketData
+        );
+
+        console.log(response);
+      } else {
+        /**
+         * @dev Process data from sol for evm.
+         */
+        let evmParams = createdPocketPramsParserEvm(
+          whiteLists,
+          solCreatedPocketData,
+          baseTokenAddress[1],
+          targetTokenAddress[1],
+          whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
+          whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
+          walletAddress
+        );
+
+        /** @dev Process to get deposited amount in evm decimals. */
+        const plufixWithDecimals = Math.pow(
+          10,
+          whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals
+        );
+        const evmDespositedAmount = BigNumber.from(
+          (depositedAmount * plufixWithDecimals).toString()
+        );
+
+        if (takeProfitAmount) {
+          const evmTakeProfitAmount = convertBigNumber(
+            takeProfitAmount,
+            plufixWithDecimals
+          );
+          evmParams = {
+            ...evmParams,
+            takeProfitCondition: {
+              stopType: "1",
+              value: evmTakeProfitAmount,
+            },
+          };
+        }
+
+        if (stopLossAmount) {
+          const evmStopLossAmount = convertBigNumber(
+            stopLossAmount,
+            plufixWithDecimals
+          );
+          evmParams = {
+            ...evmParams,
+            stopLossCondition: {
+              stopType: "1",
+              value: evmStopLossAmount,
+            },
+          };
+        }
+
+        /**
+         * @dev Execute interact with eth blockchain.
+         */
+        const response = await createEvmPocket(evmDespositedAmount, {
+          ...evmParams,
+        });
+        console.log(response);
+      }
       setSuccessCreated(true);
     } catch (err) {
       console.log(err);
@@ -231,14 +331,25 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     buyCondition,
     stopConditions,
     depositedAmount,
+    takeProfitAmount,
+    stopLossAmount,
     createdEnable,
+    chain,
+    walletAddress,
+    evmSigner,
+    whiteLists,
     validateForms,
   ]);
 
   /** @dev Update mint order size. */
   useEffect(() => {
     (async () => {
-      if (!baseTokenAddress.length || !targetTokenAddress.length) return;
+      if (
+        !baseTokenAddress.length ||
+        !targetTokenAddress.length ||
+        chain === "ETH"
+      )
+        return;
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
         baseTokenAddress[0]?.toBase58().toString(),
@@ -249,7 +360,17 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       const ppair = findPairLiquidity(baseAddress, targetAddress);
       setMintOrderSize(ppair?.[3]);
     })();
-  }, [baseTokenAddress, targetTokenAddress]);
+  }, [baseTokenAddress, targetTokenAddress, chain]);
+
+  /**
+   * @dev Update base token when chain changed.
+   */
+  useEffect(() => {
+    if (chain === "ETH") {
+      console.log(chain);
+      setBaseTokenAddress([new PublicKey(ALIAS_WMATIC_ADDRESS), 9]);
+    }
+  }, [chain]);
 
   /**
    * @dev dynamically update a list of available base tokens based on
@@ -268,20 +389,30 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
    * the selected base token and the available liquidity data.
    */
   useEffect(() => {
+    if (chain === "ETH") {
+      return setAvailableTargetTokens(() => {
+        return Object.keys(whiteLists).filter((address) => {
+          return whiteLists?.[address].name !== "Wrapped Matic";
+        });
+      });
+    }
     setAvailableTargetTokens(() => {
+      const tokenAddress = baseTokenAddress[0]?.toBase58()?.toString();
+      const tokenInfo =
+        whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
       return union(
         liquidities
           ?.filter(
             (item) =>
-              item.baseMint === baseTokenAddress[0].toBase58().toString() ||
-              item.quoteMint === baseTokenAddress[0].toBase58().toString()
+              item.baseMint === tokenInfo?.address ||
+              item.quoteMint === tokenInfo?.address
           )
           .map((item) => [item.baseMint, item.quoteMint])
           .flat(1)
           .filter((item) => item !== baseTokenAddress[0].toBase58().toString())
       );
     });
-  }, [liquidities, baseTokenAddress]);
+  }, [liquidities, baseTokenAddress, chain, whiteLists]);
 
   return (
     <CreatePocketContext.Provider
@@ -301,6 +432,10 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         availableBaseTokens,
         availableTargetTokens,
         mintOrderSize,
+        takeProfitAmount,
+        stopLossAmount,
+        setTakeProfitAmount,
+        setStopLossAmount,
         setPocketName,
         setBaseTokenAddress,
         setTargetTokenAddress,
@@ -318,7 +453,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       <SuccessTransactionModal
         isModalOpen={successCreated}
         handleOk={() => router.push("/my-pockets")}
-        handleCancel={() => {}}
+        handleCancel={() => setSuccessCreated(false)}
         okMessage="Back to Home"
         message="You have created pocket and deposited successful"
       />

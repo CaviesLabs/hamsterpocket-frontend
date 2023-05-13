@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "Commands",
+  "sourceName": "@uniswap/universal-router/contracts/libraries/Commands.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601757603a9081601d823930815050f35b600080fdfe600080fdfea2646970667358221220dc9b9261c2707ce56dc2a793c71835175aaecac5970f46febccfe19fc56c713964736f6c63430008130033",
+  "deployedBytecode": "0x600080fdfea2646970667358221220dc9b9261c2707ce56dc2a793c71835175aaecac5970f46febccfe19fc56c713964736f6c63430008130033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

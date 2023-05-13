@@ -37,7 +37,7 @@ export class ProgramService {
   ): Promise<any> {
     /** @dev Call to HamsterBox server to initialize the proposal. */
     const response = await networkProvider.request<any>(
-      `/pool/${walletProvider.publicKey?.toBase58()?.toString()}`,
+      `/pool/solana/${walletProvider.publicKey?.toBase58()?.toString()}`,
       {
         method: "POST",
         data: {},

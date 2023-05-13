@@ -15,19 +15,39 @@ export class PoolService {
       });
   }
 
+  public async getPocketById(payload: {
+    pocketId: string;
+  }): Promise<PocketEntity[]> {
+    return networkProvider
+      .request<PocketEntity[]>(`/pool/${payload.pocketId}`, {
+        method: "GET",
+      })
+      .catch(() => {
+        return ActivePocketsMock;
+      });
+  }
+
   /**
    * @dev Make call to hamster server to sync all pockets owned by a wallet address.
    * @param walletAddress
    * @returns
    */
-  public async syncWalletPockets(walletAddress: string): Promise<any> {
-    return networkProvider.request<any>(`/pool/user/${walletAddress}/sync`, {
-      method: "POST",
-      data: {},
-      headers: {
-        "content-type": "text/plain;charset=UTF-8",
-      },
-    });
+  public async syncWalletPockets(
+    walletAddress: string,
+    evm = false
+  ): Promise<any> {
+    return networkProvider.request<any>(
+      evm
+        ? `/pool/user/evm/${walletAddress}/sync`
+        : `/pool/user/${walletAddress}/sync`,
+      {
+        method: "POST",
+        data: {},
+        headers: {
+          "content-type": "text/plain;charset=UTF-8",
+        },
+      }
+    );
   }
 }
 

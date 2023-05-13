@@ -27,6 +27,42 @@ export const PlusIcon: FC<IconProps> = (props) => {
   );
 };
 
+export const BookIcon: FC<IconProps> = (props) => {
+  return (
+    <svg
+      className={props.className}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.23999 3.68001C2.23999 3.29809 2.3917 2.93182 2.66176 2.66177C2.93181 2.39172 3.29808 2.24001 3.67999 2.24001H10.88C11.3892 2.24001 11.8776 2.44229 12.2376 2.80236C12.5977 3.16243 12.8 3.65079 12.8 4.16001V4.41729C13.0919 4.5858 13.3342 4.82817 13.5027 5.12003C13.6713 5.4119 13.76 5.74298 13.76 6.08001V11.84C13.76 12.3492 13.5577 12.8376 13.1976 13.1977C12.8376 13.5577 12.3492 13.76 11.84 13.76H4.63999C4.00347 13.76 3.39302 13.5071 2.94293 13.0571C2.49285 12.607 2.23999 11.9965 2.23999 11.36V3.68001ZM3.19999 3.68001C3.19999 3.80731 3.25056 3.9294 3.34058 4.01942C3.4306 4.10943 3.55269 4.16001 3.67999 4.16001H11.84C11.84 3.9054 11.7388 3.66122 11.5588 3.48118C11.3788 3.30115 11.1346 3.20001 10.88 3.20001H3.67999C3.55269 3.20001 3.4306 3.25058 3.34058 3.34059C3.25056 3.43061 3.19999 3.5527 3.19999 3.68001ZM10.4 8.00001C10.2727 8.00001 10.1506 8.05058 10.0606 8.14059C9.97056 8.23061 9.91999 8.3527 9.91999 8.48001C9.91999 8.60731 9.97056 8.7294 10.0606 8.81942C10.1506 8.90943 10.2727 8.96001 10.4 8.96001H11.36C11.4873 8.96001 11.6094 8.90943 11.6994 8.81942C11.7894 8.7294 11.84 8.60731 11.84 8.48001C11.84 8.3527 11.7894 8.23061 11.6994 8.14059C11.6094 8.05058 11.4873 8.00001 11.36 8.00001H10.4Z"
+        fill="#CBD4E1"
+      />
+    </svg>
+  );
+};
+
+export const NoneIcon: FC<IconProps> = (props) => {
+  return (
+    <svg
+      className={props.className}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M7.99992 1.33334C4.32381 1.33334 1.33325 4.3239 1.33325 8.00001C1.33325 11.6761 4.32381 14.6667 7.99992 14.6667C11.676 14.6667 14.6666 11.6761 14.6666 8.00001C14.6666 4.3239 11.676 1.33334 7.99992 1.33334ZM9.47659 11.4911C9.10936 11.6356 7.83659 12.2433 7.10325 11.5972C6.88436 11.405 6.77547 11.1611 6.77547 10.865C6.77547 10.3106 6.9577 9.82723 7.28603 8.66668C7.34381 8.44723 7.41436 8.16279 7.41436 7.93723C7.41436 7.54779 7.26659 7.44446 6.86603 7.44446C6.67047 7.44446 6.45381 7.5139 6.2577 7.58723L6.36603 7.14334C6.80325 6.96557 7.35214 6.7489 7.82214 6.7489C8.52714 6.7489 9.04603 7.10057 9.04603 7.76945C9.04603 7.96223 9.0127 8.30001 8.9427 8.53334L8.53714 9.96779C8.45325 10.2578 8.30159 10.8972 8.53659 11.0867C8.7677 11.2739 9.31492 11.1745 9.58492 11.0472L9.47659 11.4911ZM8.80659 5.77779C8.34659 5.77779 7.97325 5.40445 7.97325 4.94445C7.97325 4.48445 8.34659 4.11112 8.80659 4.11112C9.26659 4.11112 9.63992 4.48445 9.63992 4.94445C9.63992 5.40445 9.26659 5.77779 8.80659 5.77779Z"
+        fill="#CBD4E1"
+      />
+    </svg>
+  );
+};
+
 export const DeleteIcon: FC<IconProps> = (props) => {
   return (
     <svg
@@ -277,20 +313,22 @@ export const CopyIcon: FC<IconProps> = (props) => {
   return (
     <svg
       className={props.className}
-      viewBox="0 0 16 16"
+      width="17"
+      height="17"
+      viewBox="0 0 17 17"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect
-        x="1.75"
-        y="1.75"
+        x="2.25"
+        y="1.75195"
         width="9.5"
         height="9.5"
         rx="1.25"
-        stroke="#94A3B8"
+        stroke="#7886A0"
         strokeWidth="1.5"
       />
-      <rect x="4" y="4" width="11" height="11" rx="2" fill="#94A3B8" />
+      <rect x="4.5" y="4.00195" width="11" height="11" rx="2" fill="#7886A0" />
     </svg>
   );
 };
@@ -672,8 +710,8 @@ export const ShareIcon: FC<IconProps> = (props) => (
 export const TwoWayArrowIcon: FC<IconProps> = (props) => (
   <svg
     className={props.className}
-    width="24"
-    height="24"
+    width={props.size || "24"}
+    height={props.size || "24"}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -726,8 +764,8 @@ export const LoggoutIcon: FC<IconProps> = (props) => (
 export const DeleteIconCircle: FC<IconProps> = (props) => (
   <svg
     className={props.className}
-    width="60"
-    height="60"
+    width={props.size || "60"}
+    height={props.size || "60"}
     viewBox="0 0 60 60"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -752,6 +790,347 @@ export const SyncIcon: FC<IconProps> = (props) => (
     <path
       d="M655.461 473.469c11.875 81.719-13.062 167.781-76.812 230.594-94.188 92.938-239.5 104.375-346.375 34.562l74.875-73L31.96 627.25 70.367 896l84.031-80.5c150.907 111.25 364.938 100.75 502.063-34.562 79.5-78.438 115.75-182.562 111.25-285.312L655.461 473.469zM189.46 320.062c94.156-92.938 239.438-104.438 346.313-34.562l-75 72.969 275.188 38.406L697.586 128l-83.938 80.688C462.711 97.34400000000005 248.742 107.96900000000005 111.585 243.25 32.085 321.656-4.133 425.781 0.335 528.5l112.25 22.125C100.71 468.875 125.71 382.906 189.46 320.062z"
       fill="#DE2C47"
+    />
+  </svg>
+);
+
+export const TabMenuIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M5.03988 2.00195H8.41988C9.82988 2.00195 10.9599 3.15195 10.9599 4.56295V7.97195C10.9599 9.39195 9.82988 10.532 8.41988 10.532H5.03988C3.63988 10.532 2.49988 9.39195 2.49988 7.97195V4.56295C2.49988 3.15195 3.63988 2.00195 5.03988 2.00195ZM5.03988 13.4717H8.41988C9.82988 13.4717 10.9599 14.6127 10.9599 16.0327V19.4417C10.9599 20.8517 9.82988 22.0017 8.41988 22.0017H5.03988C3.63988 22.0017 2.49988 20.8517 2.49988 19.4417V16.0327C2.49988 14.6127 3.63988 13.4717 5.03988 13.4717ZM19.96 2.00195H16.58C15.17 2.00195 14.04 3.15195 14.04 4.56295V7.97195C14.04 9.39195 15.17 10.532 16.58 10.532H19.96C21.36 10.532 22.5 9.39195 22.5 7.97195V4.56295C22.5 3.15195 21.36 2.00195 19.96 2.00195ZM16.58 13.4717H19.96C21.36 13.4717 22.5 14.6127 22.5 16.0327V19.4417C22.5 20.8517 21.36 22.0017 19.96 22.0017H16.58C15.17 22.0017 14.04 20.8517 14.04 19.4417V16.0327C14.04 14.6127 15.17 13.4717 16.58 13.4717Z"
+      fill={props.color || "#7886A0"}
+    />
+  </svg>
+);
+
+export const TabStategyIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M7.4115 14.783L10.4046 10.8928L13.8188 13.5748L16.7479 9.79443"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle
+      cx="20.1621"
+      cy="4.20198"
+      r="1.9222"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.0912 3.12207H7.82342C4.81198 3.12207 2.9447 5.25479 2.9447 8.26623V16.3486C2.9447 19.3601 4.77537 21.4836 7.82342 21.4836H16.4275C19.439 21.4836 21.3063 19.3601 21.3063 16.3486V9.30971"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const TabHistoryIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M12.4986 3.36559C9.0284 3.36559 6.03479 5.41167 4.66132 8.36559H6.81818C7.19474 8.36559 7.5 8.67085 7.5 9.04741C7.5 9.42397 7.19474 9.72923 6.81818 9.72923H3.40909C2.90701 9.72923 2.5 9.32221 2.5 8.82014V5.41104C2.5 5.03449 2.80526 4.72923 3.18182 4.72923C3.55838 4.72923 3.86364 5.03449 3.86364 5.41104V6.95334C5.59921 3.99203 8.81587 2.00195 12.4986 2.00195C18.0221 2.00195 22.5 6.47901 22.5 12.002C22.5 17.5249 18.0221 22.002 12.4986 22.002C7.05853 22.002 2.63292 17.6594 2.50021 12.2516C2.49097 11.8752 2.78865 11.5625 3.16509 11.5533C3.54154 11.5441 3.8542 11.8417 3.86344 12.2182C3.97803 16.8877 7.80025 20.6383 12.4986 20.6383C17.2692 20.6383 21.1364 16.7716 21.1364 12.002C21.1364 7.23232 17.2692 3.36559 12.4986 3.36559Z"
+      fill={props.color || "#7886A0"}
+    />
+    <path
+      d="M12.9545 7.68377C12.9545 7.30721 12.6493 7.00195 12.2727 7.00195C11.8962 7.00195 11.5909 7.30721 11.5909 7.68377V12.6838C11.5909 12.9284 11.722 13.1544 11.9344 13.2758L15.1163 15.0939C15.4432 15.2808 15.8597 15.1672 16.0465 14.8402C16.2334 14.5133 16.1198 14.0968 15.7928 13.91L12.9545 12.2881V7.68377Z"
+      fill={props.color || "#7886A0"}
+    />
+  </svg>
+);
+
+export const TabStrategyIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M7.41162 14.781L10.4048 10.8909L13.8189 13.5728L16.748 9.79248"
+      stroke="#7886A0"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle
+      cx="20.1622"
+      cy="4.20003"
+      r="1.9222"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.0913 3.12012H7.82354C4.8121 3.12012 2.94482 5.25284 2.94482 8.26428V16.3467C2.94482 19.3581 4.77549 21.4817 7.82354 21.4817H16.4277C19.4391 21.4817 21.3064 19.3581 21.3064 16.3467V9.30776"
+      stroke={props.color || "#7886A0"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const TabProfileIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M17.794 7.29301C17.794 10.23 15.4391 12.5851 12.5 12.5851C9.5619 12.5851 7.20601 10.23 7.20601 7.29301C7.20601 4.35598 9.5619 2.00195 12.5 2.00195C15.4391 2.00195 17.794 4.35598 17.794 7.29301ZM12.5 22.002C8.16237 22.002 4.5 21.2969 4.5 18.5769C4.5 15.8559 8.18538 15.1759 12.5 15.1759C16.8386 15.1759 20.5 15.8809 20.5 18.6009C20.5 21.3219 16.8146 22.002 12.5 22.002Z"
+      fill="url(#paint0_linear_3402_14400)"
+    />
+    <defs>
+      <linearGradient
+        id="paint0_linear_3402_14400"
+        x1="19.6881"
+        y1="2.00195"
+        x2="19.6881"
+        y2="19.1539"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stopColor={props.color || "#735CF7"} />
+        <stop offset="1" stopColor={props.color || "#735CF7"} />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+export const DropdownArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width="17"
+    height="16"
+    viewBox="0 0 17 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.6566 5.66675L8.98991 10.3334L4.32324 5.66675"
+      stroke="#7886A0"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const RightArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M20.2051 12.0859L5.20508 12.0859"
+      stroke="white"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.1553 6.06233L20.2053 12.0863L14.1553 18.1113"
+      stroke="white"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const LeftArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clip-path="url(#clip0_3413_12543)">
+      <path
+        d="M4.95837 14.3221L22.4584 14.3221"
+        stroke="#7886A0"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.0165 21.3506L4.95815 14.3226L12.0165 7.29346"
+        stroke="#7886A0"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_3413_12543">
+        <rect
+          width="28"
+          height="28"
+          fill="white"
+          transform="translate(0 0.00195312)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const LeftIcon: FC<IconProps> = (props) => (
+  <svg
+    width="25"
+    height="25"
+    viewBox="0 0 25 25"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M16.285 3.87695L7.80005 12.362L16.285 20.847L17.7 19.433L10.628 12.362L17.7 5.29095L16.285 3.87695Z"
+      fill="white"
+    />
+  </svg>
+);
+
+export const MobileExchangeIcon: FC<IconProps> = (props) => (
+  <svg
+    width={props.size || "45"}
+    height={props.size || "45"}
+    viewBox="0 0 45 45"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <rect
+      x="44.5"
+      y="0.00195312"
+      width="44"
+      height="44"
+      rx="22"
+      transform="rotate(90 44.5 0.00195312)"
+      fill="#735CF7"
+    />
+    <g clip-path="url(#clip0_3390_23925)">
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10.5 22.002C10.5 28.6294 15.8726 34.002 22.5 34.002C29.1274 34.002 34.5 28.6294 34.5 22.002C34.5 15.3745 29.1274 10.002 22.5 10.002C15.8726 10.002 10.5 15.3745 10.5 22.002ZM27.323 24.7118C27.559 24.4902 27.559 24.1311 27.323 23.9095C27.087 23.688 26.7044 23.688 26.4684 23.9095L24.1724 26.0649L24.1724 16.5692C24.1724 16.2559 23.9018 16.002 23.5681 16.002C23.2344 16.002 22.9638 16.2559 22.9638 16.5692L22.9638 27.4344C22.9638 27.6638 23.1111 27.8707 23.3369 27.9585C23.5627 28.0463 23.8226 27.9977 23.9954 27.8355L27.323 24.7118ZM22.0362 16.5695C22.0362 16.3401 21.8889 16.1332 21.6631 16.0454C21.4373 15.9576 21.1774 16.0062 21.0046 16.1684L17.677 19.2922C17.441 19.5137 17.441 19.8728 17.677 20.0944C17.913 20.3159 18.2956 20.3159 18.5316 20.0944L20.8276 17.939L20.8276 27.4347C20.8276 27.748 21.0982 28.002 21.4319 28.002C21.7656 28.002 22.0362 27.748 22.0362 27.4347L22.0362 16.5695Z"
+        fill="#D9D9D9"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_3390_23925">
+        <rect
+          width="24"
+          height="24"
+          fill="white"
+          transform="translate(34.5 10.002) rotate(90)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const UnCollapseArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9 12.002L14 16.002L19 12.002"
+      stroke="#735CF7"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const CollapseArrowIcon: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width={props.size || "28"}
+    height={props.size || "29"}
+    viewBox="0 0 28 29"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M19 16.002L14 12.002L9 16.002"
+      stroke="#735CF7"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const CloseIcon: FC<IconProps> = (props) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={props.className}
+  >
+    <path
+      d="M18 6L6 18"
+      stroke="#735CF7"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M18 18L6 6"
+      stroke="#735CF7"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     />
   </svg>
 );

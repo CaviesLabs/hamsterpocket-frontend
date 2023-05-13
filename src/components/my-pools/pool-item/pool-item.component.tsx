@@ -5,7 +5,15 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { DATE_TIME_FORMAT, formatCurrency, utilsProvider } from "@/src/utils";
+import {
+  DATE_TIME_FORMAT,
+  formatCurrency,
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -29,6 +37,9 @@ export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists, convertDecimalAmount } = useWhiteList();
   const { programService } = useWallet();
+
+  /** @dev Inject wallet account info. */
+  const { chain } = useAppWallet();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -65,6 +76,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const isPaused = useMemo(() => data.status === PocketStatus.PAUSED, [data]);
   const isClosed = useMemo(() => data.status === PocketStatus.CLOSED, [data]);
   const isEnded = useMemo(() => data.status === PocketStatus.ENDED, [data]);
+  const isWithdrawed = useMemo(() => !isEnded && isClosed, [isEnded, isClosed]);
 
   useEffect(() => {
     (async () => {
@@ -94,7 +106,7 @@ export const PoolItem = (props: PoolItemProps) => {
   }, [data]);
 
   return (
-    <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px]">
+    <div className="w-full min-h-[100px] rounded-[32px] bg-dark90 py-[32px] md:px-[100px] px-[20px] mt-[40px] overflow-hidden">
       <div className="flow-root">
         <p className="text-[16px] md:text-[24px] text-white normal-text float-left">
           {data.name}
@@ -102,7 +114,13 @@ export const PoolItem = (props: PoolItemProps) => {
         <p className="float-right text-dark50 text-[12px] md:text-[16px] regular-text relative top-[3px] md:top-[6px] flex items-center">
           #{utilsProvider.makeShort(data.id)}
           <a
-            href={`https://solscan.io/account/${data.address}`}
+            href={
+              chain === "SOL"
+                ? `${SOL_EXPLORE}/account/${data.address}`
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? `${MUMBAI_EXPLORE}/token/${data.address}`
+                : `${BSC_EXPLORE}/token/${data.address}`
+            }
             target="_blank"
             className="ml-[10px] relative top-[-3px]"
           >
@@ -183,7 +201,7 @@ export const PoolItem = (props: PoolItemProps) => {
               <p className="float-left text-green text-[14px] regular-text">
                 {data.progressPercent > 1
                   ? 100
-                  : (data.progressPercent * 100).toFixed(2)}
+                  : (data.progressPercent * 100)?.toFixed(2)}
                 %
               </p>
               <div className="float-right">
@@ -198,19 +216,19 @@ export const PoolItem = (props: PoolItemProps) => {
         ) : (
           <>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Batch bought:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {data.currentBatchAmount || 0}{" "}
                 {data.currentBatchAmount > 1 ? "BATCHES" : "BATCH"}
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Token bought:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {formatCurrency(
                   convertDecimalAmount(
                     targetToken?.address,
@@ -221,10 +239,10 @@ export const PoolItem = (props: PoolItemProps) => {
               </p>
             </div>
             <div className="flex items-center mt-[5px]">
-              <p className="w-[200px] text-[12px] md:text-[14px] text-dark40 normal-text">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white normal-text">
                 Spent:
               </p>
-              <p className="text-white text-[12px] md:text-[16px] normal-text">
+              <p className="text-dark40 text-[12px] md:text-[16px] normal-text w-full text-right">
                 {formatCurrency(
                   convertDecimalAmount(
                     baseToken?.address,
@@ -243,18 +261,18 @@ export const PoolItem = (props: PoolItemProps) => {
             Pocket information
           </p>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px]  text-[12px] md:text-[14px]  text-dark40 ">
+            <p className="w-[200px]  text-[12px] md:text-[14px]  text-white ">
               Start date:
             </p>
-            <p className="text-white  text-[12px] md:text-[16px] ">
+            <p className="text-dark40 text-[12px] md:text-[16px] w-full text-right">
               {dayjs(data.startTime).format(DATE_TIME_FORMAT)}
             </p>
           </div>
           <div className="flex items-center mt-[5px] regular-text">
-            <p className="w-[200px] text-[12px] md:text-[14px] text-dark40">
+            <p className="w-[200px] text-[12px] md:text-[14px] text-white">
               Total deposited
             </p>
-            <p className="text-white text-[12px] md:text-[16px]">
+            <p className="text-dark40 text-[12px] md:text-[16px] w-full text-right">
               {convertDecimalAmount(
                 data?.baseTokenAddress,
                 data.remainingBaseTokenBalance
@@ -264,10 +282,10 @@ export const PoolItem = (props: PoolItemProps) => {
           </div>
           {data.batchVolume > data.remainingBaseTokenBalance && (
             <div className="flex items-center mt-[5px] regular-text">
-              <p className="w-[200px] text-[14px] text-dark40">
+              <p className="w-[200px] text-[12px] md:text-[14px] text-white">
                 Outstanding deposit:
               </p>
-              <p className="text-white text-[16px]">
+              <p className="text-dark40 text-[12px] md:text-[16px] w-[50%] text-right">
                 {convertDecimalAmount(
                   baseToken?.address,
                   data.batchVolume - data.remainingBaseTokenBalance
@@ -292,77 +310,111 @@ export const PoolItem = (props: PoolItemProps) => {
         >
           {hummanStatus}
         </p>
-        <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto w-[200px]">
-          <div className="float-right">
-            {(isActive || isPaused) && (
-              <Button
-                className="!px-[50px] md:w-auto !w-full pool-control-btn"
-                theme={{
-                  backgroundColor: "#B998FB",
-                  color: "#FFFFFF",
-                }}
-                text="Deposit"
-                width="100%"
-                onClick={() => setDepositedDisplayed(true)}
-              />
-            )}
-          </div>
-          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
-            {!isClosed &&
-              !isEnded &&
-              (isPaused ? (
+        {!isWithdrawed && !(isEnded && !isClaimed) && (
+          <div className="md:float-right flex mt-[20px] md:mt-0 md:w-auto mobile:grid mobile:grid-cols-3 mobile:gap-3">
+            <div className="md:float-right mobile:col-span-1">
+              {(isActive || isPaused) && (
                 <Button
-                  className="!px-[50px] md:w-auto pool-control-btn"
+                  className="!px-[50px] md:w-auto !w-full pool-control-btn"
                   theme={{
                     backgroundColor: "#B998FB",
                     color: "#FFFFFF",
                   }}
-                  text="Continue"
+                  text="Deposit"
                   width="100%"
-                  onClick={() => setResumedDisplayed(true)}
+                  onClick={() => setDepositedDisplayed(true)}
                 />
-              ) : (
+              )}
+            </div>
+            <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
+              {!isClosed &&
+                !isEnded &&
+                (isPaused ? (
+                  <Button
+                    className="!px-[50px] md:w-auto pool-control-btn"
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
+                    text="Continue"
+                    width="100%"
+                    onClick={() => setResumedDisplayed(true)}
+                  />
+                ) : (
+                  <Button
+                    className="!px-[50px] md:w-auto pool-control-btn"
+                    theme={{
+                      backgroundColor: "#B998FB",
+                      color: "#FFFFFF",
+                    }}
+                    text="Pause"
+                    width="100%"
+                    onClick={() => setPausedDisplayed(true)}
+                  />
+                ))}
+            </div>
+            <div className="md:float-right md:ml-[10px] md:mt-0 md:w-auto mobile:col-span-1">
+              {!isEnded && (
                 <Button
-                  className="!px-[50px] md:w-auto pool-control-btn"
+                  className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
                   theme={{
-                    backgroundColor: "#B998FB",
-                    color: "#FFFFFF",
+                    backgroundColor: "transparent",
+                    color: "#B998FB",
+                    hoverColor: "#B998FB",
                   }}
-                  text="Pause"
+                  text={isClosed ? "Withdraw" : "Close"}
                   width="100%"
-                  onClick={() => setPausedDisplayed(true)}
+                  onClick={() => setClosedDisplayed(true)}
                 />
-              ))}
+              )}
+              {isEnded && !isClaimed && (
+                <Button
+                  className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
+                  theme={{
+                    backgroundColor: "transparent",
+                    color: "#B998FB",
+                    hoverColor: "#B998FB",
+                  }}
+                  text="Claim fee"
+                  width="100%"
+                  onClick={() => setClaimFeeDisplayed(true)}
+                />
+              )}
+            </div>
           </div>
-          <div className="float-right ml-[10px] md:mt-0 md:w-auto w-[200px]">
+        )}
+        {isWithdrawed && (
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
             {!isEnded && (
               <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
+                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn text-center mx-auto"
                 theme={{
                   backgroundColor: "transparent",
                   color: "#B998FB",
                   hoverColor: "#B998FB",
                 }}
-                text={isClosed ? "Withdraw" : "Close"}
+                text="Withdraw"
                 width="100%"
                 onClick={() => setClosedDisplayed(true)}
               />
             )}
-            {isEnded && !isClaimed && (
-              <Button
-                className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn"
-                theme={{
-                  backgroundColor: "transparent",
-                  color: "#B998FB",
-                  hoverColor: "#B998FB",
-                }}
-                text="Claim fee"
-                width="100%"
-                onClick={() => setClaimFeeDisplayed(true)}
-              />
-            )}
           </div>
-        </div>
+        )}
+        {isEnded && !isClaimed && (
+          <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
+            <Button
+              className="!px-[50px] !border-solid !border-purple !border-[2px] pool-control-btn text-center mx-auto mobile:!max-w-[150px]"
+              theme={{
+                backgroundColor: "transparent",
+                color: "#B998FB",
+                hoverColor: "#B998FB",
+              }}
+              text="Claim fee"
+              width="100%"
+              onClick={() => setClaimFeeDisplayed(true)}
+            />
+          </div>
+        )}
       </div>
       {depositedDisplayed && (
         <DepositModal

@@ -1,28 +1,23 @@
-import { CalendarIcon, SearchIcon } from "@/src/components/icons";
+import { SearchIcon } from "@/src/components/icons";
 import { Input } from "@hamsterbox/ui-kit";
-import { DatePicker } from "antd";
-import { DropdownSelect } from "@/src/components/select";
+// import { DropdownSelect } from "@/src/components/select";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getHistories } from "../../redux/actions/history/history.action";
 import useDebounce from "../../hooks/useDebounce";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import { PoolType } from "@/src/entities/history.entity";
-import classnames from "classnames";
-import styles from "./styles.module.scss";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
-
-const { RangePicker } = DatePicker;
 
 const types = [
   { label: "All type", value: "ALL" },
-  { label: "Create", value: PoolType.CREATE },
-  { label: "Pause", value: PoolType.PAUSE },
+  { label: "Create", value: PoolType.CREATED },
+  { label: "Pause", value: PoolType.PAUSED },
   { label: "Resume", value: PoolType.CONTINUE },
-  { label: "Deposit", value: PoolType.DEPOSIT },
+  { label: "Deposit", value: PoolType.DEPOSITED },
   { label: "Swap", value: PoolType.SWAPPED },
-  { label: "Close", value: PoolType.CLOSE },
-  { label: "Withdraw", value: PoolType.WITHDRAW },
+  { label: "Close", value: PoolType.CLOSED },
+  { label: "Withdraw", value: PoolType.WITHDRAWN },
 ];
 const PickerFormat = "DD/MM/YYYY";
 
@@ -31,20 +26,26 @@ export default function HistoryController() {
   /**
    * @desc Wallet injected
    */
-  const wallet = useConnectedWallet()?.publicKey.toString();
+  const { walletAddress, chain } = useAppWallet();
 
-  const [selectedType, setSelectedType] = useState<string>(types[0].value);
+  const [selectedType] = useState<string>(types[0].value);
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState([]);
+  const [date] = useState([]);
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   useEffect(() => {
-    if (!wallet) return;
+    if (!walletAddress) return;
     const [start, end] = date;
     dispatch(
       getHistories({
         limit: 999,
-        ownerAddress: wallet,
+        ownerAddress: walletAddress,
+        chainId:
+          chain === "SOL"
+            ? "solana"
+            : process.env.EVM_CHAIN_ID === "matic"
+            ? "mumbai"
+            : "bsc_mainnet",
         search,
         statuses: selectedType === types[0].value ? undefined : [selectedType],
         timeFrom: start
@@ -55,38 +56,55 @@ export default function HistoryController() {
           : undefined,
       })
     );
-  }, [wallet, debouncedSearch, selectedType, date]);
+  }, [debouncedSearch, selectedType, date, walletAddress]);
 
   return (
-    <div className="mt-8 flex justify-between">
-      <div className="w-full max-w-[440px]">
-        <Input
-          containerClassName="app-input"
-          inputClassName="bg-dark90 !text-white !rounded-[100px]"
-          placeholder="Search by Pocket name/ID"
-          icon={<SearchIcon />}
-          onValueChange={(v) => setSearch(v)}
-        />
-      </div>
-      <div className="flex">
-        <RangePicker
-          format={PickerFormat}
-          size="large"
-          className={classnames(
-            "rounded-full w-full min-w-[280px] px-[20px] bg-dark90 !h-[48px] placeholder-gray-500 border-none",
-            styles.customDatePicker
-          )}
-          placeholder={["From", "To"]}
-          onChange={(_, dateString) => setDate(dateString)}
-          suffixIcon={<CalendarIcon />}
-          clearIcon={null}
-        />
-        <DropdownSelect
-          options={types}
-          handleSelectValue={(v) => setSelectedType(v)}
-          value={selectedType}
-          className="!rounded-full !h-[48px] ml-6"
-        />
+    <div className="mt-8 md:justify-between">
+      <div className="flex mt-[32px]">
+        {/* <div className="float-left md:w-[10%]">
+          <DropdownSelect
+            handleSelectValue={(val) => console.log(val)}
+            className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
+            value={
+              chain === "SOL"
+                ? "SOL"
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? "MATIC"
+                : "BNB"
+            }
+            options={
+              chain === "SOL"
+                ? [
+                    {
+                      value: "SOL",
+                      label: "SOL",
+                    },
+                  ]
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? [
+                    {
+                      value: "MATIC",
+                      label: "MATIC",
+                    },
+                  ]
+                : [
+                    {
+                      value: "BNB",
+                      label: "BNB",
+                    },
+                  ]
+            }
+          />
+        </div> */}
+        <div className="float-left w-[100%] mobile:w-[100%] pr-[10px] ml-[10px]">
+          <Input
+            containerClassName="app-input psi w-full mobile:!h-[40px]"
+            inputClassName="!bg-dark100 !text-white !rounded-[8px]"
+            placeholder="Search by Pocket name/ID"
+            icon={<SearchIcon />}
+            onValueChange={(v) => setSearch(v)}
+          />
+        </div>
       </div>
     </div>
   );

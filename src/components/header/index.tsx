@@ -1,24 +1,20 @@
-import { FC, useMemo, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useWalletKit } from "@gokiprotocol/walletkit";
-import { useConnectedWallet } from "@saberhq/use-solana";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
-import classnames from "classnames";
-import styles from "./index.module.scss";
-import UserProfile from "@/src/components/header/user-profile";
 import { HamsterboxIcon } from "@/src/components/icons";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import classnames from "classnames";
+import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
 
-interface MenuItem {
-  title: string;
-  href: string;
-  button?: boolean | false;
-}
-
 const Header: FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [chain] = useState<"SOL" | "ETH">("ETH");
   const router = useRouter();
 
   /**
@@ -31,58 +27,17 @@ const Header: FC = () => {
    * @dev Import GoGi providers.
    */
   const { connect: connectWallet } = useWalletKit();
-  const wallet = useConnectedWallet();
+  const { walletAddress } = useAppWallet();
+  // const wallet = useConnectedWallet();
 
   /**
-   * @dev Define Menu Data.
+   * @dev The function to desire which blockchain to connect.
    */
-  const menuData = useMemo<MenuItem[]>(
-    () => [{ title: "Home", href: "/create-proposal", button: true }],
-    []
-  );
-
-  /**
-   * @dev The function to open/close mobile header menu.
-   */
-  const handleToggleMobileMenu = () => {
-    const toggleButton = document.getElementById("mobile-toggle");
-    const mobileMemu = document.getElementById("mobile-menu");
-    toggleButton?.classList?.toggle(styles.active);
-    mobileMemu?.classList?.toggle(styles.active);
-  };
-
-  /**
-   * @dev The function to call when click menu item.
-   * @param {string} slug.
-   * @param {string} spacing.
-   * @returns {void}
-   */
-  const handleOnClickMenu = (slug: string, spacing?: number) => {
-    const url: string = router.asPath;
-    if (url && url !== "/" && !url.startsWith("/#")) {
-      return router.push(`/${slug}`);
+  const handleConnect = useCallback(() => {
+    if (chain === "SOL") {
+      connectWallet();
     }
-
-    setCurSlug(slug);
-    const el = document.getElementById(slug?.split("#")[1]);
-    if (!el) return;
-
-    /**
-     * @description
-     * Change location without refresh page
-     * */
-    history.pushState({}, "", `/${slug}`);
-
-    if (!window.location.href.includes("#")) return;
-
-    // Scroll certain amounts from current position
-    window.scrollBy({
-      top: el.getBoundingClientRect().top - (spacing || 200),
-      left: 0,
-      behavior: "smooth",
-    });
-  };
-
+  }, [chain]);
   /**
    * @description
    * This function set current selected section based on the location user are in
@@ -115,20 +70,23 @@ const Header: FC = () => {
 
   return (
     <StyledHeader
-      className={classnames("app-header fixed z-50 w-full  px-[12px] md:px-0", {
-        /**
-         * @dev Restrict fill purple background & clear border for specific pages.
-         */
-        "bg-purpleBg border-b-[0px]": PURPLE_HEADER_PAGES.filter((item) =>
-          router.asPath.includes(item)
-        ).length,
-        "text-white": !isScrolled && isHomepage,
-        "scrolled-header shadow-lg": isScrolled,
-      })}
+      className={classnames(
+        "app-header md:fixed md:z-50 w-full px-[12px] md:px-0 mobile:block mobile:shadow-lg mobile:bg-[#060710]",
+        {
+          /**
+           * @dev Restrict fill purple background & clear border for specific pages.
+           */
+          "bg-purpleBg border-b-[0px]": PURPLE_HEADER_PAGES.filter((item) =>
+            router.asPath.includes(item)
+          ).length,
+          "text-white": !isScrolled && isHomepage,
+          "scrolled-header shadow-lg": isScrolled,
+        }
+      )}
       id="app-header"
     >
       <div className="w-full py-[18px] md:py-[25px] flow-root">
-        <div className="md:max-w-[1140px] mx-auto flex justify-between">
+        <div className="md:max-w-[1440px] mx-auto flex justify-between">
           <div className="logo-wrapper md:mt-0 flex items-center">
             <a className="cursor-pointer" onClick={() => router.push("/")}>
               <HamsterboxIcon
@@ -144,110 +102,83 @@ const Header: FC = () => {
             >
               {
                 <ul className="menu-container float-left">
-                  {wallet && (
+                  {/* {walletAddress && (
                     <Button
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
                       size="small"
-                      onClick={() => router.push("/create-pocket")}
+                      onClick={() => router.push("/strategy")}
                       theme={{
-                        backgroundColor: "#B998FB",
+                        backgroundColor: "#735CF7",
                         color: "#FFFFFF",
                       }}
                     />
+                  )} */}
+                  {walletAddress && (
+                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] pr-[30px]">
+                      <img
+                        className="w-[24px] h-[24px]"
+                        src="/assets/images/bnb.svg"
+                      />
+                    </div>
                   )}
                 </ul>
               }
             </div>
             <div className="relative flex items-center right-[16px]">
               <div className="float-right relative">
-                {!wallet ? (
-                  <div className="relative">
-                    {" "}
-                    <Button
-                      className="!px-8"
-                      size="small"
-                      text="Connect Wallet"
-                      onClick={connectWallet}
-                      theme={{
-                        backgroundColor: "#B998FB",
-                        color: "#FFFFFF",
-                      }}
-                    />{" "}
+                {!walletAddress ? (
+                  <div className="relative flex items-center">
+                    {chain === "SOL" ? (
+                      <Button
+                        className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
+                        size="small"
+                        text="Connect Wallet"
+                        onClick={handleConnect}
+                        theme={{
+                          backgroundColor: "#735CF7",
+                          color: "#FFFFFF",
+                        }}
+                      />
+                    ) : (
+                      <ConnectButton.Custom>
+                        {({ account, chain, openConnectModal, mounted }) => {
+                          return (
+                            <div
+                              {...(!mounted && {
+                                "aria-hidden": true,
+                                style: {
+                                  opacity: 0,
+                                  pointerEvents: "none",
+                                  userSelect: "none",
+                                },
+                              })}
+                            >
+                              {(() => {
+                                if (!mounted || !account || !chain) {
+                                  return (
+                                    <Button
+                                      className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
+                                      size="small"
+                                      text="Connect Wallet"
+                                      onClick={openConnectModal}
+                                      theme={{
+                                        backgroundColor: "#735CF7",
+                                        color: "#FFFFFF",
+                                      }}
+                                    />
+                                  );
+                                }
+                              })()}
+                            </div>
+                          );
+                        }}
+                      </ConnectButton.Custom>
+                    )}{" "}
                   </div>
                 ) : (
                   <UserProfile />
                 )}
-              </div>
-              <div className="flex items-center float-right">
-                <div
-                  className={classnames(
-                    styles["toggle-button"],
-                    "block md:hidden ml-[20px]"
-                  )}
-                  id="mobile-toggle"
-                  onClick={handleToggleMobileMenu.bind(this)}
-                >
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.top,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.middle,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                  <span
-                    className={classnames(
-                      styles.bar,
-                      styles.bottom,
-                      "bg-strongTitle dark:bg-strongTitleDark"
-                    )}
-                  ></span>
-                </div>
-              </div>
-            </div>
-            <div className={classnames(styles["mobile-nav"])}>
-              <div
-                className={classnames(styles["menu-container"], "pt-[20%]")}
-                id="mobile-menu"
-              >
-                <ul className={styles["mobile-menu"]}>
-                  {menuData.map((item: any, index: number) => (
-                    <li key={`mobile-menu-${index}`}>
-                      {item.button ? (
-                        <Button
-                          className="!rounded-[100px] after:!rounded-[100px] !px-[20px] mx-auto"
-                          text="Create a Proposal"
-                          size="small"
-                          onClick={() => router.push(item.href)}
-                        />
-                      ) : (
-                        <a
-                          className={classnames("mt-[30px] md:mt-[60px]", {
-                            active: item.slug === curSlug,
-                          })}
-                          onClick={() => {
-                            handleOnClickMenu(item.slug, 200);
-                            handleToggleMobileMenu();
-                          }}
-                        >
-                          <div className="hidden-layer"></div>
-                          <button className="shown-layer">
-                            <p className="uppercase text-[16px] md:text-[32px] bold-text">
-                              {item.title}
-                            </p>
-                          </button>
-                        </a>
-                      )}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </div>
           </div>
@@ -262,6 +193,9 @@ export default Header;
 const StyledHeader = styled.div`
   transition: background-color 0.3s ease;
   &.scrolled-header {
-    background-color: #000000;
+    background-color: #121320;
+    @media screen and (max-width: 768px) {
+      background-color: #121320;
+    }
   }
 `;

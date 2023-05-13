@@ -43,6 +43,11 @@ export type CurrencyInputProps = {
   dropdownIconDisplayed?: boolean | false;
 
   /**
+   * @dev Force to show right prefix.
+   */
+  rightPrefixLabel?: string;
+
+  /**
    * @dev Callback function for on click event.
    */
   onClick?: () => void;
@@ -57,7 +62,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
    */
-  const { whiteLists: allowCurrencies } = useWhiteList();
+  const { whiteLists: allowCurrencies, findEntityByAddress } = useWhiteList();
 
   /**
    * @dev The condition to display filter for user to select which token want to excute.
@@ -91,7 +96,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       <Input
         size="large"
         className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px]",
+          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px] mobile:!h-[45px] mobile:!text-[14px]",
           styles.myInput,
           props.inputClassName
         )}
@@ -107,9 +112,16 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
             <img
               className={classNames(
                 "rounded-full",
-                addressSelected ? "w-10 h-10 mr-4" : "invisible"
+                addressSelected
+                  ? "w-10 h-10 mr-4 mobile:!w-[24px] mobile:!h-[24px]"
+                  : "invisible"
               )}
-              src={allowCurrencies?.[addressSelected]?.image}
+              src={
+                (
+                  allowCurrencies?.[addressSelected] ||
+                  findEntityByAddress(addressSelected)
+                )?.image
+              }
             />
           )
         }
@@ -125,13 +137,15 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       />
       <p
         className={classNames(
-          "absolute right-[20px] top-[30px] cursor-pointer semi-bold text-white",
+          "absolute right-[20px] top-[30px] mobile:top-[20px] cursor-pointer semi-bold text-white mobile:!text-[14px]",
           props.dropdownBadgeClassname
         )}
         style={{ zIndex: 3 }}
         onClick={() => setDropdown(!dropDown)}
       >
-        {addressSelected === "BATCH"
+        {props.rightPrefixLabel
+          ? props.rightPrefixLabel
+          : addressSelected === "BATCH"
           ? "BATCH"
           : allowCurrencies?.[addressSelected]?.symbol}
         {!props.disableDropdown && (

@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
-import { useWallet } from "@/src/hooks/useWallet";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 interface Props {
   children: ReactNode;
@@ -12,6 +12,8 @@ const AUTH_ROUTES = [
   "/my-pockets",
   "/portfolio",
   "/history",
+  "/pocket",
+  "/strategy",
 ];
 
 const AuthMiddleware: FC<Props> = ({ children }) => {
@@ -20,19 +22,26 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
   /**
    * @dev Wallet hook injected.
    */
-  const wallet = useWallet();
+  const wallet = useAppWallet();
 
   const isAuth = useCallback(() => {
-    return !(AUTH_ROUTES.find((item) => router.asPath === item) === undefined);
+    return !(
+      AUTH_ROUTES.find(
+        (item) => router.asPath === item || router.asPath.includes(item)
+      ) === undefined
+    );
   }, [router.asPath]);
 
   useEffect(() => {
     /** @dev Wait for 2s to re-connect wallet */
     const myTimer = setTimeout(() => {
-      if (isAuth() && !wallet?.solanaWallet.publicKey) {
+      if (isAuth() && !wallet?.walletAddress) {
         router.push("/");
       }
-    }, 2000);
+      if (router.asPath === "/" && wallet?.walletAddress) {
+        router.push("/my-pockets");
+      }
+    }, 1000);
     return () => clearTimeout(myTimer);
   }, [router.asPath, wallet]);
 

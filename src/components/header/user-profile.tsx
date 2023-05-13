@@ -1,26 +1,25 @@
-import { FC, useMemo, useRef, useState } from "react";
-import { utilsProvider, AVATAR_ENDPOINT } from "@/src/utils";
-import { useConnectedWallet } from "@saberhq/use-solana";
+import { FC, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useWallet } from "@/src/hooks/useWallet";
-import { LoggoutIcon } from "@/src/components/icons";
+import { disconnect as disconnectEvm } from "@wagmi/core";
+import {
+  LoggoutIcon,
+  // NoneIcon,
+  // PlusIcon,
+  BookIcon,
+  DropdownArrowIcon,
+} from "@/src/components/icons";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
 import classnames from "classnames";
 import styles from "./index.module.scss";
-import { DownOutlined } from "@ant-design/icons";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
-  const wallet = useConnectedWallet();
   const router = useRouter();
-  const { disconnect } = useWallet();
-
-  /**
-   * @dev Get wallet public key address.
-   */
-  const walletPublicKey = useMemo(
-    () => wallet?.publicKey?.toString(),
-    [wallet]
-  );
+  const { chain, walletAddress } = useAppWallet();
+  const { disconnect: disconnectSol } = useWallet();
+  // const { disconnect: disconnectEvm } = useDisconnectEvm();
 
   /**
    * @description Define state of showing profile menu
@@ -40,22 +39,24 @@ const UserProfile: FC = () => {
   return (
     <div
       className={classnames(
-        "relative flex items-center h-full py-[3px] px-[10px] border-solid border-[0px] border-purple rounded-[5px] cursor-pointer avatar-profile",
+        "relative flex items-center h-full border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] px-[10px] md:py-[10px] py-[5px]",
         styles["avatar-profile"]
       )}
       ref={ref}
     >
       <img
-        className="w-[20px] md:w-[40px] h-[auto] mr-[10px]"
-        src={`${AVATAR_ENDPOINT}/${walletPublicKey}.png`}
-        alt="Boring avatar"
+        className="mr-[10px] w-[24px] h-[24px]"
+        src={`${AVATAR_ENDPOINT}/${walletAddress}.png`}
       />
       <span
         className="text-[12px] md:text-[14px] text-white flex items-center"
         onClick={() => setShow(!show)}
       >
-        {utilsProvider.makeShort(walletPublicKey, 3)}{" "}
-        <DownOutlined style={{ fontSize: 14 }} className="ml-2" />
+        <span className="normal-text text-dark50">
+          {/* {chain === "SOL" ? "Solana" : "BNB Chain"} */}
+          {utilsProvider.makeShort(walletAddress, 3)}
+        </span>
+        <DropdownArrowIcon className="ml-2 text-dark50" />
       </span>
       <ul
         style={{ display: show ? "block" : "none" }}
@@ -65,24 +66,40 @@ const UserProfile: FC = () => {
           <ul>
             <li
               onClick={() => router.push(`/my-pockets`)}
-              className="hover:text-purple normal-text"
+              className="hover:text-purple normal-text flex items-center"
             >
-              My Pockets
+              <BookIcon />
+              <p className="ml-[5px]">My Pockets</p>
+            </li>
+            {/* <li
+              onClick={() => router.push(`/create-pocket`)}
+              className="hover:text-purple normal-text md:hidden flex items-center"
+            >
+              <PlusIcon />
+              <p className="ml-[5px]">Create Pocket</p>
             </li>
             <li
               onClick={() => router.push(`/portfolio`)}
-              className="hover:text-purple normal-text"
+              className="hover:text-purple normal-text flex items-center"
             >
-              View Portfolio
+              <BookIcon />
+              <p className="ml-[5px]">View Portfolio</p>
             </li>
             <li
               onClick={() => router.push(`/history`)}
-              className="hover:text-purple normal-text"
+              className="hover:text-purple normal-text flex items-center"
             >
-              View History
-            </li>
+              <NoneIcon />
+              <p className="ml-[5px]">View History</p>
+            </li> */}
             <li
-              onClick={disconnect}
+              onClick={async () => {
+                if (chain === "SOL") {
+                  disconnectSol();
+                } else {
+                  await disconnectEvm();
+                }
+              }}
               className="text-red300 flex items-center normal-text"
             >
               <LoggoutIcon />
