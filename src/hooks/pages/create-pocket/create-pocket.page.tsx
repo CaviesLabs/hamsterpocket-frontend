@@ -21,7 +21,10 @@ import { union } from "lodash";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
-import { createdPocketPramsParserEvm } from "@/src/utils/evm.parser";
+import {
+  createdPocketPramsParserEvm,
+  convertBigNumber,
+} from "@/src/utils/evm.parser";
 import { BigNumber } from "ethers";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
@@ -275,8 +278,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         );
 
         if (takeProfitAmount) {
-          const evmTakeProfitAmount = BigNumber.from(
-            `0x${(takeProfitAmount * plufixWithDecimals).toString(16)}`
+          const evmTakeProfitAmount = convertBigNumber(
+            takeProfitAmount,
+            plufixWithDecimals
           );
           evmParams = {
             ...evmParams,
@@ -288,8 +292,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         }
 
         if (stopLossAmount) {
-          const evmStopLossAmount = BigNumber.from(
-            `0x${(stopLossAmount * plufixWithDecimals).toString(16)}`
+          const evmStopLossAmount = convertBigNumber(
+            stopLossAmount,
+            plufixWithDecimals
           );
           evmParams = {
             ...evmParams,

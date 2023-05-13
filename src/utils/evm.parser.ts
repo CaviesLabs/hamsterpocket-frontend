@@ -17,6 +17,16 @@ import { WSOL_ADDRESS } from "@/src/utils";
 export const convertToEtherBigNumber = (value: number) =>
   BigNumber.from(`0x${value.toString(16)}`);
 
+export const convertBigNumber = (value: number, decimals: number) => {
+  if (decimals > 10 ** 10) {
+    return BigNumber.from(
+      `0x${(value * 10 ** 10 * (decimals / 10 ** 10)).toString(16)}`
+    );
+  } else {
+    return BigNumber.from(`0x${(value * 10 ** 10 * decimals).toString(16)}`);
+  }
+};
+
 /**
  * @param solStopConditions
  * @returns
