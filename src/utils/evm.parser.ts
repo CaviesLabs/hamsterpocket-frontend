@@ -56,15 +56,13 @@ export const convertToEtherStopCondition = (
         conditionOperator = "2";
         const solReverd =
           condition[type].value.toNumber() / Math.pow(10, baseTokenDecimals);
-        const ethReverd = solReverd * Math.pow(10, realBaseTokenDecimals);
-        ethValue = convertToEtherBigNumber(ethReverd);
+        ethValue = convertBigNumber(solReverd, realBaseTokenDecimals);
         break;
       case "quoteTokenAmountReach":
         conditionOperator = "3";
         const solReverd1 =
           condition[type].value.toNumber() / Math.pow(10, targetTokenDecimals);
-        const ethReverd1 = solReverd1 * Math.pow(10, realTargetTokenDecimals);
-        ethValue = convertToEtherBigNumber(ethReverd1);
+        ethValue = convertBigNumber(solReverd1, realTargetTokenDecimals);
         break;
     }
     return {
