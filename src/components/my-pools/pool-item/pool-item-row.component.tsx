@@ -263,9 +263,9 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <div className="mobile:hidden">{statusComponent}</div>
             <p className="text-center md:mt-[5px] text-[12px] text-dark50 mobile:ml-[5px]">
               {isClosed || isEnded || isClaimed
-                ? dayjs(data?.updatedAt?.toLocaleString()).format(
-                    DATE_TIME_FORMAT
-                  )
+                ? dayjs(
+                    (data?.closedAt || data?.endedAt)?.toLocaleString()
+                  ).format(DATE_TIME_FORMAT)
                 : dayjs(data?.nextExecutionAt?.toLocaleString()).format(
                     DATE_TIME_FORMAT
                   )}

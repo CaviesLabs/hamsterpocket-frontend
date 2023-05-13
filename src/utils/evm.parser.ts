@@ -23,7 +23,7 @@ export const convertBigNumber = (value: number, decimals: number) => {
       `0x${(value * 10 ** 10 * (decimals / 10 ** 10)).toString(16)}`
     );
   } else {
-    return BigNumber.from(`0x${(value * 10 ** 10 * decimals).toString(16)}`);
+    return BigNumber.from(`0x${(value * decimals).toString(16)}`);
   }
 };
 
