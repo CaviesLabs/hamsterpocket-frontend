@@ -5,7 +5,15 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import classnames from "classnames";
 import { PocketNote } from "@/src/components/my-pools/pool-item/pocket-note";
-import { DATE_TIME_FORMAT, formatCurrency, utilsProvider } from "@/src/utils";
+import {
+  DATE_TIME_FORMAT,
+  formatCurrency,
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -29,6 +37,9 @@ export const PoolItem = (props: PoolItemProps) => {
   const { data } = props;
   const { whiteLists, convertDecimalAmount } = useWhiteList();
   const { programService } = useWallet();
+
+  /** @dev Inject wallet account info. */
+  const { chain } = useAppWallet();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -103,7 +114,13 @@ export const PoolItem = (props: PoolItemProps) => {
         <p className="float-right text-dark50 text-[12px] md:text-[16px] regular-text relative top-[3px] md:top-[6px] flex items-center">
           #{utilsProvider.makeShort(data.id)}
           <a
-            href={`https://solscan.io/account/${data.address}`}
+            href={
+              chain === "SOL"
+                ? `${SOL_EXPLORE}/account/${data.address}`
+                : process.env.EVM_CHAIN_ID === "matic"
+                ? `${MUMBAI_EXPLORE}/token/${data.address}`
+                : `${BSC_EXPLORE}/token/${data.address}`
+            }
             target="_blank"
             className="ml-[10px] relative top-[-3px]"
           >

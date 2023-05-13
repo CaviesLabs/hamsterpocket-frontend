@@ -204,13 +204,6 @@ export default function TableComponent() {
                             </p>
                             <div className="text-dark40 flex float-right text-[14px]">
                               #{utilsProvider.makeShort(h.poolId)}
-                              {/* <a
-                                href={`https://solscan.io/account/${poolDoc.address}`}
-                                target="_blank"
-                                className="ml-2"
-                              >
-                                <ShareIcon size="20" />
-                              </a> */}
                             </div>
                           </div>
                           <div

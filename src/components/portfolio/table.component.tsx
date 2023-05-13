@@ -1,11 +1,18 @@
 import { MdOpenInNew } from "react-icons/all";
 import { useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
-import { utilsProvider } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import {
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import State from "@/src/redux/entities/state";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
+  const { chain } = useAppWallet();
   const { whiteLists, convertDecimalAmount, findEntityByAddress } =
     useWhiteList();
 
@@ -43,7 +50,13 @@ export default function TableComponent() {
               </div>
               <div className="col-span-1 mobile:col-span-2 mobile:pt-[10px]">
                 <a
-                  href={`https://solscan.io/account/${h.tokenAddress}`}
+                  href={
+                    chain === "SOL"
+                      ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
+                      : process.env.EVM_CHAIN_ID === "matic"
+                      ? `${MUMBAI_EXPLORE}/token/${h.tokenAddress}`
+                      : `${BSC_EXPLORE}/token/${h.tokenAddress}`
+                  }
                   target="_blank"
                   className="flex justify-center items-center"
                 >

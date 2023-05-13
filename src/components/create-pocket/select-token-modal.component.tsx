@@ -3,8 +3,14 @@ import { Modal } from "antd";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon, SearchIcon } from "@/src/components/icons";
-import { utilsProvider } from "@/src/utils";
+import {
+  utilsProvider,
+  SOL_EXPLORE,
+  BSC_EXPLORE,
+  MUMBAI_EXPLORE,
+} from "@/src/utils";
 import { Input } from "@hamsterbox/ui-kit";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 export const TargetSelectTokenModal: FC<{
   isModalOpen: boolean;
@@ -20,6 +26,9 @@ export const TargetSelectTokenModal: FC<{
 
   /** @dev Inject whitelist info. */
   const { whiteLists } = useWhiteList();
+
+  /** @dev Inject wallet account info. */
+  const { chain } = useAppWallet();
 
   /** @dev Search token value. */
   const [search, setSearch] = useState("");
@@ -99,7 +108,13 @@ export const TargetSelectTokenModal: FC<{
                       </p>
                     </div>
                     <a
-                      href={`https://solscan.io/account/${token}`}
+                      href={
+                        chain === "SOL"
+                          ? `${SOL_EXPLORE}/account/${token}`
+                          : process.env.EVM_CHAIN_ID === "matic"
+                          ? `${MUMBAI_EXPLORE}/token/${token}`
+                          : `${BSC_EXPLORE}/token/${token}`
+                      }
                       target="_blank"
                       className="ml-[10px]"
                     >
