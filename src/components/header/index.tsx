@@ -97,12 +97,12 @@ const Header: FC = () => {
           </div>
           <div className="flex">
             <div
-              className="hidden md:flex memu-wrapper flex items-center md:pr-[40px]"
+              className="hidden md:flex memu-wrapper flex items-center md:pr-[30px]"
               style={{ height: "44px" }}
             >
               {
-                <ul className="menu-container float-left">
-                  {/* {walletAddress && (
+                <ul className="menu-container float-left flex items-center">
+                  {walletAddress && (
                     <Button
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
@@ -113,9 +113,9 @@ const Header: FC = () => {
                         color: "#FFFFFF",
                       }}
                     />
-                  )} */}
+                  )}
                   {walletAddress && (
-                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] pr-[30px]">
+                    <div className="border-solid border-[0px] border-purple rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]">
                       <img
                         className="w-[24px] h-[24px]"
                         src="/assets/images/bnb.svg"

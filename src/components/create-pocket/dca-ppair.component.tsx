@@ -41,11 +41,11 @@ export const DCAPPair: FC = () => {
    */
   const baseToken = useMemo(
     () => whiteLists?.[baseTokenAddress[0]?.toBase58()?.toString()],
-    [baseTokenAddress]
+    [baseTokenAddress, whiteLists]
   );
   const targetToken = useMemo(
     () => whiteLists?.[targetTokenAddress[0]?.toBase58()?.toString()],
-    [targetTokenAddress]
+    [targetTokenAddress, whiteLists]
   );
 
   const handleBaseTokenSelect = (address: string, decimals?: number) => {

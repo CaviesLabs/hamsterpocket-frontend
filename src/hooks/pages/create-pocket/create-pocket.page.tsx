@@ -391,9 +391,14 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   useEffect(() => {
     if (chain === "ETH") {
       return setAvailableTargetTokens(() => {
-        return Object.keys(whiteLists).filter((address) => {
-          return whiteLists?.[address].name !== "Wrapped Matic";
-        });
+        return Object.keys(whiteLists)
+          .filter((address) => {
+            return (
+              whiteLists?.[address].name !== "Wrapped Matic" &&
+              whiteLists?.[address].name !== "Wrapped BNB"
+            );
+          })
+          .reverse();
       });
     }
     setAvailableTargetTokens(() => {
