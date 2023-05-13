@@ -9,6 +9,6 @@ export type WhitelistEntity = {
   symbol: string;
   estimatedValue: number;
   realDecimals?: number;
-  chainId: "solana" | "mumbai";
+  chainId: "solana" | "mumbai" | "bsc_mainnet";
   aliasAddress?: string;
 };

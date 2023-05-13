@@ -246,11 +246,17 @@ export const makeAliasForEvmWhitelist = (
   source: WhitelistEntity[]
 ): WhitelistEntity[] => {
   let evmFilerted = source.filter((item) => item.chainId !== "solana");
+  let baseToken = "Wrapped Matic";
+  if (process.env.EVM_CHAIN_ID === "bsc") {
+    evmFilerted = evmFilerted.filter((item) => item.chainId === "bsc_mainnet");
+    baseToken = "Wrapped BNB";
+  }
+
   evmFilerted = evmFilerted.map((item) => {
     return {
       ...item,
       aliasAddress:
-        item?.name !== "Wrapped Matic"
+        item?.name !== baseToken
           ? Keypair.generate().publicKey.toBase58().toString()
           : WSOL_ADDRESS,
       realDecimals: item.decimals,

@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, FC } from "react";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, polygonMumbai } from "wagmi/chains";
+import { bsc, polygonMumbai } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
@@ -10,8 +10,9 @@ export const WalletKitContext = createContext<any>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
+  const customChains = process.env.EVM_CHAIN_ID === "bsc" ? bsc : polygonMumbai;
   const { chains, provider } = configureChains(
-    [mainnet, polygonMumbai],
+    [customChains],
     [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
   );
 

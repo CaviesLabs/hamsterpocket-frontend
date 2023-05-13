@@ -10,10 +10,13 @@ export class EvmProgramService {
    * @param {WalletProvider}
    * @param {CreatePocketDto}
    */
-  public async createPocketOffChain(walletAddress: string): Promise<any> {
+  public async createPocketOffChain(
+    chainId: string,
+    walletAddress: string
+  ): Promise<any> {
     /** @dev Call to HamsterBox server to initialize the proposal. */
     const response = await networkProvider.request<any>(
-      `/pool/mumbai/${walletAddress}`,
+      `/pool/${chainId}/${walletAddress}`,
       {
         method: "POST",
         data: {},

@@ -127,7 +127,8 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const findEntityByAddress = useCallback(
     (address: string) => {
       const keyFound = Object.keys(whiteLists).find(
-        (key) => whiteLists[key]?.address === address
+        (key) =>
+          whiteLists[key]?.address?.toLowerCase() === address?.toLowerCase()
       );
 
       return keyFound ? whiteLists[keyFound] : null;

@@ -3,7 +3,10 @@ import { useSigner, useBalance, useAccount } from "wagmi";
 // import pocketChefContract from "@/src/providers/program/evm/artifacts/contracts/PocketChef.sol/PocketChef.json";
 import { BigNumber } from "ethers";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
-import { PocketChef__factory } from "@/src/providers/program/evm/typechain-types";
+import {
+  PocketChef__factory,
+  PocketRegistry__factory,
+} from "@/src/providers/program/evm/typechain-types";
 import { evmProgramService } from "@/src/services/evm-program.service";
 
 /** @dev Initiize context. */
@@ -40,6 +43,10 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     process.env.EVM_CONTRACT_ADDRESS,
     signer
   );
+  const pocketRegistry = PocketRegistry__factory.connect(
+    process.env.EVM_REGISTRY_ADDRESS,
+    signer
+  );
 
   /** @dev Get chain native token balance. */
   const { data: nativeBalanceData } = useBalance({
@@ -54,6 +61,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Execute off-chain */
       console.log({ signer });
       const pocketId = await evmProgramService.createPocketOffChain(
+        process.env.EVM_CHAIN_ID === "bsc" ? "bsc_mainnet" : "mumbai",
         await signer.getAddress()
       );
 
@@ -116,10 +124,15 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
-      console.log(pocketId);
-      await contract.withdraw(pocketId);
+      const pocketStatus = (await pocketRegistry.pockets(pocketId)).status;
+      console.log({ pocketStatus });
+      if (pocketStatus !== 3) {
+        await closePocket(pocketId);
+      } else {
+        await contract.withdraw(pocketId);
+      }
     },
-    [signer, contract]
+    [signer, contract, pocketRegistry]
   );
 
   return (
