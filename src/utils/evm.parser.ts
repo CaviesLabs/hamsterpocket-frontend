@@ -20,12 +20,13 @@ export const convertToEtherBigNumber = (value: number) =>
 
 export const convertBigNumber = (value: number, decimals: number) => {
   if (decimals > 10 ** 10) {
-    console.log(bigDecimal.multiply(value, decimals).toString());
     return BigNumber.from(
       `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
     );
   } else {
-    return BigNumber.from(`0x${(value * decimals).toString(16)}`);
+    return BigNumber.from(
+      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
+    );
   }
 };
 
@@ -56,13 +57,13 @@ export const convertToEtherStopCondition = (
         conditionOperator = "2";
         const solReverd =
           condition[type].value.toNumber() / Math.pow(10, baseTokenDecimals);
-        ethValue = convertBigNumber(solReverd, realBaseTokenDecimals);
+        ethValue = convertBigNumber(solReverd, 10 ** realBaseTokenDecimals);
         break;
       case "quoteTokenAmountReach":
         conditionOperator = "3";
         const solReverd1 =
           condition[type].value.toNumber() / Math.pow(10, targetTokenDecimals);
-        ethValue = convertBigNumber(solReverd1, realTargetTokenDecimals);
+        ethValue = convertBigNumber(solReverd1, 10 ** realTargetTokenDecimals);
         break;
     }
     return {
@@ -114,32 +115,24 @@ export const convertToEtherBuyCondition = (
   }
 
   if (solBuyCondition[type].fromValue) {
+    const fromValueReverted =
+      solBuyCondition[type].fromValue.toNumber() /
+      Math.pow(10, baseTokenDecimals);
+    const toValueReverted =
+      solBuyCondition[type].toValue.toNumber() /
+      Math.pow(10, targetTokenDecimals);
     return {
       operator,
-      value0: convertToEtherBigNumber(
-        (solBuyCondition[type].fromValue.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-          Math.pow(10, realBaseTokenDecimals)
-      ),
-      value1: convertToEtherBigNumber(
-        (solBuyCondition[type].toValue.toNumber() /
-          Math.pow(10, targetTokenDecimals)) *
-          Math.pow(10, realTargetTokenDecimals)
-      ),
+      value0: convertBigNumber(fromValueReverted, 10 ** realBaseTokenDecimals),
+      value1: convertBigNumber(toValueReverted, 10 ** realTargetTokenDecimals),
     };
   } else {
+    const valueReverted =
+      solBuyCondition[type].value.toNumber() / Math.pow(10, baseTokenDecimals);
     return {
       operator,
-      value0: convertToEtherBigNumber(
-        (solBuyCondition[type].value.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-          Math.pow(10, realBaseTokenDecimals)
-      ),
-      value1: convertToEtherBigNumber(
-        (solBuyCondition[type].value.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-          Math.pow(10, realBaseTokenDecimals)
-      ),
+      value0: convertBigNumber(valueReverted, 10 ** realBaseTokenDecimals),
+      value1: convertBigNumber(valueReverted, 10 ** realBaseTokenDecimals),
     };
   }
 };

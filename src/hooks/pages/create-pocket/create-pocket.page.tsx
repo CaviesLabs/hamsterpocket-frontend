@@ -25,7 +25,6 @@ import {
   createdPocketPramsParserEvm,
   convertBigNumber,
 } from "@/src/utils/evm.parser";
-import { BigNumber } from "ethers";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   /** @dev Inject router to use. */
@@ -273,8 +272,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           10,
           whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals
         );
-        const evmDespositedAmount = BigNumber.from(
-          (depositedAmount * plufixWithDecimals).toString()
+        const evmDespositedAmount = convertBigNumber(
+          depositedAmount,
+          plufixWithDecimals
         );
 
         if (takeProfitAmount) {
