@@ -91,7 +91,12 @@ const PocketDetailPage: NextPage = () => {
     if (!walletAddress) return;
     dispatch(
       getActivePockets({
-        chainId: chain === "SOL" ? "solana" : "mumbai",
+        chainId:
+          chain === "SOL"
+            ? "solana"
+            : process.env.EVM_CHAIN_ID === "matic"
+            ? "mumbai"
+            : "bsc_mainnet",
         limit: 5,
         ownerAddress: walletAddress,
         sortBy: "DATE_CREATED_DESC",

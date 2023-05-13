@@ -41,7 +41,12 @@ export const ActivePoolGroup: FC = () => {
     if (!walletAddress) return;
     dispatch(
       getActivePockets({
-        chainId: chain === "SOL" ? "solana" : "mumbai",
+        chainId:
+          chain === "SOL"
+            ? "solana"
+            : process.env.EVM_CHAIN_ID === "matic"
+            ? "mumbai"
+            : "bsc_mainnet",
         limit: 999,
         ownerAddress: walletAddress,
         search,

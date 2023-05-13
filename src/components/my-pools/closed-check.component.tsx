@@ -28,7 +28,12 @@ export const ClosedCheckComponent: FC<{
       getClosedPockets({
         ownerAddress: walletAddress,
         statuses: [PocketStatus.CLOSED],
-        chainId: chain === "SOL" ? "solana" : "mumbai",
+        chainId:
+          chain === "SOL"
+            ? "solana"
+            : process.env.EVM_CHAIN_ID === "matic"
+            ? "mumbai"
+            : "bsc_mainnet",
       })
     );
   }, [walletAddress]);

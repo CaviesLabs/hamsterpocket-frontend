@@ -51,7 +51,12 @@ export const EndedPoolGroupComponent: FC = () => {
             selectedType === PocketTypes[2].value
               ? [PocketStatus.CLOSED, PocketStatus.ENDED]
               : [selectedType as PocketStatus.ENDED],
-          chainId: chain === "SOL" ? "solana" : "mumbai",
+          chainId:
+            chain === "SOL"
+              ? "solana"
+              : process.env.EVM_CHAIN_ID === "matic"
+              ? "mumbai"
+              : "bsc_mainnet",
         },
         () => setFetching(false)
       )

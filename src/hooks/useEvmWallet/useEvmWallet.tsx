@@ -37,7 +37,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev Initilize contract from signer provider. */
   const contract = PocketChef__factory.connect(
-    "0x9ac25725B8465E70cc2458592C9104c0f06C8e87",
+    process.env.EVM_CONTRACT_ADDRESS,
     signer
   );
 
