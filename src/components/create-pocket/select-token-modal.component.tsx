@@ -9,8 +9,8 @@ import {
   BSC_EXPLORE,
   MUMBAI_EXPLORE,
 } from "@/src/utils";
-import { Input } from "@hamsterbox/ui-kit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { Input } from "@hamsterbox/ui-kit";
 
 export const TargetSelectTokenModal: FC<{
   isModalOpen: boolean;
