@@ -7,7 +7,6 @@ export const SeoComponent: FC = () => {
   const title = "Cavies Labs | Hamsterpocket | Self-Managed DCA Vault";
   const description =
     "Hamsterpocket allows users to create and manage their own dollar-cost averaging pockets that will automatically execute the chosen strategies over time";
-  // const banner = `${url}main-banner.png`;
 
   return (
     <>
@@ -24,7 +23,7 @@ export const SeoComponent: FC = () => {
           locale: "en_US",
           images: [
             {
-              url: "https://pocket.hamsterbox.xyz/assets/images/banner_seo.png",
+              url: "https://pocket.hamsterbox.xyz/assets/images/banner_seo_bnb.png",
               width: 1024,
               height: 512,
               alt: `hero image for ${title}`,
@@ -282,7 +281,7 @@ export const SeoComponent: FC = () => {
       <meta property="og:url" content="https://pocket.hamsterbox.xyz/" />
       <meta
         property="og:image"
-        content="https://pocket.hamsterbox.xyz/assets/images/banner_seo.png"
+        content="https://pocket.hamsterbox.xyz/assets/images/banner_seo_bnb.png"
       />
       <meta
         property="og:image:alt"
@@ -303,7 +302,7 @@ export const SeoComponent: FC = () => {
       />
       <meta
         name="twitter:image"
-        content="https://pocket.hamsterbox.xyz/assets/images/banner_twitter.png"
+        content="https://pocket.hamsterbox.xyz/assets/images/banner_twitter_bnb.png"
       />
       <meta
         name="twitter:image:alt"
