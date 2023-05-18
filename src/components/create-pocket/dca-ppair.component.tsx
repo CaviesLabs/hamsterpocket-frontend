@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useMemo } from "react";
 import {
-  CurrencyInput,
   CurrencyInputBadge,
+  CurrencyBage,
 } from "@/src/components/currency-input";
 import { MobileExchangeIcon, TwoWayArrowIcon } from "@/src/components/icons";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
@@ -10,13 +10,14 @@ import { getPriceBySolana } from "@/src/services/coingecko";
 import { TargetSelectTokenModal } from "./select-token-modal.component";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const DCAPPair: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { chain } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const { whiteLists } = useWhiteList();
   const {
     baseTokenAddress,
@@ -52,7 +53,7 @@ export const DCAPPair: FC = () => {
     setBaseTokenAddress([new PublicKey(address), decimals]);
   };
   useEffect(() => {
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       const address = baseTokenAddress[0]?.toBase58()?.toString();
       getPriceBySolana(address).then((resp: any) =>
         setBaseTokenPrice(resp[address]?.usd)
@@ -60,14 +61,14 @@ export const DCAPPair: FC = () => {
     } else {
       setBaseTokenPrice(baseToken?.estimatedValue);
     }
-  }, [baseTokenAddress, baseToken, chain]);
+  }, [baseTokenAddress, baseToken, chainId]);
 
   const handleTargetTokenSelect = (address: string, decimals?: number) => {
     setTargetTokenAddress([new PublicKey(address), decimals]);
   };
 
   useEffect(() => {
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       const address = targetTokenAddress[0]?.toBase58()?.toString();
       if (!address) return;
       getPriceBySolana(address).then((resp: any) =>
@@ -76,29 +77,20 @@ export const DCAPPair: FC = () => {
     } else {
       setTargetTokenPrice(targetToken?.estimatedValue);
     }
-  }, [targetTokenAddress, targetToken, chain]);
+  }, [targetTokenAddress, targetToken, chainId]);
 
   return (
     <section>
       <LayoutWrapper
         layout={
           <>
-            <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
+            <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[20px] text-dark50 normal-text font-[600]">
               DCA pair
             </p>
-            <div className="mt-2">
-              <p className="text-dark20 text-[14px] md:text-[16px] regular-text italic mobile:hidden">
-                Enter the buy and sell token pair for this pool
-              </p>
-              <div className="grid md:grid-cols-5 md:gap-3 mt-[24px]">
+            <div className="mt-2 bg-dark100 rounded-[12px] py-[50px] px-[20px]">
+              <div className="flex mt-[24px] justify-center">
                 <div className="md:col-span-2">
-                  <p className="text-dark10 text-[14px] regular-text">
-                    From
-                    <span className="text-red300 relative top-[-2px] right-[-2px]">
-                      *
-                    </span>
-                  </p>
-                  <CurrencyInput
+                  <CurrencyBage
                     addressSelected={baseTokenAddress[0]
                       ?.toBase58()
                       ?.toString()}
@@ -109,24 +101,18 @@ export const DCAPPair: FC = () => {
                       handleBaseTokenSelect(address, decimals)
                     }
                   />
-                  <p className="mt-1 text-dark10 text-[14px] md:text-[16px] regular-text">
+                  <p className="mt-1 text-dark50 text-[14px] regular-text">
                     Price: ~${baseTokenPrice?.toFixed(2)}
                   </p>
                 </div>
-                <div className="md:col-span-1 flex items-center justify-center">
+                <div className="md:col-span-1 flex items-center justify-center px-[100px]">
                   <div className="rounded-[50%] p-[10px] md:p-[20px] bg-dark90">
                     <TwoWayArrowIcon className="mobile:hidden" />
                     <TwoWayArrowIcon className="md:hidden" size="12" />
                   </div>
                 </div>
                 <div className="md:col-span-2">
-                  <p className="text-dark10 text-[14px] regular-text">
-                    To
-                    <span className="text-red300 relative top-[-2px] right-[-2px]">
-                      *
-                    </span>
-                  </p>
-                  <CurrencyInput
+                  <CurrencyBage
                     placeholder="Select Token"
                     currencyBadgeOnly={true}
                     addressSelected={targetTokenAddress?.[0]
@@ -141,7 +127,7 @@ export const DCAPPair: FC = () => {
                       handleTargetTokenSelect(address, decimals)
                     }
                   />
-                  <p className="mt-1 text-dark10 text-[14px] md:text-[16px] regular-text">
+                  <p className="mt-1 text-dark50 text-[14px] regular-text">
                     Price: ~${targetTokenPrice?.toFixed(2)}
                   </p>
                 </div>

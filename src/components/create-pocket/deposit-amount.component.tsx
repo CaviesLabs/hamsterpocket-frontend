@@ -4,7 +4,8 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { useWallet } from "@/src/hooks/useWallet";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { formatCurrency } from "@/src/utils";
 
@@ -21,7 +22,7 @@ export const DepositAmount: FC = () => {
   } = useCreatePocketPage();
 
   const { nativeBalance: evmBalance } = useEvmWallet();
-  const { chain } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   const { whiteLists, convertDecimalAmount } = useWhiteList();
 
@@ -32,47 +33,39 @@ export const DepositAmount: FC = () => {
 
   return (
     <section>
-      <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
+      <p className="mt-[20px] md:mt-[48px] text-[14px] md:text-[20px] text-dark50 regular-text">
         Deposit amount
       </p>
       <div className="mt-2">
-        <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
-          <div className="md:col-span-2">
-            <p className="text-dark10 text-[14px] regular-text">
-              Deposit amount
-              <span className="text-red300 relative top-[-2px] right-[-2px]">
-                *
-              </span>
-            </p>
-            <CurrencyInput
-              addressSelected={baseTokenAddress[0]?.toBase58().toString()}
-              disableDropdown={true}
-              onAmountChange={(val) => {
-                setErrorMsgs({
-                  ...errorMsgs,
-                  depositedAmount:
-                    val < batchVolume &&
-                    "Deposit amount must be equal or greater than the each batch amount",
-                });
-                setDepositedAmount(val);
-              }}
-              placeholder="Enter amount"
+        <div>
+          <CurrencyInput
+            addressSelected={baseTokenAddress[0]?.toBase58().toString()}
+            disableDropdown={true}
+            placeholder="Enter amount"
+            onAmountChange={(val) => {
+              setDepositedAmount(val);
+              setErrorMsgs({
+                ...errorMsgs,
+                depositedAmount:
+                  val < batchVolume &&
+                  "Deposit amount must be equal or greater than the each batch amount",
+              });
+            }}
+          />
+          <p className="mt-3 text-white text-[14px] md:text-[16px] regular-text flex">
+            Available:
+            <img
+              src={baseToken?.image}
+              alt="token balance"
+              className="!w-6 mx-1 rounded w-[20px]"
             />
-            <p className="mt-3 text-white text-[14px] md:text-[16px] regular-text flex">
-              Available:
-              <img
-                src={baseToken?.image}
-                alt="token balance"
-                className="!w-6 mx-1 rounded w-[20px]"
-              />
-              {formatCurrency(
-                chain === "SOL"
-                  ? convertDecimalAmount(baseToken?.address, solBalance)
-                  : evmBalance
-              )}{" "}
-              {baseToken?.symbol}
-            </p>
-          </div>
+            {formatCurrency(
+              chainId === ChainId.sol
+                ? convertDecimalAmount(baseToken?.address, solBalance)
+                : evmBalance
+            )}{" "}
+            {baseToken?.symbol}
+          </p>
         </div>
         {errorMsgs?.depositedAmount && (
           <ErrorLabel message={errorMsgs.depositedAmount} />

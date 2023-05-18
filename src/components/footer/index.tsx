@@ -1,5 +1,6 @@
 import { FC, useMemo } from "react";
 import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { HamsterboxIcon, CaviesIcon } from "@/src/components/icons";
 
 interface FooterItem {
@@ -15,6 +16,7 @@ interface SocialItem {
 
 const Footer: FC = () => {
   const router = useRouter();
+  const { pushRouterWithChainId, chainId } = usePlatformConfig();
 
   const footers = useMemo<FooterItem[]>(
     () => [
@@ -40,7 +42,7 @@ const Footer: FC = () => {
     []
   );
 
-  return router.asPath === "/" ? (
+  return router.asPath === `/${chainId}` || router.asPath === `/${chainId}/` ? (
     <div className="footer pb-9 mobile:hidden">
       <div className="lg:max-w-[1440px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
@@ -63,7 +65,7 @@ const Footer: FC = () => {
             </ul>
           </div>
           <div className="relative left-[120px]">
-            <a onClick={() => router.push("/")}>
+            <a onClick={() => pushRouterWithChainId("/")}>
               <HamsterboxIcon
                 className="w-[155px] h-auto  mx-auto cursor-pointer"
                 color="white"

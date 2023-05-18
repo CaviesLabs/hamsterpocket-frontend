@@ -6,6 +6,8 @@ import { useWallet } from "@/src/hooks/useWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const ResumePocketModal: FC<{
   isModalOpen: boolean;
@@ -16,7 +18,8 @@ export const ResumePocketModal: FC<{
 }> = (props) => {
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet } = useWallet();
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const { resumePocket: resumePocketEvm } = useEvmWallet();
 
   /** @dev Process boolean. */
@@ -29,13 +32,12 @@ export const ResumePocketModal: FC<{
   const handleClosePocket = useCallback(async () => {
     try {
       if (!walletAddress) throw new Error("Wallet not connected.");
-      console.log("resume pocket", chain);
 
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
       /** @dev Execute transaction. */
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         await programService.resumePocket(solanaWallet, props.pocket);
       } else {
         await resumePocketEvm(props.pocket.id || props.pocket._id);
@@ -48,7 +50,7 @@ export const ResumePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, walletAddress, chain]);
+  }, [programService, solanaWallet, props.pocket, walletAddress, chainId]);
 
   return (
     <Modal

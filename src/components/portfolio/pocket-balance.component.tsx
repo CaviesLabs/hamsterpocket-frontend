@@ -1,11 +1,13 @@
 import { FC } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const PocketBalance: FC = () => {
   /** @dev Handle to get total estimate sol in total pockets. */
   const { totalSOL, totalUSD } = usePocketBalance();
-  const { chain } = useAppWallet();
+  /** @dev Inject wallet account info. */
+  const { chainId } = usePlatformConfig();
 
   return (
     <div className="py-3 px-6 bg-purple300 md:w-1/3 rounded-[12px] md:h-[300px] pocket-bg">
@@ -16,7 +18,7 @@ export const PocketBalance: FC = () => {
         <div className="p-[5px] rounded-[50%] bg-white md:p-[8px]">
           <img
             src={
-              chain === "SOL"
+              chainId === ChainId.sol
                 ? "/assets/images/solana-icon.svg"
                 : process.env.EVM_CHAIN_ID === "matic"
                 ? "/assets/images/matic.png"
@@ -27,7 +29,7 @@ export const PocketBalance: FC = () => {
         </div>
         <div className="text-white ml-3 text-[32px] mobile:text-[14px]">
           ~ {totalSOL?.toFixed(5)}{" "}
-          {chain === "SOL"
+          {chainId === ChainId.sol
             ? "SOL"
             : process.env.EVM_CHAIN_ID === "matic"
             ? "MATIC"

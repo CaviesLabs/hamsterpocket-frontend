@@ -3,8 +3,9 @@ import { FC, useEffect, useState } from "react";
 import { getClosedPockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
 import { useDispatch, useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import State from "@/src/redux/entities/state";
 import classnames from "classnames";
 
 export const ClosedCheckComponent: FC<{
@@ -18,7 +19,8 @@ export const ClosedCheckComponent: FC<{
   const [isClosed, setIsClosed] = useState(false);
 
   /** @dev Inject wallet info. */
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   /** @dev Call API to get closed pockets */
   useEffect(() => {
@@ -28,15 +30,10 @@ export const ClosedCheckComponent: FC<{
       getClosedPockets({
         ownerAddress: walletAddress,
         statuses: [PocketStatus.CLOSED],
-        chainId:
-          chain === "SOL"
-            ? "solana"
-            : process.env.EVM_CHAIN_ID === "matic"
-            ? "mumbai"
-            : "bsc_mainnet",
+        chainId: chainId,
       })
     );
-  }, [walletAddress]);
+  }, [walletAddress, chainId]);
 
   /** @dev Get fetched closed pools. */
   const closedPockets = useSelector((state: State) => state.closedPockets);

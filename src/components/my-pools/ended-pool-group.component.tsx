@@ -1,5 +1,4 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { Input, toast } from "@hamsterbox/ui-kit";
 import { DropdownSelect, FilterSelect } from "@/src/components/select";
 import { SearchIcon } from "@/src/components/icons";
@@ -15,19 +14,17 @@ import { useSelector } from "react-redux";
 import { PoolItem } from "@/src/components/my-pools/pool-item";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import State from "@/src/redux/entities/state";
 
 export const EndedPoolGroupComponent: FC = () => {
-  /**
-   * @dev Router injected.
-   */
-  const router = useRouter();
   const dispatch = useDispatch();
 
   /** @dev Get fetched closed pools. */
   const closedPockets = useSelector((state: State) => state.closedPockets);
 
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState(PocketTypes[0].value);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
@@ -51,17 +48,12 @@ export const EndedPoolGroupComponent: FC = () => {
             selectedType === PocketTypes[2].value
               ? [PocketStatus.CLOSED, PocketStatus.ENDED]
               : [selectedType as PocketStatus.ENDED],
-          chainId:
-            chain === "SOL"
-              ? "solana"
-              : process.env.EVM_CHAIN_ID === "matic"
-              ? "mumbai"
-              : "bsc_mainnet",
+          chainId: chainId,
         },
         () => setFetching(false)
       )
     );
-  }, [walletAddress, debouncedSearch, selectedType, sorter, chain]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter, chainId]);
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
@@ -98,7 +90,7 @@ export const EndedPoolGroupComponent: FC = () => {
           </div>
           <p
             className="text-purple underline md:text-[18px] text-[14px] cursor-pointer regular-text relative mobile:mt-[12px]"
-            onClick={() => router.push("/my-pockets")}
+            onClick={() => pushRouterWithChainId("/my-pockets")}
           >
             View Active Pockets
           </p>

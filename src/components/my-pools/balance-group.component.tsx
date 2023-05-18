@@ -1,19 +1,19 @@
 import { FC, useEffect } from "react";
 import { Button } from "@hamsterbox/ui-kit";
-import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { UserBalanceComponent } from "@/src/components/my-pools/user-balance.component";
 import { PocketBalanceComponent } from "@/src/components/my-pools/pocket-balance.component";
 import { getPortfolios } from "@/src/redux/actions/portfolio/portfolio.action";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export const BalanceGroup: FC = () => {
   /**
    * @dev Inject router module to use.
    */
-  const router = useRouter();
   const dispatch = useDispatch();
   const { walletAddress } = useAppWallet();
+  const { pushRouterWithChainId } = usePlatformConfig();
 
   /**
    * @dev Fetch
@@ -51,7 +51,7 @@ export const BalanceGroup: FC = () => {
                 hoverColor: "#735CF7",
               }}
               text="View Portfolio"
-              onClick={() => router.push("/profile")}
+              onClick={() => pushRouterWithChainId("/profile")}
             />
           </div>
         </div>
@@ -65,7 +65,7 @@ export const BalanceGroup: FC = () => {
             }}
             text="View history"
             width="100%"
-            onClick={() => router.push("/history")}
+            onClick={() => pushRouterWithChainId("/history")}
           />
         </div>
       </section>

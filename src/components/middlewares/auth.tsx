@@ -1,5 +1,6 @@
 import { FC, ReactNode, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 
 interface Props {
@@ -18,6 +19,7 @@ const AUTH_ROUTES = [
 
 const AuthMiddleware: FC<Props> = ({ children }) => {
   const router = useRouter();
+  const { pushRouterWithChainId, chainId } = usePlatformConfig();
 
   /**
    * @dev Wallet hook injected.
@@ -36,10 +38,13 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
     /** @dev Wait for 2s to re-connect wallet */
     const myTimer = setTimeout(() => {
       if (isAuth() && !wallet?.walletAddress) {
-        router.push("/");
+        pushRouterWithChainId("/");
       }
-      if (router.asPath === "/" && wallet?.walletAddress) {
-        router.push("/my-pockets");
+      if (
+        (router.asPath === `/${chainId}` || router.asPath === `/${chainId}/`) &&
+        wallet?.walletAddress
+      ) {
+        pushRouterWithChainId("/my-pockets");
       }
     }, 1000);
     return () => clearTimeout(myTimer);

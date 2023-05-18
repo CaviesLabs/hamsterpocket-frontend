@@ -33,13 +33,14 @@ import {
 } from "@/src/hooks/useEvmWallet";
 import { AppWalletProvider } from "@/src/hooks/useAppWallet";
 import { WhitelistProvider } from "@/src/hooks/useWhitelist";
+import { PlatformConfigProvider } from "@/src/hooks/usePlatformConfig";
 
 /**
  * @dev Import needed third-party styled.
  */
 import "flowbite";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const store = makeStore();
 
@@ -82,47 +83,49 @@ function MyApp({ Component, pageProps }: AppProps) {
             integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
             crossOrigin="anonymous"
           />
-          <ConnectionProvider
-            endpoint={
-              network === WalletAdapterNetwork.Mainnet
-                ? process.env.SOLANA_RPC_URL
-                : clusterApiUrl(network)
-            }
-          >
-            <SolanaWalletAdapterProvider wallets={walletAdapters}>
-              {/**
-               * @dev
-               * Wrap the whole app in Goki Kit provider for use.
-               */}
-              <WalletKitProvider
-                defaultNetwork={network}
-                app={{
-                  name: "Hamsterswap",
-                  icon: (
-                    <img
-                      className="bg-dark60 rounded-full"
-                      src="/assets/icons/favicon-196.png"
-                    />
-                  ),
-                }}
-                debugMode={false} // you may want to set this in REACT_APP_DEBUG_MODE
-              >
-                <WalletProvider>
-                  <MainProvider>
-                    <EvmWalletKitProvider>
-                      <EvmWalletProvider>
-                        <AppWalletProvider>
-                          <WhitelistProvider>
-                            <AppComponent {...{ Component, pageProps }} />
-                          </WhitelistProvider>
-                        </AppWalletProvider>
-                      </EvmWalletProvider>
-                    </EvmWalletKitProvider>
-                  </MainProvider>
-                </WalletProvider>
-              </WalletKitProvider>
-            </SolanaWalletAdapterProvider>
-          </ConnectionProvider>
+          <PlatformConfigProvider>
+            <ConnectionProvider
+              endpoint={
+                network === WalletAdapterNetwork.Mainnet
+                  ? process.env.SOLANA_RPC_URL
+                  : clusterApiUrl(network)
+              }
+            >
+              <SolanaWalletAdapterProvider wallets={walletAdapters}>
+                {/**
+                 * @dev
+                 * Wrap the whole app in Goki Kit provider for use.
+                 */}
+                <WalletKitProvider
+                  defaultNetwork={network}
+                  app={{
+                    name: "Hamsterswap",
+                    icon: (
+                      <img
+                        className="bg-dark60 rounded-full"
+                        src="/assets/icons/favicon-196.png"
+                      />
+                    ),
+                  }}
+                  debugMode={false} // you may want to set this in REACT_APP_DEBUG_MODE
+                >
+                  <WalletProvider>
+                    <MainProvider>
+                      <EvmWalletKitProvider>
+                        <EvmWalletProvider>
+                          <AppWalletProvider>
+                            <WhitelistProvider>
+                              <AppComponent {...{ Component, pageProps }} />
+                            </WhitelistProvider>
+                          </AppWalletProvider>
+                        </EvmWalletProvider>
+                      </EvmWalletKitProvider>
+                    </MainProvider>
+                  </WalletProvider>
+                </WalletKitProvider>
+              </SolanaWalletAdapterProvider>
+            </ConnectionProvider>
+          </PlatformConfigProvider>
         </ThemeProvider>
       </StyleProvider>
     </Provider>

@@ -58,7 +58,7 @@ export const TargetAmountConditionMobile: FC<{
 
   return (
     <div className="mt-[24px]">
-      <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px]">
+      <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px] cursor-pointer">
         <div className="flow-root">
           <div
             className="float-left flex items-center"
@@ -97,6 +97,7 @@ export const TargetAmountConditionMobile: FC<{
                 addressSelected={targetTokenAddress[0]?.toBase58().toString()}
                 disableDropdown={true}
                 onAmountChange={(val) => setCurrentValue(val)}
+                inputClassName="!bg-dark90 bg-dark90"
               />
             </div>
             <div className="col-span-2">

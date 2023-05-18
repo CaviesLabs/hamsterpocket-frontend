@@ -15,11 +15,12 @@ import {
   RADYUM_EXPLORE,
   UNISWAP_EXPLORE,
 } from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export default function TableComponent() {
   const { whiteLists, findEntityByAddress } = useWhiteList();
-  const { chain } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -111,7 +112,7 @@ export default function TableComponent() {
                             {baseToken?.address && targetToken?.address && (
                               <a
                                 href={
-                                  chain === "SOL"
+                                  chainId === ChainId.sol
                                     ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
                                     : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
                                 }
@@ -162,7 +163,7 @@ export default function TableComponent() {
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
                               href={
-                                chain === "SOL"
+                                chainId === ChainId.sol
                                   ? `${SOL_EXPLORE}/tx/${h.transactionId}`
                                   : process.env.EVM_CHAIN_ID === "matic"
                                   ? `${MUMBAI_EXPLORE}/tx/${h.transactionId}`
@@ -219,7 +220,7 @@ export default function TableComponent() {
                                 {baseToken?.address && targetToken?.address && (
                                   <a
                                     href={
-                                      chain === "SOL"
+                                      chainId === ChainId.sol
                                         ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
                                         : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
                                     }

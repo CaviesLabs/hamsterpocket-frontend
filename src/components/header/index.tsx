@@ -1,11 +1,13 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useWalletKit } from "@gokiprotocol/walletkit";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
 import { HamsterboxIcon } from "@/src/components/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { ChainSelect } from "./chain-select";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
@@ -15,6 +17,7 @@ const Header: FC = () => {
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
   const [chain] = useState<"SOL" | "ETH">("ETH");
+  const { pushRouterWithChainId } = usePlatformConfig();
   const router = useRouter();
 
   /**
@@ -88,7 +91,10 @@ const Header: FC = () => {
       <div className="w-full py-[18px] md:py-[25px] flow-root">
         <div className="md:max-w-[1440px] mx-auto flex justify-between">
           <div className="logo-wrapper md:mt-0 flex items-center">
-            <a className="cursor-pointer" onClick={() => router.push("/")}>
+            <a
+              className="cursor-pointer"
+              onClick={() => pushRouterWithChainId("/")}
+            >
               <HamsterboxIcon
                 className={classnames("w-[140px] md:w-[180px] hamsterbox-icon")}
                 color={"white"}
@@ -107,21 +113,14 @@ const Header: FC = () => {
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
                       size="small"
-                      onClick={() => router.push("/strategy")}
+                      onClick={() => pushRouterWithChainId("/strategy")}
                       theme={{
                         backgroundColor: "#735CF7",
                         color: "#FFFFFF",
                       }}
                     />
                   )}
-                  {walletAddress && (
-                    <div className="border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]">
-                      <img
-                        className="w-[24px] h-[24px]"
-                        src="/assets/images/bnb.svg"
-                      />
-                    </div>
-                  )}
+                  {walletAddress && <ChainSelect />}
                 </ul>
               }
             </div>

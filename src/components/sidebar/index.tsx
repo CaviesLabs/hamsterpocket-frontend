@@ -7,6 +7,7 @@ import {
   TabStrategyIcon,
 } from "@/src/components/icons";
 import { HamsterboxIcon, CaviesIcon } from "@/src/components/icons";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import classNames from "classnames";
 export interface FooterItem {
   name: string;
@@ -27,6 +28,7 @@ export interface SideBarMenuItem {
 }
 
 export const SideBar: FC = () => {
+  const { pushRouterWithChainId, chainId } = usePlatformConfig();
   const router = useRouter();
 
   const footers = useMemo<FooterItem[]>(
@@ -50,28 +52,28 @@ export const SideBar: FC = () => {
     () => [
       {
         name: "My Pockets",
-        uri: "/my-pockets",
-        sideUris: ["/pocket/"],
+        uri: `/${chainId}/my-pockets`,
+        sideUris: [`/${chainId}/pocket`],
         icon: (color: string) => <TabMenuIcon color={color} />,
       },
       {
         name: "History",
-        uri: "/history",
+        uri: `/${chainId}/history`,
         icon: (color: string) => <TabHistoryIcon color={color} />,
       },
       {
         name: "Strategy",
-        uri: "/strategy",
-        sideUris: ["/create-pocket"],
+        uri: `/${chainId}/strategy`,
+        sideUris: [`${chainId}/create-pocket`],
         icon: (color: string) => <TabStrategyIcon color={color} />,
       },
       {
         name: "Profile",
-        uri: "/profile",
+        uri: `/${chainId}/profile`,
         icon: (color: string) => <TabProfileIcon color={color} />,
       },
     ],
-    []
+    [chainId]
   );
 
   /**
@@ -147,7 +149,7 @@ export const SideBar: FC = () => {
             ))}
           </ul>
         </div>
-        <a onClick={() => router.push("/")}>
+        <a onClick={() => pushRouterWithChainId("/")}>
           <HamsterboxIcon
             className="w-[155px] h-auto  mx-auto cursor-pointer mt-[10px]"
             color="white"

@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Input } from "@hamsterbox/ui-kit";
-import { DeleteIconCircle, UnCollapseArrowIcon } from "@/src/components/icons";
+import { UnCollapseArrowIcon } from "@/src/components/icons";
 import { PRICE_CONDITIONS } from "@/src/utils";
 import { DropdownSelect } from "@/src/components/select";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
@@ -80,7 +80,7 @@ export const BuyConditionMobile: FC<{
   return (
     <div className="mt-[24px] ">
       {/* animate={{ x: 0 }} initial={{ x: -100 }} */}
-      <p className="text-dark10 text-[14px] regular-text">
+      <p className="text-dark50 text-[20px] mobile:text-[14px] regular-text">
         Buy at market price if
       </p>
       {errorMsgs?.buyCondition && (
@@ -88,7 +88,7 @@ export const BuyConditionMobile: FC<{
       )}
       <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px] mt-[16px]">
         <div
-          className="flow-root"
+          className="flow-root cursor-pointer"
           onClick={() => {
             !buyCondition && props.toggle();
             setCollapsed(!collapsed);
@@ -97,7 +97,7 @@ export const BuyConditionMobile: FC<{
           <div className="float-left rounded-[50%] bg-dark3">
             <UnCollapseArrowIcon />
           </div>
-          <p className="float-left text-[12px] text-white normal-text ml-[12px] relative top-[4px]">
+          <p className="float-left text-[12px] text-dark50 normal-text ml-[12px] relative top-[4px]">
             Add condition
           </p>
           {!buyCondition ? (
@@ -118,26 +118,17 @@ export const BuyConditionMobile: FC<{
         </div>
         <Collapse isOpened={!collapsed}>
           <div className="md:flex md:items-center mt-[16px] max-w-[100%]">
-            <div className="md:mr-6 items-center flex">
-              <button onClick={props.toggle} className="relative md:top-[4px]">
-                <DeleteIconCircle className="mobile:hidden" />
-              </button>
-            </div>
-            <div className="md:mr-6 relative flex items-center">
-              <p className="text-dark45 text-[14px] md:text-[16px] normal-text mt-[10px] bold-text">
-                Each batch {`(${UtilsProvider.formatLongNumber(batchVolume)}`}
-              </p>
-              <p className="text-dark45 text-[14px] md:text-[16px] normal-text mt-[10px] bold-text ml-[3px]">
-                {
+            <div className="relative flex items-center">
+              <p className="text-dark45 text-[12px] normal-text mt-[10px] bold-text">
+                Each batch (
+                {`${UtilsProvider.formatLongNumber(batchVolume)} ${
                   whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]
                     ?.symbol
-                }
-              </p>
-              <p className="text-dark45 text-[14px] md:text-[16px] normal-text mt-[10px] bold-text ml-[3px]">
+                }`}
                 ) can buy
               </p>
             </div>
-            <div className="md:mr-6 mobile:mt-[16px]">
+            <div className="mobile:mt-[16px] md:px-[10px]">
               <DropdownSelect
                 handleSelectValue={(val) =>
                   setBuyCondition({
@@ -147,7 +138,7 @@ export const BuyConditionMobile: FC<{
                 }
                 value={buyCondition?.type}
                 options={PRICE_CONDITIONS}
-                className="w-full min-w-[230px]"
+                className="w-full min-w-[230px] !bg-dark90"
               />
             </div>
             <div className="h-[63px] md:mr-6 relative md:flex md:items-center mobile:mt-[16px] mobile:inline-block mobile:w-full">
@@ -278,7 +269,7 @@ export const BuyConditionMobile: FC<{
                   }}
                 />
               )}
-              <div className="h-full flex items-center relative md:hidden ml-[3px]">
+              <div className="h-full flex items-center relative ml-[3px]">
                 <img
                   src={
                     whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]

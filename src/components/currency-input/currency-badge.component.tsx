@@ -1,14 +1,12 @@
 import { FC, useState, useRef, useEffect } from "react";
-import { Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
 import { TokenItem } from "./token-select-item.component";
 import { WSOL_ADDRESS } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 import classNames from "classnames";
-import styles from "./currency-input.module.scss";
 
-export type CurrencyInputProps = {
+export type CurrencyPage = {
   onAddressSelect?: (address: string, decimals?: number) => void;
   onAmountChange?: (amount: number) => void;
   placeholder?: string;
@@ -53,12 +51,7 @@ export type CurrencyInputProps = {
   onClick?: () => void;
 };
 
-export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
-  /**
-   * @dev handle value
-   */
-  const [value, setValue] = useState<string>("");
-
+export const CurrencyBage: FC<CurrencyPage> = (props) => {
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
    */
@@ -92,69 +85,45 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
   );
 
   return (
-    <div className="relative" ref={ref} onClick={props.onClick}>
-      <Input
-        size="large"
+    <div className="relative max-w-[150px]" ref={ref} onClick={props.onClick}>
+      <img
         className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark100 border-none dark-input text-white placeholder-gray-500 h-[63px] mobile:!h-[45px] mobile:!text-[14px]",
-          styles.myInput,
-          props.inputClassName
+          "rounded-full",
+          addressSelected
+            ? "w-[64px] h-[64px] mobile:!w-[24px] mobile:!h-[24px] mx-auto"
+            : "invisible"
         )}
-        placeholder={
-          props.currencyBadgeOnly
-            ? addressSelected
-              ? ""
-              : props.placeholder
-            : props.placeholder
+        src={
+          (
+            allowCurrencies?.[addressSelected] ||
+            findEntityByAddress(addressSelected)
+          )?.image
         }
-        prefix={
-          addressSelected === "BATCH" ? null : (
-            <img
-              className={classNames(
-                "rounded-full",
-                addressSelected
-                  ? "w-10 h-10 mr-4 mobile:!w-[24px] mobile:!h-[24px]"
-                  : "invisible"
-              )}
-              src={
-                (
-                  allowCurrencies?.[addressSelected] ||
-                  findEntityByAddress(addressSelected)
-                )?.image
-              }
-            />
-          )
-        }
-        onChange={(e) => {
-          const value = e.target.value;
-          const validator = /^[+]?([.]\d+|\d+[.]?\d*)$/;
-          if (value !== "" && !validator.exec(value)) return;
-          props.onAmountChange && props.onAmountChange(parseFloat(value));
-          setValue(e.target.value);
-        }}
-        disabled={props.currencyBadgeOnly || props.disabledInput}
-        value={value}
       />
-      <p
-        className={classNames(
-          "absolute right-[20px] top-[30px] mobile:top-[20px] cursor-pointer semi-bold text-white mobile:!text-[14px]",
-          props.dropdownBadgeClassname
-        )}
-        style={{ zIndex: 3 }}
+      <div
+        className="max-w-[200px] mx-auto mt-[20px] flow-root border-solid border-[2px] border-dark50 px-[10px] py-[10px] rounded-[12px] cursor-pointer"
         onClick={() => setDropdown(!dropDown)}
       >
-        {props.rightPrefixLabel
-          ? props.rightPrefixLabel
-          : addressSelected === "BATCH"
-          ? "BATCH"
-          : allowCurrencies?.[addressSelected]?.symbol}
+        <p
+          className={classNames(
+            "cursor-pointer semi-bold text-white mobile:!text-[14px] float-left",
+            props.dropdownBadgeClassname
+          )}
+          style={{ zIndex: 3 }}
+        >
+          {props.rightPrefixLabel
+            ? props.rightPrefixLabel
+            : addressSelected === "BATCH"
+            ? "BATCH"
+            : allowCurrencies?.[addressSelected]?.symbol}
+        </p>
         {!props.disableDropdown && (
           <DropdownIcon className="float-right ml-[5px]" />
         )}
         {props.dropdownIconDisplayed && (
           <DropdownIcon className="float-right ml-[5px]" />
         )}
-      </p>
+      </div>
       {!props?.disableDropdown && dropDown && (
         <div className="rounded-3xl mt-2 border absolute w-full z-10 py-[15px] bg-dark90 text-dark50 border-dark80">
           <div className="overflow-y-scroll max-h-64">

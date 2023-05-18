@@ -1,5 +1,6 @@
 import { FC, ReactNode } from "react";
 import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useMain } from "@/src/hooks/pages/main";
 import { TabBar } from "@/src/components/tabbar";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
@@ -19,6 +20,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
    * @dev Import context for supporting ui handle.
    */
   const { transitionLoading, fistLoading } = useMain();
+  const { chainId } = usePlatformConfig();
 
   /**
    * @dev Import next router hook.
@@ -33,7 +35,8 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
           <LayoutWrapper
             mobileLayout={children}
             layout={
-              router.asPath === "/" ? (
+              router.asPath === `/${chainId}` ||
+              router.asPath === `/${chainId}/` ? (
                 children
               ) : (
                 <div className="flex">

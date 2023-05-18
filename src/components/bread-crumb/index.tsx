@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { BreadCrumbProps } from "./types";
 
 export const BreadCrumb: FC<BreadCrumbProps> = (props) => {
-  const router = useRouter();
+  const { pushRouterWithChainId } = usePlatformConfig();
 
   return (
     <nav className="flex mt-20" aria-label="Breadcrumb">
@@ -15,7 +15,9 @@ export const BreadCrumb: FC<BreadCrumbProps> = (props) => {
           >
             <a
               onClick={() =>
-                index === 0 ? router.push("/") : router.push(router.asPath)
+                index === 0
+                  ? pushRouterWithChainId("/")
+                  : pushRouterWithChainId("self")
               }
               className="inline-flex items-center text-[14px] md:text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white cursor-pointer"
             >

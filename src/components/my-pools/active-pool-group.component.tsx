@@ -15,6 +15,8 @@ import { PoolItemRow } from "@/src/components/my-pools/pool-item/pool-item-row.c
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { RefreshButton } from "@/src/components/refresh-button";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { ClosedCheckComponent } from "./closed-check.component";
 import State from "@/src/redux/entities/state";
 import classnames from "classnames";
@@ -22,7 +24,8 @@ import classnames from "classnames";
 export const ActivePoolGroup: FC = () => {
   const dispatch = useDispatch();
 
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const [search, setSearch] = useState("");
   const [isPauseOnly, setIsPauseOnly] = useState(false);
   const [sorter, setSorter] = useState([sortOptions[0].value]);
@@ -41,12 +44,7 @@ export const ActivePoolGroup: FC = () => {
     if (!walletAddress) return;
     dispatch(
       getActivePockets({
-        chainId:
-          chain === "SOL"
-            ? "solana"
-            : process.env.EVM_CHAIN_ID === "matic"
-            ? "mumbai"
-            : "bsc_mainnet",
+        chainId: chainId,
         limit: 999,
         ownerAddress: walletAddress,
         search,
@@ -58,18 +56,24 @@ export const ActivePoolGroup: FC = () => {
           : [PocketStatus.CLOSED, PocketStatus.ENDED],
       })
     );
-  }, [debouncedSearch, isPauseOnly, sorter, endedSelect, walletAddress, chain]);
+  }, [
+    debouncedSearch,
+    isPauseOnly,
+    sorter,
+    endedSelect,
+    walletAddress,
+    chainId,
+  ]);
 
   /** @dev Handle fetching data */
   const [fetching, setFetching] = useState(false);
 
   /** @dev The function to handle sync pockets. */
   const handleSync = useCallback(() => {
-    console.log(walletAddress);
     if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress, evm: chain === "ETH" }, () => {
+      syncWalletPockets({ walletAddress, evm: chainId !== ChainId.sol }, () => {
         setFetching(false);
         handleFetch();
         toast("The latest data is now available", {
@@ -77,7 +81,14 @@ export const ActivePoolGroup: FC = () => {
         });
       })
     );
-  }, [walletAddress, debouncedSearch, isPauseOnly, sorter, chain, endedSelect]);
+  }, [
+    walletAddress,
+    debouncedSearch,
+    isPauseOnly,
+    sorter,
+    chainId,
+    endedSelect,
+  ]);
 
   useEffect(
     () => handleFetch(),
@@ -140,41 +151,6 @@ export const ActivePoolGroup: FC = () => {
               onValueChange={(v) => setSearch(v)}
             />
           </div>
-          {/* <div className="float-left md:w-[10%]">
-            <DropdownSelect
-              handleSelectValue={(val) => console.log(val)}
-              className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
-              value={
-                chain === "SOL"
-                  ? "SOL"
-                  : process.env.EVM_CHAIN_ID === "matic"
-                  ? "MATIC"
-                  : "BNB"
-              }
-              options={
-                chain === "SOL"
-                  ? [
-                      {
-                        value: "SOL",
-                        label: "SOL",
-                      },
-                    ]
-                  : process.env.EVM_CHAIN_ID === "matic"
-                  ? [
-                      {
-                        value: "MATIC",
-                        label: "MATIC",
-                      },
-                    ]
-                  : [
-                      {
-                        value: "BNB",
-                        label: "BNB",
-                      },
-                    ]
-              }
-            />
-          </div> */}
         </div>
         <div className="float-root mobile:hidden">
           <div className="flex flex-col md:flex-row flex-wrap border-solid border-b-[1px] border-[#1F2937] w-full rounded mt-4 normal-text">

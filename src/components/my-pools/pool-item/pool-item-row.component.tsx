@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import { ShareIcon } from "@/src/components/icons";
 import { Button } from "@hamsterbox/ui-kit";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
@@ -22,6 +21,8 @@ import {
   RADYUM_EXPLORE,
 } from "@/src/utils";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import dayjs from "dayjs";
 
 type PoolItemProps = {
@@ -33,8 +34,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
   const { whiteLists, findEntityByAddress, convertDecimalAmount } =
     useWhiteList();
   const { programService } = useWallet();
-  const { chain, walletAddress } = useAppWallet();
-  const router = useRouter();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -59,7 +60,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.targetTokenAddress] ||
       findEntityByAddress(data.targetTokenAddress),
-    [props, chain, walletAddress]
+    [props, chainId, walletAddress]
   );
 
   /** @dev Get base token database on address. */
@@ -67,7 +68,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.baseTokenAddress] ||
       findEntityByAddress(data.baseTokenAddress),
-    [props, chain, walletAddress]
+    [props, chainId, walletAddress]
   );
 
   /** @dev Condition whether pocket account is closed completedly  before. */
@@ -130,7 +131,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
   useEffect(() => {
     (async () => {
       try {
-        if (chain === "SOL") {
+        if (chainId === ChainId.sol) {
           programService && (await programService.getPocketAccount(data._id));
         }
         setClaimed(false);
@@ -139,14 +140,14 @@ export const PoolItemRow = (props: PoolItemProps) => {
         setClaimed(true);
       }
     })();
-  }, [data, programService, chain]);
+  }, [data, programService, chainId]);
 
   return (
     <div className="w-full min-h-[100px] rounded-[8px] bg-[#121320] py-[32px] px-[20px] mt-[40px] overflow-hidden">
       <div className="md:grid md:grid-cols-12">
         <div
           className="md:col-span-3 cursor-pointer mobile:flow-root mobile:bg-dark3 mobile:py-[10px] mobile:px-[10px] mobile:rounded-[12px] cursor-poiter"
-          onClick={() => router.push(`/pocket/${data.id}`)}
+          onClick={() => pushRouterWithChainId(`/pocket/${data.id}`)}
         >
           <div className="flex items-center mobile:float-left">
             <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
@@ -162,7 +163,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
                 href={
-                  chain === "SOL"
+                  chainId === ChainId.sol
                     ? `${RADYUM_EXPLORE}?inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
                     : `${UNISWAP_EXPLORE}&inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
                 }
@@ -341,7 +342,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                   />
                 </>
               )}
-              {isEnded && !isClaimed && chain === "SOL" && (
+              {isEnded && !isClaimed && chainId === ChainId.sol && (
                 <Button
                   className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn"
                   theme={{
@@ -390,7 +391,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             ) : null}
           </div>
         )}
-        {isEnded && !isClaimed && chain === "SOL" && (
+        {isEnded && !isClaimed && chainId === ChainId.sol && (
           <div className="md:float-right md:ml-[10px] md:mt-0 mt-[20px] md:w-auto mobile:col-span-1">
             <Button
               className="!px-[50px] !border-solid !border-purple300 !border-[2px] pool-control-btn text-center mx-auto mobile:!max-w-[150px]"

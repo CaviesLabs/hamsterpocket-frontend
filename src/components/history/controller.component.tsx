@@ -3,10 +3,11 @@ import { Input } from "@hamsterbox/ui-kit";
 // import { DropdownSelect } from "@/src/components/select";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getHistories } from "../../redux/actions/history/history.action";
-import useDebounce from "../../hooks/useDebounce";
 import { PoolType } from "@/src/entities/history.entity";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { getHistories } from "@/src/redux/actions/history/history.action";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import useDebounce from "@/src/hooks/useDebounce";
 import dayjs from "dayjs";
 
 const types = [
@@ -26,7 +27,8 @@ export default function HistoryController() {
   /**
    * @desc Wallet injected
    */
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   const [selectedType] = useState<string>(types[0].value);
   const [search, setSearch] = useState("");
@@ -40,12 +42,7 @@ export default function HistoryController() {
       getHistories({
         limit: 999,
         ownerAddress: walletAddress,
-        chainId:
-          chain === "SOL"
-            ? "solana"
-            : process.env.EVM_CHAIN_ID === "matic"
-            ? "mumbai"
-            : "bsc_mainnet",
+        chainId: chainId,
         search,
         statuses: selectedType === types[0].value ? undefined : [selectedType],
         timeFrom: start
@@ -56,46 +53,11 @@ export default function HistoryController() {
           : undefined,
       })
     );
-  }, [debouncedSearch, selectedType, date, walletAddress]);
+  }, [debouncedSearch, selectedType, date, walletAddress, chainId]);
 
   return (
     <div className="mt-8 md:justify-between">
       <div className="flex mt-[32px]">
-        {/* <div className="float-left md:w-[10%]">
-          <DropdownSelect
-            handleSelectValue={(val) => console.log(val)}
-            className="w-full mobile:!h-[40px] px-[5px] md:!h-[48px]"
-            value={
-              chain === "SOL"
-                ? "SOL"
-                : process.env.EVM_CHAIN_ID === "matic"
-                ? "MATIC"
-                : "BNB"
-            }
-            options={
-              chain === "SOL"
-                ? [
-                    {
-                      value: "SOL",
-                      label: "SOL",
-                    },
-                  ]
-                : process.env.EVM_CHAIN_ID === "matic"
-                ? [
-                    {
-                      value: "MATIC",
-                      label: "MATIC",
-                    },
-                  ]
-                : [
-                    {
-                      value: "BNB",
-                      label: "BNB",
-                    },
-                  ]
-            }
-          />
-        </div> */}
         <div className="float-left w-[100%] mobile:w-[100%] pr-[10px] ml-[10px]">
           <Input
             containerClassName="app-input psi w-full mobile:!h-[40px]"

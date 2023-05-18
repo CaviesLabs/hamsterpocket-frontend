@@ -13,7 +13,6 @@ import {
   BSC_EXPLORE,
   MUMBAI_EXPLORE,
 } from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
 import { ProgressDetailComponent } from "@/src/components/my-pools/pool-item/progress-detail.component";
@@ -28,6 +27,8 @@ import {
   ClaimFeeModal,
 } from "@/src/components/home";
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -39,7 +40,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const { programService } = useWallet();
 
   /** @dev Inject wallet account info. */
-  const { chain } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -115,7 +116,7 @@ export const PoolItem = (props: PoolItemProps) => {
           #{utilsProvider.makeShort(data.id)}
           <a
             href={
-              chain === "SOL"
+              chainId === ChainId.sol
                 ? `${SOL_EXPLORE}/account/${data.address}`
                 : process.env.EVM_CHAIN_ID === "matic"
                 ? `${MUMBAI_EXPLORE}/token/${data.address}`

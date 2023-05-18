@@ -24,6 +24,8 @@ import { evmProgramService } from "@/src/services/evm-program.service";
 import { ClosedCheckComponent } from "@/src/components/my-pools/closed-check.component";
 import { getActivePockets } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketStatus } from "@/src/entities/pocket.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import State from "@/src/redux/entities/state";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
@@ -35,7 +37,8 @@ const PocketDetailPage: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { whiteLists, findEntityByAddress } = useWhiteList();
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const { programService: solProgram } = useWallet();
 
   /** @dev Get lastest pockets. */
@@ -64,12 +67,12 @@ const PocketDetailPage: NextPage = () => {
   const handleSync = useCallback(async () => {
     if (!walletAddress) return;
     if (!pocket) return;
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       await solProgram.sync(pocket?._id);
     } else {
       await evmProgramService.sync(pocket?._id);
     }
-  }, [walletAddress, chain, solProgram, pocket]);
+  }, [walletAddress, chainId, solProgram, pocket]);
 
   /** @dev The function to sync and refetch. */
   const syncAndFetch = useCallback(async () => {
@@ -82,7 +85,7 @@ const PocketDetailPage: NextPage = () => {
         setPocket(pocket);
       })
     );
-  }, [router, walletAddress, chain, solProgram, pocket]);
+  }, [router, walletAddress, chainId, solProgram, pocket]);
 
   /**
    * @dev Fetch lastest 5 pockets.
@@ -91,19 +94,14 @@ const PocketDetailPage: NextPage = () => {
     if (!walletAddress) return;
     dispatch(
       getActivePockets({
-        chainId:
-          chain === "SOL"
-            ? "solana"
-            : process.env.EVM_CHAIN_ID === "matic"
-            ? "mumbai"
-            : "bsc_mainnet",
+        chainId: chainId,
         limit: 5,
         ownerAddress: walletAddress,
         sortBy: "DATE_CREATED_DESC",
         statuses: [PocketStatus.PAUSED, PocketStatus.ACTIVE],
       })
     );
-  }, [chain, walletAddress]);
+  }, [chainId, walletAddress]);
 
   /**
    * @dev Fetch pocket data from hamster server.
@@ -124,7 +122,9 @@ const PocketDetailPage: NextPage = () => {
               <div className="md:float-left md:w-[80%]">
                 <div className="md:flex justify-between items-center">
                   <div className="flex items-center">
-                    <button onClick={() => router.push("/my-pockets")}>
+                    <button
+                      onClick={() => pushRouterWithChainId("/my-pockets")}
+                    >
                       <LeftIcon />
                     </button>
                     <p className="float-left md:text-[32px] text-[20px] text-white ml-[10px]">
@@ -147,7 +147,7 @@ const PocketDetailPage: NextPage = () => {
                     </div>
                     <a
                       href={
-                        chain === "SOL"
+                        chainId === ChainId.sol
                           ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
                           : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
                       }
@@ -220,7 +220,9 @@ const PocketDetailPage: NextPage = () => {
                         <div
                           className="md:w-full mobile:max-w-[200px] flex px-[10px] py-[10px] border-solid border-[3px] border-dark80 rounded-[12px] md:mb-[20px] cursor-pointer hover:bg-dark80"
                           onClick={() =>
-                            router.push(`/pocket/${pocket.id || pocket._id}`)
+                            pushRouterWithChainId(
+                              `/pocket/${pocket.id || pocket._id}`
+                            )
                           }
                         >
                           <div className="float:left">
@@ -246,7 +248,9 @@ const PocketDetailPage: NextPage = () => {
                   </div>
                 ) : null}
                 <ClosedCheckComponent
-                  routeToClosePockets={() => router.push("/my-pockets")}
+                  routeToClosePockets={() =>
+                    pushRouterWithChainId("/my-pockets")
+                  }
                   isCloseView={false}
                 />
               </div>

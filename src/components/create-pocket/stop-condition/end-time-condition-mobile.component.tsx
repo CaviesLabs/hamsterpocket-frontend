@@ -60,10 +60,10 @@ export const EndTimeConditionMobile: FC<{
 
   return (
     <div className="mt-[24px]">
-      <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px]">
+      <div className="bg-dark100 rounded-[16px] py-[16px] px-[16px]">
         <div className="flow-root">
           <div
-            className="float-left flex items-center"
+            className="float-left flex items-center cursor-pointer"
             onClick={() => {
               setCollapsed(!collapsed);
             }}
@@ -95,7 +95,10 @@ export const EndTimeConditionMobile: FC<{
         <Collapse isOpened={!collapsed}>
           <div className="grid grid-cols-12 gap-2 items-center justify-center mt-[16px] max-w-[600px]">
             <div className="col-span-10">
-              <DatetimePicker onChange={(v) => setCurrentValue(v)} />
+              <DatetimePicker
+                onChange={(v) => setCurrentValue(v)}
+                backgroundColor="!bg-dark90"
+              />
             </div>
             <div className="col-span-2">
               <TooltipPrimaryComponent>

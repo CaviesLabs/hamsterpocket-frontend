@@ -4,50 +4,48 @@ import styles from "@/styles/Home.module.css";
 import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
 import { LayoutSection } from "@/src/components/layout-section";
 import { Button } from "@hamsterbox/ui-kit";
-import { useRouter } from "next/router";
 import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { useCallback, useEffect } from "react";
-import { useWallet } from "../hooks/useWallet";
+import { useWallet } from "@/src/hooks/useWallet";
 import { useWalletKit } from "@gokiprotocol/walletkit";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 type LayoutProps = {
   data: StatisticEntity;
 };
 const Layout = (props: LayoutProps) => {
   const { data } = props;
-  /**
-   * @dev Router injected.
-   */
-  const router = useRouter();
 
   /**
    * @dev Wallet hook injected.
    */
   const wallet = useWallet();
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const { connect: connectWallet } = useWalletKit();
   useEffect(() => {
     if (wallet?.solanaWallet.publicKey?.toString()) {
-      router.push("/my-pockets");
+      pushRouterWithChainId("/my-pockets");
     }
   }, [wallet]);
 
   const handleCreatePocket = useCallback(
     (openModalEvm: () => void) => {
       if (!walletAddress) {
-        if (chain === "SOL") {
+        if (chainId === ChainId.sol) {
           connectWallet();
         } else {
           openModalEvm();
         }
       } else {
-        router.push("/strategy");
+        pushRouterWithChainId("/strategy");
       }
     },
-    [walletAddress, chain]
+    [walletAddress, chainId]
   );
 
   return (

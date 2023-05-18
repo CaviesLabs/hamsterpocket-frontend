@@ -16,8 +16,8 @@ export const TakeProfitAmount: FC = () => {
         Take Profit
       </p>
       <div className="mt-2">
-        <div className="grid md:grid-cols-5 gap-3 mt-[24px]">
-          <div className="md:col-span-2">
+        <div className="mt-[24px]">
+          <div>
             <p className="text-dark10 text-[14px] regular-text">
               At fixed price target
             </p>

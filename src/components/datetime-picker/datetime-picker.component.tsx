@@ -57,7 +57,7 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
       <DatePicker
         format="DD/MM/YYYY"
         size="large"
-        className="rounded-[16px] px-[50px] bg-dark90 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 mobile:!hidden"
+        className={`rounded-[16px] px-[50px] bg-dark100 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 mobile:!hidden ${props.backgroundColor}`}
         placeholder="dd/mm/yyyy"
         defaultValue={dayjs(Date.now())}
         onChange={(v) => handleSelectDate(v)}
@@ -68,7 +68,7 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
       <DatePicker
         format="DD/MM/YYYY"
         size="small"
-        className="rounded-[16px] px-[10px] bg-dark90 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 md:!hidden"
+        className={`rounded-[16px] px-[10px] bg-dark100 !h-[63px] mobile:!h-[44px] text-dark10 border-none col-span-2 md:!hidden ${props.backgroundColor}`}
         placeholder="dd/mm/yyyy"
         defaultValue={dayjs(Date.now())}
         onChange={(v) => handleSelectDate(v)}
@@ -81,6 +81,7 @@ export const DatetimePicker: FC<DatetimePickerProps> = (props) => {
           options={TIME_ARRAYS}
           value={dateTime.toISOString()}
           handleSelectValue={(value) => handleSelectTime(value)}
+          className={props.backgroundColor}
           format={() =>
             dateTime
               ? `${dateTime.format("HH")}:${dateTime.format("mm")}`
