@@ -17,7 +17,6 @@ const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [chain] = useState<"SOL" | "ETH">("ETH");
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const router = useRouter();
 
@@ -41,7 +40,7 @@ const Header: FC = () => {
     if (chainId === ChainId.sol) {
       connectWallet();
     }
-  }, [chain]);
+  }, [chainId]);
   /**
    * @description
    * This function set current selected section based on the location user are in
