@@ -74,9 +74,9 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
     const config = platformConfig?.[desiredChainId];
     if (config) {
       setDexUrl(() => {
-        let dexUrl = config.whitelistedRouters[0]?.dexUrl;
+        let dexUrl = config.whitelistedRouters?.[0]?.dexUrl;
         if (desiredChainId === ChainId.bnb) {
-          dexUrl = config.whitelistedRouters.find(
+          dexUrl = config?.whitelistedRouters?.find(
             (item) => item.ammTag === "uniswap"
           )?.dexUrl;
         }
