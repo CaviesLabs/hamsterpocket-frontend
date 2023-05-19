@@ -53,6 +53,14 @@ module.exports = withPWA(
     devIndicators: {
       buildActivity: false,
     },
+    async rewrites() {
+      return [
+        {
+          source: "/",
+          destination: "/bnb/",
+        },
+      ];
+    },
     webpack: (config, { isServer }) => {
       if (!isServer) {
         config.module.rules.push({

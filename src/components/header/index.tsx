@@ -120,7 +120,7 @@ const Header: FC = () => {
                       }}
                     />
                   )}
-                  {walletAddress && <ChainSelect />}
+                  <ChainSelect />
                 </ul>
               }
             </div>

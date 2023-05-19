@@ -18,6 +18,8 @@ import {
 } from "@/src/providers/program/evm/typechain-types";
 import { evmProgramService } from "@/src/services/evm-program.service";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { PocketEntity } from "@/src/entities/pocket.entity";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 /** @dev Initiize context. */
 export const EvmWalletContext = createContext<{
@@ -28,7 +30,7 @@ export const EvmWalletContext = createContext<{
   ): Promise<void>;
   depositPocket(pocketId: string, depositedAmount: BigNumber): Promise<void>;
   closePocket(pocketId: string): Promise<void>;
-  closePositionPocket(pocketId: string): Promise<void>;
+  closePositionPocket(pocket: PocketEntity): Promise<void>;
   pausePocket(pocketId: string): Promise<void>;
   withdrawPocket(pocketId: string): Promise<void>;
   resumePocket(pocketId: string): Promise<void>;
@@ -125,8 +127,42 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @params pocketId.
    */
   const closePositionPocket = useCallback(
-    async (pocketId: string) => {
-      await contract.closePosition(pocketId);
+    async (pocket: PocketEntity) => {
+      let fee = "0";
+
+      /**
+       * @dev Call to hamster server to get fee.
+       */
+      if (
+        pocket.chainId === ChainId.polygon_mumbai ||
+        pocket.chainId === ChainId.bnb
+      ) {
+        let isV3 = platformConfig?.whitelistedRouters[0]?.isV3 || false;
+        let ammRouterAddress =
+          platformConfig?.whitelistedRouters[0]?.address || "";
+
+        /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
+        if (pocket.chainId === ChainId.bnb) {
+          const exchange = platformConfig.whitelistedRouters.find(
+            (item) => item.ammTag === "uniswap"
+          );
+
+          /** @dev Update address. */
+          ammRouterAddress = exchange?.address;
+          isV3 = exchange?.isV3;
+        }
+
+        fee = await evmProgramService.getQoute({
+          chainId: pocket.chainId,
+          baseTokenAddress: pocket.baseTokenAddress,
+          targetTokenAddress: pocket.targetTokenAddress,
+          amountIn: pocket.currentTargetTokenBalance.toString(),
+          useV3: isV3,
+          ammRouterAddress,
+        });
+      }
+
+      await contract.closePosition(pocket.id || pocket._id, fee);
     },
     [signer, contract]
   );
@@ -161,7 +197,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
       const pocketStatus = (await pocketRegistry.pockets(pocketId)).status;
-      console.log({ pocketStatus });
       if (pocketStatus !== 3) {
         await closePocket(pocketId);
       } else {
@@ -173,12 +208,14 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   useEffect(() => {
     if (platformConfig?.programAddress) {
+      console.log("init program address: ", platformConfig?.programAddress);
       initContract(
         PocketChef__factory.connect(platformConfig?.programAddress, signer)
       );
     }
 
     if (platformConfig?.registryAddress) {
+      console.log("init program address: ", platformConfig?.registryAddress);
       initPocketRegistry(
         PocketRegistry__factory.connect(platformConfig?.registryAddress, signer)
       );

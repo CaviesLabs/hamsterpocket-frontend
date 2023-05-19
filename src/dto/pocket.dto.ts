@@ -125,3 +125,12 @@ export class CreatePocketDto {
    */
   marketId: string;
 }
+
+export class GetQouteDto {
+  chainId: string;
+  baseTokenAddress: string;
+  targetTokenAddress: string;
+  ammRouterAddress: string;
+  amountIn: string;
+  useV3: boolean;
+}

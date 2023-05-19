@@ -164,6 +164,7 @@ export const createdPocketPramsParserEvm = (
     /**
      * @dev Desired universal router based on evm chain id.
      */
+    ammRouterVersion: "0",
     ammRouterAddress:
       process.env.EVM_CHAIN_ID === "matic"
         ? MATIC_UNIVERSAL_ROUTER

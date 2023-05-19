@@ -1,9 +1,10 @@
 import { FC, useRef, useState } from "react";
 import { DropdownArrowIcon } from "@/src/components/icons";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export type ChainItem = {
   id: string;
@@ -38,6 +39,7 @@ const chains: ChainItem[] = [
 
 export const ChainSelect: FC = () => {
   const { chainId, switchChainId } = usePlatformConfig();
+  const { walletAddress } = useAppWallet();
 
   /**
    * @description Define state of showing profile menu
@@ -64,7 +66,7 @@ export const ChainSelect: FC = () => {
     >
       <span
         className="text-[12px] md:text-[14px] text-white flex items-center"
-        onClick={() => setShow(!show)}
+        onClick={() => !walletAddress && setShow(!show)}
       >
         <img
           className="w-[24px] h-[24px]"

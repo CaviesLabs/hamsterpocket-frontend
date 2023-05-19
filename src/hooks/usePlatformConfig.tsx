@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useState,
+  useCallback,
 } from "react";
 import { useRouter } from "next/router";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
@@ -53,33 +54,48 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
 
   useEffect(() => {
     const chainId = router.query?.chainId;
-    console.log("desired route chainId", chainId);
     if (chainId) {
       setDesiredChainId(chainId as ChainId);
     }
   }, [router]);
 
+  /**
+   * @dev Watch changes in desired id.
+   */
   useEffect(() => {
     setPlatformConfigBasedDesiredChainId(platformConfig?.[desiredChainId]);
   }, [platformConfig, desiredChainId]);
 
-  // router.asPath.indexOf("/", 1);
-  // console.log(
-  //   router.asPath.substring(router.asPath.indexOf("/", 1), router.asPath.length)
-  // );
+  /**
+   * @dev The function to switch chain.
+   * @params chainId.
+   */
+  const handleSwitchChain = useCallback(
+    (chainId: string) => {
+      const lastSlug = router.asPath.substring(
+        router.asPath.indexOf("/", 1),
+        router.asPath.length
+      );
+
+      /** @dev If home page. */
+      const isHomePage = Object.values(ChainId).find(
+        (item) => lastSlug === `/${item}` || lastSlug === `/${item}/`
+      );
+      if (isHomePage) {
+        return router.push(`/${chainId}`);
+      }
+
+      router.push(`/${chainId}/${lastSlug}`);
+    },
+    [router]
+  );
 
   return (
     <PlatformConfigContext.Provider
       value={{
         chainId: desiredChainId,
         platformConfig: platformConfigBasedDesiredChainId,
-        switchChainId: (chainId: string) =>
-          router.push(
-            `/${chainId}/${router.asPath.substring(
-              router.asPath.indexOf("/", 1),
-              router.asPath.length
-            )}`
-          ),
+        switchChainId: (chainId: string) => handleSwitchChain(chainId),
         pushRouterWithChainId: (uri: "self" | string) =>
           router.push(
             uri === "self" ? router.asPath : `/${desiredChainId}${uri}`

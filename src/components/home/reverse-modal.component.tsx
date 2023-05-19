@@ -53,7 +53,7 @@ export const ReversePocketModal: FC<{
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
-        await closePositionPocketEvm(props.pocket.id || props.pocket._id);
+        await closePositionPocketEvm(props.pocket);
       }
 
       /** @dev Callback function when close successfully. */
