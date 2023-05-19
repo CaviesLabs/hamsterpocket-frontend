@@ -35,6 +35,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
           <LayoutWrapper
             mobileLayout={children}
             layout={
+              router.asPath === `/` ||
               router.asPath === `/${chainId}` ||
               router.asPath === `/${chainId}/` ? (
                 children
