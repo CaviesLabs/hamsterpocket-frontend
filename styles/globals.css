@@ -391,3 +391,8 @@ input:checked + .slider:before {
 .carousel-root .slider {
   background-color: transparent !important;
 }
+
+.carousel-root .slider::before {
+  display: none;
+  background-color: transparent;
+}
