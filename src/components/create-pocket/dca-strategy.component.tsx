@@ -10,6 +10,8 @@ import { ErrorLabel } from "@/src/components/error-label";
 import { StopLossAmount } from "./stop-loss-amount.component";
 import { TakeProfitAmount } from "./take-profit-amount.component";
 import dayjs from "dayjs";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const DCAStrategy: FC = () => {
   /**
@@ -22,6 +24,7 @@ export const DCAStrategy: FC = () => {
     errorMsgs,
     targetTokenAddress,
   } = useCreatePocketPage();
+  const { chainId } = usePlatformConfig();
 
   /**
    * @dev Buy condition display.
@@ -69,18 +72,22 @@ export const DCAStrategy: FC = () => {
                   }}
                 />
               </div>
-              <div className="mt-[40px]">
-                <TakeProfitAmount />
-              </div>
+              {chainId !== ChainId.sol && (
+                <div className="mt-[40px]">
+                  <TakeProfitAmount />
+                </div>
+              )}
             </div>
             <div className="md:col-span-1 max-w-[500px] md:pl-[20px]">
               <FrequencyOption />
               <div className="mt-[40px]">
                 <StopConditionMobile />
               </div>
-              <div className="mt-[40px]">
-                <StopLossAmount />
-              </div>
+              {chainId !== ChainId.sol && (
+                <div className="mt-[40px]">
+                  <StopLossAmount />
+                </div>
+              )}
             </div>
           </div>
         </div>

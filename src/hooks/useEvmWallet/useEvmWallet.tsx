@@ -42,7 +42,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /**
   /* @dev Inject context of eth wallet. */
   const ethWallet = useAccount();
-  const { platformConfig } = usePlatformConfig();
+  const { platformConfig, chainId } = usePlatformConfig();
 
   /** @dev Define state for main contract. */
   const [contract, initContract] = useState<PocketChef>();
@@ -207,6 +207,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   );
 
   useEffect(() => {
+    /** @dev Not in sol. */
+    if (chainId == ChainId.sol || !signer) return;
+
     if (platformConfig?.programAddress) {
       console.log("init program address: ", platformConfig?.programAddress);
       initContract(
@@ -220,7 +223,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         PocketRegistry__factory.connect(platformConfig?.registryAddress, signer)
       );
     }
-  }, [platformConfig, signer]);
+  }, [platformConfig, signer, chainId]);
 
   return (
     <EvmWalletContext.Provider

@@ -19,5 +19,5 @@ export enum ChainId {
   polygon_mumbai = "polygon_mumbai",
   okt = "okt",
   xdc = "xdc",
-  sol = "sol",
+  sol = "solana",
 }

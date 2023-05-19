@@ -11,13 +11,14 @@ import { ChainSelect } from "./chain-select";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
   const [chain] = useState<"SOL" | "ETH">("ETH");
-  const { pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const router = useRouter();
 
   /**
@@ -37,7 +38,7 @@ const Header: FC = () => {
    * @dev The function to desire which blockchain to connect.
    */
   const handleConnect = useCallback(() => {
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       connectWallet();
     }
   }, [chain]);
@@ -128,7 +129,7 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    {chain === "SOL" ? (
+                    {chainId === ChainId.sol ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
                         size="small"
