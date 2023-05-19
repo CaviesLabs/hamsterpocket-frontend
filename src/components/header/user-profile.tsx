@@ -76,6 +76,9 @@ const UserProfile: FC = () => {
                 } else {
                   await disconnectEvm();
                 }
+
+                /** @dev Redirect to home. */
+                pushRouterWithChainId("/");
               }}
               className="text-red300 flex items-center normal-text"
             >

@@ -10,8 +10,6 @@ import {
   formatCurrency,
   utilsProvider,
   SOL_EXPLORE,
-  BSC_EXPLORE,
-  MUMBAI_EXPLORE,
 } from "@/src/utils";
 import dayjs from "dayjs";
 import { PoolItemEndConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-end-condition.component";
@@ -40,7 +38,7 @@ export const PoolItem = (props: PoolItemProps) => {
   const { programService } = useWallet();
 
   /** @dev Inject wallet account info. */
-  const { chainId } = usePlatformConfig();
+  const { chainId, platformConfig } = usePlatformConfig();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -118,9 +116,7 @@ export const PoolItem = (props: PoolItemProps) => {
             href={
               chainId === ChainId.sol
                 ? `${SOL_EXPLORE}/account/${data.address}`
-                : process.env.EVM_CHAIN_ID === "matic"
-                ? `${MUMBAI_EXPLORE}/token/${data.address}`
-                : `${BSC_EXPLORE}/token/${data.address}`
+                : `${platformConfig.explorerUrl}token/${data.address}`
             }
             target="_blank"
             className="ml-[10px] relative top-[-3px]"

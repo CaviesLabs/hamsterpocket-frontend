@@ -9,9 +9,6 @@ import { groupHistoryByDate } from "./parser";
 import {
   utilsProvider,
   DATE_TIME_FORMAT,
-  SOL_EXPLORE,
-  MUMBAI_EXPLORE,
-  BSC_EXPLORE,
   RADYUM_EXPLORE,
   UNISWAP_EXPLORE,
 } from "@/src/utils";
@@ -20,7 +17,7 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 
 export default function TableComponent() {
   const { whiteLists, findEntityByAddress } = useWhiteList();
-  const { chainId } = usePlatformConfig();
+  const { chainId, platformConfig } = usePlatformConfig();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -162,13 +159,7 @@ export default function TableComponent() {
                           <div className="flex items-center">
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
-                              href={
-                                chainId === ChainId.sol
-                                  ? `${SOL_EXPLORE}/tx/${h.transactionId}`
-                                  : process.env.EVM_CHAIN_ID === "matic"
-                                  ? `${MUMBAI_EXPLORE}/tx/${h.transactionId}`
-                                  : `${BSC_EXPLORE}/tx/${h.transactionId}`
-                              }
+                              href={`${platformConfig}/tx/${h.transactionId}`}
                               target="_blank"
                               className="ml-2"
                             >

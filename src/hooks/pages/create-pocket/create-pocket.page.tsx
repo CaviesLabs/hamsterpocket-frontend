@@ -33,7 +33,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev Inject app wallet to get both sol & eth account info. */
   const { walletAddress } = useAppWallet();
-  const { chainId, pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, pushRouterWithChainId, platformConfig } =
+    usePlatformConfig();
 
   /** @dev Inject eth function. */
   const { createPocket: createEvmPocket, signer: evmSigner } = useEvmWallet();
@@ -253,6 +254,15 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
         console.log(response);
       } else {
+        let exchange = platformConfig?.whitelistedRouters?.[0];
+
+        /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
+        if (chainId === ChainId.bnb) {
+          exchange = platformConfig.whitelistedRouters.find(
+            (item) => item.ammTag === "uniswap"
+          );
+        }
+
         /**
          * @dev Process data from sol for evm.
          */
@@ -263,7 +273,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           targetTokenAddress[1],
           whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
           whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
-          walletAddress
+          walletAddress,
+          exchange?.address,
+          exchange?.isV3 ? "0" : "1"
         );
 
         /** @dev Process to get deposited amount in evm decimals. */
@@ -339,6 +351,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     walletAddress,
     evmSigner,
     whiteLists,
+    platformConfig,
+    chainId,
     validateForms,
   ]);
 

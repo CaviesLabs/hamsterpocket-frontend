@@ -12,6 +12,7 @@ export type PortfolioStatisticEntity = {
 
 export type PortfolioEntity = {
   tokenName: string;
+  tokenImage: string;
   tokenSymbol: string;
   ownerAddress: string;
   tokenAddress: string;

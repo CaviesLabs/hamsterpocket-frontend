@@ -1,7 +1,7 @@
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { BigNumber } from "ethers";
-import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
+// import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
@@ -155,7 +155,9 @@ export const createdPocketPramsParserEvm = (
   targetTokenDecimals: number,
   realBaseTokenDecimals: number,
   realTargetTokenDecimals: number,
-  walletAddress: string
+  walletAddress: string,
+  ammRouterAddress: string,
+  ammRouterVersion: string
 ): Params.CreatePocketParamsStruct => {
   return {
     id: solCreatedPocketDto.id,
@@ -164,11 +166,8 @@ export const createdPocketPramsParserEvm = (
     /**
      * @dev Desired universal router based on evm chain id.
      */
-    ammRouterVersion: "0",
-    ammRouterAddress:
-      process.env.EVM_CHAIN_ID === "matic"
-        ? MATIC_UNIVERSAL_ROUTER
-        : BSC_UNIVERSAL_ROUTER,
+    ammRouterVersion: ammRouterVersion,
+    ammRouterAddress: ammRouterAddress,
 
     /**
      * @dev Convert sol public key to eth string address.

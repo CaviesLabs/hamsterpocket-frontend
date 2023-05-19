@@ -5,6 +5,7 @@ export interface PlatformConfigEntity {
   vaultAddress?: string;
   registryAddress?: string;
   mainDex?: string;
+  explorerUrl?: string;
   whitelistedRouters?: {
     address: string;
     isV3: boolean;

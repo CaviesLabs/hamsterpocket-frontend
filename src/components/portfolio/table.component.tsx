@@ -1,20 +1,15 @@
 import { MdOpenInNew } from "react-icons/all";
 import { useSelector } from "react-redux";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import {
-  utilsProvider,
-  SOL_EXPLORE,
-  BSC_EXPLORE,
-  MUMBAI_EXPLORE,
-} from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import State from "@/src/redux/entities/state";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
-  const { chain } = useAppWallet();
-  const { whiteLists, convertDecimalAmount, findEntityByAddress } =
-    useWhiteList();
+  const { chainId, platformConfig } = usePlatformConfig();
+  const { convertDecimalAmount } = useWhiteList();
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
@@ -25,8 +20,6 @@ export default function TableComponent() {
       </div>
       <div>
         {portfoliosData.map((h) => {
-          const tokenInfo =
-            whiteLists[h.tokenAddress] || findEntityByAddress(h.tokenAddress);
           return (
             <div
               key={h.tokenName}
@@ -35,7 +28,7 @@ export default function TableComponent() {
               <div className="col-span-1 mobile:col-span-2 flex">
                 <div className="bg-gray-600 p-2 rounded-full h-[48px]">
                   <img
-                    src={tokenInfo?.image}
+                    src={h.tokenImage}
                     className="max-w-[32px] rounded-full h-[32px] w-[32px]"
                   />
                 </div>
@@ -51,11 +44,9 @@ export default function TableComponent() {
               <div className="col-span-1 mobile:col-span-2 mobile:pt-[10px]">
                 <a
                   href={
-                    chain === "SOL"
+                    chainId === ChainId.sol
                       ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
-                      : process.env.EVM_CHAIN_ID === "matic"
-                      ? `${MUMBAI_EXPLORE}/token/${h.tokenAddress}`
-                      : `${BSC_EXPLORE}/token/${h.tokenAddress}`
+                      : `${platformConfig.explorerUrl}token/${h.tokenAddress}`
                   }
                   target="_blank"
                   className="flex justify-center items-center"
@@ -70,11 +61,11 @@ export default function TableComponent() {
               </div>
               <div className="text-right col-span-1">
                 <div className="mobile:text-[14px]">
-                  {convertDecimalAmount(h.tokenAddress, h.total)?.toFixed(2)}
+                  {convertDecimalAmount(h.tokenAddress, h.total)?.toFixed(3)}
                 </div>
-                <div className="text-dark40 mobile:text-[14px]">
+                {/* <div className="text-dark40 mobile:text-[14px]">
                   ~ ${convertDecimalAmount(h.tokenAddress, h.value)?.toFixed(2)}
-                </div>
+                </div> */}
               </div>
             </div>
           );
