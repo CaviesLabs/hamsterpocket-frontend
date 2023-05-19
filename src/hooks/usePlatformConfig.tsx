@@ -26,6 +26,11 @@ export const PlatformConfigContext = createContext<{
   platformConfig: PlatformConfigEntity;
 
   /**
+   * @dev Dex url based on platformConfig for each chains.
+   */
+  dexUrl: string;
+
+  /**
    * @dev Override router function with chainId slug.
    */
   pushRouterWithChainId(uri: string): void;
@@ -44,6 +49,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev Define desired chain id, @default bsc proxied router. */
   const [desiredChainId, setDesiredChainId] = useState<ChainId>(ChainId.bnb);
+  const [dexUrl, setDexUrl] = useState("");
   const [
     platformConfigBasedDesiredChainId,
     setPlatformConfigBasedDesiredChainId,
@@ -64,6 +70,20 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
    */
   useEffect(() => {
     setPlatformConfigBasedDesiredChainId(platformConfig?.[desiredChainId]);
+
+    const config = platformConfig?.[desiredChainId];
+    if (config) {
+      setDexUrl(() => {
+        let dexUrl = config.whitelistedRouters[0]?.dexUrl;
+        if (desiredChainId === ChainId.bnb) {
+          dexUrl = config.whitelistedRouters.find(
+            (item) => item.ammTag === "uniswap"
+          )?.dexUrl;
+        }
+
+        return dexUrl;
+      });
+    }
   }, [platformConfig, desiredChainId]);
 
   /**
@@ -95,6 +115,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
       value={{
         chainId: desiredChainId,
         platformConfig: platformConfigBasedDesiredChainId,
+        dexUrl,
         switchChainId: (chainId: string) => handleSwitchChain(chainId),
         pushRouterWithChainId: (uri: "self" | string) =>
           router.push(

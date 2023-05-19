@@ -14,12 +14,7 @@ import {
   ReversePocketModal,
 } from "@/src/components/home";
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
-import {
-  utilsProvider,
-  DATE_TIME_FORMAT,
-  UNISWAP_EXPLORE,
-  RADYUM_EXPLORE,
-} from "@/src/utils";
+import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
@@ -35,7 +30,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     useWhiteList();
   const { programService } = useWallet();
   const { walletAddress } = useAppWallet();
-  const { chainId, pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -162,11 +157,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={
-                  chainId === ChainId.sol
-                    ? `${RADYUM_EXPLORE}?inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
-                    : `${UNISWAP_EXPLORE}&inputCurrency=${data.baseTokenAddress}&outputCurrency=${data.targetTokenAddress}`
-                }
+                href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >

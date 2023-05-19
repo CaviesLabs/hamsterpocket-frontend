@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPocketById } from "@/src/redux/actions/pocket/pocket.action";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { utilsProvider, RADYUM_EXPLORE, UNISWAP_EXPLORE } from "@/src/utils";
+import { utilsProvider } from "@/src/utils";
 import {
   PocketStrategy,
   PocketInfo,
@@ -38,7 +38,7 @@ const PocketDetailPage: NextPage = () => {
   const dispatch = useDispatch();
   const { whiteLists, findEntityByAddress } = useWhiteList();
   const { walletAddress } = useAppWallet();
-  const { chainId, pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
   const { programService: solProgram } = useWallet();
 
   /** @dev Get lastest pockets. */
@@ -146,11 +146,7 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={
-                        chainId === ChainId.sol
-                          ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
-                          : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
-                      }
+                      href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >
