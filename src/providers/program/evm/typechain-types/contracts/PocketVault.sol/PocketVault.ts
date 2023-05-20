@@ -61,7 +61,7 @@ export interface PocketVaultInterface extends utils.Interface {
     "getCurrentQuote(address,address,address,uint256,uint256)": FunctionFragment;
     "getCurrentQuoteV2(address,address,address,uint256)": FunctionFragment;
     "getCurrentQuoteV3(address,address,address,uint256,uint256)": FunctionFragment;
-    "initEtherman()": FunctionFragment;
+    "initEtherman(address)": FunctionFragment;
     "initialize()": FunctionFragment;
     "makeDCASwap(string,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
@@ -147,7 +147,7 @@ export interface PocketVaultInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initEtherman",
-    values?: undefined
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -495,6 +495,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<ContractTransaction>;
 
     initEtherman(
+      _weth: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -601,6 +602,7 @@ export interface PocketVault extends BaseContract {
   ): Promise<ContractTransaction>;
 
   initEtherman(
+    _weth: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -706,7 +708,10 @@ export interface PocketVault extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber]>;
 
-    initEtherman(overrides?: CallOverrides): Promise<void>;
+    initEtherman(
+      _weth: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     initialize(overrides?: CallOverrides): Promise<void>;
 
@@ -941,6 +946,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<BigNumber>;
 
     initEtherman(
+      _weth: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1048,6 +1054,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initEtherman(
+      _weth: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
