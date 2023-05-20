@@ -1,6 +1,7 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { Keypair } from "@solana/web3.js";
 import { GetQouteDto } from "@/src/dto/pocket.dto";
+import { ChainId } from "../entities/platform-config.entity";
 
 export class EvmProgramService {
   /**
@@ -12,7 +13,7 @@ export class EvmProgramService {
    * @param {CreatePocketDto}
    */
   public async createPocketOffChain(
-    chainId: string,
+    chainId: ChainId,
     walletAddress: string
   ): Promise<any> {
     /** @dev Call to HamsterBox server to initialize the proposal. */

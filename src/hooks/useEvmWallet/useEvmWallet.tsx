@@ -75,7 +75,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Execute off-chain */
       console.log({ signer });
       const pocketId = await evmProgramService.createPocketOffChain(
-        process.env.EVM_CHAIN_ID === "bsc" ? "bnb" : "mumbai",
+        chainId,
         await signer.getAddress()
       );
 
@@ -88,7 +88,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         }
       );
     },
-    [signer, contract]
+    [signer, contract, chainId]
   );
 
   /**
