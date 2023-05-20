@@ -157,7 +157,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
+                href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >

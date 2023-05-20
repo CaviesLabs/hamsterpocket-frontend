@@ -146,7 +146,7 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
+                      href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >

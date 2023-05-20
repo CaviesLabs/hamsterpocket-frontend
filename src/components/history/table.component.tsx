@@ -11,7 +11,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export default function TableComponent() {
   const { whiteLists, findEntityByAddress } = useWhiteList();
-  const { platformConfig, dexUrl } = usePlatformConfig();
+  const { platformConfig, dexUrl, chainId } = usePlatformConfig();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -89,7 +89,7 @@ export default function TableComponent() {
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
                             <a
-                              href={`/pocket/${poolDoc.address}`}
+                              href={`/${chainId}/pocket/${poolDoc.address}`}
                               target="_blank"
                               className="ml-2"
                             >
@@ -102,7 +102,7 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
+                                href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                                 target="_blank"
                                 className="ml-[10px]"
                               >
@@ -149,7 +149,7 @@ export default function TableComponent() {
                           <div className="flex items-center">
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
-                              href={`${platformConfig}/tx/${h.transactionId}`}
+                              href={`${platformConfig?.explorerUrl}tx/${h.transactionId}`}
                               target="_blank"
                               className="ml-2"
                             >
@@ -200,7 +200,7 @@ export default function TableComponent() {
                                 {baseToken?.symbol}/{targetToken?.symbol}
                                 {baseToken?.address && targetToken?.address && (
                                   <a
-                                    href={`${dexUrl}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`}
+                                    href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                                     target="_blank"
                                     className="ml-[10px]"
                                   >

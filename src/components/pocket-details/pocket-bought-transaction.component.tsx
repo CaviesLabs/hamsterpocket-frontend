@@ -130,7 +130,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 </div>
                 <div className="col-span-2 ml-[10px] relative top-[-3px] mobile:col-span-1">
                   <a
-                    href={`${platformConfig}/tx/${item.transactionId}`}
+                    href={`${platformConfig?.explorerUrl}tx/${item.transactionId}`}
                     target="_blank"
                     className="ml-[10px] relative top-[-5px]"
                   >
