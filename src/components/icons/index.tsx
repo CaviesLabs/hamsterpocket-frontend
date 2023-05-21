@@ -879,9 +879,9 @@ export const TabStrategyIcon: FC<IconProps> = (props) => (
     <path
       d="M7.41162 14.781L10.4048 10.8909L13.8189 13.5728L16.748 9.79248"
       stroke="#7886A0"
-      stroke-width="1.5"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <circle
       cx="20.1622"
@@ -1121,16 +1121,16 @@ export const CloseIcon: FC<IconProps> = (props) => (
     <path
       d="M18 6L6 18"
       stroke="#735CF7"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
     <path
       d="M18 18L6 6"
       stroke="#735CF7"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );

@@ -29,7 +29,7 @@ const chains: ChainItem[] = [
   {
     id: "polygon_mumbai",
     image: "/assets/images/matic.png",
-    name: "polygon",
+    name: "mumbai",
   },
   {
     id: "solana",
