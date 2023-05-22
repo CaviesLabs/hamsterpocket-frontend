@@ -39,23 +39,15 @@ export const usePocketBalance = (): {
         whiteLists[token.tokenAddress] ||
         findEntityByAddress(token.tokenAddress);
 
-      /** @dev Get decimal amount. */
-      const humanValue =
-        token.total /
-        Math.pow(10, tokenInfo?.realDecimals || tokenInfo?.decimals);
-
-      /** @dev Get price based on amount. */
-      const usdPrice = humanValue * token?.usdValue || 0;
-
       return {
         /** @dev Token symbol. */
         token: tokenInfo?.symbol,
 
         /** @dev Price of portfolio token in USD. */
-        totalValue: usdPrice,
+        totalValue: token?.usdValue,
 
         /** @dev Percent of price in total pool. */
-        percent: usdPrice / totalUSD,
+        percent: token?.usdValue / totalUSD,
       };
     });
   }, [statisticData, portfolios, whiteLists, totalUSD]);
