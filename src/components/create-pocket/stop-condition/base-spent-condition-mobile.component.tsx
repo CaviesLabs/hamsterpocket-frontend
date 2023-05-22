@@ -72,7 +72,7 @@ export const BaseAmountSpendConditionMobile: FC<{
               <UnCollapseArrowIcon />
             </div>
             <p className="float-left text-[12px] text-white normal-text ml-[12px] relative">
-              Add target SOL amount
+              Add target token spent amount
             </p>
           </div>
           {!curCondition ? (

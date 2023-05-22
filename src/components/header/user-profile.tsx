@@ -1,5 +1,6 @@
 import { FC, useRef, useState } from "react";
-import { useWallet } from "@/src/hooks/useWallet";
+import { useWallet as useSolanaWallet } from "@/src/hooks/useWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { disconnect as disconnectEvm } from "@wagmi/core";
 import {
   LoggoutIcon,
@@ -17,7 +18,9 @@ import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 const UserProfile: FC = () => {
   const { walletAddress } = useAppWallet();
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
-  const { disconnect: disconnectSol } = useWallet();
+  const { disconnect: disconnectSol, solanaWallet } = useSolanaWallet();
+  const { signer: evmSigner } = useEvmWallet();
+
   // const { disconnect: disconnectEvm } = useDisconnectEvm();
 
   /**
@@ -71,9 +74,13 @@ const UserProfile: FC = () => {
             </li>
             <li
               onClick={async () => {
-                if (chainId === ChainId.sol) {
-                  disconnectSol();
-                } else {
+                /** @dev Force to disconnect sol wallet. */
+                if (chainId === ChainId.sol || solanaWallet?.publicKey) {
+                  await disconnectSol();
+                }
+
+                /** @dev Force to disconnect evm wallet. */
+                if (chainId !== ChainId.sol || evmSigner !== undefined) {
                   await disconnectEvm();
                 }
 
