@@ -6,7 +6,7 @@ import { BatchOption } from "./each-batch.component";
 import { FrequencyOption } from "./frequency.component";
 import { StopConditionMobile } from "./stop-condition";
 import { ErrorLabel } from "@/src/components/error-label";
-// import { DepositAmount } from "./deposit-amount.component";
+import { PoolInformation } from "./pool-informationn.component";
 import { StopLossAmount } from "./stop-loss-amount.component";
 import { TakeProfitAmount } from "./take-profit-amount.component";
 import dayjs from "dayjs";
@@ -37,6 +37,11 @@ export const DCAStrategy: FC = () => {
         <div className="mt-6">
           <div className="md:grid md:grid-cols-2">
             <div className="md:col-span-1 max-w-[600px]">
+              {chainId === ChainId.sol && (
+                <div className="mb-[40px]">
+                  <PoolInformation />
+                </div>
+              )}
               <BatchOption />
               <div className="mt-[40px]">
                 <p className="mobile:text-[14px] text-[20px] text-dark50 regular-text">

@@ -169,7 +169,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       if (!walletAddress) return;
 
       /** @dev Validate if all form be valid. */
-      if (!validateForms()) {
+      if (!(await validateForms())) {
         throw new Error("NOT::VALIDATION");
       }
 
@@ -208,7 +208,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
        */
       const solCreatedPocketData: SolCreatePocketDto = {
         id: ProgramService.generatePocketId(),
-        name: "pocketName",
+        name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(
           chainId === ChainId.sol ? liqQoute : targetAddress
