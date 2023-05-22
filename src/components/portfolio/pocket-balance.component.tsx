@@ -48,11 +48,11 @@ export const PocketBalance: FC = () => {
           ~ {totalSOL?.toFixed(5)} {nativeToken?.symbol}
         </div>
       </div>
-      <div className="text-dark10 italic normal-text mobile:text-[14px] mt-[10px]">
-        Today's PNL
+      <div className="text-dark10 normal-text mobile:text-[14px] mt-[10px] text-[16px]">
+        Estimated USD Value
       </div>
-      <div className="text-green mt-1 italic regular-text mobile:text-[14px]">
-        (~ ${totalUSD?.toFixed(2)})
+      <div className="text-green mt-1 mobile:text-[14px] text-[24px]">
+        (~ ${`${totalUSD?.toFixed(2)}`})
       </div>
     </div>
   );

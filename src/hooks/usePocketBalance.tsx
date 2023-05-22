@@ -24,16 +24,8 @@ export const usePocketBalance = (): {
   const handleBalance = useCallback(() => {
     setTotalUSD(() => {
       const arr = portfolios.map((token) => {
-        /** @dev Get decimal amount. */
-        const tokenInfo =
-          whiteLists[token.tokenAddress] ||
-          findEntityByAddress(token.tokenAddress);
-        const humanValue =
-          token.total /
-          Math.pow(10, tokenInfo?.realDecimals || tokenInfo?.decimals);
-
         /** @dev Return price of portfolio token in USD. */
-        return humanValue * token?.usdValue || 0;
+        return token?.usdValue || 0;
       });
       return arr.length ? arr.reduce((prev, cur) => cur + prev) : 0;
     });

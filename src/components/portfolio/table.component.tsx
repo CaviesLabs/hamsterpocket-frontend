@@ -1,6 +1,5 @@
 import { MdOpenInNew } from "react-icons/all";
 import { useSelector } from "react-redux";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import State from "@/src/redux/entities/state";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
@@ -9,7 +8,6 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
   const { chainId, platformConfig } = usePlatformConfig();
-  const { convertDecimalAmount } = useWhiteList();
 
   return (
     <div className="mt-11 text-white max-h-[650px] overflow-y-auto">
@@ -61,11 +59,11 @@ export default function TableComponent() {
               </div>
               <div className="text-right col-span-1">
                 <div className="mobile:text-[14px]">
-                  {convertDecimalAmount(h.tokenAddress, h.total)?.toFixed(3)}
+                  {h?.decimalValue?.toFixed(3)}
                 </div>
-                {/* <div className="text-dark40 mobile:text-[14px]">
-                  ~ ${convertDecimalAmount(h.tokenAddress, h.value)?.toFixed(2)}
-                </div> */}
+                <div className="text-dark40 mobile:text-[14px]">
+                  ~ ${h?.usdValue?.toFixed(2)}
+                </div>
               </div>
             </div>
           );
