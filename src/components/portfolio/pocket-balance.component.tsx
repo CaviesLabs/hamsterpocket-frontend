@@ -41,7 +41,7 @@ export const PocketBalance: FC = () => {
         <div className="p-[5px] rounded-[50%] bg-white md:p-[8px]">
           <img
             src={nativeToken?.image}
-            className="w-[42px] h-[42px] mobile:w-[20px] mobile:h-[20px]"
+            className="w-[42px] h-[42px] mobile:w-[20px] mobile:h-[20px] rounded-[50%] object-scale-down"
           />
         </div>
         <div className="text-white ml-3 text-[32px] mobile:text-[14px]">

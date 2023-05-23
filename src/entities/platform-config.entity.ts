@@ -21,3 +21,11 @@ export enum ChainId {
   xdc = "xdc",
   sol = "solana",
 }
+
+export const chainInfos: { [key in ChainId]: number } = {
+  okt: 66,
+  bnb: 56,
+  polygon_mumbai: 80001,
+  xdc: 50,
+  solana: 0,
+};

@@ -156,7 +156,7 @@ export const DepositModal: FC<{
           <p className="my-4 text-white text-[16px] flex">
             Your balance:
             <img
-              src={baseToken.image}
+              src={baseToken?.image}
               alt="token balance"
               className="w-6 mx-1 rounded"
             />

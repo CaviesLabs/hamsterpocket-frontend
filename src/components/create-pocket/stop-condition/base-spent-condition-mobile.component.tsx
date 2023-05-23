@@ -5,6 +5,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { Collapse } from "react-collapse";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const BaseAmountSpendConditionMobile: FC<{
   displyed: boolean;
@@ -13,6 +14,7 @@ export const BaseAmountSpendConditionMobile: FC<{
   /**
    * @dev Injected context.
    */
+  const { whiteLists, findEntityByAddress } = useWhiteList();
   const { handleModifyStopConditions, stopConditions, baseTokenAddress } =
     useCreatePocketPage();
 
@@ -33,6 +35,17 @@ export const BaseAmountSpendConditionMobile: FC<{
     )?.spentBaseTokenAmountReach;
   }, [stopConditions]);
 
+  /** @dev Get base token info. */
+  const baseToken = useMemo(
+    () =>
+      whiteLists[baseTokenAddress[0]?.toBase58()?.toString()] ||
+      findEntityByAddress(baseTokenAddress[0]?.toBase58()?.toString()),
+    [baseTokenAddress, whiteLists, findEntityByAddress]
+  );
+
+  /**
+   * @dev Make condition is primary or not.
+   */
   const primary = useMemo(
     () => (curCondition?.primary == undefined ? false : curCondition?.primary),
     [curCondition]
@@ -72,7 +85,7 @@ export const BaseAmountSpendConditionMobile: FC<{
               <UnCollapseArrowIcon />
             </div>
             <p className="float-left text-[12px] text-white normal-text ml-[12px] relative">
-              Add target token spent amount
+              Add target {baseToken?.symbol} amount
             </p>
           </div>
           {!curCondition ? (

@@ -47,9 +47,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [baseTokenAddress, setBaseTokenAddress] = useState<[PublicKey, number]>(
     [new PublicKey(WSOL_ADDRESS), 9]
   );
-  const [targetTokenAddress, setTargetTokenAddress] = useState<
-    [PublicKey?, number?]
-  >([]);
   const [batchVolume, setBatchVolume] = useState<number>(0);
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
@@ -59,6 +56,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [stopLossAmount, setStopLossAmount] = useState<number>();
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
+  const [targetTokenAddress, setTargetTokenAddress] = useState<
+    [PublicKey?, number?]
+  >([]);
 
   /** @dev Mint batch amount volume. */
   const [mintOrderSize, setMintOrderSize] = useState(0);

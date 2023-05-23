@@ -85,7 +85,7 @@ export const CurrencyBage: FC<CurrencyPage> = (props) => {
   );
 
   return (
-    <div className="relative max-w-[150px]" ref={ref} onClick={props.onClick}>
+    <div className="relative max-w-[170px]" ref={ref} onClick={props.onClick}>
       <img
         className={classNames(
           "rounded-full",
@@ -115,7 +115,7 @@ export const CurrencyBage: FC<CurrencyPage> = (props) => {
             ? props.rightPrefixLabel
             : addressSelected === "BATCH"
             ? "BATCH"
-            : allowCurrencies?.[addressSelected]?.symbol}
+            : allowCurrencies?.[addressSelected]?.symbol || "Select Token"}
         </p>
         {!props.disableDropdown && (
           <DropdownIcon className="float-right ml-[5px]" />

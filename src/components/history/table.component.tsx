@@ -84,7 +84,7 @@ export default function TableComponent() {
                         key={h._id}
                         className="grid grid-cols-12 px-[5px] py-[30px]"
                       >
-                        <div className="col-span-2 text-center">
+                        <div className="col-span-2">
                           <div className="truncate">{poolDoc.name}</div>
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
