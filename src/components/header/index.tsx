@@ -142,7 +142,12 @@ const Header: FC = () => {
                     ) : (
                       <ConnectButton.Custom>
                         {({ account, chain, openConnectModal, mounted }) => {
-                          if (account) {
+                          if (
+                            account &&
+                            (router.asPath === `/` ||
+                              router.asPath === `/${chainId}` ||
+                              router.asPath === `/${chainId}/`)
+                          ) {
                             pushRouterWithChainId("/my-pockets");
                             return <></>;
                           }
