@@ -1,10 +1,14 @@
 import { FC, useMemo } from "react";
 import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
   const pocket = props.pocket;
 
+  /** @dev Inject context. */
+  const { chainId } = usePlatformConfig();
   const { whiteLists, findEntityByAddress, convertDecimalAmount } =
     useWhiteList();
 
@@ -93,7 +97,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
           )}
         </p>
       </div>
-      {pocket?.status !== PocketStatus.ENDED ? (
+      {pocket?.status !== PocketStatus.ENDED && chainId !== ChainId.sol ? (
         <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
           <p className="float-left text-dark50 normal-text">APL (ROI)</p>
           <p
