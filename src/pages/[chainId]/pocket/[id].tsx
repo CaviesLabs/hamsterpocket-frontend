@@ -82,7 +82,7 @@ const PocketDetailPage: NextPage = () => {
     /** @dev Now fetch data from hamster server. */
     dispatch(
       getPocketById({ pocketId: router.query?.id as string }, (pocket) => {
-        setPocket(pocket);
+        setPocket({ ...pocket, id: pocket?._id });
       })
     );
   }, [router, walletAddress, chainId, solProgram, pocket]);
