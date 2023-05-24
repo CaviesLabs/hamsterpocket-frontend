@@ -45,10 +45,18 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
         }
       } else if (ethWallet?.address) {
         setWalletAddress(ethWallet?.address?.toString());
+
+        /**
+         * @dev This fill redirect to correct chain which connected before.
+         */
         const connectedChainId = await ethWallet?.connector?.getChainId();
         const targetChainId = Object.keys(chainInfos).find(
           (key: string) => connectedChainId === (chainInfos as any)?.[key]
         );
+
+        /**
+         * @dev If current chain is not connected chain, will redirect to.
+         */
         if (targetChainId && chainId !== targetChainId) {
           switchChainId(targetChainId);
         }
