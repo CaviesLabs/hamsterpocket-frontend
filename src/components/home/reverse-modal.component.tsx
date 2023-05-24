@@ -8,6 +8,8 @@ import { SuccessTransactionModal } from "@/src/components/success-modal.componen
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const ReversePocketModal: FC<{
   isModalOpen: boolean;
@@ -28,14 +30,15 @@ export const ReversePocketModal: FC<{
   const [succcessClose, setSuccessClosed] = useState(false);
 
   const { closePositionPocket: closePositionPocketEvm } = useEvmWallet();
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   /** @dev Get base token database on address. */
   const baseToken = useMemo<WhitelistEntity>(
     () =>
       whiteLists[props.pocket.baseTokenAddress] ||
       findEntityByAddress(props.pocket.baseTokenAddress),
-    [props, chain, walletAddress]
+    [props, chainId, walletAddress]
   );
 
   /** @dev The function to handle close pocket. */
@@ -46,11 +49,11 @@ export const ReversePocketModal: FC<{
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
-        await closePositionPocketEvm(props.pocket.id || props.pocket._id);
+        await closePositionPocketEvm(props.pocket);
       }
 
       /** @dev Callback function when close successfully. */
@@ -60,7 +63,7 @@ export const ReversePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, chain]);
+  }, [programService, solanaWallet, props.pocket, chainId]);
 
   return (
     <Modal

@@ -6,20 +6,12 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon } from "@/src/components/icons";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { groupHistoryByDate } from "./parser";
-import {
-  utilsProvider,
-  DATE_TIME_FORMAT,
-  SOL_EXPLORE,
-  MUMBAI_EXPLORE,
-  BSC_EXPLORE,
-  RADYUM_EXPLORE,
-  UNISWAP_EXPLORE,
-} from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export default function TableComponent() {
   const { whiteLists, findEntityByAddress } = useWhiteList();
-  const { chain } = useAppWallet();
+  const { platformConfig, dexUrl, chainId } = usePlatformConfig();
   const historiesData = useSelector((state: State) => state.histories);
 
   const typeHumanize = (raw: PoolType) => {
@@ -92,12 +84,14 @@ export default function TableComponent() {
                         key={h._id}
                         className="grid grid-cols-12 px-[5px] py-[30px]"
                       >
-                        <div className="col-span-2 text-center">
+                        <div className="col-span-2">
                           <div className="truncate">{poolDoc.name}</div>
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
                             <a
-                              href={`/pocket/${poolDoc.address}`}
+                              href={`/${chainId}/pocket/${
+                                poolDoc.id || poolDoc._id
+                              }`}
                               target="_blank"
                               className="ml-2"
                             >
@@ -110,11 +104,7 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={
-                                  chain === "SOL"
-                                    ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
-                                    : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`
-                                }
+                                href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                                 target="_blank"
                                 className="ml-[10px]"
                               >
@@ -161,13 +151,7 @@ export default function TableComponent() {
                           <div className="flex items-center">
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
-                              href={
-                                chain === "SOL"
-                                  ? `${SOL_EXPLORE}/tx/${h.transactionId}`
-                                  : process.env.EVM_CHAIN_ID === "matic"
-                                  ? `${MUMBAI_EXPLORE}/tx/${h.transactionId}`
-                                  : `${BSC_EXPLORE}/tx/${h.transactionId}`
-                              }
+                              href={`${platformConfig?.explorerUrl}tx/${h.transactionId}`}
                               target="_blank"
                               className="ml-2"
                             >
@@ -218,11 +202,7 @@ export default function TableComponent() {
                                 {baseToken?.symbol}/{targetToken?.symbol}
                                 {baseToken?.address && targetToken?.address && (
                                   <a
-                                    href={
-                                      chain === "SOL"
-                                        ? `${RADYUM_EXPLORE}?inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
-                                        : `${UNISWAP_EXPLORE}&inputCurrency=${baseToken?.symbol}&outputCurrency=${targetToken?.symbol}`
-                                    }
+                                    href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
                                     target="_blank"
                                     className="ml-[10px]"
                                   >

@@ -6,6 +6,8 @@ import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
@@ -22,7 +24,8 @@ export const DepositModal: FC<{
   const { pocket } = props;
 
   /** @dev Inject app wallet hooks to get chain info. */
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet, solBalance } = useWallet();
@@ -55,7 +58,7 @@ export const DepositModal: FC<{
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
         await programService.depositPocket(
           solanaWallet,
@@ -88,7 +91,7 @@ export const DepositModal: FC<{
     solanaWallet,
     props.pocket,
     depositedAmount,
-    chain,
+    chainId,
     evmSigner,
   ]);
 
@@ -103,7 +106,7 @@ export const DepositModal: FC<{
   const baseBalance = convertDecimalAmount(pocket.baseTokenAddress, solBalance);
 
   const handleInputChange = (val: number) => {
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       if (val < 0.05) {
         setButtonText(`Minimum deposit is 0.05 ${baseToken.symbol}`);
       } else if (val > baseBalance) {
@@ -153,11 +156,11 @@ export const DepositModal: FC<{
           <p className="my-4 text-white text-[16px] flex">
             Your balance:
             <img
-              src={baseToken.image}
+              src={baseToken?.image}
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {chain === "SOL" ? baseBalance?.toFixed(4) : ethSolBalance}{" "}
+            {chainId === ChainId.sol ? baseBalance?.toFixed(4) : ethSolBalance}{" "}
             {baseToken.symbol}
           </p>
           <Button
@@ -181,7 +184,7 @@ export const DepositModal: FC<{
         handleCancel={() => props.handleOk()}
         message={`You have deposited ${convertDecimalAmount(
           pocket.baseTokenAddress,
-          chain === "SOL"
+          chainId === ChainId.sol
             ? depositedAmount?.toNumber()
             : (depositedAmount?.toNumber() /
                 Math.pow(10, baseToken?.decimals)) *

@@ -23,13 +23,13 @@ export const PoolItemBuyConditionComponent = (
     const targetLeftAmount = convertDecimalAmount(
       data?.targetTokenAddress,
       data?.buyCondition?.value?.[0]
-    );
+    )?.toFixed(3);
     const targetRightAmount =
       data?.buyCondition?.value?.[1] &&
       convertDecimalAmount(
         data?.targetTokenAddress,
         data?.buyCondition?.value[1]
-      );
+      )?.toFixed(3);
     const baseSymbol = baseToken?.symbol;
     const targetSymbol = targetToken?.symbol;
 

@@ -1,24 +1,26 @@
 import { FC, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import { useWallet } from "@/src/hooks/useWallet";
+import { useWallet as useSolanaWallet } from "@/src/hooks/useWallet";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { disconnect as disconnectEvm } from "@wagmi/core";
 import {
   LoggoutIcon,
-  // NoneIcon,
-  // PlusIcon,
   BookIcon,
   DropdownArrowIcon,
 } from "@/src/components/icons";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 const UserProfile: FC = () => {
-  const router = useRouter();
-  const { chain, walletAddress } = useAppWallet();
-  const { disconnect: disconnectSol } = useWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
+  const { disconnect: disconnectSol, solanaWallet } = useSolanaWallet();
+  const { signer: evmSigner } = useEvmWallet();
+
   // const { disconnect: disconnectEvm } = useDisconnectEvm();
 
   /**
@@ -53,7 +55,6 @@ const UserProfile: FC = () => {
         onClick={() => setShow(!show)}
       >
         <span className="normal-text text-dark50">
-          {/* {chain === "SOL" ? "Solana" : "BNB Chain"} */}
           {utilsProvider.makeShort(walletAddress, 3)}
         </span>
         <DropdownArrowIcon className="ml-2 text-dark50" />
@@ -65,40 +66,26 @@ const UserProfile: FC = () => {
         <div className={styles.container}>
           <ul>
             <li
-              onClick={() => router.push(`/my-pockets`)}
+              onClick={() => pushRouterWithChainId(`/my-pockets`)}
               className="hover:text-purple normal-text flex items-center"
             >
               <BookIcon />
               <p className="ml-[5px]">My Pockets</p>
             </li>
-            {/* <li
-              onClick={() => router.push(`/create-pocket`)}
-              className="hover:text-purple normal-text md:hidden flex items-center"
-            >
-              <PlusIcon />
-              <p className="ml-[5px]">Create Pocket</p>
-            </li>
-            <li
-              onClick={() => router.push(`/portfolio`)}
-              className="hover:text-purple normal-text flex items-center"
-            >
-              <BookIcon />
-              <p className="ml-[5px]">View Portfolio</p>
-            </li>
-            <li
-              onClick={() => router.push(`/history`)}
-              className="hover:text-purple normal-text flex items-center"
-            >
-              <NoneIcon />
-              <p className="ml-[5px]">View History</p>
-            </li> */}
             <li
               onClick={async () => {
-                if (chain === "SOL") {
-                  disconnectSol();
-                } else {
+                /** @dev Force to disconnect sol wallet. */
+                if (chainId === ChainId.sol || solanaWallet?.publicKey) {
+                  await disconnectSol();
+                }
+
+                /** @dev Force to disconnect evm wallet. */
+                if (chainId !== ChainId.sol || evmSigner !== undefined) {
                   await disconnectEvm();
                 }
+
+                /** @dev Redirect to home. */
+                pushRouterWithChainId("/");
               }}
               className="text-red300 flex items-center normal-text"
             >

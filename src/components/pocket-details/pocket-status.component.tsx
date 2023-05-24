@@ -9,6 +9,8 @@ import {
 } from "@/src/components/home";
 import { Button } from "@hamsterbox/ui-kit";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const PocketStatusComponent: FC<{
   pocket: PocketEntity;
@@ -16,6 +18,10 @@ export const PocketStatusComponent: FC<{
 }> = (props) => {
   const pocket = props.pocket;
 
+  /** @dev Inject chain info. */
+  const { chainId } = usePlatformConfig();
+
+  /** @dev Inject whitelist hooks. */
   const { whiteLists, findEntityByAddress } = useWhiteList();
 
   /** @dev Condition to show modal to close pocket. */
@@ -138,7 +144,8 @@ export const PocketStatusComponent: FC<{
                   width="100%"
                 />
               </div>
-              {pocket?.currentTargetTokenBalance > 0 ? (
+              {pocket?.currentTargetTokenBalance > 0 &&
+              chainId !== ChainId.sol ? (
                 <div className="md:col-span-3">
                   <Button
                     className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"

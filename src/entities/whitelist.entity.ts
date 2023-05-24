@@ -1,3 +1,5 @@
+import { ChainId } from "@/src/entities/platform-config.entity";
+
 export type WhitelistEntity = {
   _id: string;
   address: string;
@@ -9,6 +11,6 @@ export type WhitelistEntity = {
   symbol: string;
   estimatedValue: number;
   realDecimals?: number;
-  chainId: "solana" | "mumbai" | "bsc_mainnet";
+  chainId: ChainId;
   aliasAddress?: string;
 };

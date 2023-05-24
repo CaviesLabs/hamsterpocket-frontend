@@ -96,7 +96,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
       <Input
         size="large"
         className={classNames(
-          "rounded-[16px] p-3 mt-2 bg-dark90 border-none dark-input text-white placeholder-gray-500 h-[63px] mobile:!h-[45px] mobile:!text-[14px]",
+          "rounded-[16px] p-3 mt-2 bg-dark100 border-none dark-input text-white placeholder-gray-500 h-[63px] mobile:!h-[45px] mobile:!text-[14px]",
           styles.myInput,
           props.inputClassName
         )}

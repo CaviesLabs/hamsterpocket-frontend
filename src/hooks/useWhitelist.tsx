@@ -10,7 +10,8 @@ import {
 import { whitelistService } from "@/src/services/whitelist.service";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { makeAliasForEvmWhitelist } from "@/src/utils/evm.parser";
 import useSWR from "swr";
 
@@ -45,7 +46,8 @@ export const WhitelistContext = createContext<{
 export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
   const [whiteLists, setWhitelist] = useState<WhiteListConfigs>({});
 
-  const { chain } = useAppWallet();
+  /** @dev Inject wallet account info. */
+  const { chainId } = usePlatformConfig();
 
   /** @dev Fetch market data. */
   const { data: liquidities } = useSWR(
@@ -64,7 +66,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
       try {
         /** @dev Fetch whitelist in sol chain. */
         const result = await whitelistService.getWhitelist();
-        if (chain === "SOL") {
+        if (chainId === ChainId.sol) {
           const res: WhiteListConfigs = {};
           result.forEach((_) => {
             /** desc Convert Wrapped SOL to SOL */
@@ -74,8 +76,8 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
             res[_.address] = _;
           });
           setWhitelist(res);
-        } else if (chain === "ETH") {
-          const processedList = makeAliasForEvmWhitelist(result);
+        } else {
+          const processedList = makeAliasForEvmWhitelist(result, chainId);
           const res: WhiteListConfigs = {};
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;
@@ -86,7 +88,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
         console.log(err);
       }
     })();
-  }, [chain]);
+  }, [chainId]);
 
   /**
    * @dev The function to find pair liquidity data.
@@ -133,7 +135,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
 
       return keyFound ? whiteLists[keyFound] : null;
     },
-    [whiteLists, chain]
+    [whiteLists, chainId]
   );
 
   /**
@@ -148,7 +150,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
         Math.pow(10, tokenEntity?.realDecimals || tokenEntity?.decimals || 1)
       );
     },
-    [whiteLists, chain, findEntityByAddress]
+    [whiteLists, chainId, findEntityByAddress]
   );
 
   return (

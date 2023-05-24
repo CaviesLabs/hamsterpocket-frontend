@@ -5,4 +5,5 @@ export type DatetimePickerProps = {
   value?: Dayjs;
   onChange?: (expiredData: Date) => void;
   disabledDate?: RangePickerProps["disabledDate"];
+  backgroundColor?: string;
 };

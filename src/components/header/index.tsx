@@ -1,11 +1,14 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useWalletKit } from "@gokiprotocol/walletkit";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
 import { HamsterboxIcon } from "@/src/components/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { ChainSelect } from "./chain-select";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
@@ -14,7 +17,7 @@ const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [chain] = useState<"SOL" | "ETH">("ETH");
+  const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const router = useRouter();
 
   /**
@@ -34,10 +37,10 @@ const Header: FC = () => {
    * @dev The function to desire which blockchain to connect.
    */
   const handleConnect = useCallback(() => {
-    if (chain === "SOL") {
+    if (chainId === ChainId.sol) {
       connectWallet();
     }
-  }, [chain]);
+  }, [chainId]);
   /**
    * @description
    * This function set current selected section based on the location user are in
@@ -88,7 +91,10 @@ const Header: FC = () => {
       <div className="w-full py-[18px] md:py-[25px] flow-root">
         <div className="md:max-w-[1440px] mx-auto flex justify-between">
           <div className="logo-wrapper md:mt-0 flex items-center">
-            <a className="cursor-pointer" onClick={() => router.push("/")}>
+            <a
+              className="cursor-pointer"
+              onClick={() => pushRouterWithChainId("/")}
+            >
               <HamsterboxIcon
                 className={classnames("w-[140px] md:w-[180px] hamsterbox-icon")}
                 color={"white"}
@@ -107,21 +113,14 @@ const Header: FC = () => {
                       className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
                       text="Create a Pocket"
                       size="small"
-                      onClick={() => router.push("/strategy")}
+                      onClick={() => pushRouterWithChainId("/strategy")}
                       theme={{
                         backgroundColor: "#735CF7",
                         color: "#FFFFFF",
                       }}
                     />
                   )}
-                  {walletAddress && (
-                    <div className="border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]">
-                      <img
-                        className="w-[24px] h-[24px]"
-                        src="/assets/images/bnb.svg"
-                      />
-                    </div>
-                  )}
+                  <ChainSelect />
                 </ul>
               }
             </div>
@@ -129,7 +128,7 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    {chain === "SOL" ? (
+                    {chainId === ChainId.sol ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
                         size="small"
@@ -143,6 +142,16 @@ const Header: FC = () => {
                     ) : (
                       <ConnectButton.Custom>
                         {({ account, chain, openConnectModal, mounted }) => {
+                          if (
+                            account &&
+                            (router.asPath === `/` ||
+                              router.asPath === `/${chainId}` ||
+                              router.asPath === `/${chainId}/`)
+                          ) {
+                            pushRouterWithChainId("/my-pockets");
+                            return <></>;
+                          }
+
                           return (
                             <div
                               {...(!mounted && {

@@ -29,7 +29,7 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
     <Dropdown
       // overlayStyle={{ height: "63px" }}
       className={classnames(
-        "!bg-dark90 h-[63px] mobile:!h-[40px]",
+        "!bg-dark100 h-[63px] mobile:!h-[40px]",
         props.className
       )}
       menu={{

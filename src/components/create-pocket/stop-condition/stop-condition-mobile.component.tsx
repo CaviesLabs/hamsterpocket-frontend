@@ -33,7 +33,7 @@ export const StopConditionMobile: FC = () => {
 
   return (
     <section>
-      <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
+      <p className="mt-[48px] text-[20px] mobile:text-[14px] text-dark50 normal-text">
         Close pocket when reach
       </p>
       {errorMsgs?.stopConditions && (

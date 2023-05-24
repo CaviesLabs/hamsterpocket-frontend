@@ -9,6 +9,8 @@ import {
 import { AppWalletContextState } from "./types";
 import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId, chainInfos } from "@/src/entities/platform-config.entity";
 
 /** @dev Initiize context. */
 export const AppWalletContext = createContext<AppWalletContextState>(null);
@@ -18,8 +20,8 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /**
    * @dev Provider states.
    */
-  const [chain, setChain] = useState<"SOL" | "ETH">();
   const [walletAddress, setWalletAddress] = useState("");
+  const { switchChainId, chainId } = usePlatformConfig();
 
   /**
    * @dev Inject context of solana wallet.
@@ -35,22 +37,39 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @dev Watch changes in solana wallet and eth wallet.
    */
   useEffect(() => {
-    if (solWallet) {
-      setChain("SOL");
-      setWalletAddress(solWallet?.publicKey?.toString());
-    } else if (ethWallet?.address) {
-      setChain("ETH");
-      setWalletAddress(ethWallet?.address?.toString());
-    }
+    (async () => {
+      if (solWallet) {
+        setWalletAddress(solWallet?.publicKey?.toString());
+        if (chainId !== ChainId.sol) {
+          switchChainId(ChainId.sol);
+        }
+      } else if (ethWallet?.address) {
+        setWalletAddress(ethWallet?.address?.toString());
 
-    if (!solWallet && !ethWallet?.address) {
-      setChain(null);
-      setWalletAddress("");
-    }
-  }, [solWallet, ethWallet]);
+        /**
+         * @dev This fill redirect to correct chain which connected before.
+         */
+        const connectedChainId = await ethWallet?.connector?.getChainId();
+        const targetChainId = Object.keys(chainInfos).find(
+          (key: string) => connectedChainId === (chainInfos as any)?.[key]
+        );
+
+        /**
+         * @dev If current chain is not connected chain, will redirect to.
+         */
+        if (targetChainId && chainId !== targetChainId) {
+          switchChainId(targetChainId);
+        }
+      }
+
+      if (!solWallet && !ethWallet?.address) {
+        setWalletAddress("");
+      }
+    })();
+  }, [solWallet, ethWallet, chainId]);
 
   return (
-    <AppWalletContext.Provider value={{ chain, walletAddress }}>
+    <AppWalletContext.Provider value={{ walletAddress }}>
       {props.children}
     </AppWalletContext.Provider>
   );

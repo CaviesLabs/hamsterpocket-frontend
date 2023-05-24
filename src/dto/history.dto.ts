@@ -1,3 +1,5 @@
+import { ChainId } from "@/src/entities/platform-config.entity";
+
 /**
  * @dev Define list history dto
  */
@@ -13,5 +15,5 @@ export class GetHistoriesDto {
 
   ownerAddress: string;
   search?: string;
-  chainId: "solana" | "bsc_mainnet" | "mumbai";
+  chainId: ChainId;
 }

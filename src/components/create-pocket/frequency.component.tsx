@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { DropdownSelect } from "@/src/components/select";
+// import { DropdownSelect } from "@/src/components/select";
 import { TIME_CONDITIONS } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { FrequencyConditionType } from "@/src/entities/pocket.entity";
@@ -56,8 +56,8 @@ export const FrequencyOption: FC = () => {
   );
 
   return (
-    <div className="mt-[24px] ">
-      <p className="text-dark10 text-[14px] regular-text flex">
+    <div>
+      <p className="text-dark50 text-[20px] mobile:text-[14px] regular-text flex">
         Frequency
         <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
         <ToolTip message="1 week = 7 days 1 month = 30 days 1 year = 365 days">
@@ -65,22 +65,22 @@ export const FrequencyOption: FC = () => {
         </ToolTip>
       </p>
       <LayoutWrapper
+        // layout={
+        //   <DropdownSelect
+        //     className="mt-3 !min-w-[250px]"
+        //     handleSelectValue={(val) => handleModifyFrequency(val)}
+        //     options={TIME_CONDITIONS}
+        //     autoValue={true}
+        //   />
+        // }
         layout={
-          <DropdownSelect
-            className="mt-3 !min-w-[250px]"
-            handleSelectValue={(val) => handleModifyFrequency(val)}
-            options={TIME_CONDITIONS}
-            autoValue={true}
-          />
-        }
-        mobileLayout={
           <div className="flex items-center flex-wrap">
             {TIME_CONDITIONS.map((item, index) => (
               <p
                 key={`mobile-option-frequency-${index}`}
                 onClick={() => handleModifyFrequency(item.value)}
                 className={classNames(
-                  "px-[16px] py-[6px] rounded-[30px] text-dark50 bg-dark3 mr-[16px] mt-[16px] normal-text text-[14px]",
+                  "px-[16px] py-[6px] rounded-[30px] text-dark50 bg-dark3 mr-[16px] mt-[16px] normal-text text-[14px] cursor-pointer",
                   {
                     "!bg-purple300 !text-white": textValue === item.value,
                   }

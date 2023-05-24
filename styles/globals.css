@@ -186,8 +186,11 @@ input[type=number] {
 }
 
 .dark-input input {
-  background-color: #20242D !important;
+  background-color: #121320 !important;
   color: white;
+}
+.dark-input.bg-dark90 input {
+  background-color: #20242D !important;
 }
 .dark-input input::placeholder  {
   color: white;
@@ -382,4 +385,19 @@ input:checked + .slider:before {
 .boardslist::-webkit-scrollbar-thumb {
   background-color: #735CF7;
   border-radius: 3px;
+}
+
+
+.carousel-root .slider {
+  background-color: transparent !important;
+}
+
+.carousel-root .slider::before {
+  display: none;
+  background-color: transparent;
+}
+
+.b-mc.mb-3 div:first-child, .b-mc div:first-child {
+  border: 2px solid #ffffff !important;
+  border-top: 2px solid #ffffff00 !important;
 }

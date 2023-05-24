@@ -12,6 +12,7 @@ export type PortfolioStatisticEntity = {
 
 export type PortfolioEntity = {
   tokenName: string;
+  tokenImage: string;
   tokenSymbol: string;
   ownerAddress: string;
   tokenAddress: string;
@@ -19,4 +20,9 @@ export type PortfolioEntity = {
   total: number;
   image?: string; // for developing
   usdValue?: number;
+
+  /**
+   * @dev Amount of token  (converted to decimals).
+   */
+  decimalValue?: number;
 };

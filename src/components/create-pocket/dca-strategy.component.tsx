@@ -1,12 +1,17 @@
 import { FC, useState } from "react";
 import { DatetimePicker } from "@/src/components/datetime-picker";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { BuyCondition } from "./buy-condition.component";
+import { BuyConditionMobile } from "./buy-condition-mobile.component";
 import { BatchOption } from "./each-batch.component";
 import { FrequencyOption } from "./frequency.component";
-import { DepositAmount } from "./deposit-amount.component";
+import { StopConditionMobile } from "./stop-condition";
 import { ErrorLabel } from "@/src/components/error-label";
+import { PoolInformation } from "./pool-informationn.component";
+import { StopLossAmount } from "./stop-loss-amount.component";
+import { TakeProfitAmount } from "./take-profit-amount.component";
 import dayjs from "dayjs";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const DCAStrategy: FC = () => {
   /**
@@ -19,6 +24,7 @@ export const DCAStrategy: FC = () => {
     errorMsgs,
     targetTokenAddress,
   } = useCreatePocketPage();
+  const { chainId } = usePlatformConfig();
 
   /**
    * @dev Buy condition display.
@@ -28,64 +34,70 @@ export const DCAStrategy: FC = () => {
   return (
     <>
       <section>
-        <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
-          Pool start time
-        </p>
-        <p className="mt-2 text-dark20 text-[14px] md:text-[16px] regular-text italic">
-          Select a time to execute the first batch of this Pocket
-        </p>
-        <p className="mt-6 text-dark10 text-[14px] regular-text">
-          Start time (Local time: UTC {dayjs().format("Z")})
-          <span className="text-red300 relative top-[-2px] right-[-2px]">
-            *
-          </span>
-        </p>
-        <div className="mt-3 md:grid md:grid-cols-5 gap-3">
-          <div className="md:col-span-2">
-            <DatetimePicker
-              disabledDate={(current) =>
-                current && current < dayjs().startOf("day")
-              }
-              onChange={(v) => {
-                setErrorMsgs({
-                  ...errorMsgs,
-                  startAt:
-                    v.getTime() < Date.now() &&
-                    "Date start must be larger than now.",
-                });
-                setStartAt(v);
-              }}
-            />
-          </div>
-        </div>
-        {errorMsgs?.startAt && <ErrorLabel message={errorMsgs.startAt} />}
-      </section>
-      <section>
-        <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
-          DCA strategy
-        </p>
-        <p className="text-dark20 text-[14px] md:text-[16px] regular-text italic mt-2">
-          Set the conditions that must be met before each batch of tokens
-          purchase is executed
-        </p>
         <div className="mt-6">
-          <BatchOption />
-          <div className="grid md:grid-cols-5 gap-3">
-            <div className="col-span-1">
+          <div className="md:grid md:grid-cols-2">
+            <div className="md:col-span-1 max-w-[600px]">
+              {chainId === ChainId.sol && (
+                <div className="mb-[40px]">
+                  <PoolInformation />
+                </div>
+              )}
+              <BatchOption />
+              <div className="mt-[40px]">
+                <p className="mobile:text-[14px] text-[20px] text-dark50 regular-text">
+                  First batch time (+7Hrs)
+                </p>
+                <div className="mt-[8px]">
+                  <DatetimePicker
+                    disabledDate={(current) =>
+                      current && current < dayjs().startOf("day")
+                    }
+                    onChange={(v) => {
+                      setErrorMsgs({
+                        ...errorMsgs,
+                        startAt:
+                          v.getTime() < Date.now() &&
+                          "Date start must be larger than now.",
+                      });
+                      setStartAt(v);
+                    }}
+                  />
+                </div>
+                {errorMsgs?.startAt && (
+                  <ErrorLabel message={errorMsgs.startAt} />
+                )}
+              </div>
+              <div className="mt-[40px]">
+                <BuyConditionMobile
+                  buyConditionDisplayed={buyConditionDisplayed}
+                  disabled={!targetTokenAddress.length}
+                  toggle={() => {
+                    setBuyCondition(null);
+                    setBuyConditionDisplayed(!buyConditionDisplayed);
+                  }}
+                />
+              </div>
+              {chainId !== ChainId.sol && (
+                <div className="mt-[40px]">
+                  <TakeProfitAmount />
+                </div>
+              )}
+            </div>
+            <div className="md:col-span-1 max-w-[500px] md:pl-[20px]">
               <FrequencyOption />
+              <div className="mt-[40px]">
+                <StopConditionMobile />
+              </div>
+              {chainId !== ChainId.sol && (
+                <div className="mt-[40px]">
+                  <StopLossAmount />
+                </div>
+              )}
             </div>
           </div>
-          <BuyCondition
-            buyConditionDisplayed={buyConditionDisplayed}
-            disabled={!targetTokenAddress.length}
-            toggle={() => {
-              setBuyCondition(null);
-              setBuyConditionDisplayed(!buyConditionDisplayed);
-            }}
-          />
         </div>
       </section>
-      <DepositAmount />
+      {/* <DepositAmount /> */}
     </>
   );
 };

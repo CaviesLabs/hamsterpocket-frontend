@@ -1,7 +1,16 @@
-import { createContext, useContext, ReactNode, FC } from "react";
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  FC,
+  useState,
+  useMemo,
+} from "react";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { bsc, polygonMumbai } from "wagmi/chains";
+import { bsc, polygonMumbai, okc, xdc } from "wagmi/chains";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
@@ -10,28 +19,47 @@ export const WalletKitContext = createContext<any>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
-  const customChains = process.env.EVM_CHAIN_ID === "bsc" ? bsc : polygonMumbai;
-  const { chains, provider } = configureChains(
-    [customChains],
-    [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
-  );
+  const { chainId } = usePlatformConfig();
+  const [wagmiChains, setWagmiChains] = useState<any[]>([]);
 
-  const { connectors } = getDefaultWallets({
-    appName: "hamsterpocket",
-    projectId: process.env.WALLET_CONNECT_PROJECT_ID,
-    chains,
-  });
+  const initClient = useMemo(() => {
+    let customChains;
 
-  const wagmiConfig = createClient({
-    autoConnect: true,
-    connectors,
-    provider,
-  });
+    /** @dev Desired chain config based on chainId. */
+    if (chainId === ChainId.okt) {
+      customChains = okc;
+    } else if (chainId === ChainId.polygon_mumbai) {
+      customChains = polygonMumbai;
+    } else if (chainId === ChainId.xdc) {
+      customChains = xdc;
+    } else {
+      customChains = bsc;
+    }
+
+    const { chains, provider } = configureChains(
+      [customChains],
+      [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
+    );
+
+    const { connectors } = getDefaultWallets({
+      appName: "hamsterpocket",
+      projectId: process.env.WALLET_CONNECT_PROJECT_ID,
+      chains,
+    });
+
+    /** @dev Update config here */
+    setWagmiChains(chains);
+    return createClient({
+      autoConnect: true,
+      connectors,
+      provider,
+    });
+  }, [chainId]);
 
   return (
     <WalletKitContext.Provider value={{}}>
-      <WagmiConfig client={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
+      <WagmiConfig client={initClient}>
+        <RainbowKitProvider chains={wagmiChains}>
           {props.children}
         </RainbowKitProvider>
       </WagmiConfig>

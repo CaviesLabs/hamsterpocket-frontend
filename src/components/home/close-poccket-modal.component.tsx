@@ -5,6 +5,8 @@ import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
 import { useWallet } from "@/src/hooks/useWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 
 export const ClosePocketModal: FC<{
@@ -27,7 +29,8 @@ export const ClosePocketModal: FC<{
 
   const { closePocket: closePocketEvm, withdrawPocket: withdrawPocketEvm } =
     useEvmWallet();
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
 
   /** @dev The function to handle close pocket. */
   const handleClosePocket = useCallback(async () => {
@@ -37,7 +40,7 @@ export const ClosePocketModal: FC<{
       /** @dev Disable UX interaction when processing. */
       setLoading(true);
 
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
       } else {
@@ -55,7 +58,7 @@ export const ClosePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, chain]);
+  }, [programService, solanaWallet, props.pocket, chainId]);
 
   return (
     <Modal

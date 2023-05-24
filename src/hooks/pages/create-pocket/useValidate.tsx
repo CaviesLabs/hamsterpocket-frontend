@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useCreatePocketPage } from "./types";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 /** @dev Define validated schemas. */
 export interface ErrorValidateContext {
@@ -13,6 +15,7 @@ export interface ErrorValidateContext {
   stopLossAmount: string;
   batchVolume: string;
   startAt: string;
+  pocketName: string;
 }
 
 /**
@@ -21,6 +24,9 @@ export interface ErrorValidateContext {
 export const useValidate = (): { errors: ErrorValidateContext } => {
   /** @dev Initialize erros data. */
   const [errors, setErrors] = useState<ErrorValidateContext>();
+
+  /** @dev Get chain info. */
+  const { chainId } = usePlatformConfig();
 
   /** @dev The function to handle modifying error messageses. */
   const modifyErrors = useCallback(
@@ -43,6 +49,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     startAt,
     takeProfitAmount,
     stopLossAmount,
+    pocketName,
   } = useCreatePocketPage();
 
   /** @dev Init */
@@ -58,8 +65,19 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
       startAt: "",
       takeProfitAmount: "",
       stopLossAmount: "",
+      pocketName: "",
     });
   }, []);
+
+  /** @dev Watch changes in pocket name, required if chainId is SOL. */
+  useEffect(() => {
+    if (!createdEnable) return;
+    if (chainId !== ChainId.sol) return;
+    modifyErrors(
+      "pocketName",
+      !pocketName ? "Pocket name must be required" : ""
+    );
+  }, [pocketName, chainId]);
 
   /** @dev Watch changes in pocket start at. */
   useEffect(() => {

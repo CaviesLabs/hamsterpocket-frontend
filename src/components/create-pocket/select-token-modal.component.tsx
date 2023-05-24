@@ -3,13 +3,9 @@ import { Modal } from "antd";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon, SearchIcon } from "@/src/components/icons";
-import {
-  utilsProvider,
-  SOL_EXPLORE,
-  BSC_EXPLORE,
-  MUMBAI_EXPLORE,
-} from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { Input } from "@hamsterbox/ui-kit";
 
 export const TargetSelectTokenModal: FC<{
@@ -28,7 +24,7 @@ export const TargetSelectTokenModal: FC<{
   const { whiteLists } = useWhiteList();
 
   /** @dev Inject wallet account info. */
-  const { chain } = useAppWallet();
+  const { chainId, platformConfig } = usePlatformConfig();
 
   /** @dev Search token value. */
   const [search, setSearch] = useState("");
@@ -109,11 +105,9 @@ export const TargetSelectTokenModal: FC<{
                     </div>
                     <a
                       href={
-                        chain === "SOL"
+                        chainId === ChainId.sol
                           ? `${SOL_EXPLORE}/account/${token}`
-                          : process.env.EVM_CHAIN_ID === "matic"
-                          ? `${MUMBAI_EXPLORE}/token/${token}`
-                          : `${BSC_EXPLORE}/token/${token}`
+                          : `${platformConfig.explorerUrl}token/${token}`
                       }
                       target="_blank"
                       className="ml-[10px]"

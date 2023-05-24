@@ -7,6 +7,7 @@ import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { useSelector } from "react-redux";
 import State from "@/src/redux/entities/state";
 import useDebounce from "@/src/hooks/useDebounce";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 const options = [
   {
@@ -25,6 +26,7 @@ export default function PortfolioController() {
 
   const [search, setSearch] = useState("");
   const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const debouncedSearch: string = useDebounce<string>(search, 500);
 
   const portfoliosData = useSelector((state: State) => state.portfolios);
@@ -37,9 +39,10 @@ export default function PortfolioController() {
         ownerAddress: walletAddress,
         sortBy: selectedType,
         search,
+        chainId,
       })
     );
-  }, [walletAddress, debouncedSearch, selectedType]);
+  }, [walletAddress, debouncedSearch, selectedType, chainId]);
 
   return (
     <div className="mt-10 flow-root md:justify-between">

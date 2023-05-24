@@ -1,7 +1,7 @@
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { BigNumber } from "ethers";
-import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
+// import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
@@ -10,6 +10,7 @@ import {
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Keypair } from "@solana/web3.js";
 import { WSOL_ADDRESS } from "@/src/utils";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import bigDecimal from "js-big-decimal";
 
 /**
@@ -154,7 +155,9 @@ export const createdPocketPramsParserEvm = (
   targetTokenDecimals: number,
   realBaseTokenDecimals: number,
   realTargetTokenDecimals: number,
-  walletAddress: string
+  walletAddress: string,
+  ammRouterAddress: string,
+  ammRouterVersion: string
 ): Params.CreatePocketParamsStruct => {
   return {
     id: solCreatedPocketDto.id,
@@ -163,10 +166,8 @@ export const createdPocketPramsParserEvm = (
     /**
      * @dev Desired universal router based on evm chain id.
      */
-    ammRouterAddress:
-      process.env.EVM_CHAIN_ID === "matic"
-        ? MATIC_UNIVERSAL_ROUTER
-        : BSC_UNIVERSAL_ROUTER,
+    ammRouterVersion: ammRouterVersion,
+    ammRouterAddress: ammRouterAddress,
 
     /**
      * @dev Convert sol public key to eth string address.
@@ -234,13 +235,18 @@ export const createdPocketPramsParserEvm = (
  * @dev The function to convert list of tokens in evm to support sol chain.
  */
 export const makeAliasForEvmWhitelist = (
-  source: WhitelistEntity[]
+  source: WhitelistEntity[],
+  chainId: ChainId
 ): WhitelistEntity[] => {
-  let evmFilerted = source.filter((item) => item.chainId !== "solana");
+  let evmFilerted = source.filter((item) => item.chainId !== ChainId.sol);
+  evmFilerted = evmFilerted.filter((item) => item.chainId === chainId);
   let baseToken = "Wrapped Matic";
-  if (process.env.EVM_CHAIN_ID === "bsc") {
-    evmFilerted = evmFilerted.filter((item) => item.chainId === "bsc_mainnet");
+  if (chainId === ChainId.bnb) {
     baseToken = "Wrapped BNB";
+  } else if (chainId === ChainId.okt) {
+    baseToken = "Wrapped OKT";
+  } else if (chainId === ChainId.xdc) {
+    baseToken = "Wrapped XDC";
   }
 
   evmFilerted = evmFilerted.map((item) => {

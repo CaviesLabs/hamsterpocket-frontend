@@ -9,13 +9,8 @@ import {
   HistoryEntity,
 } from "@/src/entities/history.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import {
-  DATE_TIME_FORMAT,
-  SOL_EXPLORE,
-  MUMBAI_EXPLORE,
-  BSC_EXPLORE,
-} from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { DATE_TIME_FORMAT } from "@/src/utils";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import dayjs from "dayjs";
 
 export type TransactionItem = {
@@ -33,7 +28,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
     []
   );
 
-  const { chain } = useAppWallet();
+  const { platformConfig } = usePlatformConfig();
   const { whiteLists, findEntityByAddress } = useWhiteList();
 
   const baseToken = useMemo(
@@ -135,13 +130,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 </div>
                 <div className="col-span-2 ml-[10px] relative top-[-3px] mobile:col-span-1">
                   <a
-                    href={
-                      chain === "SOL"
-                        ? `${SOL_EXPLORE}/tx/${item.transactionId}`
-                        : process.env.EVM_CHAIN_ID === "matic"
-                        ? `${MUMBAI_EXPLORE}/tx/${item.transactionId}`
-                        : `${BSC_EXPLORE}/tx/${item.transactionId}`
-                    }
+                    href={`${platformConfig?.explorerUrl}tx/${item.transactionId}`}
                     target="_blank"
                     className="ml-[10px] relative top-[-5px]"
                   >

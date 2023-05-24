@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { PublicKey } from "@solana/web3.js";
 import { DurationObjectUnits } from "luxon";
@@ -20,6 +19,8 @@ import { SideMethod } from "@/src/dto/pocket.dto";
 import { union } from "lodash";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import {
   createdPocketPramsParserEvm,
@@ -27,14 +28,13 @@ import {
 } from "@/src/utils/evm.parser";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
-  /** @dev Inject router to use. */
-  const router = useRouter();
-
   /** @dev Inject wallet provider. */
   const { solanaWallet, programService } = useWallet();
 
   /** @dev Inject app wallet to get both sol & eth account info. */
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId, pushRouterWithChainId, platformConfig } =
+    usePlatformConfig();
 
   /** @dev Inject eth function. */
   const { createPocket: createEvmPocket, signer: evmSigner } = useEvmWallet();
@@ -47,9 +47,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [baseTokenAddress, setBaseTokenAddress] = useState<[PublicKey, number]>(
     [new PublicKey(WSOL_ADDRESS), 9]
   );
-  const [targetTokenAddress, setTargetTokenAddress] = useState<
-    [PublicKey?, number?]
-  >([]);
   const [batchVolume, setBatchVolume] = useState<number>(0);
   const [startAt, setStartAt] = useState<Date>(new Date());
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
@@ -59,6 +56,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [stopLossAmount, setStopLossAmount] = useState<number>();
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
+  const [targetTokenAddress, setTargetTokenAddress] = useState<
+    [PublicKey?, number?]
+  >([]);
 
   /** @dev Mint batch amount volume. */
   const [mintOrderSize, setMintOrderSize] = useState(0);
@@ -169,7 +169,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       if (!walletAddress) return;
 
       /** @dev Validate if all form be valid. */
-      if (!validateForms()) {
+      if (!(await validateForms())) {
         throw new Error("NOT::VALIDATION");
       }
 
@@ -184,7 +184,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       let marketId = "1111";
       let sideMethod: SideMethod = { sell: {} };
 
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         const [liqBase, _liqQoute, _marketId] = findPairLiquidity(
           baseAddress,
           targetAddress
@@ -208,10 +208,10 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
        */
       const solCreatedPocketData: SolCreatePocketDto = {
         id: ProgramService.generatePocketId(),
-        name: "pocketName",
+        name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(
-          chain === "SOL" ? liqQoute : targetAddress
+          chainId === ChainId.sol ? liqQoute : targetAddress
         ),
         startAt: new BN(
           parseInt((startAt.getTime() / 1000).toString()).toString()
@@ -243,7 +243,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         })),
       };
 
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         /**
          * @dev Execute interact with solana blockchain.
          */
@@ -254,6 +254,15 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
         console.log(response);
       } else {
+        let exchange = platformConfig?.whitelistedRouters?.[0];
+
+        /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
+        if (chainId === ChainId.bnb) {
+          exchange = platformConfig.whitelistedRouters.find(
+            (item) => item.ammTag === "uniswap"
+          );
+        }
+
         /**
          * @dev Process data from sol for evm.
          */
@@ -264,7 +273,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           targetTokenAddress[1],
           whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
           whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
-          walletAddress
+          walletAddress,
+          exchange?.address,
+          exchange?.isV3 ? "0" : "1"
         );
 
         /** @dev Process to get deposited amount in evm decimals. */
@@ -276,6 +287,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           depositedAmount,
           plufixWithDecimals
         );
+
+        console.log(evmDespositedAmount.toString());
 
         if (takeProfitAmount) {
           const evmTakeProfitAmount = convertBigNumber(
@@ -334,10 +347,12 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
     takeProfitAmount,
     stopLossAmount,
     createdEnable,
-    chain,
+    chainId,
     walletAddress,
     evmSigner,
     whiteLists,
+    platformConfig,
+    chainId,
     validateForms,
   ]);
 
@@ -347,7 +362,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       if (
         !baseTokenAddress.length ||
         !targetTokenAddress.length ||
-        chain === "ETH"
+        chainId !== ChainId.sol
       )
         return;
       /** @dev Convert address to string. */
@@ -360,17 +375,16 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       const ppair = findPairLiquidity(baseAddress, targetAddress);
       setMintOrderSize(ppair?.[3]);
     })();
-  }, [baseTokenAddress, targetTokenAddress, chain]);
+  }, [baseTokenAddress, targetTokenAddress, chainId]);
 
   /**
    * @dev Update base token when chain changed.
    */
   useEffect(() => {
-    if (chain === "ETH") {
-      console.log(chain);
+    if (chainId !== ChainId.sol) {
       setBaseTokenAddress([new PublicKey(ALIAS_WMATIC_ADDRESS), 9]);
     }
-  }, [chain]);
+  }, [chainId]);
 
   /**
    * @dev dynamically update a list of available base tokens based on
@@ -389,13 +403,15 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
    * the selected base token and the available liquidity data.
    */
   useEffect(() => {
-    if (chain === "ETH") {
+    if (chainId !== ChainId.sol) {
       return setAvailableTargetTokens(() => {
         return Object.keys(whiteLists)
           .filter((address) => {
             return (
               whiteLists?.[address].name !== "Wrapped Matic" &&
-              whiteLists?.[address].name !== "Wrapped BNB"
+              whiteLists?.[address].name !== "Wrapped BNB" &&
+              whiteLists?.[address].name !== "Wrapped OKT" &&
+              whiteLists?.[address].name !== "Wrapped XDC"
             );
           })
           .reverse();
@@ -417,7 +433,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           .filter((item) => item !== baseTokenAddress[0].toBase58().toString())
       );
     });
-  }, [liquidities, baseTokenAddress, chain, whiteLists]);
+  }, [liquidities, baseTokenAddress, chainId, whiteLists]);
 
   return (
     <CreatePocketContext.Provider
@@ -457,7 +473,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       {props.children}
       <SuccessTransactionModal
         isModalOpen={successCreated}
-        handleOk={() => router.push("/my-pockets")}
+        handleOk={() => pushRouterWithChainId("/my-pockets")}
         handleCancel={() => setSuccessCreated(false)}
         okMessage="Back to Home"
         message="You have created pocket and deposited successful"

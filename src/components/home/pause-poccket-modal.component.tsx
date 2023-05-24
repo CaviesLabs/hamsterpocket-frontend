@@ -6,6 +6,8 @@ import { useWallet } from "@/src/hooks/useWallet";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const PausePocketModal: FC<{
   isModalOpen: boolean;
@@ -16,7 +18,8 @@ export const PausePocketModal: FC<{
 }> = (props) => {
   /** @dev Inject propgram service to use. */
   const { programService, solanaWallet } = useWallet();
-  const { chain, walletAddress } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { chainId } = usePlatformConfig();
   const { pausePocket: pausePocketEvm } = useEvmWallet();
 
   /** @dev Process boolean. */
@@ -34,7 +37,7 @@ export const PausePocketModal: FC<{
       setLoading(true);
 
       /** @dev Execute transaction. */
-      if (chain === "SOL") {
+      if (chainId === ChainId.sol) {
         await programService.pausePocket(solanaWallet, props.pocket);
       } else {
         await pausePocketEvm(props.pocket._id || props.pocket.id);
@@ -47,7 +50,7 @@ export const PausePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, walletAddress]);
+  }, [programService, solanaWallet, props.pocket, walletAddress, chainId]);
 
   return (
     <Modal

@@ -1,11 +1,11 @@
 import type { NextPage } from "next";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
-import { useRouter } from "next/router";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { LayoutSection } from "@/src/components/layout-section";
 
 const StrageryPage: NextPage = () => {
-  const router = useRouter();
+  const { pushRouterWithChainId } = usePlatformConfig();
 
   return (
     <MainLayout>
@@ -17,7 +17,7 @@ const StrageryPage: NextPage = () => {
           <div className="md:grid md:grid-cols-2 md:gap-2 mt-[20px]">
             <div
               className="md:cols-span-1 mobile:w-full rounded-[12px] bg-dark100 px-[20px] py-[40px] mobile:py-[20px] cursor-pointer hover:bg-[#181927] mobile:flex"
-              onClick={() => router.push("/create-pocket")}
+              onClick={() => pushRouterWithChainId("/create-pocket")}
             >
               <div className="mobile:float-left mobile:w-[100px]">
                 <div className="p-[10px] rounded-[12px] bg-dark3 md:inline-block">

@@ -11,19 +11,14 @@ export const PoolInformation: FC = () => {
 
   return (
     <section>
-      <p className="mt-[20px] md:mt-[48px] text-[18px] md:text-[24px] text-white normal-text font-[600]">
+      <p className="mobile:text-[14px] text-[20px] text-dark50 regular-text">
         Pool information
+        <span className="text-red300 relative top-[-2px] right-[-2px]">*</span>
       </p>
       <div className="mt-[16px]">
-        <p className="text-dark10 text-[14px] normal-text">
-          Pocket name
-          <span className="text-red300 relative top-[-2px] right-[-2px]">
-            *
-          </span>
-        </p>
         <Input
           containerClassName="app-input w-full mt-1"
-          inputClassName="bg-dark90 !text-white !rounded-[16px] w-full"
+          inputClassName="bg-dark100 !text-white !rounded-[16px] w-full"
           placeholder="Enter pocket name"
           value={pocketName}
           onValueChange={(v) => setPocketName(v)}
