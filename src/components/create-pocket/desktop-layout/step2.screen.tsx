@@ -6,12 +6,15 @@ import {
   parseStopConditionHumanValue,
 } from "@/src/components/create-pocket";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export const CreatePocketStep2Desktop: FC = () => {
   /**
    * @dev Injected context.
    */
   const { stopConditions } = useCreatePocketPage();
+  const { chainId } = usePlatformConfig();
 
   return (
     <>
@@ -48,7 +51,7 @@ export const CreatePocketStep2Desktop: FC = () => {
           )}
         </div>
         <div className="md:col-span-1 max-w-[500px]">
-          <PocketTpSlSumary />
+          {chainId !== ChainId.sol ? <PocketTpSlSumary /> : null}
         </div>
       </div>
     </>

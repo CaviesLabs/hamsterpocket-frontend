@@ -23,7 +23,7 @@ export const PocketTpSlSumary: FC = () => {
   return (
     <div>
       <p className="mt-[20px] md:mt-[48px] text-[14px] md:text-[20px] text-dark50 regular-text">
-        Deposit amount
+        TP/SL
       </p>
       <div className="bg-dark100 rounded-[12px] p-[16px] mt-[12px]">
         <div className="flow-root border-b-[1px] border-solid border-[#1C1D2C] py-[20px]">
