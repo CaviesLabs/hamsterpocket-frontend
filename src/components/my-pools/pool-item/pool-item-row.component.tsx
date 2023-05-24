@@ -367,7 +367,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                 width="100%"
               />
             </div>
-            {data?.currentTargetTokenBalance > 0 ? (
+            {data?.currentTargetTokenBalance > 0 && chainId !== ChainId.sol ? (
               <div className="mobile:col-span-4">
                 <Button
                   className="!border-solid !border-purple300 !border-[2px] md:pool-control-btn ml-[10px] text-center"
