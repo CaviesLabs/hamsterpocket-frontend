@@ -8,10 +8,10 @@ import { HamsterboxIcon } from "@/src/components/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { ChainSelect } from "./chain-select";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
-import { ChainId } from "@/src/entities/platform-config.entity";
 
 const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -200,7 +200,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
           <div className="mobile:float-right mobile:flex mobile:items-center mobile:text-[14px] md:text-center">
             {data?.currentROIValue !== 0 &&
             data?.status !== PocketStatus.ENDED &&
-            data?.status !== PocketStatus.CLOSED ? (
+            data?.status !== PocketStatus.CLOSED &&
+            chainId !== ChainId.sol ? (
               <>
                 <p
                   className={`"md:text-center ${

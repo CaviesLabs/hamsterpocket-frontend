@@ -397,7 +397,7 @@ input:checked + .slider:before {
   background-color: transparent;
 }
 
-.b-mc.mb-3 div:first-child {
+.b-mc.mb-3, .b-mc div:first-child {
   border: 2px solid #ffffff !important;
   border-top: 2px solid #ffffff00 !important;
 }

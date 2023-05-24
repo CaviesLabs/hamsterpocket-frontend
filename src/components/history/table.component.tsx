@@ -89,7 +89,9 @@ export default function TableComponent() {
                           <div className="text-dark40 flex">
                             #{utilsProvider.makeShort(h.poolId)}
                             <a
-                              href={`/${chainId}/pocket/${poolDoc.address}`}
+                              href={`/${chainId}/pocket/${
+                                poolDoc.id || poolDoc._id
+                              }`}
                               target="_blank"
                               className="ml-2"
                             >
