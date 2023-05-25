@@ -411,7 +411,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
               whiteLists?.[address].name !== "Wrapped Matic" &&
               whiteLists?.[address].name !== "Wrapped BNB" &&
               whiteLists?.[address].name !== "Wrapped OKT" &&
-              whiteLists?.[address].name !== "Wrapped XDC"
+              whiteLists?.[address].name !== "Wrapped XDC" &&
+              whiteLists?.[address].name !== "Wrapped xDAI"
             );
           })
           .reverse();

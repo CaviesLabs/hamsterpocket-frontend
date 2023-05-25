@@ -247,6 +247,8 @@ export const makeAliasForEvmWhitelist = (
     baseToken = "Wrapped OKT";
   } else if (chainId === ChainId.xdc) {
     baseToken = "Wrapped XDC";
+  } else if (chainId === ChainId.gnosis) {
+    baseToken = "Wrapped xDAI";
   }
 
   evmFilerted = evmFilerted.map((item) => {

@@ -107,7 +107,7 @@ export const TargetSelectTokenModal: FC<{
                       href={
                         chainId === ChainId.sol
                           ? `${SOL_EXPLORE}/account/${token}`
-                          : `${platformConfig.explorerUrl}token/${token}`
+                          : `${platformConfig?.explorerUrl}token/${token}`
                       }
                       target="_blank"
                       className="ml-[10px]"
