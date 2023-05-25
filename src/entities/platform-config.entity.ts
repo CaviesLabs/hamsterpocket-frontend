@@ -1,4 +1,6 @@
 export interface PlatformConfigEntity {
+  chainName: string;
+  chainLogo: string;
   rpcUrl: string;
   chainId?: number;
   programAddress?: string;
@@ -20,6 +22,7 @@ export enum ChainId {
   okt = "okt",
   xdc = "xdc",
   sol = "solana",
+  gnosis = "gnosis",
 }
 
 export const chainInfos: { [key in ChainId]: number } = {
@@ -28,4 +31,5 @@ export const chainInfos: { [key in ChainId]: number } = {
   polygon_mumbai: 80001,
   xdc: 50,
   solana: 0,
+  gnosis: 100,
 };
