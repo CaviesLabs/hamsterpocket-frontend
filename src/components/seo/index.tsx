@@ -23,7 +23,7 @@ export const SeoComponent: FC = () => {
           locale: "en_US",
           images: [
             {
-              url: "https://pocket.hamsterbox.xyz/assets/images/banner_seo_bnb.png",
+              url: "https://pocket.hamsterbox.xyz/assets/images/banner_seo_multichain.png",
               width: 1024,
               height: 512,
               alt: `hero image for ${title}`,
@@ -281,7 +281,7 @@ export const SeoComponent: FC = () => {
       <meta property="og:url" content="https://pocket.hamsterbox.xyz/" />
       <meta
         property="og:image"
-        content="https://pocket.hamsterbox.xyz/assets/images/banner_seo_bnb.png"
+        content="https://pocket.hamsterbox.xyz/assets/images/banner_seo_multichain.png"
       />
       <meta
         property="og:image:alt"
@@ -302,7 +302,7 @@ export const SeoComponent: FC = () => {
       />
       <meta
         name="twitter:image"
-        content="https://pocket.hamsterbox.xyz/assets/images/banner_twitter_bnb.png"
+        content="https://pocket.hamsterbox.xyz/assets/images/banner_twitter_multichain.png"
       />
       <meta
         name="twitter:image:alt"
