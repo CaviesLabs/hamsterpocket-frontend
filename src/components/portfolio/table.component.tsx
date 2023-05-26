@@ -44,7 +44,7 @@ export default function TableComponent() {
                   href={
                     chainId === ChainId.sol
                       ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
-                      : `${platformConfig.explorerUrl}token/${h.tokenAddress}`
+                      : `${platformConfig?.explorerUrl}token/${h.tokenAddress}`
                   }
                   target="_blank"
                   className="flex justify-center items-center"

@@ -238,24 +238,21 @@ export const makeAliasForEvmWhitelist = (
   source: WhitelistEntity[],
   chainId: ChainId
 ): WhitelistEntity[] => {
+  /**
+   * @dev Filter based on chainId.
+   */
   let evmFilerted = source.filter((item) => item.chainId !== ChainId.sol);
   evmFilerted = evmFilerted.filter((item) => item.chainId === chainId);
-  let baseToken = "Wrapped Matic";
-  if (chainId === ChainId.bnb) {
-    baseToken = "Wrapped BNB";
-  } else if (chainId === ChainId.okt) {
-    baseToken = "Wrapped OKT";
-  } else if (chainId === ChainId.xdc) {
-    baseToken = "Wrapped XDC";
-  }
 
+  /**
+   * @dev Make alias for properties.
+   */
   evmFilerted = evmFilerted.map((item) => {
     return {
       ...item,
-      aliasAddress:
-        item?.name !== baseToken
-          ? Keypair.generate().publicKey.toBase58().toString()
-          : WSOL_ADDRESS,
+      aliasAddress: !item?.isNativeCoin
+        ? Keypair.generate().publicKey.toBase58().toString()
+        : WSOL_ADDRESS,
       realDecimals: item.decimals,
       decimals: 9,
     };

@@ -407,12 +407,14 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       return setAvailableTargetTokens(() => {
         return Object.keys(whiteLists)
           .filter((address) => {
-            return (
-              whiteLists?.[address].name !== "Wrapped Matic" &&
-              whiteLists?.[address].name !== "Wrapped BNB" &&
-              whiteLists?.[address].name !== "Wrapped OKT" &&
-              whiteLists?.[address].name !== "Wrapped XDC"
-            );
+            // return (
+            //   whiteLists?.[address].name !== "Wrapped Matic" &&
+            //   whiteLists?.[address].name !== "Wrapped BNB" &&
+            //   whiteLists?.[address].name !== "Wrapped OKT" &&
+            //   whiteLists?.[address].name !== "Wrapped XDC" &&
+            //   whiteLists?.[address].name !== "Wrapped xDAI"
+            // );
+            return !whiteLists?.[address]?.isNativeCoin;
           })
           .reverse();
       });

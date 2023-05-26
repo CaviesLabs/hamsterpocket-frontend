@@ -13,4 +13,5 @@ export type WhitelistEntity = {
   realDecimals?: number;
   chainId: ChainId;
   aliasAddress?: string;
+  isNativeCoin: boolean;
 };

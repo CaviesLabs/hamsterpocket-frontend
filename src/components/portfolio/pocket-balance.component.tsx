@@ -1,7 +1,6 @@
 import { FC, useMemo } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId } from "@/src/entities/platform-config.entity";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const PocketBalance: FC = () => {
@@ -13,21 +12,11 @@ export const PocketBalance: FC = () => {
 
   /** @dev Get native token info. */
   const nativeToken = useMemo(() => {
-    let symbol = "";
-    if (chainId === ChainId.bnb) {
-      symbol = "WBNB";
-    } else if (chainId === ChainId.sol) {
-      symbol = "SOL";
-    } else if (chainId === ChainId.polygon_mumbai) {
-      symbol = "WMATIC";
-    } else if (chainId === ChainId.xdc) {
-      symbol = "WXDC";
-    } else if (chainId === ChainId.okt) {
-      symbol = "WOKT";
-    }
-
+    /**
+     * @dev Filter to get native coin.
+     */
     const keyFound = Object.keys(whiteLists).find(
-      (key) => whiteLists[key]?.symbol === symbol
+      (key) => whiteLists[key]?.isNativeCoin
     );
     return whiteLists?.[keyFound];
   }, [platformConfig, chainId, whiteLists]);

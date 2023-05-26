@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useMemo, useRef, useState } from "react";
 import { DropdownArrowIcon } from "@/src/components/icons";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
@@ -6,39 +6,8 @@ import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
-export type ChainItem = {
-  id: string;
-  image: string;
-  name?: string;
-};
-
-const chains: ChainItem[] = [
-  {
-    id: "bnb",
-    image: "/assets/images/bnb.svg",
-  },
-  {
-    id: "xdc",
-    image: "https://xinfin.org/assets/images/brand-assets/xdc-icon.png",
-  },
-  {
-    id: "okt",
-    image:
-      "https://cdn.bitkeep.vip/u_b_1697a330-c21d-11ed-bb06-6b42bb500220.png",
-  },
-  {
-    id: "polygon_mumbai",
-    image: "/assets/images/matic.png",
-    name: "mumbai",
-  },
-  {
-    id: "solana",
-    image: "/assets/images/solana.svg",
-  },
-];
-
 export const ChainSelect: FC = () => {
-  const { chainId, switchChainId } = usePlatformConfig();
+  const { chainId, switchChainId, chainInfos } = usePlatformConfig();
   const { walletAddress } = useAppWallet();
 
   /**
@@ -55,6 +24,15 @@ export const ChainSelect: FC = () => {
   useOnClickOutside(ref, () => {
     setShow(false);
   });
+
+  const chains = useMemo(() => {
+    if (!chainInfos) return [];
+    return Object.keys(chainInfos).map((key) => ({
+      id: key,
+      name: chainInfos?.[key]?.chainName,
+      image: chainInfos?.[key]?.chainLogo,
+    }));
+  }, [chainInfos]);
 
   return (
     <div

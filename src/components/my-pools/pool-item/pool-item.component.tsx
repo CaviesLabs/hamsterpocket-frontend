@@ -116,7 +116,7 @@ export const PoolItem = (props: PoolItemProps) => {
             href={
               chainId === ChainId.sol
                 ? `${SOL_EXPLORE}/account/${data.address}`
-                : `${platformConfig.explorerUrl}token/${data.address}`
+                : `${platformConfig?.explorerUrl}token/${data.address}`
             }
             target="_blank"
             className="ml-[10px] relative top-[-3px]"

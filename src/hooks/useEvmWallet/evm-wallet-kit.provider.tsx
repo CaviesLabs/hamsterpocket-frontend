@@ -8,7 +8,7 @@ import {
 } from "react";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { bsc, polygonMumbai, okc, xdc } from "wagmi/chains";
+import { bsc, polygonMumbai, okc, xdc, gnosis } from "wagmi/chains";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -32,6 +32,8 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       customChains = polygonMumbai;
     } else if (chainId === ChainId.xdc) {
       customChains = xdc;
+    } else if (chainId === ChainId.gnosis) {
+      customChains = gnosis;
     } else {
       customChains = bsc;
     }

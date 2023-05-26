@@ -55,7 +55,7 @@ const Layout = (props: LayoutProps) => {
           <section className="md:flex md:items-center">
             <div className="w-full md:!hidden">
               <img
-                src="/assets/images/banner-icon-bnb.png"
+                src="/assets/images/banner-icon-multichain.png"
                 alt="Image"
                 className="w-full h-[auto]"
               />
@@ -111,7 +111,7 @@ const Layout = (props: LayoutProps) => {
             </div>
             <div className="w-full md:w-[35%] mt-28 mobile:!hidden">
               <img
-                src="/assets/images/banner-icon-bnb.png"
+                src="/assets/images/banner-icon-multichain.png"
                 alt="Image"
                 className="w-full h-[auto]"
               />

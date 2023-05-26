@@ -24,6 +24,7 @@ export type WhiteListConfigs = {
 export const PlatformConfigContext = createContext<{
   chainId: ChainId;
   platformConfig: PlatformConfigEntity;
+  chainInfos: { [key: string]: PlatformConfigEntity };
 
   /**
    * @dev Dex url based on platformConfig for each chains.
@@ -116,6 +117,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
         chainId: desiredChainId,
         platformConfig: platformConfigBasedDesiredChainId,
         dexUrl,
+        chainInfos: platformConfig,
         switchChainId: (chainId: string) => handleSwitchChain(chainId),
         pushRouterWithChainId: (uri: "self" | string) =>
           router.push(
