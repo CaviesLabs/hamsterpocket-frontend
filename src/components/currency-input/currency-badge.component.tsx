@@ -90,7 +90,7 @@ export const CurrencyBage: FC<CurrencyPage> = (props) => {
         className={classNames(
           "rounded-full",
           addressSelected
-            ? "w-[64px] h-[64px] mobile:!w-[24px] mobile:!h-[24px] mx-auto"
+            ? "!w-[64px] !h-[64px] mobile:!w-[24px] mobile:!h-[24px] mx-auto !block"
             : "invisible"
         )}
         src={

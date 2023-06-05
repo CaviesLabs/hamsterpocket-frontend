@@ -122,7 +122,7 @@ export const DCAPPair: FC = () => {
                     disabledInput={true}
                     disableDropdown={true}
                     onClick={() => setTokenSelectDisplayed(true)}
-                    dropdownIconDisplayed={true}
+                    dropdownIconDisplayed={false}
                     onAddressSelect={(address, decimals) =>
                       handleTargetTokenSelect(address, decimals)
                     }
