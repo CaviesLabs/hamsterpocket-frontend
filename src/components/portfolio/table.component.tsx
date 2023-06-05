@@ -1,4 +1,4 @@
-import { MdOpenInNew } from "react-icons/all";
+import { MdOpenInNew } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import State from "@/src/redux/entities/state";

@@ -1,6 +1,6 @@
 import { Doughnut } from "react-chartjs-2";
 import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
-import { RiQuestionnaireFill } from "react-icons/all";
+import { RiQuestionnaireFill } from "react-icons/ri";
 Chart.register(ArcElement, Legend, Tooltip);
 import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";

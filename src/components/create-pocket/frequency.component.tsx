@@ -3,7 +3,7 @@ import { FC, useCallback, useState } from "react";
 import { TIME_CONDITIONS } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { FrequencyConditionType } from "@/src/entities/pocket.entity";
-import { RiQuestionnaireFill } from "react-icons/all";
+import { RiQuestionnaireFill } from "react-icons/ri";
 import { ToolTip } from "@/src/components/tooltip";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import classNames from "classnames";
