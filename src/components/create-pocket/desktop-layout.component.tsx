@@ -35,7 +35,7 @@ export const CreatePocketDesktopLayout: FC = () => {
   /** @dev The function when click on action button. */
   const handleClickContinue = useCallback(() => {
     if (currentStep <= 1) {
-      stepperRef.current.nextHandler();
+      stepperRef && stepperRef?.current?.nextHandler();
       setCurrentStep(currentStep + 1);
     } else {
       handleCreatePocket();
@@ -151,7 +151,7 @@ export const CreatePocketDesktopLayout: FC = () => {
               className="float-right !border-solid !border-purple300 !border-[2px]  !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0  normal-text font-semibold"
               onClick={() => {
                 setCurrentStep(currentStep - 1);
-                stepperRef.current.prevHandler();
+                stepperRef && stepperRef?.current?.prevHandler();
               }}
               theme={{
                 backgroundColor: "transparent",
