@@ -1134,3 +1134,41 @@ export const CloseIcon: FC<IconProps> = (props) => (
     />
   </svg>
 );
+
+export const DropdownIconAdvancedSetting: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width="16"
+    height="17"
+    viewBox="0 0 16 17"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1 5.49951L8 11.4995L15 5.49951"
+      stroke="#735CF7"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const UnDropdownIconAdvancedSetting: FC<IconProps> = (props) => (
+  <svg
+    className={props.className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M1 10.9995L8 4.99951L15 10.9995"
+      stroke="#735CF7"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

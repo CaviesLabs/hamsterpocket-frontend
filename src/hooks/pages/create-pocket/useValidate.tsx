@@ -47,8 +47,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     batchVolume,
     depositedAmount,
     startAt,
-    takeProfitAmount,
-    stopLossAmount,
     pocketName,
   } = useCreatePocketPage();
 
@@ -127,25 +125,25 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     );
   }, [depositedAmount, createdEnable, batchVolume]);
 
-  useEffect(() => {
-    if (!createdEnable) return;
-    modifyErrors(
-      "takeProfitAmount",
-      takeProfitAmount !== undefined && takeProfitAmount <= 0
-        ? "Must to set token amount to take profit"
-        : ""
-    );
-  }, [takeProfitAmount, createdEnable]);
+  // useEffect(() => {
+  //   if (!createdEnable) return;
+  //   modifyErrors(
+  //     "takeProfitAmount",
+  //     takeProfitAmount !== undefined && takeProfitAmount <= 0
+  //       ? "Must to set token amount to take profit"
+  //       : ""
+  //   );
+  // }, [takeProfitAmount, createdEnable]);
 
-  useEffect(() => {
-    if (!createdEnable) return;
-    modifyErrors(
-      "stopLossAmount",
-      stopLossAmount !== undefined && stopLossAmount <= 0
-        ? "Must to set token amount stop loss"
-        : ""
-    );
-  }, [stopLossAmount, createdEnable]);
+  // useEffect(() => {
+  //   if (!createdEnable) return;
+  //   modifyErrors(
+  //     "stopLossAmount",
+  //     stopLossAmount !== undefined && stopLossAmount <= 0
+  //       ? "Must to set token amount stop loss"
+  //       : ""
+  //   );
+  // }, [stopLossAmount, createdEnable]);
 
   return {
     errors,

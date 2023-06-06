@@ -184,7 +184,7 @@ export const Ref: ForwardRefRenderFunction<
           );
         })}
       </ul>
-      {!props.hiddenContent && (
+      {/* {!props.hiddenContent && (
         <div className="relative">
           <div className="absolute w-full top-14 left-0">
             <div className="flex">
@@ -201,7 +201,7 @@ export const Ref: ForwardRefRenderFunction<
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

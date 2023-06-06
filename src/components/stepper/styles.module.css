@@ -1,5 +1,5 @@
 .progress-bar-wrapper {
-  padding: 2rem;
+  padding: 20px 0;
   font-family: poppins-regular;
 }
 .progress-bar-wrapper, .progress-bar-wrapper * {
@@ -31,7 +31,7 @@
   right: 50%;
   transform: translateY(-50%);
   z-index: -1;
-  background: linear-gradient(to left, #ffff 50%, #735CF7 50%);
+  background: linear-gradient(to left, #242636 50%, #735CF7 50%);
 	background-size: 200% 100%;
   background-position: right bottom;
   transition: background-position 200ms ease-in-out;
@@ -39,7 +39,7 @@
 .progress-step.secondary::before {
   transform: translateY(-50%);
   z-index: -1;
-  background: linear-gradient(to left, #E5E0FF 50%, #735CF7 50%);
+  background: linear-gradient(to left, #242636 50%, #735CF7 50%);
   background-size: 200% 100%;
   background-position: right bottom;
   transition: background-position 200ms ease-in-out;
@@ -49,8 +49,8 @@
 }
 .progress-step .step-index,
 .progress-step .step-icon {
-  background-color: #ffff;
-  color: var(--text-normal);
+  background-color: #242636;
+  color: #7886A0;
   border-radius: 50%;
   height: 2.5rem;
   width: 2.5rem;
@@ -62,7 +62,7 @@
 }
 .progress-step .step-index.secondary,
 .progress-step .step-icon.secondary {
-  background-color: #E5E0FF; 
+  background-color: #242636; 
   color: #5F6C87;
 }
 .step-index, .step-icon {
@@ -75,6 +75,7 @@
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
+  font-size: 14px;
 }
 .progress-step .step-label-subtitle {
   display: block;
@@ -86,6 +87,9 @@
 }
 .progress-step.completed .step-icon:hover {
   background-color: #42997f;
+}
+.progress-step.completed .step-label {
+  color: white;
 }
 .progress-step.current .step-index {
   background-color: #735CF7;

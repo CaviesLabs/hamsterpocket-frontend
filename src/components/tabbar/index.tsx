@@ -7,6 +7,7 @@ import {
   TabStrategyIcon,
 } from "@/src/components/icons";
 import classNames from "classnames";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export interface TabbarMenuItem {
   name: string;
@@ -17,6 +18,7 @@ export interface TabbarMenuItem {
 
 export const TabBar: FC = () => {
   const router = useRouter();
+  const { chainId } = usePlatformConfig();
 
   /**
    * @dev Define @arrays of each tab items.
@@ -25,22 +27,22 @@ export const TabBar: FC = () => {
     () => [
       {
         name: "My Pockets",
-        uri: "/my-pockets",
+        uri: chainId ? `/${chainId}/my-pockets` : "/my-pockets",
         icon: (color: string) => <TabMenuIcon color={color} />,
       },
       {
         name: "Strategy",
-        uri: "/strategy",
+        uri: chainId ? `/${chainId}/strategy` : "/strategy",
         icon: (color: string) => <TabStrategyIcon color={color} />,
       },
       {
         name: "History",
-        uri: "/history",
+        uri: chainId ? `/${chainId}/history` : "/history",
         icon: (color: string) => <TabHistoryIcon color={color} />,
       },
       {
         name: "Profile",
-        uri: "/profile",
+        uri: chainId ? `/${chainId}/profile` : "/profile",
         icon: (color: string) => <TabProfileIcon color={color} />,
       },
     ],
