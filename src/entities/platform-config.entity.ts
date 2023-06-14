@@ -23,6 +23,7 @@ export enum ChainId {
   xdc = "xdc",
   sol = "solana",
   gnosis = "gnosis",
+  avax = "avaxc",
 }
 
 export const chainInfos: { [key in ChainId]: number } = {
@@ -32,4 +33,5 @@ export const chainInfos: { [key in ChainId]: number } = {
   xdc: 50,
   solana: 0,
   gnosis: 100,
+  avaxc: 43114,
 };
