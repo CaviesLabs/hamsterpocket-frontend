@@ -79,8 +79,6 @@ export const convertToEtherStopCondition = (
  */
 export const convertToEtherBuyCondition = (
   solBuyCondition: SolBuyConditionOnChain,
-  baseTokenDecimals: number,
-  realBaseTokenDecimals: number,
   targetTokenDecimals: number,
   realTargetTokenDecimals: number
 ) => {
@@ -118,22 +116,26 @@ export const convertToEtherBuyCondition = (
   if (solBuyCondition[type].fromValue) {
     const fromValueReverted =
       solBuyCondition[type].fromValue.toNumber() /
-      Math.pow(10, baseTokenDecimals);
+      Math.pow(10, targetTokenDecimals);
     const toValueReverted =
       solBuyCondition[type].toValue.toNumber() /
       Math.pow(10, targetTokenDecimals);
     return {
       operator,
-      value0: convertBigNumber(fromValueReverted, 10 ** realBaseTokenDecimals),
+      value0: convertBigNumber(
+        fromValueReverted,
+        10 ** realTargetTokenDecimals
+      ),
       value1: convertBigNumber(toValueReverted, 10 ** realTargetTokenDecimals),
     };
   } else {
     const valueReverted =
-      solBuyCondition[type].value.toNumber() / Math.pow(10, baseTokenDecimals);
+      solBuyCondition[type].value.toNumber() /
+      Math.pow(10, targetTokenDecimals);
     return {
       operator,
-      value0: convertBigNumber(valueReverted, 10 ** realBaseTokenDecimals),
-      value1: convertBigNumber(valueReverted, 10 ** realBaseTokenDecimals),
+      value0: convertBigNumber(valueReverted, 10 ** realTargetTokenDecimals),
+      value1: convertBigNumber(valueReverted, 10 ** realTargetTokenDecimals),
     };
   }
 };
@@ -159,6 +161,7 @@ export const createdPocketPramsParserEvm = (
   ammRouterAddress: string,
   ammRouterVersion: string
 ): Params.CreatePocketParamsStruct => {
+  console.log({ realTargetTokenDecimals, realBaseTokenDecimals });
   return {
     id: solCreatedPocketDto.id,
     owner: walletAddress,
@@ -215,8 +218,6 @@ export const createdPocketPramsParserEvm = (
     }`,
     openingPositionCondition: convertToEtherBuyCondition(
       solCreatedPocketDto.buyCondition,
-      baseTokenDecimals,
-      realBaseTokenDecimals,
       targetTokenDecimals,
       realTargetTokenDecimals
     ),
@@ -257,5 +258,6 @@ export const makeAliasForEvmWhitelist = (
       decimals: 9,
     };
   });
+  console.log(evmFilerted);
   return evmFilerted;
 };
