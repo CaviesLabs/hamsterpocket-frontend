@@ -4,7 +4,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
 export const PocketTpSlSumary: FC = () => {
   /** @dev Inject needed modules to get token account. */
-  const { whiteLists, findEntityByAddress } = useWhiteList();
+  const { whiteLists, findEntityByAddress, analyzeDecimals } = useWhiteList();
 
   /**
    * @dev Injected context.
@@ -31,7 +31,7 @@ export const PocketTpSlSumary: FC = () => {
           <p className="text-white normal-text float-right">
             {takeProfitAmount ? (
               <>
-                at price {takeProfitAmount} {baseToken?.symbol}
+                at price {analyzeDecimals(takeProfitAmount)} {baseToken?.symbol}
               </>
             ) : (
               "N/A"
@@ -43,7 +43,7 @@ export const PocketTpSlSumary: FC = () => {
           <p className="text-white normal-text float-right">
             {stopLossAmount ? (
               <>
-                at price {stopLossAmount} {baseToken?.symbol}
+                at price {analyzeDecimals(stopLossAmount)} {baseToken?.symbol}
               </>
             ) : (
               "N/A"
