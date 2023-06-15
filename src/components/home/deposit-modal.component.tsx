@@ -38,8 +38,12 @@ export const DepositModal: FC<{
   } = useEvmWallet();
 
   /** @dev Inject whitelist provider to use. */
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
 
   /** @dev Deposited amount. */
   const [depositedAmount, setDepositedAmount] = useState<BN>();
@@ -160,7 +164,9 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {chainId === ChainId.sol ? baseBalance?.toFixed(4) : ethSolBalance}{" "}
+            {chainId === ChainId.sol
+              ? analyzeDecimals(baseBalance)
+              : ethSolBalance}{" "}
             {baseToken.symbol}
           </p>
           <Button

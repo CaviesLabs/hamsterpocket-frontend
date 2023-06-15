@@ -29,7 +29,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
   );
 
   const { platformConfig } = usePlatformConfig();
-  const { whiteLists, findEntityByAddress } = useWhiteList();
+  const { whiteLists, findEntityByAddress, analyzeDecimals } = useWhiteList();
 
   const baseToken = useMemo(
     () =>
@@ -92,23 +92,27 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 </div>
                 <div className="col-span-4 text-center flex items-center justify-center mobile:col-span-5">
                   {item.type === PoolType.SWAPPED ? (
-                    <p>{`${item.baseTokenAmount?.toFixed(3)} ${
-                      baseToken?.symbol
-                    }`}</p>
+                    <p>
+                      {analyzeDecimals(item.baseTokenAmount)}
+                      {`${baseToken?.symbol}`}
+                    </p>
                   ) : (
-                    <p>{`${item.targetTokenAmount?.toFixed(3)} ${
-                      targetToken?.symbol
-                    }`}</p>
+                    <p>
+                      {analyzeDecimals(item.targetTokenAmount)}
+                      {`${targetToken?.symbol}`}
+                    </p>
                   )}
                   <RightArrowIcon className="md:mx-[20px]" />
                   {item.type === PoolType.SWAPPED ? (
-                    <p>{`${item.targetTokenAmount?.toFixed(3)} ${
-                      targetToken?.symbol
-                    }`}</p>
+                    <p>
+                      {analyzeDecimals(item.targetTokenAmount)}
+                      {`${targetToken?.symbol}`}
+                    </p>
                   ) : (
-                    <p>{`${item.baseTokenAmount?.toFixed(3)} ${
-                      baseToken?.symbol
-                    }`}</p>
+                    <p>
+                      {analyzeDecimals(item.baseTokenAmount)}
+                      {`${baseToken?.symbol}`}
+                    </p>
                   )}
                 </div>
                 <div className="col-span-2 text-center mobile:hidden">

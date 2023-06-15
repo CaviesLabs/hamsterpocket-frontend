@@ -9,8 +9,12 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
 
   /** @dev Inject context. */
   const { chainId } = usePlatformConfig();
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
 
   /** @dev Get base token info. */
   const baseToken = useMemo(
@@ -76,10 +80,12 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
             {baseToken?.symbol}
           </p> */}
           <p className="text-white normal-text">
-            {convertDecimalAmount(
-              targetToken?.address,
-              pocket?.currentReceivedTargetToken
-            )?.toFixed(3)}{" "}
+            {analyzeDecimals(
+              convertDecimalAmount(
+                targetToken?.address,
+                pocket?.currentReceivedTargetToken
+              )
+            )}{" "}
             {targetToken?.symbol}
           </p>
         </div>
@@ -89,7 +95,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
         <p className="text-white normal-text float-right">
           {averagePrice ? (
             <>
-              1 {baseToken?.symbol} = {averagePrice?.toFixed(3)}{" "}
+              1 {baseToken?.symbol} = {analyzeDecimals(averagePrice)}{" "}
               {targetToken?.symbol}
             </>
           ) : (
@@ -107,8 +113,8 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
                 : "text-green300"
             } normal-text float-right`}
           >
-            {pocket?.currentROIValue?.toFixed(5) || 0} {baseToken?.symbol} (
-            {pocket?.currentROI?.toFixed(3) || 0}%)
+            {analyzeDecimals(pocket?.currentROIValue) || 0} {baseToken?.symbol}{" "}
+            ({analyzeDecimals(pocket?.currentROI) || 0}%)
           </p>
         </div>
       ) : null}

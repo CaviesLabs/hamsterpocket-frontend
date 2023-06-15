@@ -8,7 +8,7 @@ export const PocketBalance: FC = () => {
   const { totalSOL, totalUSD } = usePocketBalance();
   /** @dev Inject wallet account info. */
   const { chainId, platformConfig } = usePlatformConfig();
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, analyzeDecimals } = useWhiteList();
 
   /** @dev Get native token info. */
   const nativeToken = useMemo(() => {
@@ -34,14 +34,14 @@ export const PocketBalance: FC = () => {
           />
         </div>
         <div className="text-white ml-3 text-[32px] mobile:text-[14px]">
-          ~ {totalSOL?.toFixed(5)} {nativeToken?.symbol}
+          ~ {analyzeDecimals(totalSOL)} {nativeToken?.symbol}
         </div>
       </div>
       <div className="text-dark10 normal-text mobile:text-[14px] mt-[10px] text-[16px]">
         Estimated USD Value
       </div>
       <div className="text-green mt-1 mobile:text-[14px] text-[24px]">
-        (~ ${`${totalUSD?.toFixed(2)}`})
+        (~ ${analyzeDecimals(totalUSD)})
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export const PoolItemBuyConditionComponent = (
   props: PoolItemBuyConditionComponentProps
 ) => {
   const { data, baseToken, targetToken } = props;
-  const { convertDecimalAmount } = useWhiteList();
+  const { convertDecimalAmount, analyzeDecimals } = useWhiteList();
 
   const humanBuyConditionType = () => {
     const baseAmount = convertDecimalAmount(
@@ -23,37 +23,62 @@ export const PoolItemBuyConditionComponent = (
     const targetLeftAmount = convertDecimalAmount(
       data?.targetTokenAddress,
       data?.buyCondition?.value?.[0]
-    )?.toFixed(3);
+    );
     const targetRightAmount =
       data?.buyCondition?.value?.[1] &&
       convertDecimalAmount(
         data?.targetTokenAddress,
         data?.buyCondition?.value[1]
-      )?.toFixed(3);
+      );
     const baseSymbol = baseToken?.symbol;
     const targetSymbol = targetToken?.symbol;
 
     switch (data?.buyCondition?.type?.toLowerCase()) {
       case PriceConditionType.GT:
-        return `${baseAmount} ${baseSymbol} > ${targetLeftAmount} ${targetSymbol}`;
+        return (
+          <span>
+            {baseAmount} {baseSymbol} {`>`} {analyzeDecimals(targetLeftAmount)}{" "}
+            {targetSymbol}
+          </span>
+        );
       case PriceConditionType.GTE:
-        return `${baseAmount} ${baseSymbol} >= ${targetLeftAmount} ${targetSymbol}`;
+        return (
+          <span>
+            {baseAmount} {baseSymbol} {`>=`} {analyzeDecimals(targetLeftAmount)}{" "}
+            {targetSymbol}
+          </span>
+        );
       case PriceConditionType.LT:
-        return `${baseAmount} ${baseSymbol} < ${targetLeftAmount} ${targetSymbol}`;
+        return (
+          <span>
+            {baseAmount} {baseSymbol} {`<`} {analyzeDecimals(targetLeftAmount)}{" "}
+            {targetSymbol}
+          </span>
+        );
       case PriceConditionType.LTE:
-        return `${baseAmount} ${baseSymbol} <= ${targetLeftAmount} ${targetSymbol}`;
+        return (
+          <span>
+            {baseAmount} {baseSymbol} {`<=`} {analyzeDecimals(targetLeftAmount)}{" "}
+            {targetSymbol}
+          </span>
+        );
       case PriceConditionType.EQ:
-        return `${baseAmount} ${baseSymbol} = ${targetLeftAmount} ${targetSymbol}`;
+        return (
+          <span>
+            {baseAmount} {baseSymbol} = {analyzeDecimals(targetLeftAmount)}{" "}
+            {targetSymbol}
+          </span>
+        );
       case PriceConditionType.BW:
         return (
           <div>
             <p>
-              {baseAmount} {baseSymbol} {">="} {targetLeftAmount} {targetSymbol}{" "}
-              and
+              {baseAmount} {baseSymbol} {">="}{" "}
+              {analyzeDecimals(targetLeftAmount)} {targetSymbol} and
             </p>
             <p>
-              {baseAmount} {baseSymbol} {"<="} {targetRightAmount}{" "}
-              {targetSymbol}
+              {baseAmount} {baseSymbol} {"<="}{" "}
+              {analyzeDecimals(targetRightAmount)} {targetSymbol}
             </p>
           </div>
         );
@@ -61,12 +86,12 @@ export const PoolItemBuyConditionComponent = (
         return (
           <div>
             <p>
-              {baseAmount} {baseSymbol} {"<="} {targetLeftAmount} {targetSymbol}{" "}
-              or
+              {baseAmount} {baseSymbol} {"<="}{" "}
+              {analyzeDecimals(targetLeftAmount)} {targetSymbol} or
             </p>
             <p>
-              {baseAmount} {baseSymbol} {">="} {targetRightAmount}{" "}
-              {targetSymbol}
+              {baseAmount} {baseSymbol} {">="}{" "}
+              {analyzeDecimals(targetRightAmount)} {targetSymbol}
             </p>
           </div>
         );
@@ -118,7 +143,9 @@ export const PoolItemBuyConditionComponent = (
   return (
     <div className="text-white normal-text text-center mobile:text-[14px]">
       <p>
-        {convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)}{" "}
+        {analyzeDecimals(
+          convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)
+        )}
         {baseToken?.symbol} {handleRenderFrequency()}
       </p>
       <p className="mt-[5px] text-[12px] text-dark50">
