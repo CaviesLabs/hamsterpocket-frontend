@@ -6,8 +6,12 @@ export const PocketTpSl: FC<{ pocket: PocketEntity }> = (props) => {
   const pocket = props.pocket;
 
   /** @dev Inject needed modules to get token account. */
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
 
   /** @dev Get base token info. */
   const baseToken = useMemo(
@@ -27,9 +31,11 @@ export const PocketTpSl: FC<{ pocket: PocketEntity }> = (props) => {
             {pocket?.takeProfitCondition?.value ? (
               <>
                 at price{" "}
-                {convertDecimalAmount(
-                  baseToken?.address,
-                  pocket?.takeProfitCondition?.value
+                {analyzeDecimals(
+                  convertDecimalAmount(
+                    baseToken?.address,
+                    pocket?.takeProfitCondition?.value
+                  )
                 )}{" "}
                 {baseToken?.symbol}
               </>
@@ -44,9 +50,11 @@ export const PocketTpSl: FC<{ pocket: PocketEntity }> = (props) => {
             {pocket?.stopLossCondition?.value ? (
               <>
                 at price{" "}
-                {convertDecimalAmount(
-                  baseToken?.address,
-                  pocket?.stopLossCondition?.value
+                {analyzeDecimals(
+                  convertDecimalAmount(
+                    baseToken?.address,
+                    pocket?.stopLossCondition?.value
+                  )
                 )}{" "}
                 {baseToken?.symbol}
               </>
