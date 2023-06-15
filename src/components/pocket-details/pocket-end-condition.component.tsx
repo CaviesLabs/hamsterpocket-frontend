@@ -26,8 +26,12 @@ export const EndCondition: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
 
   /** @dev Inject needed modules to get token account. */
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
 
   /** @dev Get base token info. */
   const baseToken = useMemo(
@@ -57,28 +61,43 @@ export const EndCondition: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
   if (stopConditions?.baseTokenReach) {
     conditions.push([
       "Base token amount reach",
-      `${convertDecimalAmount(
-        targetToken?.address,
-        stopConditions?.baseTokenReach
-      )} ${targetToken?.symbol}`,
+      <span>
+        {analyzeDecimals(
+          convertDecimalAmount(
+            targetToken?.address,
+            stopConditions?.baseTokenReach
+          )
+        )}
+        {targetToken?.symbol}
+      </span>,
     ]);
   }
   if (stopConditions?.receivedTargetTokenReach) {
     conditions.push([
       "Target token amount reach",
-      `${convertDecimalAmount(
-        targetToken?.address,
-        stopConditions?.receivedTargetTokenReach
-      )} ${targetToken?.symbol}`,
+      <span>
+        {analyzeDecimals(
+          convertDecimalAmount(
+            targetToken?.address,
+            stopConditions?.receivedTargetTokenReach
+          )
+        )}
+        {targetToken?.symbol}
+      </span>,
     ]);
   }
   if (stopConditions?.spentBaseTokenReach) {
     conditions.push([
       "Spent base token amount reach",
-      `${convertDecimalAmount(
-        baseToken?.address,
-        stopConditions?.spentBaseTokenReach
-      )} ${baseToken?.symbol}`,
+      <span>
+        {analyzeDecimals(
+          convertDecimalAmount(
+            baseToken?.address,
+            stopConditions?.spentBaseTokenReach
+          )
+        )}
+        {baseToken?.symbol}
+      </span>,
     ]);
   }
   if (stopConditions?.batchAmountReach) {
