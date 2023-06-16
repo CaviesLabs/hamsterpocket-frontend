@@ -171,12 +171,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           {veryComplexDecimalsValue.toFixed(5).replace(/0+$/, "")}
         </span>
       );
-      // return {
-      //   value: veryComplexDecimalsValue,
-      //   totalZero: undefined,
-      //   restValue: undefined,
-      //   baseValue: undefined,
-      // };
     }
 
     const baseValue = newStr.split(".")[0];
@@ -185,20 +179,13 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     const restValue = newStr.replace(`${baseValue}${matchedStr}`, "");
     return (
       <span className="mx-[3px]">
-        {baseValue}.<sub>{totalZero}</sub>
+        {baseValue}.0<sub>{totalZero - 1}</sub>
         {(restValue.length > 5 ? restValue.substring(0, 5) : restValue).replace(
           /0+$/,
           ""
         )}
       </span>
     );
-
-    // return {
-    //   value: veryComplexDecimalsValue,
-    //   baseValue,
-    //   totalZero,
-    //   restValue,
-    // };
   };
 
   return (
