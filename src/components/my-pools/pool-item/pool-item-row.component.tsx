@@ -214,8 +214,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } normal-text"`}
                 >
-                  {analyzeDecimals(data?.currentROIValue) || 0}{" "}
-                  {baseToken?.symbol}
+                  {data?.currentROIValue?.toFixed(2) || 0} {baseToken?.symbol}
                 </p>
                 <p
                   className={`md:text-center md:mt-[5px] ${
@@ -224,7 +223,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } mobile:ml-[5px]`}
                 >
-                  ({analyzeDecimals(data?.currentROI) || 0}%)
+                  ({data?.currentROI.toFixed(2) || 0}%)
                 </p>
               </>
             ) : (
