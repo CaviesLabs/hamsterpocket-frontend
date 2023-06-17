@@ -224,7 +224,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } mobile:ml-[5px]`}
                 >
-                  ({data?.currentROI.toFixed(2) || 0}%)
+                  ({data?.currentROI?.toFixed(2) || 0}%)
                 </p>
               </>
             ) : (

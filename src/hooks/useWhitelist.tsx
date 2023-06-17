@@ -161,14 +161,14 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const analyzeDecimals = (veryComplexDecimalsValue: number): ReactNode => {
     if (!veryComplexDecimalsValue) return <span></span>;
-    const valueStr = new Decimal(veryComplexDecimalsValue).toFixed();
+    const valueStr = new Decimal(veryComplexDecimalsValue)?.toFixed();
     const newStr = valueStr.replace(/(0)+$/, "");
     const zeroMatched = newStr.match(/\.(0)+/);
 
     if (!zeroMatched || zeroMatched[0]?.replace(".", "").split("").length < 3) {
       return (
         <span className="mx-[3px]">
-          {veryComplexDecimalsValue.toFixed(5).replace(/0+$/, "")}
+          {veryComplexDecimalsValue?.toFixed(5).replace(/0+$/, "")}
         </span>
       );
     }

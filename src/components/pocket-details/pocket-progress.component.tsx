@@ -114,7 +114,7 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
             } normal-text float-right`}
           >
             {analyzeDecimals(pocket?.currentROIValue) || 0} {baseToken?.symbol}{" "}
-            ({pocket?.currentROI.toFixed(2) || 0}%)
+            ({pocket?.currentROI?.toFixed(2) || 0}%)
           </p>
         </div>
       ) : null}
