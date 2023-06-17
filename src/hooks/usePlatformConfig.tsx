@@ -85,7 +85,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
         return dexUrl;
       });
     }
-  }, [platformConfig, desiredChainId]);
+  }, [platformConfig, desiredChainId, router]);
 
   /**
    * @dev The function to switch chain.
@@ -112,6 +112,8 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
     },
     [router, platformConfig]
   );
+
+  console.log({ desiredChainId, platformConfigBasedDesiredChainId });
 
   return (
     <PlatformConfigContext.Provider

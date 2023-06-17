@@ -113,8 +113,8 @@ export const PocketProgress: FC<{ pocket: PocketEntity }> = (props) => {
                 : "text-green300"
             } normal-text float-right`}
           >
-            {pocket?.currentROIValue.toFixed(2) || 0} {baseToken?.symbol} (
-            {pocket?.currentROI.toFixed(2) || 0}%)
+            {analyzeDecimals(pocket?.currentROIValue) || 0} {baseToken?.symbol}{" "}
+            ({pocket?.currentROI.toFixed(2) || 0}%)
           </p>
         </div>
       ) : null}

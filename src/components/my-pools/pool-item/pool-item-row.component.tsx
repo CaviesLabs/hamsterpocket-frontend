@@ -97,7 +97,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     );
 
     return targetTokenBought / baseTokenSpent;
-  }, [data, baseToken, targetToken]);
+  }, [data, baseToken, targetToken, chainId]);
 
   const statusComponent = useMemo(() => {
     if (isActive) {
@@ -214,7 +214,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } normal-text"`}
                 >
-                  {data?.currentROIValue?.toFixed(2) || 0} {baseToken?.symbol}
+                  {analyzeDecimals(data?.currentROIValue) || 0}{" "}
+                  {baseToken?.symbol}
                 </p>
                 <p
                   className={`md:text-center md:mt-[5px] ${
