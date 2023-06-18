@@ -74,13 +74,16 @@ export const ActivePoolGroup: FC = () => {
     if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress, evm: chainId !== ChainId.sol }, () => {
-        setFetching(false);
-        handleFetch();
-        toast("The latest data is now available", {
-          theme: "dark",
-        });
-      })
+      syncWalletPockets(
+        { walletAddress, evm: chainId !== ChainId.sol, chainId: chainId },
+        () => {
+          setFetching(false);
+          handleFetch();
+          toast("The latest data is now available", {
+            theme: "dark",
+          });
+        }
+      )
     );
   }, [
     walletAddress,

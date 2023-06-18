@@ -160,7 +160,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
    * @param veryComplexDecimalsValue
    */
   const analyzeDecimals = (veryComplexDecimalsValue: number): ReactNode => {
-    if (!veryComplexDecimalsValue) return <span></span>;
+    if (!veryComplexDecimalsValue) return null;
     const valueStr = new Decimal(veryComplexDecimalsValue)?.toFixed();
     const newStr = valueStr.replace(/(0)+$/, "");
     const zeroMatched = newStr.match(/\.(0)+/);

@@ -16,6 +16,7 @@ import { PocketEntity } from "@/src/entities/pocket.entity";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import State from "@/src/redux/entities/state";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 export const EndedPoolGroupComponent: FC = () => {
   const dispatch = useDispatch();
@@ -60,19 +61,22 @@ export const EndedPoolGroupComponent: FC = () => {
     if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress }, () => {
-        setFetching(false);
-        handleFetch();
-        toast("The latest data is now available", {
-          theme: "dark",
-        });
-      })
+      syncWalletPockets(
+        { walletAddress, evm: chainId !== ChainId.sol, chainId: chainId },
+        () => {
+          setFetching(false);
+          handleFetch();
+          toast("The latest data is now available", {
+            theme: "dark",
+          });
+        }
+      )
     );
-  }, [walletAddress, debouncedSearch, selectedType, sorter]);
+  }, [walletAddress, debouncedSearch, selectedType, sorter, chainId]);
 
   useEffect(
     () => handleFetch(),
-    [walletAddress, debouncedSearch, selectedType, sorter]
+    [walletAddress, debouncedSearch, selectedType, sorter, chainId]
   );
 
   return (
