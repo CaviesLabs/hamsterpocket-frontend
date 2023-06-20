@@ -85,7 +85,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
         return dexUrl;
       });
     }
-  }, [platformConfig, desiredChainId]);
+  }, [platformConfig, desiredChainId, router]);
 
   /**
    * @dev The function to switch chain.
@@ -93,13 +93,15 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const handleSwitchChain = useCallback(
     (chainId: string) => {
+      if (!platformConfig) return;
+
       const lastSlug = router.asPath.substring(
         router.asPath.indexOf("/", 1),
         router.asPath.length
       );
 
       /** @dev If home page. */
-      const isHomePage = Object.values(ChainId).find(
+      const isHomePage = Object.keys(platformConfig).find(
         (item) => lastSlug === `/${item}` || lastSlug === `/${item}/`
       );
       if (isHomePage) {
@@ -108,8 +110,10 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
 
       router.push(`/${chainId}/${lastSlug}`);
     },
-    [router]
+    [router, platformConfig]
   );
+
+  console.log({ desiredChainId, platformConfigBasedDesiredChainId });
 
   return (
     <PlatformConfigContext.Provider

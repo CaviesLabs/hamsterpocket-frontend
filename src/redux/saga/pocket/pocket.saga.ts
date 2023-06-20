@@ -89,12 +89,16 @@ export function* getClosedPockets({
 export function* syncWalletPockets({
   payload,
   callback,
-}: SagaPayload<{ walletAddress: string; evm?: boolean }, boolean>) {
+}: SagaPayload<
+  { walletAddress: string; evm?: boolean; chainId?: string },
+  boolean
+>) {
   try {
     yield call(
       poolService.syncWalletPockets,
       payload.walletAddress,
-      payload.evm
+      payload.evm,
+      payload.chainId
     );
     yield call(portfolioService.syncWalletPortfolio, payload.walletAddress);
     callback && callback(true);

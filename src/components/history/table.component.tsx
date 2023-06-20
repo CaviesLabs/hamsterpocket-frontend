@@ -10,7 +10,7 @@ import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export default function TableComponent() {
-  const { whiteLists, findEntityByAddress } = useWhiteList();
+  const { whiteLists, findEntityByAddress, analyzeDecimals } = useWhiteList();
   const { platformConfig, dexUrl, chainId } = usePlatformConfig();
   const historiesData = useSelector((state: State) => state.histories);
 
@@ -118,7 +118,7 @@ export default function TableComponent() {
                         </div>
                         <div className="col-span-2 text-center">
                           {h?.baseTokenAmount ? (
-                            <div>{h?.baseTokenAmount.toFixed(3)}</div>
+                            <div>{analyzeDecimals(h?.baseTokenAmount)}</div>
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
@@ -142,7 +142,7 @@ export default function TableComponent() {
                             <div className="text-dark40">--</div>
                           )} */}
                           {h?.targetTokenAmount ? (
-                            <div>{h?.targetTokenAmount.toFixed(3)}</div>
+                            <div>{analyzeDecimals(h?.targetTokenAmount)}</div>
                           ) : (
                             <div className="text-dark40">--</div>
                           )}

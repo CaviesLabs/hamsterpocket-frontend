@@ -6,6 +6,7 @@ import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";
 import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 import { PocketBalance } from "./pocket-balance.component";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 const options = {
   cutout: 70,
@@ -22,6 +23,7 @@ const options = {
 export default function DashboardComponentMobile() {
   /** @dev Handle to get total estimate sol in total pockets. */
   const { totalSOL, totalUSD, getTokenBlances } = usePocketBalance();
+  const { analyzeDecimals } = useWhiteList();
 
   const chartData = useMemo(() => {
     const mapData = getTokenBlances();
@@ -69,7 +71,7 @@ export default function DashboardComponentMobile() {
                   </AntdTooltip>
                 </div>
                 <div className="mobile:text-[14px]">
-                  ${totalUSD?.toFixed(2)}
+                  ${analyzeDecimals(totalUSD)}
                 </div>
               </div>
             </div>

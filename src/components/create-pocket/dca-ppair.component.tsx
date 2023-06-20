@@ -18,7 +18,7 @@ export const DCAPPair: FC = () => {
    * @dev Injected context.
    */
   const { chainId } = usePlatformConfig();
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, analyzeDecimals } = useWhiteList();
   const {
     baseTokenAddress,
     targetTokenAddress,
@@ -102,7 +102,7 @@ export const DCAPPair: FC = () => {
                     }
                   />
                   <p className="mt-1 text-dark50 text-[14px] regular-text">
-                    Price: ~${baseTokenPrice?.toFixed(2)}
+                    Price: ~${analyzeDecimals(baseTokenPrice)}
                   </p>
                 </div>
                 <div className="md:col-span-1 flex items-center justify-center px-[100px]">
@@ -128,7 +128,7 @@ export const DCAPPair: FC = () => {
                     }
                   />
                   <p className="mt-1 text-dark50 text-[14px] regular-text">
-                    Price: ~${targetTokenPrice?.toFixed(2)}
+                    Price: ~${analyzeDecimals(targetTokenPrice)}
                   </p>
                 </div>
               </div>

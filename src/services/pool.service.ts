@@ -34,11 +34,12 @@ export class PoolService {
    */
   public async syncWalletPockets(
     walletAddress: string,
-    evm = false
+    evm = false,
+    chainId = ""
   ): Promise<any> {
     return networkProvider.request<any>(
       evm
-        ? `/pool/user/evm/${walletAddress}/sync`
+        ? `/pool/user/evm/${walletAddress}/sync?chainId=${chainId}`
         : `/pool/user/${walletAddress}/sync`,
       {
         method: "POST",
