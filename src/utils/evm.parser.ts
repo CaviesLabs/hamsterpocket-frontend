@@ -188,12 +188,10 @@ export const createdPocketPramsParserEvm = (
     /**
      * @dev Revert value from alias decimals to real decimals.
      */
-    batchVolume: BigNumber.from(
-      (
-        (solCreatedPocketDto.batchVolume.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-        Math.pow(10, realBaseTokenDecimals)
-      ).toString()
+    batchVolume: convertBigNumber(
+      solCreatedPocketDto.batchVolume.toNumber() /
+        Math.pow(10, baseTokenDecimals),
+      Math.pow(10, realBaseTokenDecimals)
     ),
 
     /**
