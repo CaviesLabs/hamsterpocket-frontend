@@ -81,6 +81,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
       /** @dev Execute on-chain */
       console.log({ ...createdPocketParams, id: pocketId });
+      console.log(createdPocketParams.batchVolume.toString());
       await contract.createPocketAndDepositEther(
         { ...createdPocketParams, id: pocketId },
         {
