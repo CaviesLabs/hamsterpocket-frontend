@@ -5,6 +5,10 @@ import { useAppWallet } from "@/src/hooks/useAppWallet";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
+import { ChainId } from "@/src/entities/platform-config.entity";
+
+const APTOS_IMAGE =
+  "https://s2.coinmarketcap.com/static/img/coins/200x200/21794.png";
 
 export const ChainSelect: FC = () => {
   const { chainId, switchChainId, chainInfos } = usePlatformConfig();
@@ -48,7 +52,11 @@ export const ChainSelect: FC = () => {
       >
         <img
           className="w-[24px] h-[24px]"
-          src={chains.find((item) => item.id === chainId)?.image}
+          src={
+            chainId === ChainId.aptos
+              ? APTOS_IMAGE
+              : chains.find((item) => item.id === chainId)?.image
+          }
         />
         <DropdownArrowIcon className="ml-2 text-dark50" />
       </span>
@@ -59,6 +67,11 @@ export const ChainSelect: FC = () => {
         <div className={styles.container}>
           <ul>
             {chains
+              .concat({
+                id: "aptos",
+                name: "Aptos",
+                image: APTOS_IMAGE,
+              })
               .filter((item) => item.id !== chainId)
               .map((item, key) => (
                 <li
