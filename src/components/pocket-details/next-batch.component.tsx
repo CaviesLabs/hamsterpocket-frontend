@@ -26,8 +26,12 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
 
   /** @dev Inject needed modules to get token account. */
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
 
   /** @dev Get base token info. */
   const baseToken = useMemo(
@@ -83,10 +87,12 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
           <p className="text-white normal-text float-right">
             {pocket?.batchVolume - pocket?.remainingBaseTokenBalance < 0
               ? 0
-              : convertDecimalAmount(
-                  baseToken?.address,
-                  pocket?.batchVolume - pocket?.remainingBaseTokenBalance
-                )?.toFixed(3)}{" "}
+              : analyzeDecimals(
+                  convertDecimalAmount(
+                    baseToken?.address,
+                    pocket?.batchVolume - pocket?.remainingBaseTokenBalance
+                  )
+                )}{" "}
             {baseToken?.symbol}
           </p>
         </div>

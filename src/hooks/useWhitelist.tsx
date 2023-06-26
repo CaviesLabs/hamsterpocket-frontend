@@ -14,6 +14,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { makeAliasForEvmWhitelist } from "@/src/utils/evm.parser";
 import { makeAliasForAptosWhitelist } from "@/src/utils/aptos.parser";
+import Decimal from "decimal.js";
 import useSWR from "swr";
 
 export type WhiteListConfigs = {
@@ -25,6 +26,7 @@ export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
   liquidities: LiquidityEntity[];
   convertDecimalAmount(tokenAddress: string, source: number): number;
+  analyzeDecimals(veryComplexDecimalsValue: number): ReactNode;
 
   /**
    * @dev The function find entitiy base real address.
@@ -156,6 +158,39 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     [whiteLists, chainId, findEntityByAddress]
   );
 
+  /**
+   * @notice Analyze decimals for smart display
+   * @param veryComplexDecimalsValue
+   */
+  const analyzeDecimals = (veryComplexDecimalsValue: number): ReactNode => {
+    if (!veryComplexDecimalsValue) return null;
+    const valueStr = new Decimal(veryComplexDecimalsValue)?.toFixed();
+    const newStr = valueStr.replace(/(0)+$/, "");
+    const zeroMatched = newStr.match(/\.(0)+/);
+
+    if (!zeroMatched || zeroMatched[0]?.replace(".", "").split("").length < 3) {
+      return (
+        <span className="mx-[3px]">
+          {veryComplexDecimalsValue?.toFixed(5).replace(/0+$/, "")}
+        </span>
+      );
+    }
+
+    const baseValue = newStr.split(".")[0];
+    const [matchedStr] = zeroMatched;
+    const totalZero = matchedStr.replace(".", "").split("").length;
+    const restValue = newStr.replace(`${baseValue}${matchedStr}`, "");
+    return (
+      <span className="mx-[3px]">
+        {baseValue}.0<sub>{totalZero - 1}</sub>
+        {(restValue.length > 5 ? restValue.substring(0, 5) : restValue).replace(
+          /0+$/,
+          ""
+        )}
+      </span>
+    );
+  };
+
   return (
     <WhitelistContext.Provider
       value={{
@@ -164,6 +199,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
         convertDecimalAmount,
         findPairLiquidity,
         findEntityByAddress,
+        analyzeDecimals,
       }}
     >
       {props.children}

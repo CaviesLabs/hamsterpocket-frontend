@@ -23,7 +23,7 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
    */
-  const { whiteLists: allowCurrencies } = useWhiteList();
+  const { whiteLists: allowCurrencies, analyzeDecimals } = useWhiteList();
 
   /**
    * @dev The condition to display filter for user to select which token want to excute.
@@ -132,7 +132,7 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
         style={{ zIndex: 2 }}
       >
         <p className="text-dark50 mobile:text-[12px] normal-text">
-          Balance: {tokenBalance?.toFixed(2)}
+          Balance: {analyzeDecimals(tokenBalance)}
         </p>
       </div>
     </div>

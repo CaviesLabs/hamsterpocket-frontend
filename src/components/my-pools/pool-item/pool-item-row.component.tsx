@@ -26,8 +26,12 @@ type PoolItemProps = {
 };
 export const PoolItemRow = (props: PoolItemProps) => {
   const { data } = props;
-  const { whiteLists, findEntityByAddress, convertDecimalAmount } =
-    useWhiteList();
+  const {
+    whiteLists,
+    findEntityByAddress,
+    convertDecimalAmount,
+    analyzeDecimals,
+  } = useWhiteList();
   const { programService } = useWallet();
   const { walletAddress } = useAppWallet();
   const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
@@ -93,7 +97,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     );
 
     return targetTokenBought / baseTokenSpent;
-  }, [data, baseToken, targetToken]);
+  }, [data, baseToken, targetToken, chainId]);
 
   const statusComponent = useMemo(() => {
     if (isActive) {
@@ -210,7 +214,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } normal-text"`}
                 >
-                  {data?.currentROIValue?.toFixed(5) || 0} {baseToken?.symbol}
+                  {analyzeDecimals(data?.currentROIValue) || 0}{" "}
+                  {baseToken?.symbol}
                 </p>
                 <p
                   className={`md:text-center md:mt-[5px] ${
@@ -219,7 +224,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       : "text-green300"
                   } mobile:ml-[5px]`}
                 >
-                  ({data?.currentROI?.toFixed(3) || 0}%)
+                  ({data?.currentROI?.toFixed(2) || 0}%)
                 </p>
               </>
             ) : (
@@ -238,7 +243,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                   1 {baseToken?.symbol}
                 </p>
                 <p className="text-center md:mt-[5px] md:text-[12px] text-white">
-                  = {averagePrice?.toFixed(3)} {targetToken?.symbol}
+                  = {analyzeDecimals(averagePrice)} {targetToken?.symbol}
                 </p>
               </>
             ) : (

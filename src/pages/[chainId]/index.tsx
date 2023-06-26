@@ -13,6 +13,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 type LayoutProps = {
   data: StatisticEntity;
@@ -27,6 +28,8 @@ const Layout = (props: LayoutProps) => {
   const { walletAddress } = useAppWallet();
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const { connect: connectWallet } = useWalletKit();
+  const { analyzeDecimals } = useWhiteList();
+
   useEffect(() => {
     if (wallet?.solanaWallet.publicKey?.toString()) {
       pushRouterWithChainId("/my-pockets");
@@ -145,7 +148,7 @@ const Layout = (props: LayoutProps) => {
               </div>
               <div className="md:mt-0 mt-[20px]">
                 <p className="text-center text-green text-[32px] mobile:text-[20px] normal-text">
-                  $ {data.totalVolume?.toFixed(2)}
+                  $ {analyzeDecimals(data.totalVolume)}
                 </p>
                 <p className="text-center text-dark30 text-[18px] mobile:text-[16px] normal-text">
                   Total Volume

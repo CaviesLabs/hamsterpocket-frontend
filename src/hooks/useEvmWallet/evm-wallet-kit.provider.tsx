@@ -8,7 +8,15 @@ import {
 } from "react";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { bsc, polygonMumbai, okc, xdc, gnosis } from "wagmi/chains";
+import {
+  bsc,
+  polygonMumbai,
+  okc,
+  xdc,
+  gnosis,
+  avalanche,
+  // Chain as WagmiChain,
+} from "wagmi/chains";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -19,7 +27,7 @@ export const WalletKitContext = createContext<any>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
-  const { chainId } = usePlatformConfig();
+  const { chainId, platformConfig } = usePlatformConfig();
   const [wagmiChains, setWagmiChains] = useState<any[]>([]);
 
   const initClient = useMemo(() => {
@@ -34,9 +42,24 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       customChains = xdc;
     } else if (chainId === ChainId.gnosis) {
       customChains = gnosis;
+    } else if (chainId === ChainId.avax) {
+      customChains = avalanche;
     } else {
       customChains = bsc;
     }
+
+    // const chainConfig: WagmiChain = {
+    //   id: platformConfig.chainId,
+    //   name: platformConfig.chainName,
+    //   network: platformConfig.chainName,
+    //   nativeCurrency: NativeCurrency;
+    //   /** Collection of RPC endpoints */
+    //   rpcUrls: {
+    //       [key: string]: RpcUrls;
+    //       default: RpcUrls;
+    //       public: RpcUrls;
+    //   };
+    // };
 
     const { chains, provider } = configureChains(
       [customChains],
@@ -56,7 +79,7 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       connectors,
       provider,
     });
-  }, [chainId]);
+  }, [chainId, platformConfig]);
 
   return (
     <WalletKitContext.Provider value={{}}>

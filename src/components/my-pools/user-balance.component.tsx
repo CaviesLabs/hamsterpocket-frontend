@@ -2,9 +2,11 @@ import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useWallet } from "@/src/hooks/useWallet";
 import { FC, useEffect, useState } from "react";
 import { getPrice } from "@/src/services/coingecko";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 
 export const UserBalanceComponent: FC = () => {
   const wallet = useWallet();
+  const { analyzeDecimals } = useWhiteList();
 
   /**
    * @desc fetch token price
@@ -20,11 +22,11 @@ export const UserBalanceComponent: FC = () => {
   return (
     <div>
       <p className="text-center text-green normal-text text-[16px] md:text-[20px]">
-        {(wallet.solBalance / LAMPORTS_PER_SOL)?.toFixed(2)} SOL
+        {analyzeDecimals(wallet.solBalance / LAMPORTS_PER_SOL)} SOL
       </p>
       <p className="text-center text-green normal-text text-[14px] md:text-[16px]">
         ~$
-        {(price * (wallet.solBalance / LAMPORTS_PER_SOL))?.toFixed(2)}
+        {analyzeDecimals(price * (wallet.solBalance / LAMPORTS_PER_SOL))}
       </p>
       <p className="text-center text-dark40 normal-text text-[14px]">
         Wallet Balance

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { Input, toast } from "@hamsterbox/ui-kit";
 import { SearchIcon } from "@/src/components/icons";
 import useDebounce from "@/src/hooks/useDebounce";
@@ -40,6 +39,8 @@ export const ActivePoolGroup: FC = () => {
   const activePockets = useSelector((state: State) => state.activePockets);
 
   /** @dev The function to handle request pockets from server. */
+  console.log("Chain id to get", chainId);
+
   const handleFetch = useCallback(() => {
     if (!walletAddress) return;
     dispatch(
@@ -73,13 +74,16 @@ export const ActivePoolGroup: FC = () => {
     if (!walletAddress) return;
     setFetching(true);
     dispatch(
-      syncWalletPockets({ walletAddress, evm: chainId !== ChainId.sol }, () => {
-        setFetching(false);
-        handleFetch();
-        toast("The latest data is now available", {
-          theme: "dark",
-        });
-      })
+      syncWalletPockets(
+        { walletAddress, evm: chainId !== ChainId.sol, chainId: chainId },
+        () => {
+          setFetching(false);
+          handleFetch();
+          toast("The latest data is now available", {
+            theme: "dark",
+          });
+        }
+      )
     );
   }, [
     walletAddress,
@@ -92,7 +96,7 @@ export const ActivePoolGroup: FC = () => {
 
   useEffect(
     () => handleFetch(),
-    [walletAddress, debouncedSearch, isPauseOnly, sorter, endedSelect]
+    [walletAddress, debouncedSearch, isPauseOnly, sorter, endedSelect, chainId]
   );
 
   return (
