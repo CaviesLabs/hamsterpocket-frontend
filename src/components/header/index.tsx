@@ -12,6 +12,7 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 import classnames from "classnames";
 import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 const Header: FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,6 +30,7 @@ const Header: FC = () => {
   /**
    * @dev Import GoGi providers.
    */
+  const { connect: connectAptos } = useAptosWallet();
   const { connect: connectWallet } = useWalletKit();
   const { walletAddress } = useAppWallet();
   // const wallet = useConnectedWallet();
@@ -39,6 +41,8 @@ const Header: FC = () => {
   const handleConnect = useCallback(() => {
     if (chainId === ChainId.sol) {
       connectWallet();
+    } else if (chainId === ChainId.aptos) {
+      connectAptos();
     }
   }, [chainId]);
   /**
@@ -128,7 +132,7 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    {chainId === ChainId.sol ? (
+                    {chainId === ChainId.sol || chainId === ChainId.aptos ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
                         size="small"

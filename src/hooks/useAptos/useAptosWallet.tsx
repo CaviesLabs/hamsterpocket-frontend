@@ -1,34 +1,29 @@
 import { createContext, useContext, ReactNode, FC } from "react";
-import { useWallet, MartianWalletName } from "@manahippo/aptos-wallet-adapter";
+import { useWallet, PontemWalletName } from "@manahippo/aptos-wallet-adapter";
 
 /** @dev Initiize context. */
 export const AptosWalletContext = createContext<{
-  handleConnect(): void;
+  connect(): void;
+  walletAddress: string;
 }>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /** @dev Inject aptos wallet context. */
-  const { connect: connectAptos } = useWallet();
+  const { connect: connectAptos, account } = useWallet();
 
   /** @internal @dev The function to open wallet popup for connecting. */
   const handleConnect = () => {
-    connectAptos(MartianWalletName);
+    connectAptos(PontemWalletName);
   };
+
+  console.log(account?.address?.toString());
 
   return (
     <AptosWalletContext.Provider
       value={{
-        handleConnect,
-        // createPocket,
-        // depositPocket,
-        // closePocket,
-        // closePositionPocket,
-        // pausePocket,
-        // withdrawPocket,
-        // resumePocket,
-        // signer: signer,
-        // nativeBalance: parseFloat(nativeBalanceData?.formatted).toFixed(3),
+        connect: handleConnect,
+        walletAddress: account?.address?.toString(),
       }}
     >
       {props.children}

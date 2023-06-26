@@ -13,6 +13,7 @@ import { LiquidityEntity } from "@/src/entities/radyum.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { makeAliasForEvmWhitelist } from "@/src/utils/evm.parser";
+import { makeAliasForAptosWhitelist } from "@/src/utils/aptos.parser";
 import useSWR from "swr";
 
 export type WhiteListConfigs = {
@@ -77,7 +78,9 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           });
           setWhitelist(res);
         } else {
-          const processedList = makeAliasForEvmWhitelist(result, chainId);
+          const processedList = ChainId.aptos
+            ? makeAliasForAptosWhitelist(result, chainId)
+            : makeAliasForEvmWhitelist(result, chainId);
           const res: WhiteListConfigs = {};
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;

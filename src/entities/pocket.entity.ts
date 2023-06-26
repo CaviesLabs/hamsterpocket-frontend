@@ -1,8 +1,12 @@
 import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
-// import { PublicKey } from "@solana/web3.js";
-import "reflect-metadata";
 import { ChainId } from "./platform-config.entity";
+import "reflect-metadata";
+
+/**
+ * @dev Export all entities for aptos chain.
+ */
+export * from "./pocket.aptos.entity";
 
 export enum PocketStatus {
   CREATED = "POOL_STATUS::CREATED",

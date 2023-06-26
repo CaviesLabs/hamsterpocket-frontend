@@ -52,8 +52,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
-  const [takeProfitAmount, setTakeProfitAmount] = useState<number>();
-  const [stopLossAmount, setStopLossAmount] = useState<number>();
+  const [takeProfitAmount, setTakeProfitAmount] = useState<number>(0);
+  const [stopLossAmount, setStopLossAmount] = useState<number>(0);
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
   const [targetTokenAddress, setTargetTokenAddress] = useState<

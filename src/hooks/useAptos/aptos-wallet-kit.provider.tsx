@@ -1,10 +1,14 @@
 import { createContext, useContext, ReactNode, FC } from "react";
 import {
   MartianWalletAdapter,
+  PontemWalletAdapter,
   WalletProvider,
 } from "@manahippo/aptos-wallet-adapter";
 
-const aptosWalletAdapters = [new MartianWalletAdapter()];
+const aptosWalletAdapters = [
+  new MartianWalletAdapter(),
+  new PontemWalletAdapter(),
+];
 
 /** @dev Initiize context. */
 export const AptosWalletKitContext = createContext<any>(null);
