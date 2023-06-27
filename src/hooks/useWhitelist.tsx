@@ -179,7 +179,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     const restValue = newStr.replace(`${baseValue}${matchedStr}`, "");
     return (
       <span className="mx-[3px]">
-        {baseValue}.0<sub>{totalZero - 1}</sub>
+        {baseValue}.0<sub>{totalZero}</sub>
         {(restValue.length > 5 ? restValue.substring(0, 5) : restValue).replace(
           /0+$/,
           ""
