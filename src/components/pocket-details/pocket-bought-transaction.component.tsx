@@ -28,7 +28,7 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
     []
   );
 
-  const { platformConfig } = usePlatformConfig();
+  const { platformConfig, chainId } = usePlatformConfig();
   const { whiteLists, findEntityByAddress, analyzeDecimals } = useWhiteList();
 
   const baseToken = useMemo(
@@ -134,7 +134,11 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 </div>
                 <div className="col-span-2 ml-[10px] relative top-[-3px] mobile:col-span-1">
                   <a
-                    href={`${platformConfig?.explorerUrl}tx/${item.transactionId}`}
+                    href={
+                      chainId.includes("aptos")
+                        ? `${platformConfig?.explorerUrl}version/${item.transactionId}`
+                        : `${platformConfig?.explorerUrl}tx/${item.transactionId}`
+                    }
                     target="_blank"
                     className="ml-[10px] relative top-[-5px]"
                   >

@@ -149,6 +149,28 @@ export class AptosProgramService {
   }
 
   /**
+   * @dev Deposit base token amount into pocket.
+   * @param @var {string} pocketId.
+   * @param @var {string} baseTokenAddress.
+   * @param @var {string} targetTokenAddress.
+   * @returns {void}.
+   */
+  public async reversePocket(
+    pocketId: string,
+    baseTokenAddress: string,
+    targetTokenAddress: string
+  ) {
+    return this.transtractionBuilder
+      .buildClosePositionAndWithdrawTransaction({
+        id: pocketId,
+        baseCoinType: baseTokenAddress,
+        targetCoinType: targetTokenAddress,
+        minAmountOut: BigInt(0),
+      })
+      .execute();
+  }
+
+  /**
    * @dev The function to sync the data of pool
    * @param {string} poolId
    */

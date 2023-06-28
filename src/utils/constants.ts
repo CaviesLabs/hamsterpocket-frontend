@@ -85,14 +85,14 @@ export const PRICE_CONDITIONS: OptionProps[] = [
     value: PriceConditionType.LTE,
     label: "Less than or equal to",
   },
-  {
-    value: PriceConditionType.EQ,
-    label: "Is equal to",
-  },
-  {
-    value: PriceConditionType.NEQ,
-    label: "Is not equal to",
-  },
+  // {
+  //   value: PriceConditionType.EQ,
+  //   label: "Is equal to",
+  // },
+  // {
+  //   value: PriceConditionType.NEQ,
+  //   label: "Is not equal to",
+  // },
   {
     value: PriceConditionType.BW,
     label: "Is between",

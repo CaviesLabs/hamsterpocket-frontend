@@ -113,6 +113,12 @@ export const convertToAptosBuyCondition = (
     case PriceConditionType.NBW:
       operator = OpenPositionOperatorAptos.OPERATOR_NBW;
       break;
+    case PriceConditionType.EQ:
+      operator = OpenPositionOperatorAptos.OPERATOR_EQ;
+      break;
+    case PriceConditionType.NEQ:
+      operator = OpenPositionOperatorAptos.OPERATOR_NEQ;
+      break;
   }
 
   if (solBuyCondition[type].fromValue) {
@@ -196,12 +202,10 @@ export const createdPocketPramsParserAptos = (
       /**
        * @dev Revert value from alias decimals to real decimals.
        */
-      batchVolume: BigInt(
-        (
-          (solCreatedPocketDto.batchVolume.toNumber() /
-            Math.pow(10, baseTokenDecimals)) *
-          Math.pow(10, realBaseTokenDecimals)
-        ).toString()
+      batchVolume: convertBigNumber(
+        solCreatedPocketDto.batchVolume.toNumber() /
+          Math.pow(10, baseTokenDecimals),
+        Math.pow(10, realBaseTokenDecimals)
       ),
 
       /**

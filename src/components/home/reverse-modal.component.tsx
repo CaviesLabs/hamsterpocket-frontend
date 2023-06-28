@@ -10,6 +10,7 @@ import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 export const ReversePocketModal: FC<{
   isModalOpen: boolean;
@@ -30,6 +31,7 @@ export const ReversePocketModal: FC<{
   const [succcessClose, setSuccessClosed] = useState(false);
 
   const { closePositionPocket: closePositionPocketEvm } = useEvmWallet();
+  const { reversePocket: reversePocketAptos } = useAptosWallet();
   const { walletAddress } = useAppWallet();
   const { chainId } = usePlatformConfig();
 
@@ -52,6 +54,12 @@ export const ReversePocketModal: FC<{
       if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
+      } else if (chainId.includes("aptos")) {
+        await reversePocketAptos(
+          props.pocket.id,
+          props.pocket.baseTokenAddress,
+          props.pocket.targetTokenAddress
+        );
       } else {
         await closePositionPocketEvm(props.pocket);
       }

@@ -96,6 +96,19 @@ export const AptosWalletContext = createContext<{
     baseTokenAddress: string,
     depositedAmount: bigint
   ): Promise<void>;
+
+  /**
+   * @dev Deposit base token amount into pocket.
+   * @param @var {string} pocketId.
+   * @param @var {string} baseTokenAddress.
+   * @param @var {string} targetTokenAddress.
+   * @returns {void}.
+   */
+  reversePocket(
+    pocketId: string,
+    baseTokenAddress: string,
+    targetTokenAddress: string
+  ): Promise<void>;
 }>(null);
 
 /** @dev Expose wallet provider for usage. */
@@ -268,6 +281,31 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
   );
 
   /**
+   * @external
+   * @dev The function to close pocket and withdraw assets into owner's wallet.
+   * @param @var {string} pocketId.
+   * @param @var {string} baseTokenAddress.
+   * @param @var {string} targetTokenAddress.
+   * @returns {void}.
+   */
+  const reversePocket = useCallback(
+    async (
+      pocketId: string,
+      baseTokenAddress: string,
+      targetTokenAddress: string
+    ) => {
+      if (!service || !platformConfig || !signer || !account) return;
+      /** @dev Execute transaction. */
+      await service.reversePocket(
+        pocketId,
+        baseTokenAddress,
+        targetTokenAddress
+      );
+    },
+    [service, platformConfig, signer, account]
+  );
+
+  /**
    * @dev Watch contexts and update builder provider.
    */
   useEffect(() => {
@@ -327,6 +365,7 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
         withdrawPocket,
         closePocket,
         depositPocket,
+        reversePocket,
       }}
     >
       {props.children}

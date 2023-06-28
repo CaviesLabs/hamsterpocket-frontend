@@ -21,6 +21,7 @@ export default function TableComponent() {
       case PoolType.PAUSED:
         return "PAUSE";
       case PoolType.CONTINUE:
+      case PoolType.RESTARTED:
         return "CONTINUE";
       case PoolType.DEPOSITED:
         return "DEPOSIT";
@@ -151,7 +152,11 @@ export default function TableComponent() {
                           <div className="flex items-center">
                             {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
                             <a
-                              href={`${platformConfig?.explorerUrl}tx/${h.transactionId}`}
+                              href={
+                                chainId.includes("aptos")
+                                  ? `${platformConfig?.explorerUrl}version/${h.transactionId}`
+                                  : `${platformConfig?.explorerUrl}tx/${h.transactionId}`
+                              }
                               target="_blank"
                               className="ml-2"
                             >
