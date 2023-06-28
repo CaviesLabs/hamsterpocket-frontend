@@ -12,6 +12,8 @@ import { SuccessTransactionModal } from "@/src/components/success-modal.componen
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
 import { BigNumber } from "ethers";
+import { useAptosWallet } from "@/src/hooks/useAptos";
+import { convertBigNumber as convertAptosNumber } from "@/src/utils/aptos.parser";
 
 export const DepositModal: FC<{
   isModalOpen: boolean;
@@ -36,6 +38,9 @@ export const DepositModal: FC<{
     depositPocket: depositPocketEvm,
     signer: evmSigner,
   } = useEvmWallet();
+
+  /** @dev Inject aptos program service to use. */
+  const { depositPocket: depositPocketAptos } = useAptosWallet();
 
   /** @dev Inject whitelist provider to use. */
   const {
@@ -68,6 +73,16 @@ export const DepositModal: FC<{
           solanaWallet,
           props.pocket,
           depositedAmount
+        );
+      } else if (chainId.includes("aptos")) {
+        console.log("deposit in aptos");
+        await depositPocketAptos(
+          props.pocket.id,
+          baseToken?.address,
+          convertAptosNumber(
+            depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals),
+            baseToken?.decimals
+          )
         );
       } else {
         console.log("depsit in evm");

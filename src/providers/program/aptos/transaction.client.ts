@@ -10,8 +10,7 @@ export class TransactionSigner {
    * @dev Initialize transaction signer
    * @param signer
    */
-  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {
-  }
+  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {}
 
   /**
    * @notice Sign and send message
@@ -38,12 +37,13 @@ export class TransactionSigner {
 
     const realPayload = result[0].payload;
 
-    // TODO: cleanup this dirty fix and re-implement client
     if ((realPayload as any).arguments[0].includes("0x")) {
+      console.log("convert realpayload");
       (realPayload as any).arguments[0] = new HexString(
         (realPayload as any).arguments[0]
       ).toUint8Array();
     }
+    console.log({ realPayload });
     return this.signer.signAndSubmitTransaction(realPayload as any);
   }
 
@@ -52,19 +52,7 @@ export class TransactionSigner {
    * @param payload
    */
   public async simulate(payload: any) {
-    const client = new AptosClient(process.env.APTOS_NODE_URL);
-
-    const rawTx = await client.generateRawTransaction(
-      new HexString(this.signer.account.address.toString()),
-      payload
-    );
-
-    return client.simulateTransaction(
-      new TxnBuilderTypes.Ed25519PublicKey(
-        new HexString(this.signer.account.publicKey.toString()).toUint8Array()
-      ),
-      rawTx
-    );
+    return payload;
   }
 
   /**

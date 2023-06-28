@@ -8,6 +8,7 @@ import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 export const PausePocketModal: FC<{
   isModalOpen: boolean;
@@ -21,6 +22,7 @@ export const PausePocketModal: FC<{
   const { walletAddress } = useAppWallet();
   const { chainId } = usePlatformConfig();
   const { pausePocket: pausePocketEvm } = useEvmWallet();
+  const { pausePocket: pausePocketAptos } = useAptosWallet();
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -39,6 +41,8 @@ export const PausePocketModal: FC<{
       /** @dev Execute transaction. */
       if (chainId === ChainId.sol) {
         await programService.pausePocket(solanaWallet, props.pocket);
+      } else if (chainId.includes("aptos")) {
+        await pausePocketAptos(props.pocket._id || props.pocket.id);
       } else {
         await pausePocketEvm(props.pocket._id || props.pocket.id);
       }
