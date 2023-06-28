@@ -1,62 +1,47 @@
-import { AptosAccount, AptosClient, HexString } from "aptos";
-
+import { AptosAccount, AptosClient, HexString, TxnBuilderTypes } from "aptos";
+import * as aptosWalletAdapter from "@pontem/aptos-wallet-adapter";
 import { RESOURCE_ACCOUNT_SEED } from "./libs/constants";
 
 /**
  * @notice Transaction client to send transaction to aptos blockchain
  */
 export class TransactionSigner {
-  private readonly account: AptosAccount;
-  private readonly client: AptosClient;
-
   /**
    * @dev Initialize transaction signer
    * @param privateKey
    * @param nodeUrl
    */
-  constructor(
-    private readonly privateKey: string,
-    private readonly nodeUrl: string
-  ) {
-    this.account = new AptosAccount(
-      HexString.ensure(privateKey).toUint8Array()
-    );
-
-    this.client = new AptosClient(nodeUrl);
-  }
+  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {}
 
   /**
    * @notice Sign and send message
    * @param payload
    * @param waitForTx
    */
-  public async signAndSendTransaction(payload: any, waitForTx: boolean) {
-    const rawTx = await this.client.generateRawTransaction(
-      this.account.address(),
+  public async signAndSendTransaction(payload: any) {
+    // this.signer
+    const client = new AptosClient(process.env.APTOS_NODE_URL);
+
+    const rawTx = await client.generateRawTransaction(
+      new HexString(this.signer.account.address.toString()),
       payload
     );
-    const result = await this.client.simulateTransaction(this.account, rawTx);
 
+    const result = await client.simulateTransaction(
+      new TxnBuilderTypes.Ed25519PublicKey(
+        new HexString(this.signer.account.publicKey.toString()).toUint8Array()
+      ),
+      rawTx
+    );
     if (!result[0].success) {
       throw new Error(`${result[0].vm_status}`);
     }
 
-    /**
-     * @dev Sign and try to simulate transaction to make sure it will be a success one
-     */
-    const signedTx = await this.client.signAndSubmitTransaction(
-      this.account,
-      rawTx
-    );
-
-    /**
-     * @dev Wait for transaction if needed
-     */
-    if (waitForTx) {
-      await this.client.waitForTransaction(signedTx, { checkSuccess: true });
-    }
-
-    return signedTx;
+    const realPayload = result[0].payload;
+    console.log({ realPayload });
+    const tx = await this.signer.signAndSubmitTransaction(realPayload as any);
+    console.log(tx);
+    return tx;
   }
 
   /**
@@ -64,32 +49,28 @@ export class TransactionSigner {
    * @param payload
    */
   public async simulate(payload: any) {
-    const rawTx = await this.client.generateRawTransaction(
-      this.account.address(),
-      payload
-    );
-    return this.client.simulateTransaction(this.account, rawTx);
+    return payload;
   }
 
   /**
    * @notice Read program state from
    */
   public async view(payload: any) {
-    return this.client.view(payload);
+    return payload;
   }
 
   /**
    * @notice get current signer address
    */
   public getAddress() {
-    return this.account.address();
+    return this.signer.account.address;
   }
 
   /**
    * @notice Expose client for external use
    */
   public getClient() {
-    return this.client;
+    return this.signer.wallet;
   }
 
   /**
@@ -97,7 +78,7 @@ export class TransactionSigner {
    */
   public getResourceAccount() {
     return AptosAccount.getResourceAccountAddress(
-      this.account.address().hex(),
+      new HexString(this.signer.account.address.toString()),
       new TextEncoder().encode(RESOURCE_ACCOUNT_SEED)
     );
   }

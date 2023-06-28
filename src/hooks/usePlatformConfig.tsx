@@ -22,7 +22,7 @@ export type WhiteListConfigs = {
 
 /** @dev Initiize context. */
 export const PlatformConfigContext = createContext<{
-  chainId: ChainId;
+  chainId: string;
   platformConfig: PlatformConfigEntity;
   chainInfos: { [key: string]: PlatformConfigEntity };
 

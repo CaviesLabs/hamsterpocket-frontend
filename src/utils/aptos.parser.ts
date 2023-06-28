@@ -1,17 +1,19 @@
-// import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
-// import { BigNumber } from "ethers";
-// import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
   PriceConditionType,
-  CreatePocketParamsAptos,
-  AMM,
-  AutoCloseConditionClosedWithAptos,
-  OpenPositionOperatorAptos,
-  StopConditionStoppedWithAptos,
 } from "@/src/entities/pocket.entity";
+import {
+  CreatePocketParams as CreatePocketParamsAptos,
+  DepositParams,
+} from "@/src/providers/program/aptos/params.type";
+import {
+  AMM,
+  AutoCloseConditionClosedWith as AutoCloseConditionClosedWithAptos,
+  OpenPositionOperator as OpenPositionOperatorAptos,
+  StopConditionStoppedWith as StopConditionStoppedWithAptos,
+} from "@/src/providers/program/aptos/entities/pocket.entity";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Keypair } from "@solana/web3.js";
 import { WSOL_ADDRESS } from "@/src/utils";
@@ -19,15 +21,16 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 import bigDecimal from "js-big-decimal";
 
 export const convertBigNumber = (value: number, decimals: number) => {
-  if (decimals > 10 ** 10) {
-    return BigInt(
-      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-    );
-  } else {
-    return BigInt(
-      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-    );
-  }
+  return BigInt(`${parseInt(bigDecimal.multiply(value, decimals))}`);
+  // if (decimals > 10 ** 10) {
+  //   return BigInt(
+  //     `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
+  //   );
+  // } else {
+  //   return BigInt(
+  //     `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
+  //   );
+  // }
 };
 
 /**
@@ -152,73 +155,84 @@ export const createdPocketPramsParserAptos = (
   baseTokenDecimals: number,
   targetTokenDecimals: number,
   realBaseTokenDecimals: number,
-  realTargetTokenDecimals: number
-): CreatePocketParamsAptos => {
-  return {
-    id: solCreatedPocketDto.id,
+  realTargetTokenDecimals: number,
+  depositedAmount: number
+): [CreatePocketParamsAptos, DepositParams] => {
+  return [
+    {
+      id: solCreatedPocketDto.id,
 
-    /**
-     * @dev Desired universal router based on evm chain id.
-     */
-    amm: AMM.PCS,
+      /**
+       * @dev Desired universal router based on evm chain id.
+       */
+      amm: AMM.PCS,
 
-    /**
-     * @dev Convert sol public key to eth string address.
-     */
-    baseCoinType:
-      aptosWhiteLists[
-        solCreatedPocketDto.baseTokenAddress.toBase58().toString()
-      ].address,
+      /**
+       * @dev Convert sol public key to eth string address.
+       */
+      baseCoinType:
+        aptosWhiteLists[
+          solCreatedPocketDto.baseTokenAddress.toBase58().toString()
+        ].address,
 
-    /**
-     * @dev Convert sol public key to eth string address.
-     */
-    targetCoinType:
-      aptosWhiteLists[
-        solCreatedPocketDto.quoteTokenAddress.toBase58().toString()
-      ].address,
+      /**
+       * @dev Convert sol public key to eth string address.
+       */
+      targetCoinType:
+        aptosWhiteLists[
+          solCreatedPocketDto.quoteTokenAddress.toBase58().toString()
+        ].address,
 
-    /**
-     * @dev Convert big number which already convert before to default.
-     */
-    startAt: BigInt(solCreatedPocketDto.startAt.toNumber().toString()),
-    frequency: BigInt(
-      solCreatedPocketDto.frequency?.hours?.toNumber()?.toString() * 3600
-    ),
+      /**
+       * @dev Convert big number which already convert before to default.
+       */
+      startAt: BigInt(solCreatedPocketDto.startAt.toNumber().toString()),
+      frequency: BigInt(
+        solCreatedPocketDto.frequency?.hours?.toNumber()?.toString() * 3600
+      ),
 
-    /**
-     * @dev Revert value from alias decimals to real decimals.
-     */
-    batchVolume: BigInt(
-      (
-        (solCreatedPocketDto.batchVolume.toNumber() /
-          Math.pow(10, baseTokenDecimals)) *
-        Math.pow(10, realBaseTokenDecimals)
-      ).toString()
-    ),
+      /**
+       * @dev Revert value from alias decimals to real decimals.
+       */
+      batchVolume: BigInt(
+        (
+          (solCreatedPocketDto.batchVolume.toNumber() /
+            Math.pow(10, baseTokenDecimals)) *
+          Math.pow(10, realBaseTokenDecimals)
+        ).toString()
+      ),
 
-    /**
-     * @dev Convert stop conditions type in sol to Aptos.
-     */
-    autoClosedConditions: convertToAptosStopCondition(
-      solCreatedPocketDto.stopConditions,
-      baseTokenDecimals,
-      targetTokenDecimals,
-      realBaseTokenDecimals,
-      realTargetTokenDecimals
-    ),
+      /**
+       * @dev Convert stop conditions type in sol to Aptos.
+       */
+      autoClosedConditions: convertToAptosStopCondition(
+        solCreatedPocketDto.stopConditions,
+        baseTokenDecimals,
+        targetTokenDecimals,
+        realBaseTokenDecimals,
+        realTargetTokenDecimals
+      ),
 
-    /**
-     * @dev Convert buy conditions in sol chain to Aptos.
-     */
-    openPositionCondition: convertToAptosBuyCondition(
-      solCreatedPocketDto.buyCondition,
-      targetTokenDecimals,
-      realTargetTokenDecimals
-    ),
-    stopLossCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
-    takeProfitCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
-  };
+      /**
+       * @dev Convert buy conditions in sol chain to Aptos.
+       */
+      openPositionCondition: convertToAptosBuyCondition(
+        solCreatedPocketDto.buyCondition,
+        targetTokenDecimals,
+        realTargetTokenDecimals
+      ),
+      stopLossCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
+      takeProfitCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
+    },
+    {
+      id: solCreatedPocketDto.id,
+      coinType:
+        aptosWhiteLists[
+          solCreatedPocketDto.baseTokenAddress.toBase58().toString()
+        ].address,
+      amount: convertBigNumber(depositedAmount, 10 ** realBaseTokenDecimals),
+    },
+  ];
 };
 
 /**

@@ -3,7 +3,7 @@ import {
   MartianWalletAdapter,
   PontemWalletAdapter,
   WalletProvider,
-} from "@manahippo/aptos-wallet-adapter";
+} from "@pontem/aptos-wallet-adapter";
 
 const aptosWalletAdapters = [
   new MartianWalletAdapter(),
@@ -19,6 +19,7 @@ export const AptosWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
     <AptosWalletKitContext.Provider value={{}}>
       <WalletProvider
         wallets={aptosWalletAdapters}
+        autoConnect={true}
         onError={(error: Error) => {
           console.log("Error when connect aptos chain", error);
         }}

@@ -1,5 +1,3 @@
-import { ChainId } from "../entities/platform-config.entity";
-
 /**
  * @dev Define list portfolio dto
  */
@@ -10,7 +8,7 @@ export class GetPortfoliosDto {
   limit?: number;
   offset?: number;
   search?: string;
-  chainId: ChainId;
+  chainId: string;
 }
 
 /**

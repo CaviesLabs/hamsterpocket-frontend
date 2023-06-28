@@ -1,4 +1,4 @@
-import { HexString, TxnBuilderTypes, BCS, Types } from "aptos";
+import { HexString, TxnBuilderTypes, BCS } from "aptos";
 
 import {
   CreatePocketParams,
@@ -44,7 +44,7 @@ export class TransactionBuilder {
     return {
       execute: async () => {
         return {
-          txId: await this.signer.signAndSendTransaction(payload, true),
+          txId: await this.signer.signAndSendTransaction(payload),
         };
       },
       simulate: async () => this.signer.simulate(payload),

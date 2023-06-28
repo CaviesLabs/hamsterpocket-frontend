@@ -75,7 +75,12 @@ export const ActivePoolGroup: FC = () => {
     setFetching(true);
     dispatch(
       syncWalletPockets(
-        { walletAddress, evm: chainId !== ChainId.sol, chainId: chainId },
+        {
+          walletAddress,
+          evm: chainId !== ChainId.sol,
+          aptos: chainId.includes("aptos"),
+          chainId: chainId,
+        },
         () => {
           setFetching(false);
           handleFetch();

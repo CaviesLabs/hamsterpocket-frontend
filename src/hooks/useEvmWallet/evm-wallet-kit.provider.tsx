@@ -42,7 +42,7 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       customChains = xdc;
     } else if (chainId === ChainId.gnosis) {
       customChains = gnosis;
-    } else if (chainId === ChainId.avax) {
+    } else if (chainId === ChainId.avaxc) {
       customChains = avalanche;
     } else {
       customChains = bsc;

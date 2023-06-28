@@ -14,12 +14,14 @@ import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
 import classnames from "classnames";
 import styles from "./index.module.scss";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 const UserProfile: FC = () => {
   const { walletAddress } = useAppWallet();
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const { disconnect: disconnectSol, solanaWallet } = useSolanaWallet();
   const { signer: evmSigner } = useEvmWallet();
+  const { disconnect: disconnectAptos } = useAptosWallet();
 
   // const { disconnect: disconnectEvm } = useDisconnectEvm();
 
@@ -82,6 +84,11 @@ const UserProfile: FC = () => {
                 /** @dev Force to disconnect evm wallet. */
                 if (chainId !== ChainId.sol || evmSigner !== undefined) {
                   await disconnectEvm();
+                }
+
+                /** @dev Force to disconnect aptos wallet. */
+                if (chainId.toLowerCase().includes("aptos")) {
+                  await disconnectAptos();
                 }
 
                 /** @dev Redirect to home. */

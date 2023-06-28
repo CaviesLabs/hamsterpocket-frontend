@@ -35,10 +35,13 @@ export class PoolService {
   public async syncWalletPockets(
     walletAddress: string,
     evm = false,
+    aptos = false,
     chainId = ""
   ): Promise<any> {
     return networkProvider.request<any>(
-      evm
+      aptos
+        ? `/pool/user/aptos/${walletAddress}/sync?chainId=${chainId}`
+        : evm
         ? `/pool/user/evm/${walletAddress}/sync?chainId=${chainId}`
         : `/pool/user/${walletAddress}/sync`,
       {

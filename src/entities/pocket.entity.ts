@@ -1,6 +1,5 @@
 import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
-import { ChainId } from "./platform-config.entity";
 import "reflect-metadata";
 
 /**
@@ -184,5 +183,5 @@ export class PocketEntity {
 
   stopLossCondition: { stopType: string; value: number };
   takeProfitCondition: { stopType: string; value: number };
-  chainId: ChainId;
+  chainId: string;
 }

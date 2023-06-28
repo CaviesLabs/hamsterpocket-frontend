@@ -1,40 +1,3 @@
-export enum PocketStatusAptos {
-  STATUS_ACTIVE = 0x0,
-  STATUS_PAUSED = 0x1,
-  STATUS_CLOSED = 0x2,
-  STATUS_WITHDRAWN = 0x3,
-}
-
-export enum AMM {
-  PCS = 0x0,
-}
-
-export enum OpenPositionOperatorAptos {
-  UNSET = 0x0,
-  OPERATOR_EQ = 0x1,
-  OPERATOR_NEQ = 0x2,
-  OPERATOR_GT = 0x3,
-  OPERATOR_GTE = 0x4,
-  OPERATOR_LT = 0x5,
-  OPERATOR_LTE = 0x6,
-  OPERATOR_BW = 0x7,
-  OPERATOR_NBW = 0x8,
-}
-
-export enum StopConditionStoppedWithAptos {
-  UNSET = 0x0,
-  STOPPED_WITH_PRICE = 0x1,
-  STOPPED_WITH_PORTFOLIO_VALUE_DIFF = 0x2,
-  STOPPED_WITH_PORTFOLIO_PERCENT_DIFF = 0x3,
-}
-
-export enum AutoCloseConditionClosedWithAptos {
-  CLOSED_WITH_END_TIME = 0x0,
-  CLOSED_WITH_BATCH_AMOUNT = 0x1,
-  CLOSED_WITH_SPENT_BASE_AMOUNT = 0x2,
-  CLOSED_WITH_RECEIVED_TARGET_AMOUNT = 0x3,
-}
-
 export interface DepositParamsAptos {
   id: string;
   coinType: string;
@@ -140,4 +103,41 @@ export interface PocketResponseTypeAptos {
   total_received_fund_in_base_amount: string;
   total_received_target_amount: string;
   total_swapped_base_amount: string;
+}
+
+export enum PocketStatusAptos {
+  STATUS_ACTIVE = 0x0,
+  STATUS_PAUSED = 0x1,
+  STATUS_CLOSED = 0x2,
+  STATUS_WITHDRAWN = 0x3,
+}
+
+export enum AMM {
+  PCS = 0x0,
+}
+
+export enum OpenPositionOperatorAptos {
+  UNSET = 0x0,
+  OPERATOR_EQ = 0x1,
+  OPERATOR_NEQ = 0x2,
+  OPERATOR_GT = 0x3,
+  OPERATOR_GTE = 0x4,
+  OPERATOR_LT = 0x5,
+  OPERATOR_LTE = 0x6,
+  OPERATOR_BW = 0x7,
+  OPERATOR_NBW = 0x8,
+}
+
+export enum StopConditionStoppedWithAptos {
+  UNSET = 0x0,
+  STOPPED_WITH_PRICE = 0x1,
+  STOPPED_WITH_PORTFOLIO_VALUE_DIFF = 0x2,
+  STOPPED_WITH_PORTFOLIO_PERCENT_DIFF = 0x3,
+}
+
+export enum AutoCloseConditionClosedWithAptos {
+  CLOSED_WITH_END_TIME = 0x0,
+  CLOSED_WITH_BATCH_AMOUNT = 0x1,
+  CLOSED_WITH_SPENT_BASE_AMOUNT = 0x2,
+  CLOSED_WITH_RECEIVED_TARGET_AMOUNT = 0x3,
 }

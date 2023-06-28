@@ -41,7 +41,8 @@ const Header: FC = () => {
   const handleConnect = useCallback(() => {
     if (chainId === ChainId.sol) {
       connectWallet();
-    } else if (chainId === ChainId.aptos) {
+    } else if (chainId.toLowerCase().includes("aptos")) {
+      console.log(connectAptos);
       connectAptos();
     }
   }, [chainId]);
@@ -132,7 +133,8 @@ const Header: FC = () => {
               <div className="float-right relative">
                 {!walletAddress ? (
                   <div className="relative flex items-center">
-                    {chainId === ChainId.sol || chainId === ChainId.aptos ? (
+                    {chainId === ChainId.sol ||
+                    chainId.toLowerCase().includes("aptos") ? (
                       <Button
                         className="!px-8 mobile:!text-[12px] mobile:!px-[10px] mobile:!py-[3px]"
                         size="small"

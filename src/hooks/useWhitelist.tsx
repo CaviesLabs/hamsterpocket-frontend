@@ -80,12 +80,16 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           });
           setWhitelist(res);
         } else {
-          const processedList = ChainId.aptos
+          const processedList = chainId.toLowerCase().includes("aptos")
             ? makeAliasForAptosWhitelist(result, chainId)
             : makeAliasForEvmWhitelist(result, chainId);
           const res: WhiteListConfigs = {};
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;
+          });
+          console.log("Process whitelist for aptos chain", {
+            processedList,
+            res,
           });
           setWhitelist(res);
         }
