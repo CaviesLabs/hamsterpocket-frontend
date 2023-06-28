@@ -31,6 +31,10 @@ import {
   EvmWalletKitProvider,
   EvmWalletProvider,
 } from "@/src/hooks/useEvmWallet";
+import {
+  AptosWalletKitProvider,
+  AptosWalletProvider,
+} from "@/src/hooks/useAptos";
 import { AppWalletProvider } from "@/src/hooks/useAppWallet";
 import { WhitelistProvider } from "@/src/hooks/useWhitelist";
 import { PlatformConfigProvider } from "@/src/hooks/usePlatformConfig";
@@ -113,11 +117,15 @@ function MyApp({ Component, pageProps }: AppProps) {
                     <MainProvider>
                       <EvmWalletKitProvider>
                         <EvmWalletProvider>
-                          <AppWalletProvider>
-                            <WhitelistProvider>
-                              <AppComponent {...{ Component, pageProps }} />
-                            </WhitelistProvider>
-                          </AppWalletProvider>
+                          <AptosWalletKitProvider>
+                            <AptosWalletProvider>
+                              <AppWalletProvider>
+                                <WhitelistProvider>
+                                  <AppComponent {...{ Component, pageProps }} />
+                                </WhitelistProvider>
+                              </AppWalletProvider>
+                            </AptosWalletProvider>
+                          </AptosWalletKitProvider>
                         </EvmWalletProvider>
                       </EvmWalletKitProvider>
                     </MainProvider>

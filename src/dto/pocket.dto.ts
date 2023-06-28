@@ -7,7 +7,6 @@ import {
   BuyConditionOnChain,
   StopConditionsOnChain,
 } from "@/src/entities/pocket.entity";
-import { ChainId } from "@/src/entities/platform-config.entity";
 
 export interface PocketDto {}
 
@@ -40,7 +39,7 @@ export class GetPocketsDto {
   search?: string;
   sortBy?: string;
 
-  chainId: ChainId;
+  chainId: string;
 }
 
 /**
@@ -126,6 +125,9 @@ export class CreatePocketDto {
   marketId: string;
 }
 
+/**
+ * @dev Dto to get qoute of trading info for solana.
+ */
 export class GetQouteDto {
   chainId: string;
   baseTokenAddress: string;

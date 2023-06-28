@@ -8,6 +8,7 @@ import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 export const ClosePocketModal: FC<{
   isModalOpen: boolean;
@@ -29,6 +30,8 @@ export const ClosePocketModal: FC<{
 
   const { closePocket: closePocketEvm, withdrawPocket: withdrawPocketEvm } =
     useEvmWallet();
+  const { closePocket: closePocketAptos, withdrawPocket: withdrawPocketAptos } =
+    useAptosWallet();
   const { walletAddress } = useAppWallet();
   const { chainId } = usePlatformConfig();
 
@@ -43,6 +46,20 @@ export const ClosePocketModal: FC<{
       if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
         await programService.closePocket(solanaWallet, props.pocket);
+      } else if (chainId.includes("aptos")) {
+        if (props.pocket.status === PocketStatus.CLOSED) {
+          await withdrawPocketAptos(
+            props.pocket.id || props.pocket._id,
+            props.pocket.baseTokenAddress,
+            props.pocket.targetTokenAddress
+          );
+        } else {
+          await closePocketAptos(
+            props.pocket.id || props.pocket._id,
+            props.pocket.baseTokenAddress,
+            props.pocket.targetTokenAddress
+          );
+        }
       } else {
         if (props.pocket.status === PocketStatus.CLOSED) {
           await withdrawPocketEvm(props.pocket.id || props.pocket._id);

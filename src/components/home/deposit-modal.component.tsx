@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback, useState } from "react";
+import { FC, MouseEvent, useCallback, useMemo, useState } from "react";
 import { Modal } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
 import { CurrencyInput } from "@/src/components/currency-input";
@@ -12,6 +12,8 @@ import { SuccessTransactionModal } from "@/src/components/success-modal.componen
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
 import { BigNumber } from "ethers";
+import { useAptosWallet } from "@/src/hooks/useAptos";
+import { convertBigNumber as convertAptosNumber } from "@/src/utils/aptos.parser";
 
 export const DepositModal: FC<{
   isModalOpen: boolean;
@@ -36,6 +38,10 @@ export const DepositModal: FC<{
     depositPocket: depositPocketEvm,
     signer: evmSigner,
   } = useEvmWallet();
+
+  /** @dev Inject aptos program service to use. */
+  const { depositPocket: depositPocketAptos, balance: aptosBalance } =
+    useAptosWallet();
 
   /** @dev Inject whitelist provider to use. */
   const {
@@ -68,6 +74,16 @@ export const DepositModal: FC<{
           solanaWallet,
           props.pocket,
           depositedAmount
+        );
+      } else if (chainId.includes("aptos")) {
+        console.log("deposit in aptos", depositedAmount);
+        await depositPocketAptos(
+          props.pocket.id,
+          baseToken?.address,
+          convertAptosNumber(
+            depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals),
+            Math.pow(10, baseToken?.realDecimals)
+          )
         );
       } else {
         console.log("depsit in evm");
@@ -127,6 +143,16 @@ export const DepositModal: FC<{
 
   const isDisabled = !isAmountSet || buttonText !== "Deposit";
 
+  const renderBalance = useMemo(() => {
+    if (chainId === ChainId.sol) {
+      return analyzeDecimals(baseBalance);
+    } else if (chainId.includes("aptos")) {
+      return analyzeDecimals(aptosBalance);
+    } else {
+      return analyzeDecimals(parseFloat(ethSolBalance));
+    }
+  }, [chainId, solBalance, ethSolBalance, aptosBalance]);
+
   return (
     <Modal
       open={props.isModalOpen}
@@ -164,9 +190,7 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {chainId === ChainId.sol
-              ? analyzeDecimals(baseBalance)
-              : ethSolBalance}{" "}
+            {renderBalance}
             {baseToken.symbol}
           </p>
           <Button

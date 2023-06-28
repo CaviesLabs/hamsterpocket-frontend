@@ -43,6 +43,7 @@ module.exports = withPWA(
       EVM_CHAIN_ID: process.env.EVM_CHAIN_ID,
       EVM_CONTRACT_ADDRESS: process.env.EVM_CONTRACT_ADDRESS,
       EVM_REGISTRY_ADDRESS: process.env.EVM_REGISTRY_ADDRESS,
+      APTOS_NODE_URL: process.env.APTOS_NODE_URL,
     },
     serverRuntimeConfig: {
       // Will only be available on the server side

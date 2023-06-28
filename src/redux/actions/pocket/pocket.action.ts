@@ -128,7 +128,12 @@ export const setClosedPockets = (data: PocketEntity[]) => ({
  * @returns {boolean}
  */
 export const syncWalletPockets = (
-  data: { walletAddress: string; evm?: boolean; chainId?: string },
+  data: {
+    walletAddress: string;
+    evm?: boolean;
+    aptos?: boolean;
+    chainId?: string;
+  },
   callback?: CallBackSaga<any>
 ) => ({
   type: SYNC_WALLET_POCKETS,

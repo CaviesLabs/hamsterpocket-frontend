@@ -26,6 +26,7 @@ import {
   createdPocketPramsParserEvm,
   convertBigNumber,
 } from "@/src/utils/evm.parser";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   /** @dev Inject wallet provider. */
@@ -38,6 +39,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
   /** @dev Inject eth function. */
   const { createPocket: createEvmPocket, signer: evmSigner } = useEvmWallet();
+
+  /** @dev Inject aptos function. */
+  const { createPocket: createAptosPocket } = useAptosWallet();
 
   /** @dev Inject functions from whitelist hook to use. */
   const { findPairLiquidity, findEntityByAddress, liquidities, whiteLists } =
@@ -52,8 +56,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
   const [buyCondition, setBuyCondition] = useState<BuyCondition>();
   const [stopConditions, setStopConditions] = useState<StopConditions[]>([]);
   const [depositedAmount, setDepositedAmount] = useState<number>(0);
-  const [takeProfitAmount, setTakeProfitAmount] = useState<number>();
-  const [stopLossAmount, setStopLossAmount] = useState<number>();
+  const [takeProfitAmount, setTakeProfitAmount] = useState<number>(0);
+  const [stopLossAmount, setStopLossAmount] = useState<number>(0);
   const [createdEnable, setCreatedEnable] = useState(false);
   const [errorMsgs, setErrorMsgs] = useState<ErrorValidateContext>();
   const [targetTokenAddress, setTargetTokenAddress] = useState<
@@ -243,6 +247,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         })),
       };
 
+      console.log(chainId.toLowerCase().includes("aptos"));
       if (chainId === ChainId.sol) {
         /**
          * @dev Execute interact with solana blockchain.
@@ -253,7 +258,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         );
 
         console.log(response);
-      } else {
+      } else if (!chainId.toLowerCase().includes("aptos")) {
         let exchange = platformConfig?.whitelistedRouters?.[0];
 
         /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
@@ -287,8 +292,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           depositedAmount,
           plufixWithDecimals
         );
-
-        console.log(evmDespositedAmount.toString());
 
         if (takeProfitAmount) {
           const evmTakeProfitAmount = convertBigNumber(
@@ -325,6 +328,22 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           ...evmParams,
         });
         console.log(response);
+      } else {
+        /**
+         * @dev Execute creating on Aptos chain.
+         */
+        const response = await createAptosPocket(
+          whiteLists,
+          solCreatedPocketData,
+          baseTokenAddress[1],
+          targetTokenAddress[1],
+          whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
+          whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
+          depositedAmount,
+          stopLossAmount,
+          takeProfitAmount
+        );
+        console.log({ response });
       }
       setSuccessCreated(true);
     } catch (err) {
@@ -407,13 +426,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       return setAvailableTargetTokens(() => {
         return Object.keys(whiteLists)
           .filter((address) => {
-            // return (
-            //   whiteLists?.[address].name !== "Wrapped Matic" &&
-            //   whiteLists?.[address].name !== "Wrapped BNB" &&
-            //   whiteLists?.[address].name !== "Wrapped OKT" &&
-            //   whiteLists?.[address].name !== "Wrapped XDC" &&
-            //   whiteLists?.[address].name !== "Wrapped xDAI"
-            // );
             return !whiteLists?.[address]?.isNativeCoin;
           })
           .reverse();

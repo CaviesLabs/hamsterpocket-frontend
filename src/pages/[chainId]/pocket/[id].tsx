@@ -29,6 +29,7 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 import State from "@/src/redux/entities/state";
 import MainLayout from "@/src/layouts/main";
 import styles from "@/styles/Home.module.css";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 const PocketDetailPage: NextPage = () => {
   /**
@@ -40,6 +41,7 @@ const PocketDetailPage: NextPage = () => {
   const { walletAddress } = useAppWallet();
   const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
   const { programService: solProgram } = useWallet();
+  const { programService } = useAptosWallet();
 
   /** @dev Get lastest pockets. */
   const activePockets = useSelector((state: State) => state.activePockets);
@@ -69,6 +71,8 @@ const PocketDetailPage: NextPage = () => {
     if (!pocket) return;
     if (chainId === ChainId.sol) {
       await solProgram.sync(pocket?._id);
+    } else if (chainId.includes("aptos")) {
+      await programService.sync(pocket?._id);
     } else {
       await evmProgramService.sync(pocket?._id);
     }

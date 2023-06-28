@@ -12,7 +12,7 @@ export const stopConditionHumanLabelParser = (key: string) => {
     case "endTimeReach":
       return "Time";
     case "spentBaseTokenAmountReach":
-      return "Target SOL Amount";
+      return "Base Tokens Amount";
     case "quoteTokenAmountReach":
       return "Target Tokens Purchased";
   }

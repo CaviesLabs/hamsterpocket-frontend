@@ -90,7 +90,7 @@ export function* syncWalletPockets({
   payload,
   callback,
 }: SagaPayload<
-  { walletAddress: string; evm?: boolean; chainId?: string },
+  { walletAddress: string; evm?: boolean; aptos?: boolean; chainId?: string },
   boolean
 >) {
   try {
@@ -98,6 +98,7 @@ export function* syncWalletPockets({
       poolService.syncWalletPockets,
       payload.walletAddress,
       payload.evm,
+      payload.aptos,
       payload.chainId
     );
     yield call(portfolioService.syncWalletPortfolio, payload.walletAddress);

@@ -131,6 +131,11 @@ input[type=number] {
   border-radius: 12px;
 }
 
+.wallet-modal>.ant-modal-content {
+  padding: 40px 20px 20px;
+  border-radius: 12px;
+}
+
 @media screen and (max-width: 768px) {
   .hamster-modal>.ant-modal-content {
     padding: 10px 15px;
@@ -450,4 +455,11 @@ input:checked+.slider:before {
 
 .progress-cap.active {
   background-position: left;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

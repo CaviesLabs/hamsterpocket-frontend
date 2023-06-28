@@ -1,5 +1,3 @@
-import { ChainId } from "@/src/entities/platform-config.entity";
-
 export type WhitelistEntity = {
   _id: string;
   address: string;
@@ -11,7 +9,7 @@ export type WhitelistEntity = {
   symbol: string;
   estimatedValue: number;
   realDecimals?: number;
-  chainId: ChainId;
+  chainId: string;
   aliasAddress?: string;
   isNativeCoin: boolean;
 };

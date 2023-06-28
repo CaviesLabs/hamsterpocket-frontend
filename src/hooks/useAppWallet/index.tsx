@@ -11,6 +11,7 @@ import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId, chainInfos } from "@/src/entities/platform-config.entity";
+import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
 
 /** @dev Initiize context. */
 export const AppWalletContext = createContext<AppWalletContextState>(null);
@@ -32,6 +33,11 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @dev Inject context of eth wallet.
    */
   const ethWallet = useAccount();
+
+  /**
+   * @dev Inject context of aptos wallet.
+   */
+  const aptosWallet = useAptosWallet();
 
   /**
    * @dev Watch changes in solana wallet and eth wallet.
@@ -60,9 +66,11 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
         if (targetChainId && chainId !== targetChainId) {
           switchChainId(targetChainId);
         }
+      } else if (aptosWallet.account) {
+        setWalletAddress(aptosWallet.account?.address?.toString());
       }
 
-      if (!solWallet && !ethWallet?.address) {
+      if (!solWallet && !ethWallet?.address && !aptosWallet?.account) {
         setWalletAddress("");
       }
     })();
