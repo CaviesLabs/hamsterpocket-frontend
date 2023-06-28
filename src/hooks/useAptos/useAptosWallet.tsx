@@ -7,7 +7,7 @@ import {
   useEffect,
   useCallback,
 } from "react";
-import { useWallet, PontemWalletName } from "@pontem/aptos-wallet-adapter";
+import { useWallet } from "@pontem/aptos-wallet-adapter";
 import { TransactionBuilder } from "@/src/providers/program/aptos/transaction.builder";
 import { TransactionSigner } from "@/src/providers/program/aptos/transaction.client";
 import { AptosProgramService } from "@/src/services/aptos-program.service";
@@ -16,6 +16,7 @@ import { createdPocketPramsParserAptos } from "@/src/utils/aptos.parser";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { HexString } from "aptos";
+import { AptosConnector } from "@/src/components/aptos-connector";
 
 /** @dev Initiize context. */
 export const AptosWalletContext = createContext<{
@@ -114,12 +115,15 @@ export const AptosWalletContext = createContext<{
 /** @dev Expose wallet provider for usage. */
 export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /** @dev Inject aptos wallet context. */
-  const { connect: connectAptos, account, disconnect } = useWallet();
+  const { account, disconnect } = useWallet();
   const signer = useWallet();
 
   /** @dev Inject program provider. */
   const [builder, initBuilder] = useState<TransactionBuilder>();
   const [service, initService] = useState<AptosProgramService>();
+
+  /** @dev Define condition to show aptos connector popup. */
+  const [connectorDisplayed, setConnectorDisplayed] = useState(false);
 
   const [balance, setBalance] = useState(0);
 
@@ -130,7 +134,8 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @internal @dev The function to open wallet popup for connecting. */
   const handleConnect = () => {
-    connectAptos(PontemWalletName);
+    // connectAptos(PontemWalletName);
+    setConnectorDisplayed(true);
   };
 
   /** @internal @dev The function to disconnect for connecting. */
@@ -369,6 +374,13 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
       }}
     >
       {props.children}
+      <AptosConnector
+        isModalOpen={connectorDisplayed}
+        handleCancel={() => setConnectorDisplayed(false)}
+        handleOk={() => {
+          setConnectorDisplayed(false);
+        }}
+      />
     </AptosWalletContext.Provider>
   );
 };

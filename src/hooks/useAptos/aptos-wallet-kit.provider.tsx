@@ -2,12 +2,18 @@ import { createContext, useContext, ReactNode, FC } from "react";
 import {
   MartianWalletAdapter,
   PontemWalletAdapter,
+  FewchaWalletAdapter,
+  NightlyWalletAdapter,
+  MSafeWalletAdapter,
   WalletProvider,
 } from "@pontem/aptos-wallet-adapter";
 
 const aptosWalletAdapters = [
   new MartianWalletAdapter(),
   new PontemWalletAdapter(),
+  new FewchaWalletAdapter(),
+  new NightlyWalletAdapter(),
+  new MSafeWalletAdapter(),
 ];
 
 /** @dev Initiize context. */

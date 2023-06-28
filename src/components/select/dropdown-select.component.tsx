@@ -58,7 +58,13 @@ export const DropdownSelect: FC<DropdownSelectProps> = (props) => {
       trigger={["click"]}
       placement="bottom"
       dropdownRender={(menu) => (
-        <div className="h-52 overflow-scroll">{menu}</div>
+        <div
+          className={`no-scrollbar h-52 bg-[#20242D] ${
+            props.options.length > 10 ? "overflow-scroll" : ""
+          }`}
+        >
+          {menu}
+        </div>
       )}
     >
       <div className="flex items-center w-full rounded-[16px] cursor-pointer">
