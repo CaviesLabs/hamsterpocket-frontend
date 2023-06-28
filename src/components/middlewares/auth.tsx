@@ -41,7 +41,9 @@ const AuthMiddleware: FC<Props> = ({ children }) => {
         pushRouterWithChainId("/");
       }
       if (
-        (router.asPath === `/${chainId}` || router.asPath === `/${chainId}/`) &&
+        (router.asPath === `/${chainId}` ||
+          router.asPath === `/${chainId}/` ||
+          router.asPath === "/") &&
         wallet?.walletAddress
       ) {
         pushRouterWithChainId("/my-pockets");

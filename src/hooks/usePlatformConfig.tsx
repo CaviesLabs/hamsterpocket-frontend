@@ -49,7 +49,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
   );
 
   /** @dev Define desired chain id, @default bsc proxied router. */
-  const [desiredChainId, setDesiredChainId] = useState<ChainId>(ChainId.bnb);
+  const [desiredChainId, setDesiredChainId] = useState<string>("");
   const [dexUrl, setDexUrl] = useState("");
   const [
     platformConfigBasedDesiredChainId,
@@ -62,7 +62,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     const chainId = router.query?.chainId;
     if (chainId) {
-      setDesiredChainId(chainId as ChainId);
+      setDesiredChainId(chainId as string);
     }
   }, [router]);
 
@@ -108,12 +108,22 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
         return router.push(`/${chainId}`);
       }
 
+      window.localStorage.setItem("chainId", chainId);
       router.push(`/${chainId}/${lastSlug}`);
     },
     [router, platformConfig]
   );
 
-  console.log({ desiredChainId, platformConfigBasedDesiredChainId });
+  /** @dev The function to desire chainId in case user do not force chainId by URL. */
+  useEffect(() => {
+    if (!desiredChainId) {
+      if (window.localStorage.getItem("chainId")) {
+        setDesiredChainId(window.localStorage.getItem("chainId"));
+      } else {
+        setDesiredChainId(ChainId.bnb);
+      }
+    }
+  }, [desiredChainId]);
 
   return (
     <PlatformConfigContext.Provider
