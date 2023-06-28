@@ -70,6 +70,16 @@ export const ChainSelect: FC = () => {
               //   image: APTOS_IMAGE,
               // })
               .filter((item) => item.id !== chainId)
+              .filter((item) => {
+                if (
+                  process.env.env === "prod" &&
+                  item.id === "mumbai" &&
+                  item.id.includes("testnet")
+                ) {
+                  return false;
+                }
+                return true;
+              })
               .map((item, key) => (
                 <li
                   key={`kksk-${key}`}
