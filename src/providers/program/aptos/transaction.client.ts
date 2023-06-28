@@ -51,7 +51,19 @@ export class TransactionSigner {
    * @param payload
    */
   public async simulate(payload: any) {
-    return payload;
+    const client = new AptosClient(process.env.APTOS_NODE_URL);
+
+    const rawTx = await client.generateRawTransaction(
+      new HexString(this.signer.account.address.toString()),
+      payload
+    );
+
+    return client.simulateTransaction(
+      new TxnBuilderTypes.Ed25519PublicKey(
+        new HexString(this.signer.account.publicKey.toString()).toUint8Array()
+      ),
+      rawTx
+    );
   }
 
   /**
