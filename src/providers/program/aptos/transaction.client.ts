@@ -38,6 +38,7 @@ export class TransactionSigner {
 
     const realPayload = result[0].payload;
 
+    // TODO: cleanup this dirty fix and re-implement client
     if ((realPayload as any).arguments[0].includes("0x")) {
       (realPayload as any).arguments[0] = new HexString(
         (realPayload as any).arguments[0]
