@@ -34,6 +34,21 @@ export const ChainSelect: FC = () => {
     }));
   }, [chainInfos]);
 
+  const avaliableChains = useMemo(() => {
+    return chains
+      .filter((item) => item.id !== chainId)
+      .filter((item) => {
+        console.log(process.env.ENV);
+        if (
+          process.env.ENV === "prod" &&
+          (item.id === "polygon_mumbai" || item.id.includes("testnet"))
+        ) {
+          return false;
+        }
+        return true;
+      });
+  }, [chains, chainId]);
+
   return (
     <div
       className={classnames(
@@ -55,43 +70,24 @@ export const ChainSelect: FC = () => {
       <ul
         style={{
           display: show ? "block" : "none",
-          bottom: `-${
-            chains.filter((item) => item.id !== chainId).length * 41
-          }px`,
+          bottom: `-${avaliableChains.length * 41}px`,
         }}
         className={styles["toggle-container"]}
       >
         <div className={styles.container}>
           <ul>
-            {chains
-              // .concat({
-              //   id: "aptos",
-              //   name: "Aptos",
-              //   image: APTOS_IMAGE,
-              // })
-              .filter((item) => item.id !== chainId)
-              .filter((item) => {
-                if (
-                  process.env.env === "prod" &&
-                  item.id === "mumbai" &&
-                  item.id.includes("testnet")
-                ) {
-                  return false;
-                }
-                return true;
-              })
-              .map((item, key) => (
-                <li
-                  key={`kksk-${key}`}
-                  onClick={() => switchChainId(item.id)}
-                  className="hover:text-purple normal-text flex items-center"
-                >
-                  <img className="w-[24px] h-[24px]" src={item.image} />
-                  <p className="ml-[5px]">
-                    {(item.name || item.id).toUpperCase()}
-                  </p>
-                </li>
-              ))}
+            {avaliableChains.map((item, key) => (
+              <li
+                key={`kksk-${key}`}
+                onClick={() => switchChainId(item.id)}
+                className="hover:text-purple normal-text flex items-center"
+              >
+                <img className="w-[24px] h-[24px]" src={item.image} />
+                <p className="ml-[5px]">
+                  {(item.name || item.id).toUpperCase()}
+                </p>
+              </li>
+            ))}
           </ul>
         </div>
       </ul>
