@@ -8,15 +8,14 @@ import { RESOURCE_ACCOUNT_SEED } from "./libs/constants";
 export class TransactionSigner {
   /**
    * @dev Initialize transaction signer
-   * @param privateKey
-   * @param nodeUrl
+   * @param signer
    */
-  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {}
+  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {
+  }
 
   /**
    * @notice Sign and send message
    * @param payload
-   * @param waitForTx
    */
   public async signAndSendTransaction(payload: any) {
     // this.signer
@@ -38,10 +37,13 @@ export class TransactionSigner {
     }
 
     const realPayload = result[0].payload;
-    console.log({ realPayload });
-    const tx = await this.signer.signAndSubmitTransaction(realPayload as any);
-    console.log(tx);
-    return tx;
+
+    if ((realPayload as any).arguments[0].includes("0x")) {
+      (realPayload as any).arguments[0] = new HexString(
+        (realPayload as any).arguments[0]
+      ).toUint8Array();
+    }
+    return this.signer.signAndSubmitTransaction(realPayload as any);
   }
 
   /**
@@ -56,7 +58,7 @@ export class TransactionSigner {
    * @notice Read program state from
    */
   public async view(payload: any) {
-    return payload;
+    return new AptosClient(process.env.APTOS_NODE_URL).view(payload);
   }
 
   /**

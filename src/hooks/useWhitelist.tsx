@@ -35,10 +35,10 @@ export const WhitelistContext = createContext<{
   findEntityByAddress(address: string): WhitelistEntity;
 
   /**
-   * @dev The function handle to get qoute and base token.
-   * @param string {baseTokenAddress}
-   * @param string {targetTokenAddress}
-   * @returns {Array[baseToken, qouteToken, marketId]}
+   * @dev The function handle to get quote and base token.
+   * @returns {Array[baseToken, quoteToken, marketId]}
+   * @param baseTokenAddress
+   * @param targetTokenAddress
    */
   findPairLiquidity(
     baseTokenAddress: string,
@@ -81,8 +81,8 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           setWhitelist(res);
         } else {
           const processedList = chainId.toLowerCase().includes("aptos")
-            ? makeAliasForAptosWhitelist(result, chainId)
-            : makeAliasForEvmWhitelist(result, chainId);
+            ? makeAliasForAptosWhitelist(result, chainId as ChainId)
+            : makeAliasForEvmWhitelist(result, chainId as ChainId);
           const res: WhiteListConfigs = {};
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;
@@ -186,7 +186,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     const restValue = newStr.replace(`${baseValue}${matchedStr}`, "");
     return (
       <span className="mx-[3px]">
-        {baseValue}.0<sub>{totalZero - 1}</sub>
+        {baseValue}.0<sub>{totalZero}</sub>
         {(restValue.length > 5 ? restValue.substring(0, 5) : restValue).replace(
           /0+$/,
           ""
