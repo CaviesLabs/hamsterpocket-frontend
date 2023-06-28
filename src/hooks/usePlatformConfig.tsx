@@ -94,6 +94,7 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
   const handleSwitchChain = useCallback(
     (chainId: string) => {
       if (!platformConfig) return;
+      window.localStorage.setItem("chainId", chainId);
 
       const lastSlug = router.asPath.substring(
         router.asPath.indexOf("/", 1),
@@ -108,7 +109,6 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
         return router.push(`/${chainId}`);
       }
 
-      window.localStorage.setItem("chainId", chainId);
       router.push(`/${chainId}/${lastSlug}`);
     },
     [router, platformConfig]
