@@ -175,7 +175,9 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     if (!zeroMatched || zeroMatched[0]?.replace(".", "").split("").length < 3) {
       return (
         <span className="mx-[3px]">
-          {veryComplexDecimalsValue?.toFixed(5).replace(/0+$/, "")}
+          {Number(
+            veryComplexDecimalsValue?.toFixed(5).replace(/0+$/, "")
+          ).toString()}
         </span>
       );
     }

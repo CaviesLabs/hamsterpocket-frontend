@@ -1,4 +1,10 @@
-import { AptosAccount, AptosClient, HexString, TxnBuilderTypes } from "aptos";
+import {
+  AptosAccount,
+  AptosClient,
+  HexString,
+  TxnBuilderTypes,
+  CoinClient,
+} from "aptos";
 import * as aptosWalletAdapter from "@pontem/aptos-wallet-adapter";
 import { RESOURCE_ACCOUNT_SEED } from "./libs/constants";
 
@@ -84,5 +90,11 @@ export class TransactionSigner {
       new HexString(this.signer.account.address.toString()),
       new TextEncoder().encode(RESOURCE_ACCOUNT_SEED)
     );
+  }
+
+  public static async getBalance(address: HexString) {
+    const aptosClient = new AptosClient(process.env.APTOS_NODE_URL);
+    const coinClient = new CoinClient(aptosClient);
+    return Number((await coinClient.checkBalance(address)).toString());
   }
 }

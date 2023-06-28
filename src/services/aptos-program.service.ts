@@ -88,11 +88,16 @@ export class AptosProgramService {
     targetTokenAddress: string
   ) {
     return this.transtractionBuilder
-      .buildWithdrawTransaction({
-        id: pocketId,
-        baseCoinType: baseTokenAddress,
-        targetCoinType: targetTokenAddress,
-      })
+      .buildClosePocketAndWithdrawTransaction(
+        {
+          id: pocketId,
+        },
+        {
+          id: pocketId,
+          baseCoinType: baseTokenAddress,
+          targetCoinType: targetTokenAddress,
+        }
+      )
       .execute();
   }
 
@@ -141,5 +146,19 @@ export class AptosProgramService {
         amount: depositedAmount,
       })
       .execute();
+  }
+
+  /**
+   * @dev The function to sync the data of pool
+   * @param {string} poolId
+   */
+  public async sync(poolId: string): Promise<any> {
+    return networkProvider.request(`/pool/aptos/${poolId}/sync`, {
+      method: "POST",
+      data: {},
+      headers: {
+        "content-type": "text/plain;charset=UTF-8",
+      },
+    });
   }
 }

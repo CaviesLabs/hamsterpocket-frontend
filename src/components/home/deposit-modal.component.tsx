@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback, useState } from "react";
+import { FC, MouseEvent, useCallback, useMemo, useState } from "react";
 import { Modal } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
 import { CurrencyInput } from "@/src/components/currency-input";
@@ -40,7 +40,8 @@ export const DepositModal: FC<{
   } = useEvmWallet();
 
   /** @dev Inject aptos program service to use. */
-  const { depositPocket: depositPocketAptos } = useAptosWallet();
+  const { depositPocket: depositPocketAptos, balance: aptosBalance } =
+    useAptosWallet();
 
   /** @dev Inject whitelist provider to use. */
   const {
@@ -75,13 +76,13 @@ export const DepositModal: FC<{
           depositedAmount
         );
       } else if (chainId.includes("aptos")) {
-        console.log("deposit in aptos");
+        console.log("deposit in aptos", depositedAmount);
         await depositPocketAptos(
           props.pocket.id,
           baseToken?.address,
           convertAptosNumber(
             depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals),
-            baseToken?.decimals
+            Math.pow(10, baseToken?.realDecimals)
           )
         );
       } else {
@@ -142,6 +143,16 @@ export const DepositModal: FC<{
 
   const isDisabled = !isAmountSet || buttonText !== "Deposit";
 
+  const renderBalance = useMemo(() => {
+    if (chainId === ChainId.sol) {
+      return analyzeDecimals(baseBalance);
+    } else if (chainId.includes("aptos")) {
+      return analyzeDecimals(aptosBalance);
+    } else {
+      return analyzeDecimals(parseFloat(ethSolBalance));
+    }
+  }, [chainId, solBalance, ethSolBalance, aptosBalance]);
+
   return (
     <Modal
       open={props.isModalOpen}
@@ -179,9 +190,7 @@ export const DepositModal: FC<{
               alt="token balance"
               className="w-6 mx-1 rounded"
             />
-            {chainId === ChainId.sol
-              ? analyzeDecimals(baseBalance)
-              : ethSolBalance}{" "}
+            {renderBalance}
             {baseToken.symbol}
           </p>
           <Button

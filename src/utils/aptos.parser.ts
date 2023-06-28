@@ -156,7 +156,9 @@ export const createdPocketPramsParserAptos = (
   targetTokenDecimals: number,
   realBaseTokenDecimals: number,
   realTargetTokenDecimals: number,
-  depositedAmount: number
+  depositedAmount: number,
+  stopLossAmount: number,
+  takeProfitAmount: number
 ): [CreatePocketParamsAptos, DepositParams] => {
   return [
     {
@@ -221,8 +223,20 @@ export const createdPocketPramsParserAptos = (
         targetTokenDecimals,
         realTargetTokenDecimals
       ),
-      stopLossCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
-      takeProfitCondition: [StopConditionStoppedWithAptos.UNSET, BigInt(0)],
+      stopLossCondition:
+        stopLossAmount === 0
+          ? [StopConditionStoppedWithAptos.UNSET, BigInt(0)]
+          : [
+              StopConditionStoppedWithAptos.STOPPED_WITH_PRICE,
+              convertBigNumber(stopLossAmount, 10 ** realBaseTokenDecimals),
+            ],
+      takeProfitCondition:
+        takeProfitAmount === 0
+          ? [StopConditionStoppedWithAptos.UNSET, BigInt(0)]
+          : [
+              StopConditionStoppedWithAptos.STOPPED_WITH_PRICE,
+              convertBigNumber(takeProfitAmount, 10 ** realBaseTokenDecimals),
+            ],
     },
     {
       id: solCreatedPocketDto.id,

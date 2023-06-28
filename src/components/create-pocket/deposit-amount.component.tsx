@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { ErrorLabel } from "@/src/components/error-label";
@@ -8,6 +8,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import { formatCurrency } from "@/src/utils";
+import { useAptosWallet } from "@/src/hooks/useAptos";
 
 export const DepositAmount: FC = () => {
   /**
@@ -22,6 +23,7 @@ export const DepositAmount: FC = () => {
   } = useCreatePocketPage();
 
   const { nativeBalance: evmBalance } = useEvmWallet();
+  const { balance: aptosBalance } = useAptosWallet();
   const { chainId } = usePlatformConfig();
 
   const { whiteLists, convertDecimalAmount } = useWhiteList();
@@ -30,6 +32,16 @@ export const DepositAmount: FC = () => {
 
   /** @dev Inject program service to use. */
   const { solBalance } = useWallet();
+
+  const renderBalance = useCallback(() => {
+    if (chainId === ChainId.sol) {
+      return convertDecimalAmount(baseToken?.address, solBalance);
+    } else if (chainId.includes("aptos")) {
+      return aptosBalance;
+    } else {
+      return evmBalance;
+    }
+  }, [chainId, solBalance, evmBalance, aptosBalance]);
 
   return (
     <section>
@@ -59,12 +71,7 @@ export const DepositAmount: FC = () => {
               alt="token balance"
               className="!w-6 mx-1 rounded w-[20px]"
             />
-            {formatCurrency(
-              chainId === ChainId.sol
-                ? convertDecimalAmount(baseToken?.address, solBalance)
-                : evmBalance
-            )}{" "}
-            {baseToken?.symbol}
+            {formatCurrency(renderBalance())} {baseToken?.symbol}
           </p>
         </div>
         {errorMsgs?.depositedAmount && (

@@ -15,10 +15,13 @@ import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { createdPocketPramsParserAptos } from "@/src/utils/aptos.parser";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { HexString } from "aptos";
 
 /** @dev Initiize context. */
 export const AptosWalletContext = createContext<{
   walletAddress: string;
+  balance: number;
+  programService: AptosProgramService;
   connect(): void;
   disconnect(): void;
 
@@ -38,7 +41,9 @@ export const AptosWalletContext = createContext<{
     targetTokenDecimals: number,
     realBaseTokenDecimals: number,
     realTargetTokenDecimals: number,
-    depositedAmount: number
+    depositedAmount: number,
+    stopLossAmount: number,
+    takeProfitAmount: number
   ): Promise<void>;
 
   /**
@@ -103,6 +108,8 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const [builder, initBuilder] = useState<TransactionBuilder>();
   const [service, initService] = useState<AptosProgramService>();
 
+  const [balance, setBalance] = useState(0);
+
   /** @dev Get chain platform config. */
   const { platformConfig, chainId } = usePlatformConfig();
 
@@ -131,7 +138,9 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
       targetTokenDecimals: number,
       realBaseTokenDecimals: number,
       realTargetTokenDecimals: number,
-      depositedAmount: number
+      depositedAmount: number,
+      stopLossAmount: number,
+      takeProfitAmount: number
     ) => {
       if (!service || !platformConfig || !signer || !account) return;
 
@@ -145,7 +154,9 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
         targetTokenDecimals,
         realBaseTokenDecimals,
         realTargetTokenDecimals,
-        depositedAmount
+        depositedAmount,
+        stopLossAmount,
+        takeProfitAmount
       );
 
       /** @dev Execute transaction. */
@@ -250,6 +261,7 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
     ) => {
       if (!service || !platformConfig || !signer || !account) return;
       /** @dev Execute transaction. */
+      console.log({ depositedAmount });
       await service.depositPocket(pocketId, baseTokenAddress, depositedAmount);
     },
     [service, platformConfig, signer, account]
@@ -289,10 +301,24 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
     initService(new AptosProgramService(builder));
   }, [signer, builder]);
 
+  useEffect(() => {
+    if (!signer) return;
+    (async () => {
+      try {
+        const balance = await TransactionSigner.getBalance(
+          new HexString(signer?.account?.address?.toString() || "")
+        );
+        setBalance(balance / Math.pow(10, 8));
+      } catch {}
+    })();
+  }, [signer]);
+
   return (
     <AptosWalletContext.Provider
       value={{
         walletAddress: account?.address?.toString(),
+        programService: service,
+        balance,
         connect: handleConnect,
         disconnect: handleDisconnect,
         createPocket,

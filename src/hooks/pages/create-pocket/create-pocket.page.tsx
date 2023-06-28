@@ -293,8 +293,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           plufixWithDecimals
         );
 
-        console.log(evmDespositedAmount.toString());
-
         if (takeProfitAmount) {
           const evmTakeProfitAmount = convertBigNumber(
             takeProfitAmount,
@@ -341,7 +339,9 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           targetTokenAddress[1],
           whiteLists[baseTokenAddress[0].toBase58().toString()]?.realDecimals,
           whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
-          depositedAmount
+          depositedAmount,
+          stopLossAmount,
+          takeProfitAmount
         );
         console.log({ response });
       }
