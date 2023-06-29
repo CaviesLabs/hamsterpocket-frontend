@@ -116,14 +116,14 @@ export const PlatformConfigProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev The function to desire chainId in case user do not force chainId by URL. */
   useEffect(() => {
-    if (!desiredChainId) {
+    if (!desiredChainId && !router.query?.chainId) {
       if (window.localStorage.getItem("chainId")) {
         setDesiredChainId(window.localStorage.getItem("chainId"));
       } else {
         setDesiredChainId(ChainId.bnb);
       }
     }
-  }, [desiredChainId]);
+  }, [router]);
 
   return (
     <PlatformConfigContext.Provider
