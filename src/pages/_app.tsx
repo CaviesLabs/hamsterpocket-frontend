@@ -103,7 +103,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 <WalletKitProvider
                   defaultNetwork={network}
                   app={{
-                    name: "Hamsterswap",
+                    name: "Hamsterpocket",
                     icon: (
                       <img
                         className="bg-dark60 rounded-full"
