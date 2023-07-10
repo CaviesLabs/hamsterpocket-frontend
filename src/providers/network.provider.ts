@@ -45,12 +45,20 @@ export class NetworkProvider {
     url: string,
     requestConfig: RequestConfig
   ): Promise<RequestResponse> {
+    console.log(new URLSearchParams(requestConfig.params).toString());
     const resp = await axios(url, {
       baseURL: `${this.BASE_URL}`,
       ...requestConfig,
       paramsSerializer: {
         serialize: (params: any) => {
-          return qs.stringify(params, { arrayFormat: "repeat" });
+          console.log(
+            qs.stringify(params, {
+              arrayFormat: "repeat",
+            })
+          );
+          return qs.stringify(params, {
+            arrayFormat: "repeat",
+          });
         },
       },
       headers: {
