@@ -1,5 +1,5 @@
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV === "production" ? "dev" : process.env.NODE_ENV}`
+  path: `.env.${process.env.NODE_ENV || "dev"}`
 });
 
 const withTM = require("next-transpile-modules")(["@hamsterbox/ui-kit", "react-icons"]);
