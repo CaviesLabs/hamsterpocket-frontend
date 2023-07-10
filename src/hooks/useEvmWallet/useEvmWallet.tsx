@@ -7,7 +7,7 @@ import {
   useState,
   useEffect,
 } from "react";
-import { useSigner, useBalance, useAccount } from "wagmi";
+import { useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import {
@@ -54,13 +54,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const { data: signer } = useSigner({
     async onSuccess(data) {
       console.log("Signer got: ", data);
-      const balance = await data.provider.getBalance(
-        await data.getAddress()
-      );
+      const balance = await data.provider.getBalance(await data.getAddress());
 
-      setBalance(
-        ethers.utils.formatEther(balance)
-      )
+      setBalance(ethers.utils.formatEther(balance));
     },
   });
 
