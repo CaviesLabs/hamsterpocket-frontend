@@ -51,7 +51,7 @@ export const ChainSelect: FC = () => {
   return (
     <div
       className={classnames(
-        "relative border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px]",
+        "relative border-solid border-[0px] border-purple300 rounded-[50px] cursor-pointer avatar-profile bg-[#242636] p-[10px] ml-[5px] mobile:mr-[20px] mobile:py-[6px]",
         styles["chain-select"]
       )}
       ref={ref}

@@ -108,22 +108,24 @@ const Header: FC = () => {
           </div>
           <div className="flex">
             <div
-              className="hidden md:flex memu-wrapper flex items-center md:pr-[30px]"
+              className="flex memu-wrapper flex items-center md:pr-[22px]"
               style={{ height: "44px" }}
             >
               {
                 <ul className="menu-container float-left flex items-center">
                   {walletAddress && (
-                    <Button
-                      className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
-                      text="Create a Pocket"
-                      size="small"
-                      onClick={() => pushRouterWithChainId("/strategy")}
-                      theme={{
-                        backgroundColor: "#735CF7",
-                        color: "#FFFFFF",
-                      }}
-                    />
+                    <div className="mobile:hidden">
+                      <Button
+                        className="!rounded-[100px] after:!rounded-[100px] !px-[20px]"
+                        text="Create a Pocket"
+                        size="small"
+                        onClick={() => pushRouterWithChainId("/strategy")}
+                        theme={{
+                          backgroundColor: "#735CF7",
+                          color: "#FFFFFF",
+                        }}
+                      />
+                    </div>
                   )}
                   <ChainSelect />
                 </ul>
