@@ -105,7 +105,7 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
+                                href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
                                 target="_blank"
                                 className="ml-[10px]"
                               >

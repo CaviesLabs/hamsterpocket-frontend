@@ -38,7 +38,6 @@ export const ChainSelect: FC = () => {
     return chains
       .filter((item) => item.id !== chainId)
       .filter((item) => {
-        console.log(process.env.ENV);
         if (
           process.env.ENV === "prod" &&
           (item.id === "polygon_mumbai" || item.id.includes("testnet"))

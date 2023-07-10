@@ -10,7 +10,7 @@ import { AppWalletContextState } from "./types";
 import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId, chainInfos } from "@/src/entities/platform-config.entity";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
 
 /** @dev Initiize context. */
@@ -22,7 +22,7 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @dev Provider states.
    */
   const [walletAddress, setWalletAddress] = useState("");
-  const { switchChainId, chainId } = usePlatformConfig();
+  const { switchChainId, chainId, chainInfos } = usePlatformConfig();
 
   /**
    * @dev Inject context of solana wallet.
@@ -50,22 +50,28 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
           switchChainId(ChainId.sol);
         }
       } else if (ethWallet?.address) {
-        setWalletAddress(ethWallet?.address?.toString());
+        try {
+          setWalletAddress(ethWallet?.address?.toString());
 
-        /**
-         * @dev This fill redirect to correct chain which connected before.
-         */
-        const connectedChainId = await ethWallet?.connector?.getChainId();
-        const targetChainId = Object.keys(chainInfos).find(
-          (key: string) => connectedChainId === (chainInfos as any)?.[key]
-        );
+          /** @dev This fill redirect to correct chain which connected before. */
+          const connectedChainId = await ethWallet?.connector?.getChainId();
 
-        /**
-         * @dev If current chain is not connected chain, will redirect to.
-         */
-        if (targetChainId && chainId !== targetChainId) {
-          switchChainId(targetChainId);
-        }
+          /** @notice This fill redirect to correct chain which connected. */
+          if (!connectedChainId) {
+            return;
+          }
+
+          const targetChainId = Object.keys(chainInfos).find(
+            (key: string) => connectedChainId === chainInfos[key]?.chainId
+          );
+
+          /**
+           * @dev If current chain is not connected chain, will redirect to.
+           */
+          if (targetChainId && chainId !== targetChainId) {
+            switchChainId(targetChainId);
+          }
+        } catch (e) {}
       } else if (aptosWallet.account) {
         setWalletAddress(aptosWallet.account?.address?.toString());
       }
@@ -74,7 +80,7 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
         setWalletAddress("");
       }
     })();
-  }, [solWallet, ethWallet, chainId]);
+  }, [solWallet, ethWallet, chainId, chainInfos]);
 
   return (
     <AppWalletContext.Provider value={{ walletAddress }}>

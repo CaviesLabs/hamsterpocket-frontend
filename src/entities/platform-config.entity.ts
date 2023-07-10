@@ -8,11 +8,14 @@ export interface PlatformConfigEntity {
   registryAddress?: string;
   mainDex?: string;
   explorerUrl?: string;
+  wagmiKey?: string;
   whitelistedRouters?: {
     address: string;
     isV3: boolean;
     ammTag: string;
     dexUrl: string;
+    inputTag: string;
+    outputTag: string;
   }[];
 }
 
@@ -26,14 +29,3 @@ export enum ChainId {
   aptos = "aptos",
   avaxc = "avaxc",
 }
-
-export const chainInfos: { [key in ChainId]: number } = {
-  okt: 66,
-  bnb: 56,
-  polygon_mumbai: 80001,
-  xdc: 50,
-  solana: 0,
-  gnosis: 100,
-  avaxc: 43114,
-  aptos: 1,
-};

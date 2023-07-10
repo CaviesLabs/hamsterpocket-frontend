@@ -39,7 +39,8 @@ const PocketDetailPage: NextPage = () => {
   const dispatch = useDispatch();
   const { whiteLists, findEntityByAddress } = useWhiteList();
   const { walletAddress } = useAppWallet();
-  const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, dexUrl, platformConfig, pushRouterWithChainId } =
+    usePlatformConfig();
   const { programService: solProgram } = useWallet();
   const { programService } = useAptosWallet();
 
@@ -150,7 +151,7 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
+                      href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >

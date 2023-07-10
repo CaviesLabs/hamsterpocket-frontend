@@ -39,8 +39,6 @@ export const ActivePoolGroup: FC = () => {
   const activePockets = useSelector((state: State) => state.activePockets);
 
   /** @dev The function to handle request pockets from server. */
-  console.log("Chain id to get", chainId);
-
   const handleFetch = useCallback(() => {
     if (!walletAddress) return;
     dispatch(

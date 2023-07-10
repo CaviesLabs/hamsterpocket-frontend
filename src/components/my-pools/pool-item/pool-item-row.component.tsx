@@ -34,7 +34,8 @@ export const PoolItemRow = (props: PoolItemProps) => {
   } = useWhiteList();
   const { programService } = useWallet();
   const { walletAddress } = useAppWallet();
-  const { chainId, dexUrl, pushRouterWithChainId } = usePlatformConfig();
+  const { chainId, dexUrl, platformConfig, pushRouterWithChainId } =
+    usePlatformConfig();
 
   /** @dev Condition to show modal to deposit. */
   const [depositedDisplayed, setDepositedDisplayed] = useState(false);
@@ -161,7 +162,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
+                href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >
