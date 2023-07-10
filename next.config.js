@@ -1,8 +1,11 @@
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV || "dev"}`
+  path: `.env.${process.env.NODE_ENV || "dev"}`,
 });
 
-const withTM = require("next-transpile-modules")(["@hamsterbox/ui-kit", "react-icons"]);
+const withTM = require("next-transpile-modules")([
+  "@hamsterbox/ui-kit",
+  "react-icons",
+]);
 // const withPlugins = require("next-compose-plugins");
 
 /** @dev Define NODE_ENV to next config. */
@@ -18,9 +21,13 @@ const NODE_ENV = process.env.NODE_ENV;
 
 /** @type {import("next").NextConfig} */
 module.exports = withTM({
-  source: "/", reactStrictMode: true, transpilePackages: ["antd"], experimental: {
-    esmExternals: true
-  }, env: {
+  source: "/",
+  reactStrictMode: true,
+  transpilePackages: ["antd"],
+  experimental: {
+    esmExternals: true,
+  },
+  env: {
     ENV: NODE_ENV,
     HOST_URL: process.env.HOST_URL,
     API_URL: process.env.API_URL,
@@ -33,34 +40,46 @@ module.exports = withTM({
     EVM_CHAIN_ID: process.env.EVM_CHAIN_ID,
     EVM_CONTRACT_ADDRESS: process.env.EVM_CONTRACT_ADDRESS,
     EVM_REGISTRY_ADDRESS: process.env.EVM_REGISTRY_ADDRESS,
-    APTOS_NODE_URL: process.env.APTOS_NODE_URL
-  }, serverRuntimeConfig: {
+    APTOS_NODE_URL: process.env.APTOS_NODE_URL,
+  },
+  serverRuntimeConfig: {
     // Will only be available on the server side
-    mySecret: "secret", secondSecret: process.env.SECOND_SECRET // Pass through env variables
-  }, publicRuntimeConfig: {}, devIndicators: {
-    buildActivity: false
-  }, async rewrites() {
-    return [{
-      source: "/", destination: "/bnb/"
-    }];
-  }, webpack: (config, { isServer }) => {
+    mySecret: "secret",
+    secondSecret: process.env.SECOND_SECRET, // Pass through env variables
+  },
+  publicRuntimeConfig: {},
+  devIndicators: {
+    buildActivity: false,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/",
+        destination: "/bnb/",
+      },
+    ];
+  },
+  webpack: (config, { isServer }) => {
     if (!isServer) {
       config.module.rules.push({
-        test: /\.node$/, use: {
-          loader: "file-loader", options: {
-            name: "[name].[ext]"
-          }
-        }
+        test: /\.node$/,
+        use: {
+          loader: "file-loader",
+          options: {
+            name: "[name].[ext]",
+          },
+        },
       });
     }
     return config;
-  }, typescript: {
+  },
+  typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
     // !! WARN !!
-    ignoreBuildErrors: true
-  }
+    ignoreBuildErrors: true,
+  },
   // eslint: {
   //   ignoreDuringBuilds: true,
   // },
