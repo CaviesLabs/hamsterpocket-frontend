@@ -26,9 +26,9 @@ module.exports = withPWA(
   withTM({
     source: "/",
     reactStrictMode: true,
+    transpilePackages: ["antd"],
     experimental: {
       esmExternals: true,
-      transpilePackages: ["antd"],
     },
     env: {
       ENV: NODE_ENV,
