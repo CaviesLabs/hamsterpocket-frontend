@@ -2,28 +2,22 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV || "dev"}`,
 });
 
-const withTM = require("next-transpile-modules")([
-  "@hamsterbox/ui-kit",
-  "react-icons",
-]);
-// const withPlugins = require("next-compose-plugins");
-
 /** @dev Define NODE_ENV to next config. */
 const NODE_ENV = process.env.NODE_ENV;
 
-// /** @dev Config PWA for next app. */
-// const withPWA = require("next-pwa")({
-//   dest: "public",
-//   register: true,
-//   skipWaiting: true,
-//   disable: process.env.NODE_ENV === "dev",
-// });
+/** @dev Config PWA for next app. */
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === "dev",
+});
 
 /** @type {import("next").NextConfig} */
-module.exports = withTM({
+module.exports = withPWA({
   source: "/",
   reactStrictMode: true,
-  transpilePackages: ["antd"],
+  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd"],
   experimental: {
     esmExternals: true,
   },
@@ -59,19 +53,27 @@ module.exports = withTM({
       },
     ];
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.module.rules.push({
-        test: /\.node$/,
-        use: {
-          loader: "file-loader",
-          options: {
-            name: "[name].[ext]",
-          },
+  future: {
+    webpack5: true,
+  },
+  webpack: (config) => {
+    config.watchOptions = {
+      ignored: [],
+    };
+
+    config.module.rules.push({
+      test: /\.node$/,
+      use: {
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]",
         },
-      });
-    }
+      },
+    });
     return config;
+  },
+  watchOptions: {
+    ignored: [],
   },
   typescript: {
     // !! WARN !!
