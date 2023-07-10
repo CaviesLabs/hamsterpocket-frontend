@@ -237,7 +237,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         withdrawPocket,
         resumePocket,
         signer: signer,
-        nativeBalance: parseFloat(nativeBalanceData?.formatted)?.toFixed(3),
+        nativeBalance: parseFloat(nativeBalanceData?.formatted || "0")?.toFixed(3),
       }}
     >
       {props.children}

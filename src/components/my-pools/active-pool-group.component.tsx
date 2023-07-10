@@ -123,7 +123,7 @@ export const ActivePoolGroup: FC = () => {
           />
         </div>
         <div className="float-root md:hidden">
-          <div className="grid grid-cols-2 w-full rounded mt-4 normal-text bg-[#121320] py-[8px] px-[10px] text-[14px] rounded-[12px]">
+          <div className="grid grid-cols-2 w-full mt-4 normal-text bg-[#121320] py-[8px] px-[10px] text-[14px] rounded-[12px]">
             <span
               onClick={() => setEndedSelect(false)}
               className={classnames(
