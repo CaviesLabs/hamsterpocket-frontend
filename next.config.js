@@ -17,7 +17,7 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   source: "/",
   reactStrictMode: true,
-  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd"],
+  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd", "@saberhq/solana-contrib"],
   experimental: {
     esmExternals: true,
     appDir: true,
