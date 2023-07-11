@@ -15,14 +15,13 @@ import {
 } from "@solana/wallet-adapter-react";
 import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import {
-  PhantomWalletAdapter,
-  BraveWalletAdapter,
-  Coin98WalletAdapter,
-  LedgerWalletAdapter,
-  SolflareWalletAdapter,
-  SolletWalletAdapter,
-} from "@solana/wallet-adapter-wallets";
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom';
+import {BraveWalletAdapter} from '@solana/wallet-adapter-brave';
+import {Coin98WalletAdapter} from '@solana/wallet-adapter-coin98';
+import {LedgerWalletAdapter} from '@solana/wallet-adapter-ledger';
+import {SolflareWalletAdapter} from '@solana/wallet-adapter-solflare';
+import {SolletWalletAdapter} from '@solana/wallet-adapter-sollet';
+
 import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
