@@ -247,7 +247,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         })),
       };
 
-      console.log(chainId.toLowerCase().includes("aptos"));
       if (chainId === ChainId.sol) {
         /**
          * @dev Execute interact with solana blockchain.
