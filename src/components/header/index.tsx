@@ -1,7 +1,7 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { useWalletKit } from "@gokiprotocol/walletkit";
+// import { useWalletKit } from "@gokiprotocol/walletkit";
 import { Button } from "@hamsterbox/ui-kit";
 import { PURPLE_HEADER_PAGES } from "@/src/utils";
 import { HamsterboxIcon } from "@/src/components/icons";
@@ -31,7 +31,7 @@ const Header: FC = () => {
    * @dev Import GoGi providers.
    */
   const { connect: connectAptos } = useAptosWallet();
-  const { connect: connectWallet } = useWalletKit();
+  // const { connect: connectWallet } = useWalletKit();
   const { walletAddress } = useAppWallet();
   // const wallet = useConnectedWallet();
 
@@ -40,7 +40,7 @@ const Header: FC = () => {
    */
   const handleConnect = useCallback(() => {
     if (chainId === ChainId.sol) {
-      connectWallet();
+      // connectWallet();
     } else if (chainId.toLowerCase().includes("aptos")) {
       console.log(connectAptos);
       connectAptos();

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import "../../styles/globals.css";
 import "@hamsterbox/ui-kit/dist/cjs/styles/css/main.css";
 import Script from "next/script";
@@ -6,22 +7,21 @@ import type { AppProps } from "next/app";
 import { FC, useMemo } from "react";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "@hamsterbox/ui-kit";
-import { WalletKitProvider } from "@gokiprotocol/walletkit";
+// import { WalletKitProvider } from "@gokiprotocol/walletkit";
 import { WalletProvider } from "@/src/hooks/useWallet";
 import { MainProvider } from "@/src/hooks/pages/main";
-import {
-  ConnectionProvider,
-  WalletProvider as SolanaWalletAdapterProvider,
-} from "@solana/wallet-adapter-react";
-import { clusterApiUrl } from "@solana/web3.js";
+// import {
+//   ConnectionProvider,
+//   WalletProvider as SolanaWalletAdapterProvider,
+// } from "@solana/wallet-adapter-react";
+// import { clusterApiUrl } from "@solana/web3.js";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
-import { BraveWalletAdapter } from "@solana/wallet-adapter-brave";
-import { Coin98WalletAdapter } from "@solana/wallet-adapter-coin98";
-import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
-import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
-import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
-
+// import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom";
+// import { BraveWalletAdapter } from "@solana/wallet-adapter-brave";
+// import { Coin98WalletAdapter } from "@solana/wallet-adapter-coin98";
+// import { LedgerWalletAdapter } from "@solana/wallet-adapter-ledger";
+// import { SolflareWalletAdapter } from "@solana/wallet-adapter-solflare";
+// import { SolletWalletAdapter } from "@solana/wallet-adapter-sollet";
 import {
   legacyLogicalPropertiesTransformer,
   StyleProvider,
@@ -59,16 +59,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   const network = process.env.SOLANA_CLUSTER as WalletAdapterNetwork;
 
   /** @dev Initilize needed wallet adapters. */
-  const walletAdapters = useMemo(() => {
-    return [
-      new PhantomWalletAdapter(),
-      new BraveWalletAdapter(),
-      new Coin98WalletAdapter(),
-      new LedgerWalletAdapter(),
-      new SolflareWalletAdapter(),
-      new SolletWalletAdapter(),
-    ];
-  }, [network]);
+  // const walletAdapters = useMemo(() => {
+  //   return [
+  //     new PhantomWalletAdapter(),
+  //     new BraveWalletAdapter(),
+  //     new Coin98WalletAdapter(),
+  //     new LedgerWalletAdapter(),
+  //     new SolflareWalletAdapter(),
+  //     new SolletWalletAdapter(),
+  //   ];
+  // }, [network]);
 
   return (
     <Provider store={store}>
@@ -87,51 +87,51 @@ function MyApp({ Component, pageProps }: AppProps) {
             crossOrigin="anonymous"
           />
           <PlatformConfigProvider>
-            <ConnectionProvider
+            {/* <ConnectionProvider
               endpoint={
                 network === WalletAdapterNetwork.Mainnet
                   ? process.env.SOLANA_RPC_URL
                   : clusterApiUrl(network)
               }
-            >
-              <SolanaWalletAdapterProvider wallets={walletAdapters}>
-                {/**
-                 * @dev
-                 * Wrap the whole app in Goki Kit provider for use.
-                 */}
-                <WalletKitProvider
-                  defaultNetwork={network}
-                  app={{
-                    name: "Hamsterpocket",
-                    icon: (
-                      <img
-                        className="bg-dark60 rounded-full"
-                        src="/assets/icons/favicon-196.png"
-                      />
-                    ),
-                  }}
-                  debugMode={false} // you may want to set this in REACT_APP_DEBUG_MODE
-                >
-                  <WalletProvider>
-                    <MainProvider>
-                      <EvmWalletKitProvider>
-                        <EvmWalletProvider>
-                          <AptosWalletKitProvider>
-                            <AptosWalletProvider>
-                              <AppWalletProvider>
-                                <WhitelistProvider>
-                                  <AppComponent {...{ Component, pageProps }} />
-                                </WhitelistProvider>
-                              </AppWalletProvider>
-                            </AptosWalletProvider>
-                          </AptosWalletKitProvider>
-                        </EvmWalletProvider>
-                      </EvmWalletKitProvider>
-                    </MainProvider>
-                  </WalletProvider>
-                </WalletKitProvider>
-              </SolanaWalletAdapterProvider>
-            </ConnectionProvider>
+            > */}
+            {/* <SolanaWalletAdapterProvider wallets={walletAdapters}> */}
+            {/**
+             * @dev
+             * Wrap the whole app in Goki Kit provider for use.
+             */}
+            {/* <WalletKitProvider
+                defaultNetwork={network}
+                app={{
+                  name: "Hamsterpocket",
+                  icon: (
+                    <img
+                      className="bg-dark60 rounded-full"
+                      src="/assets/icons/favicon-196.png"
+                    />
+                  ),
+                }}
+                debugMode={false} // you may want to set this in REACT_APP_DEBUG_MODE
+              > */}
+            <WalletProvider>
+              <MainProvider>
+                <EvmWalletKitProvider>
+                  <EvmWalletProvider>
+                    <AptosWalletKitProvider>
+                      <AptosWalletProvider>
+                        <AppWalletProvider>
+                          <WhitelistProvider>
+                            <AppComponent {...{ Component, pageProps }} />
+                          </WhitelistProvider>
+                        </AppWalletProvider>
+                      </AptosWalletProvider>
+                    </AptosWalletKitProvider>
+                  </EvmWalletProvider>
+                </EvmWalletKitProvider>
+              </MainProvider>
+            </WalletProvider>
+            {/* </WalletKitProvider> */}
+            {/* </SolanaWalletAdapterProvider> */}
+            {/* </ConnectionProvider> */}
           </PlatformConfigProvider>
         </ThemeProvider>
       </StyleProvider>

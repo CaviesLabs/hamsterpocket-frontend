@@ -2,7 +2,6 @@ import { ReactNode, useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { MainContext } from "./types";
 import { useUI } from "./useUI";
-import { useAuth } from "./useAuth";
 import { useRouter } from "./useRouter";
 // import { getPlatformConfig } from "@/src/redux/actions/platform-config/platform.action";
 import ReduxState from "@/src/redux/entities/state";
@@ -25,9 +24,6 @@ export const MainProvider = (props: { children: ReactNode }) => {
 
   /** @dev Call hook to use functions related to UI process. */
   useUI();
-
-  /** @dev Call hook to use functions related to User Authentication process. */
-  useAuth();
 
   /** @dev Call hooks to detect router changes. */
   const { transitionLoading, fistLoading } = useRouter();

@@ -8,7 +8,7 @@ import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
 import { useCallback, useEffect } from "react";
 import { useWallet } from "@/src/hooks/useWallet";
-import { useWalletKit } from "@gokiprotocol/walletkit";
+// import { useWalletKit } from "@gokiprotocol/walletkit";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
@@ -28,7 +28,7 @@ const Layout = (props: LayoutProps) => {
   const wallet = useWallet();
   const { walletAddress } = useAppWallet();
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
-  const { connect: connectWallet } = useWalletKit();
+  // const { connect: connectWallet } = useWalletKit();
   const { connect: connectAptos } = useAptosWallet();
   const { analyzeDecimals } = useWhiteList();
 
@@ -46,10 +46,10 @@ const Layout = (props: LayoutProps) => {
           return;
         }
 
-        if (chainId === ChainId.sol) {
-          connectWallet();
-          return;
-        }
+        // if (chainId === ChainId.sol) {
+        //   connectWallet();
+        //   return;
+        // }
 
         openModalEvm();
       } else {

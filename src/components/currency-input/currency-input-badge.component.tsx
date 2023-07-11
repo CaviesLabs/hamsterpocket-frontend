@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FC, useState, useRef, useEffect } from "react";
 import { Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
@@ -6,7 +7,7 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import type { CurrencyInputProps } from "./currency-input.component";
 import { splService } from "@/src/services/spl.service";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
-import { useConnectedWallet } from "@saberhq/use-solana";
+// import { useConnectedWallet } from "@saberhq/use-solana";
 import { useWallet } from "@/src/hooks/useWallet";
 import classNames from "classnames";
 import styles from "./currency-input.module.scss";
@@ -18,7 +19,7 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
   const [value, setValue] = useState<string>("");
   const { solBalance } = useWallet();
   const [tokenBalance, setTokenBalance] = useState<number>(0);
-  const wallet = useConnectedWallet();
+  // const wallet = useConnectedWallet();
 
   /**
    * @dev Inject allow currencies which have been whitelisted in Hamster server.
@@ -52,21 +53,21 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
     [props.addressSelected]
   );
 
-  useEffect(() => {
-    (async () => {
-      if (!props.addressSelected) return;
-      if (props.addressSelected === WSOL_ADDRESS) {
-        return setTokenBalance(solBalance / Math.pow(10, 9));
-      }
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!props.addressSelected) return;
+  //     if (props.addressSelected === WSOL_ADDRESS) {
+  //       return setTokenBalance(solBalance / Math.pow(10, 9));
+  //     }
 
-      /** @dev Get balance of token. */
-      const balance = await splService.getBalance(
-        wallet?.publicKey?.toString(),
-        props.addressSelected
-      );
-      setTokenBalance(balance);
-    })();
-  }, [props.addressSelected, solBalance]);
+  //     /** @dev Get balance of token. */
+  //     const balance = await splService.getBalance(
+  //       wallet?.publicKey?.toString(),
+  //       props.addressSelected
+  //     );
+  //     setTokenBalance(balance);
+  //   })();
+  // }, [props.addressSelected, solBalance]);
 
   return (
     <div className="relative" ref={ref} onClick={props.onClick}>

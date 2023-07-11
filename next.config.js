@@ -17,7 +17,13 @@ const NODE_ENV = process.env.NODE_ENV;
 module.exports = {
   source: "/",
   reactStrictMode: true,
-  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd", "@saberhq/solana-contrib",  "@saberhq/use-solana"],
+  transpilePackages: [
+    "@hamsterbox/ui-kit",
+    "react-icons",
+    "antd",
+    // "@saberhq/solana-contrib",
+    // "@saberhq/use-solana",
+  ],
   experimental: {
     esmExternals: true,
     appDir: true,
