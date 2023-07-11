@@ -20,6 +20,8 @@ module.exports = withPWA({
   transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd"],
   experimental: {
     esmExternals: true,
+    appDir: true,
+    serverComponentsExternalPackages: ["@ethereumjs"],
   },
   env: {
     ENV: NODE_ENV,
@@ -57,10 +59,8 @@ module.exports = withPWA({
     webpack5: true,
   },
   webpack: (config) => {
-    config.watchOptions = {
-      ignored: [],
-    };
-
+    config.watchOptions = { ignored: [] };
+    config.experiments = { ...config.experiments, topLevelAwait: true };
     config.module.rules.push({
       test: /\.node$/,
       use: {
