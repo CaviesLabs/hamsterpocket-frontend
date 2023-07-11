@@ -140,7 +140,9 @@ export const CreatePocketDesktopLayout: FC = () => {
           <Button
             className="float-right !w-[220px] !h-[56px] !text-[18px] mobile:!text-[14px] mobile:!w-[150px] mobile:!h-[40px] mobile:!py-0 normal-text font-semibold"
             text={currentStep > 1 ? "Create Pocket" : "Continue"}
-            loading={!processing ? false : true}
+            loading={
+              processing === undefined ? false : !processing ? false : true
+            }
             onClick={() => handleClickContinue()}
             disabled={currentStep == 0 && !targetTokenAddress.length}
           />
