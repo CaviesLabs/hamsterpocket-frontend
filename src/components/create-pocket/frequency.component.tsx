@@ -1,5 +1,4 @@
 import { FC, useCallback, useState } from "react";
-// import { DropdownSelect } from "@/src/components/select";
 import { TIME_CONDITIONS } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { FrequencyConditionType } from "@/src/entities/pocket.entity";
@@ -65,14 +64,6 @@ export const FrequencyOption: FC = () => {
         </ToolTip>
       </p>
       <LayoutWrapper
-        // layout={
-        //   <DropdownSelect
-        //     className="mt-3 !min-w-[250px]"
-        //     handleSelectValue={(val) => handleModifyFrequency(val)}
-        //     options={TIME_CONDITIONS}
-        //     autoValue={true}
-        //   />
-        // }
         layout={
           <div className="flex items-center flex-wrap">
             {TIME_CONDITIONS.map((item, index) => (
