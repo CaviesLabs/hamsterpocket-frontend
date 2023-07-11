@@ -12,7 +12,7 @@ export const getWalletName = (name: string): WalletName => {
   switch (name) {
     case DefaultWalletType.Phantom:
       return new PhantomWalletAdapter().name as WalletName;
-    case "Brave":
+    case DefaultWalletType.BraveWallet:
       return new BraveWalletAdapter().name as WalletName;
     case DefaultWalletType.Coin98:
       return new Coin98WalletAdapter().name as WalletName;

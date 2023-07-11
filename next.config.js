@@ -15,7 +15,6 @@ const NODE_ENV = process.env.NODE_ENV;
 
 /** @type {import("next").NextConfig} */
 module.exports = {
-  source: "/",
   reactStrictMode: true,
   transpilePackages: [
     "@hamsterbox/ui-kit",
@@ -61,9 +60,6 @@ module.exports = {
       },
     ];
   },
-  future: {
-    webpack5: true,
-  },
   webpack: (config) => {
     // config.watchOptions = { ignored: ["node_modules"] };
     // config.experiments = { ...config.experiments, topLevelAwait: true };
@@ -82,13 +78,7 @@ module.exports = {
     });
     return config;
   },
-  watchOptions: {
-    ignored: ["node_modules"],
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
 };

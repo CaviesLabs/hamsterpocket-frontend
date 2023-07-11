@@ -19,8 +19,6 @@ import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
 import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { ProgramService, authService } from "@/src/services";
 import { getWalletName } from "./utils";
-// import { setProfile } from "@/src/redux/actions/hamster-profile/profile.action";
-// import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { WalletContextState } from "./types";
 
