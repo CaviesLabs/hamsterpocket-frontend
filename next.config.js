@@ -4,20 +4,20 @@ require("dotenv").config({
 
 /** @dev Define NODE_ENV to next config. */
 const NODE_ENV = process.env.NODE_ENV;
-
-/** @dev Config PWA for next app. */
-const withPWA = require("next-pwa")({
-  dest: "public",
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === "dev",
-});
+//
+// /** @dev Config PWA for next app. */
+// const withPWA = require("next-pwa")({
+//   dest: "public",
+//   register: true,
+//   skipWaiting: true,
+//   disable: process.env.NODE_ENV === "dev",
+// });
 
 /** @type {import("next").NextConfig} */
-module.exports = withPWA({
+module.exports = {
   source: "/",
   reactStrictMode: true,
-  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd", "@saberhq/solana-contrib"],
+  transpilePackages: ["@hamsterbox/ui-kit", "react-icons", "antd", "@saberhq/solana-contrib",  "@saberhq/use-solana"],
   experimental: {
     esmExternals: true,
     appDir: true,
@@ -85,4 +85,4 @@ module.exports = withPWA({
   // eslint: {
   //   ignoreDuringBuilds: true,
   // },
-});
+};
