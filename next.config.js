@@ -58,7 +58,7 @@ module.exports = withPWA({
   },
   webpack: (config) => {
     config.watchOptions = {
-      ignored: ["node_modules"],
+      ignored: [],
     };
 
     config.module.rules.push({
