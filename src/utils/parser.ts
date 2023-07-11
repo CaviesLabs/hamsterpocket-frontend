@@ -2,7 +2,7 @@ import { DurationObjectUnits } from "luxon";
 import { BN } from "@project-serum/anchor";
 import { StopConditions } from "@/src/entities/pocket.entity";
 import { SideMethod } from "@/src/dto/pocket.dto";
-import { useMediaQuery } from 'usehooks-ts'
+import { useMediaQuery } from "usehooks-ts";
 
 /** @dev Hook to check if breakpoint mobile. */
 export const useMobileBreakpoint = () => useMediaQuery("(max-width:768px)");
