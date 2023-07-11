@@ -38,9 +38,9 @@
     "@reach/dialog": "0.18.0",
     "@react-spring/shared": "9.7.3",
     "@reduxjs/toolkit": "1.8.0",
-    "@saberhq/solana-contrib": "1.13.19",
-    "@saberhq/token-utils": "1.13.19",
-    "@saberhq/use-solana": "1.13.19",
+    "@saberhq/solana-contrib": "1.14.11",
+    "@saberhq/token-utils": "1.14.11",
+    "@saberhq/use-solana": "1.14.11",
     "@solana/spl-token": "0.3.6",
     "@solana/wallet-adapter-base": "0.9.22",
     "@solana/wallet-adapter-brave": "0.1.16",
@@ -106,7 +106,6 @@
     "wagmi": "0.12.18"
   },
   "devDependencies": {
-    "@babel/runtime": "7.22.6",
     "@commitlint/cli": "17.1.2",
     "@commitlint/config-conventional": "17.1.0",
     "@nomicfoundation/hardhat-chai-matchers": "1.0.2",
