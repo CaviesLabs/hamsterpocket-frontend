@@ -59,12 +59,12 @@ module.exports = withPWA({
     webpack5: true,
   },
   webpack: (config) => {
-    config.watchOptions = { ignored: ["node_modules"] };
-    config.experiments = { ...config.experiments, topLevelAwait: true };
-    config.ignoreWarnings = [
-      { module: /node_modules\/@ethereumjs\/lib\/index\.js/ },
-      { file: /node_modules\/@ethereumjs\/lib\/index\.js/ },
-    ];
+    // config.watchOptions = { ignored: ["node_modules"] };
+    // config.experiments = { ...config.experiments, topLevelAwait: true };
+    // config.ignoreWarnings = [
+    //   { module: /node_modules\/@ethereumjs\/lib\/index\.js/ },
+    //   { file: /node_modules\/@ethereumjs\/lib\/index\.js/ },
+    // ];
     config.module.rules.push({
       test: /\.node$/,
       use: {
