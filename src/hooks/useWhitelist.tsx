@@ -87,10 +87,6 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           processedList.forEach((_) => {
             res[_.aliasAddress] = _;
           });
-          console.log("Process whitelist for aptos chain", {
-            processedList,
-            res,
-          });
           setWhitelist(res);
         }
       } catch (err) {

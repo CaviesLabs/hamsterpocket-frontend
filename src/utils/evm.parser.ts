@@ -1,7 +1,6 @@
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { BigNumber } from "ethers";
-// import { BSC_UNIVERSAL_ROUTER, MATIC_UNIVERSAL_ROUTER } from "@/src/utils";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
@@ -16,19 +15,15 @@ import bigDecimal from "js-big-decimal";
 /**
  * @dev The function to convert number to big ether number.
  */
-export const convertToEtherBigNumber = (value: number) =>
-  BigNumber.from(`0x${value.toString(16)}`);
-
 export const convertBigNumber = (value: number, decimals: number) => {
-  if (decimals > 10 ** 10) {
-    return BigNumber.from(
-      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-    );
-  } else {
-    return BigNumber.from(
-      `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-    );
-  }
+  console.log(
+    parseInt(bigDecimal.multiply(parseFloat(value.toString()), decimals))
+  );
+  return BigNumber.from(
+    `0x${parseInt(
+      bigDecimal.multiply(parseFloat(value.toString()), decimals)
+    ).toString(16)}`
+  );
 };
 
 /**
