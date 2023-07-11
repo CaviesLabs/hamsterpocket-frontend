@@ -16,9 +16,6 @@ import bigDecimal from "js-big-decimal";
  * @dev The function to convert number to big ether number.
  */
 export const convertBigNumber = (value: number, decimals: number) => {
-  console.log(
-    parseInt(bigDecimal.multiply(parseFloat(value.toString()), decimals))
-  );
   return BigNumber.from(
     `0x${parseInt(
       bigDecimal.multiply(parseFloat(value.toString()), decimals)

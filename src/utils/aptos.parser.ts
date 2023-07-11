@@ -20,17 +20,13 @@ import { WSOL_ADDRESS } from "@/src/utils";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import bigDecimal from "js-big-decimal";
 
+/**
+ * @dev The function to convert number to big aptos number.
+ */
 export const convertBigNumber = (value: number, decimals: number) => {
-  return BigInt(`${parseInt(bigDecimal.multiply(value, decimals))}`);
-  // if (decimals > 10 ** 10) {
-  //   return BigInt(
-  //     `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-  //   );
-  // } else {
-  //   return BigInt(
-  //     `0x${parseInt(bigDecimal.multiply(value, decimals)).toString(16)}`
-  //   );
-  // }
+  return BigInt(
+    `${parseInt(bigDecimal.multiply(parseFloat(value.toString()), decimals))}`
+  );
 };
 
 /**
