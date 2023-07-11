@@ -17,6 +17,7 @@
     "build:dev-env": "NODE_ENV=dev next build"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "1.11.1",
     "@ant-design/icons": "5.1.4",
     "@craco/craco": "6.4.3",
     "@emotion/react": "11.9.0",
@@ -46,6 +47,7 @@
     "@saberhq/token-utils": "1.13.19",
     "@saberhq/use-solana": "1.13.19",
     "@solana/spl-token": "0.3.6",
+    "@solana/wallet-adapter-base": "0.9.22",
     "@solana/wallet-adapter-react": "0.15.25",
     "@solana/wallet-adapter-torus": "0.11.24",
     "@solana/wallet-adapter-wallets": "0.19.6",
