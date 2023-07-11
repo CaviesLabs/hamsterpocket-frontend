@@ -59,7 +59,7 @@ module.exports = withPWA({
     webpack5: true,
   },
   webpack: (config) => {
-    config.watchOptions = { ignored: [] };
+    config.watchOptions = { ignored: ["node_modules"] };
     config.experiments = { ...config.experiments, topLevelAwait: true };
     config.ignoreWarnings = [
       { module: /node_modules\/@ethereumjs\/lib\/index\.js/ },
@@ -77,7 +77,7 @@ module.exports = withPWA({
     return config;
   },
   watchOptions: {
-    ignored: [],
+    ignored: ["node_modules"],
   },
   typescript: {
     ignoreBuildErrors: true,
