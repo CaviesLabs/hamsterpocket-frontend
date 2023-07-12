@@ -30,6 +30,18 @@ export const convertBigNumber = (value: number, decimals: number) => {
 };
 
 /**
+ * @dev The function to devide big number.
+ * @param value
+ * @param decimals
+ * @returns
+ */
+export const devideBigNumber = (value: number, decimals: number) => {
+  return parseFloat(
+    bigDecimal.divide(parseFloat(value.toString()), decimals, 8)
+  );
+};
+
+/**
  * @param solStopConditions
  * @returns
  */
@@ -57,15 +69,19 @@ export const convertToAptosStopCondition = (
       case "spentBaseTokenAmountReach":
         conditionOperator =
           AutoCloseConditionClosedWithAptos.CLOSED_WITH_SPENT_BASE_AMOUNT;
-        const solReverd =
-          condition[type].value.toNumber() / Math.pow(10, baseTokenDecimals);
+        const solReverd = devideBigNumber(
+          condition[type].value.toNumber(),
+          Math.pow(10, baseTokenDecimals)
+        );
         aptosValue = convertBigNumber(solReverd, 10 ** realBaseTokenDecimals);
         break;
       case "quoteTokenAmountReach":
         conditionOperator =
           AutoCloseConditionClosedWithAptos.CLOSED_WITH_RECEIVED_TARGET_AMOUNT;
-        const solReverd1 =
-          condition[type].value.toNumber() / Math.pow(10, targetTokenDecimals);
+        const solReverd1 = devideBigNumber(
+          condition[type].value.toNumber(),
+          Math.pow(10, targetTokenDecimals)
+        );
         aptosValue = convertBigNumber(
           solReverd1,
           10 ** realTargetTokenDecimals
@@ -118,21 +134,24 @@ export const convertToAptosBuyCondition = (
   }
 
   if (solBuyCondition[type].fromValue) {
-    const fromValueReverted =
-      solBuyCondition[type].fromValue.toNumber() /
-      Math.pow(10, targetTokenDecimals);
-    const toValueReverted =
-      solBuyCondition[type].toValue.toNumber() /
-      Math.pow(10, targetTokenDecimals);
+    const fromValueReverted = devideBigNumber(
+      solBuyCondition[type].fromValue.toNumber(),
+      Math.pow(10, targetTokenDecimals)
+    );
+    const toValueReverted = devideBigNumber(
+      solBuyCondition[type].toValue.toNumber(),
+      Math.pow(10, targetTokenDecimals)
+    );
     return [
       operator,
       convertBigNumber(fromValueReverted, 10 ** realTargetTokenDecimals),
       convertBigNumber(toValueReverted, 10 ** realTargetTokenDecimals),
     ];
   } else {
-    const valueReverted =
-      solBuyCondition[type].value.toNumber() /
-      Math.pow(10, targetTokenDecimals);
+    const valueReverted = devideBigNumber(
+      solBuyCondition[type].value.toNumber(),
+      Math.pow(10, targetTokenDecimals)
+    );
     return [
       operator,
       convertBigNumber(valueReverted, 10 ** realTargetTokenDecimals),
@@ -199,8 +218,10 @@ export const createdPocketPramsParserAptos = (
        * @dev Revert value from alias decimals to real decimals.
        */
       batchVolume: convertBigNumber(
-        solCreatedPocketDto.batchVolume.toNumber() /
-          Math.pow(10, baseTokenDecimals),
+        devideBigNumber(
+          solCreatedPocketDto.batchVolume.toNumber(),
+          Math.pow(10, baseTokenDecimals)
+        ),
         Math.pow(10, realBaseTokenDecimals)
       ),
 
