@@ -18,6 +18,7 @@ import { ProgramService } from "@/src/services";
 import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { WalletContextState } from "./types";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 /** @dev Initiize context. */
 export const WalletContext = createContext<WalletContextState>(null);
@@ -26,7 +27,7 @@ export const WalletContext = createContext<WalletContextState>(null);
 export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const router = useRouter();
 
-  const { platformConfig } = usePlatformConfig();
+  const { platformConfig, chainId } = usePlatformConfig();
 
   /** @dev Get @var {walletProviderInfo} from @var {GokkiKit}. */
   const { providerMut } = useSaberhq();
@@ -86,18 +87,21 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   useEffect(() => {
     if (!solanaWallet) return;
+    if (chainId !== ChainId.sol) return;
     /**
      * @dev Force to connect first.
      */
     solanaWallet?.connect().catch((e) => {
       console.log("connect wallet Error:", e);
     });
-  }, [solanaWallet]);
+  }, [chainId, solanaWallet]);
 
   /**
    * @dev Initilize when wallet changed.
    * */
   useEffect(() => {
+    if (chainId !== ChainId.sol) return;
+
     (async () => {
       if (
         !programService &&
@@ -126,6 +130,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
       }
     })();
   }, [
+    chainId,
     solanaWallet,
     router.asPath,
     providerMut,

@@ -11,6 +11,7 @@ import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
+import { ChainId } from "@/src/entities/platform-config.entity";
 
 /** @dev Initiize context. */
 export const AppWalletContext = createContext<AppWalletContextState>(null);
@@ -43,11 +44,18 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   useEffect(() => {
     (async () => {
-      if (solWallet) {
-        setWalletAddress(solWallet?.publicKey?.toString());
-      } else if (ethWallet?.address) {
+      if (!solWallet && !ethWallet?.address && !aptosWallet?.account) {
+        setWalletAddress("");
+        return;
+      }
+
+      if (chainId === ChainId.sol) {
+        setWalletAddress(solWallet?.publicKey?.toString() || "");
+      } else if (chainId.includes("aptos")) {
+        setWalletAddress(aptosWallet.account?.address?.toString() || "");
+      } else {
         try {
-          setWalletAddress(ethWallet?.address?.toString());
+          setWalletAddress(ethWallet?.address?.toString() || "");
 
           /** @dev This fill redirect to correct chain which connected before. */
           const connectedChainId = await ethWallet?.connector?.getChainId();
@@ -68,12 +76,6 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
             switchChainId(targetChainId);
           }
         } catch (e) {}
-      } else if (aptosWallet.account) {
-        setWalletAddress(aptosWallet.account?.address?.toString());
-      }
-
-      if (!solWallet && !ethWallet?.address && !aptosWallet?.account) {
-        setWalletAddress("");
       }
     })();
   }, [solWallet, ethWallet, chainId, chainInfos]);
