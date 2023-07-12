@@ -164,7 +164,21 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         });
       }
 
-      await contract.closePosition(pocket.id || pocket._id, fee);
+      await contract
+        .connect(signer)
+        .multicall([
+          contract
+            .connect(signer)
+            .interface.encodeFunctionData("closePosition", [
+              pocket.id || pocket._id,
+              fee,
+            ]),
+          contract
+            .connect(signer)
+            .interface.encodeFunctionData("withdraw", [
+              pocket.id || pocket._id,
+            ]),
+        ]);
     },
     [signer, contract]
   );
