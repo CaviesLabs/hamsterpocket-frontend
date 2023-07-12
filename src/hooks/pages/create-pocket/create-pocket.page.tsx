@@ -252,7 +252,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
          * @dev Execute interact with solana blockchain.
          */
         const response = await programService.createPocket(
-          solanaWallet,
+          solanaWallet.publicKey?.toBase58()?.toString(),
           solCreatedPocketData
         );
 
