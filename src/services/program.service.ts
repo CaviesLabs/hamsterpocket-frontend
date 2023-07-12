@@ -5,7 +5,6 @@ import { BN } from "@project-serum/anchor";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import UtilsProvider from "@/src/utils/utils.provider";
-import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 export class ProgramService {
   /**
