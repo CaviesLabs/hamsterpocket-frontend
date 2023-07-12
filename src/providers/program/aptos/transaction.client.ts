@@ -15,8 +15,12 @@ export class TransactionSigner {
   /**
    * @dev Initialize transaction signer
    * @param signer
+   * @param aptosNodeUrl
    */
-  constructor(private readonly signer: aptosWalletAdapter.WalletContextState) {}
+  constructor(
+    private readonly signer: aptosWalletAdapter.WalletContextState,
+    private readonly aptosNodeUrl: string
+  ) {}
 
   /**
    * @notice Sign and send message
@@ -24,7 +28,7 @@ export class TransactionSigner {
    */
   public async signAndSendTransaction(payload: any) {
     // this.signer
-    const client = new AptosClient(process.env.APTOS_NODE_URL);
+    const client = new AptosClient(this.aptosNodeUrl);
 
     const rawTx = await client.generateRawTransaction(
       new HexString(this.signer.account.address.toString()),
@@ -65,7 +69,7 @@ export class TransactionSigner {
    * @notice Read program state from
    */
   public async view(payload: any) {
-    return new AptosClient(process.env.APTOS_NODE_URL).view(payload);
+    return new AptosClient(this.aptosNodeUrl).view(payload);
   }
 
   /**
@@ -92,9 +96,11 @@ export class TransactionSigner {
     );
   }
 
-  public static async getBalance(address: HexString) {
-    const aptosClient = new AptosClient(process.env.APTOS_NODE_URL);
+  public async getBalance() {
+    const aptosClient = new AptosClient(this.aptosNodeUrl);
     const coinClient = new CoinClient(aptosClient);
-    return Number((await coinClient.checkBalance(address)).toString());
+    return Number(
+      (await coinClient.checkBalance(this.getAddress().toString())).toString()
+    );
   }
 }

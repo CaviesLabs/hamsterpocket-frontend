@@ -15,7 +15,6 @@ import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
 import { createdPocketPramsParserAptos } from "@/src/utils/aptos.parser";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
-import { HexString } from "aptos";
 import { AptosConnector } from "@/src/components/aptos-connector";
 
 /** @dev Initiize context. */
@@ -326,7 +325,7 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
      */
     initBuilder(
       new TransactionBuilder(
-        new TransactionSigner(signer),
+        new TransactionSigner(signer, platformConfig.rpcUrl),
         platformConfig.programAddress
       )
     );
@@ -345,16 +344,17 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
   }, [signer, builder]);
 
   useEffect(() => {
-    if (!signer) return;
+    if (!signer || !platformConfig) return;
     (async () => {
       try {
-        const balance = await TransactionSigner.getBalance(
-          new HexString(signer?.account?.address?.toString() || "")
-        );
+        const balance = await new TransactionSigner(
+          signer,
+          platformConfig.rpcUrl
+        ).getBalance();
         setBalance(balance / Math.pow(10, 8));
       } catch {}
     })();
-  }, [signer]);
+  }, [signer, platformConfig]);
 
   return (
     <AptosWalletContext.Provider

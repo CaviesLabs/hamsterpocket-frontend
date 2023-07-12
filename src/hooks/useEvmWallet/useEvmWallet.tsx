@@ -204,7 +204,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   useEffect(() => {
     /** @dev Not in sol. */
-    if (chainId == ChainId.sol || !signer) return;
+    if (chainId === ChainId.sol || chainId.includes("aptos") || !signer) return;
 
     if (platformConfig?.programAddress) {
       console.log("init program address: ", platformConfig?.programAddress);
