@@ -46,9 +46,6 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
     (async () => {
       if (solWallet) {
         setWalletAddress(solWallet?.publicKey?.toString());
-        if (chainId !== ChainId.sol) {
-          switchChainId(ChainId.sol);
-        }
       } else if (ethWallet?.address) {
         try {
           setWalletAddress(ethWallet?.address?.toString());
