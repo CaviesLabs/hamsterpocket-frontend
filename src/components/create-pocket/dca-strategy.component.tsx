@@ -30,6 +30,7 @@ export const DCAStrategy: FC = () => {
     setStopLossAmount,
     handleModifyStopConditions,
     errorMsgs,
+    createdEnable,
     targetTokenAddress,
   } = useCreatePocketPage();
   const { chainId } = usePlatformConfig();
@@ -72,7 +73,7 @@ export const DCAStrategy: FC = () => {
                     }}
                   />
                 </div>
-                {errorMsgs?.startAt && (
+                {errorMsgs?.startAt && createdEnable && (
                   <ErrorLabel message={errorMsgs.startAt} />
                 )}
               </div>

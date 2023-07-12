@@ -174,7 +174,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
 
       /** @dev Validate if all form be valid. */
       if (!validateForms()) {
-        alert("Invalid inputs, please check again");
         throw new Error("NOT::VALIDATION");
       }
 

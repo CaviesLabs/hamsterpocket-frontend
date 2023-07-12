@@ -21,10 +21,11 @@ export const BuyCondition: FC<{
   const {
     buyCondition,
     errorMsgs,
-    setBuyCondition,
+    createdEnable,
     targetTokenAddress,
     baseTokenAddress,
     batchVolume,
+    setBuyCondition,
     setErrorMsgs,
   } = useCreatePocketPage();
   const { whiteLists } = useWhiteList();
@@ -77,7 +78,7 @@ export const BuyCondition: FC<{
       <p className="text-dark10 text-[14px] regular-text">
         Buy at market price if
       </p>
-      {errorMsgs?.buyCondition && (
+      {errorMsgs?.buyCondition && createdEnable && (
         <ErrorLabel message={errorMsgs.buyCondition} />
       )}
       {!props.buyConditionDisplayed ? (

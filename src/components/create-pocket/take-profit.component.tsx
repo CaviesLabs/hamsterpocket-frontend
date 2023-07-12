@@ -16,6 +16,7 @@ export const TakeProfitOption: FC = () => {
     baseTokenAddress,
     errorMsgs,
     mintOrderSize,
+    createdEnable,
     setBatchVolume,
     setErrorMsgs,
   } = useCreatePocketPage();
@@ -58,7 +59,7 @@ export const TakeProfitOption: FC = () => {
             setBatchVolume(val);
           }}
         />
-        {errorMsgs?.batchVolume && (
+        {errorMsgs?.batchVolume && createdEnable && (
           <ErrorLabel message={errorMsgs.batchVolume} />
         )}
       </div>

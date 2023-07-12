@@ -29,14 +29,15 @@ export const StopConditionMobile: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { errorMsgs, handleModifyStopConditions } = useCreatePocketPage();
+  const { errorMsgs, createdEnable, handleModifyStopConditions } =
+    useCreatePocketPage();
 
   return (
     <section>
       <p className="mt-[48px] text-[20px] mobile:text-[14px] text-dark50 normal-text">
         Close pocket when reach
       </p>
-      {errorMsgs?.stopConditions && (
+      {errorMsgs?.stopConditions && createdEnable && (
         <ErrorLabel message={errorMsgs.stopConditions} />
       )}
       <div className="mt-2">

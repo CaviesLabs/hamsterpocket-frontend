@@ -15,6 +15,7 @@ export const StopLossOption: FC = () => {
   const {
     baseTokenAddress,
     errorMsgs,
+    createdEnable,
     mintOrderSize,
     setBatchVolume,
     setErrorMsgs,
@@ -63,7 +64,7 @@ export const StopLossOption: FC = () => {
             setBatchVolume(val);
           }}
         />
-        {errorMsgs?.batchVolume && (
+        {errorMsgs?.batchVolume && createdEnable && (
           <ErrorLabel message={errorMsgs.batchVolume} />
         )}
       </div>

@@ -69,7 +69,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
 
   /** @dev Watch changes in pocket name, required if chainId is SOL. */
   useEffect(() => {
-    if (!createdEnable) return;
     if (chainId !== ChainId.sol) return;
     modifyErrors(
       "pocketName",
@@ -79,7 +78,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
 
   /** @dev Watch changes in pocket start at. */
   useEffect(() => {
-    if (!createdEnable) return;
     modifyErrors(
       "startAt",
       startAt.getTime() < Date.now()
@@ -90,7 +88,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
 
   /** @dev Watch changes in batch volume and validate it. */
   useEffect(() => {
-    if (!createdEnable) return;
     if (batchVolume < mintOrderSize) {
       return modifyErrors(
         "batchVolume",
@@ -107,8 +104,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
 
   /** @dev Watch changes in stop condtions. */
   useEffect(() => {
-    if (!createdEnable) return;
-
     /** @dev Raise error if user enter deposit amount smaller than batch amount. */
     if (depositedAmount < batchVolume) {
       return modifyErrors(
@@ -124,26 +119,6 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
         : ""
     );
   }, [depositedAmount, createdEnable, batchVolume]);
-
-  // useEffect(() => {
-  //   if (!createdEnable) return;
-  //   modifyErrors(
-  //     "takeProfitAmount",
-  //     takeProfitAmount !== undefined && takeProfitAmount <= 0
-  //       ? "Must to set token amount to take profit"
-  //       : ""
-  //   );
-  // }, [takeProfitAmount, createdEnable]);
-
-  // useEffect(() => {
-  //   if (!createdEnable) return;
-  //   modifyErrors(
-  //     "stopLossAmount",
-  //     stopLossAmount !== undefined && stopLossAmount <= 0
-  //       ? "Must to set token amount stop loss"
-  //       : ""
-  //   );
-  // }, [stopLossAmount, createdEnable]);
 
   return {
     errors,

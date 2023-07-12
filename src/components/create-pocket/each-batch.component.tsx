@@ -10,6 +10,7 @@ export const BatchOption: FC = () => {
   const {
     baseTokenAddress,
     errorMsgs,
+    createdEnable,
     mintOrderSize,
     setBatchVolume,
     setErrorMsgs,
@@ -42,7 +43,7 @@ export const BatchOption: FC = () => {
             setBatchVolume(val);
           }}
         />
-        {errorMsgs?.batchVolume && (
+        {errorMsgs?.batchVolume && createdEnable && (
           <ErrorLabel message={errorMsgs.batchVolume} />
         )}
       </div>
