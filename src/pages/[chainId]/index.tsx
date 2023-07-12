@@ -34,7 +34,7 @@ const Layout = (props: LayoutProps) => {
   const { analyzeDecimals } = useWhiteList();
 
   useEffect(() => {
-    if (wallet.wallet?.publicKey?.toString()) {
+    if (wallet.solanaWallet?.publicKey?.toString()) {
       pushRouterWithChainId("/my-pockets");
     }
   }, [wallet]);
