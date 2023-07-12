@@ -69,7 +69,7 @@ export const ChainSelect: FC = () => {
       <ul
         style={{
           display: show ? "block" : "none",
-          bottom: `-${avaliableChains.length * 41}px`,
+          bottom: `-${avaliableChains.length * 39}px`,
         }}
         className={styles["toggle-container"]}
       >
@@ -78,7 +78,10 @@ export const ChainSelect: FC = () => {
             {avaliableChains.map((item, key) => (
               <li
                 key={`kksk-${key}`}
-                onClick={() => switchChainId(item.id)}
+                onClick={() => {
+                  switchChainId(item.id);
+                  setShow(false);
+                }}
                 className="hover:text-purple normal-text flex items-center"
               >
                 <img className="w-[24px] h-[24px]" src={item.image} />
