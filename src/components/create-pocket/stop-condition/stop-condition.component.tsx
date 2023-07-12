@@ -32,14 +32,15 @@ export const StopCondition: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { errorMsgs, handleModifyStopConditions } = useCreatePocketPage();
+  const { errorMsgs, createdEnable, handleModifyStopConditions } =
+    useCreatePocketPage();
 
   return (
     <section>
       <p className="mt-[48px] text-[24px] text-white normal-text font-[600]">
         Pocket end condition
       </p>
-      {errorMsgs?.stopConditions && (
+      {errorMsgs?.stopConditions && createdEnable && (
         <ErrorLabel message={errorMsgs.stopConditions} />
       )}
       <div className="mt-2">

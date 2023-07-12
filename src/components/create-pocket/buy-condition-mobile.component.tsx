@@ -23,10 +23,11 @@ export const BuyConditionMobile: FC<{
   const {
     buyCondition,
     errorMsgs,
-    setBuyCondition,
+    createdEnable,
     targetTokenAddress,
     baseTokenAddress,
     batchVolume,
+    setBuyCondition,
     setErrorMsgs,
   } = useCreatePocketPage();
 
@@ -83,7 +84,7 @@ export const BuyConditionMobile: FC<{
       <p className="text-dark50 text-[20px] mobile:text-[14px] regular-text">
         Buy at market price if
       </p>
-      {errorMsgs?.buyCondition && (
+      {errorMsgs?.buyCondition && createdEnable && (
         <ErrorLabel message={errorMsgs.buyCondition} />
       )}
       <div className="bg-[#121320] rounded-[16px] py-[16px] px-[16px] mt-[16px]">

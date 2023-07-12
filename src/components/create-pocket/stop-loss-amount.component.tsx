@@ -7,7 +7,7 @@ export const StopLossAmount: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setStopLossAmount, errorMsgs } =
+  const { baseTokenAddress, setStopLossAmount, errorMsgs, createdEnable } =
     useCreatePocketPage();
 
   return (
@@ -31,7 +31,7 @@ export const StopLossAmount: FC = () => {
             />
           </div>
         </div>
-        {errorMsgs?.stopLossAmount && (
+        {errorMsgs?.stopLossAmount && createdEnable && (
           <ErrorLabel message={errorMsgs.stopLossAmount} />
         )}
       </div>

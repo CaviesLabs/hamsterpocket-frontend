@@ -7,7 +7,7 @@ export const TakeProfitAmount: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { baseTokenAddress, setTakeProfitAmount, errorMsgs } =
+  const { baseTokenAddress, setTakeProfitAmount, errorMsgs, createdEnable } =
     useCreatePocketPage();
 
   return (
@@ -31,7 +31,7 @@ export const TakeProfitAmount: FC = () => {
             />
           </div>
         </div>
-        {errorMsgs?.takeProfitAmount && (
+        {errorMsgs?.takeProfitAmount && createdEnable && (
           <ErrorLabel message={errorMsgs.takeProfitAmount} />
         )}
       </div>

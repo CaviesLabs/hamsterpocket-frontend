@@ -16,10 +16,11 @@ export const DepositAmount: FC = () => {
    */
   const {
     baseTokenAddress,
-    setDepositedAmount,
     errorMsgs,
-    setErrorMsgs,
+    createdEnable,
     batchVolume,
+    setDepositedAmount,
+    setErrorMsgs,
   } = useCreatePocketPage();
 
   const { nativeBalance: evmBalance } = useEvmWallet();
@@ -74,7 +75,7 @@ export const DepositAmount: FC = () => {
             {formatCurrency(renderBalance())} {baseToken?.symbol}
           </p>
         </div>
-        {errorMsgs?.depositedAmount && (
+        {errorMsgs?.depositedAmount && createdEnable && (
           <ErrorLabel message={errorMsgs.depositedAmount} />
         )}
       </div>

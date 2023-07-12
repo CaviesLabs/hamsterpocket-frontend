@@ -7,7 +7,8 @@ export const PoolInformation: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { setPocketName, pocketName, errorMsgs } = useCreatePocketPage();
+  const { setPocketName, pocketName, errorMsgs, createdEnable } =
+    useCreatePocketPage();
 
   return (
     <section>
@@ -24,7 +25,9 @@ export const PoolInformation: FC = () => {
           onValueChange={(v) => setPocketName(v)}
         />
       </div>
-      {errorMsgs?.pocketName && <ErrorLabel message={errorMsgs.pocketName} />}
+      {errorMsgs?.pocketName && createdEnable && (
+        <ErrorLabel message={errorMsgs.pocketName} />
+      )}
     </section>
   );
 };
