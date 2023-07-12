@@ -27,13 +27,13 @@ export class ProgramService {
    * Step 1: Create a empty pocket offchain to Hamster server.
    * Step 2: Create pocket onchain.
    * Step 3: Sync pocket after creation.
-   * @param address
    * @param createPocketDto
    */
   public async createPocket(
-    address: string,
     createPocketDto: CreatePocketDto
   ): Promise<any> {
+    const address = this.pocketProgramProvider.walletProvider.wallet.publicKey.toBase58();
+
     /** @dev Call to HamsterBox server to initialize the proposal. */
     const response = await networkProvider.request<any>(
       `/pool/solana/${address}`,

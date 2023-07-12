@@ -987,7 +987,7 @@ export const LeftArrowIcon: FC<IconProps> = (props) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g clip-path="url(#clip0_3413_12543)">
+    <g clipPath="url(#clip0_3413_12543)">
       <path
         d="M4.95837 14.3221L22.4584 14.3221"
         stroke="#7886A0"
@@ -1050,7 +1050,7 @@ export const MobileExchangeIcon: FC<IconProps> = (props) => (
       transform="rotate(90 44.5 0.00195312)"
       fill="#735CF7"
     />
-    <g clip-path="url(#clip0_3390_23925)">
+    <g clipPath="url(#clip0_3390_23925)">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

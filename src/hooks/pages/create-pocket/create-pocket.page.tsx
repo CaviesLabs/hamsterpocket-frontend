@@ -173,7 +173,8 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       if (!walletAddress) return;
 
       /** @dev Validate if all form be valid. */
-      if (!(await validateForms())) {
+      if (!(validateForms())) {
+        alert("Invalid inputs, please check again");
         throw new Error("NOT::VALIDATION");
       }
 
@@ -252,7 +253,6 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
          * @dev Execute interact with solana blockchain.
          */
         const response = await programService.createPocket(
-          solanaWallet.publicKey?.toBase58()?.toString(),
           solCreatedPocketData
         );
 

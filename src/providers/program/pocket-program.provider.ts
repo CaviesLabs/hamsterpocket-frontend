@@ -9,9 +9,6 @@ import { TransactionProvider } from "./transaction.provider";
 import { WSOL_ADDRESS } from "@/src/utils/constants";
 import { AugmentedProvider } from "@saberhq/solana-contrib";
 
-export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
-export const SOLANA_MAINNET_RPC_RPC_ENDPOINT = process.env.SOLANA_RPC_URL;
-
 /**
  * @dev Swap Program Provider acts as an interface to interact with hamsterswap program on solana.
  */
@@ -19,7 +16,7 @@ export class PocketProgramProvider {
   private readonly idl: PocketIdl = IDL;
   private readonly rpcEndpoint: string;
   private readonly programId: string;
-  private readonly walletProvider: AugmentedProvider;
+  public readonly walletProvider: AugmentedProvider;
   private connection: Connection;
 
   /**
@@ -46,30 +43,17 @@ export class PocketProgramProvider {
   /**
    * @dev Initialize swap program provider.
    */
-  constructor(walletProvider: AugmentedProvider) {
+  constructor(walletProvider: AugmentedProvider, rpcUrl: string, programAddress: string) {
     /**
      * @dev Initilize wallet provider context.
      */
     this.walletProvider = walletProvider;
-
-    /**
-     * @dev Binding cluster
-     */
-    switch (process.env.SOLANA_CLUSTER) {
-      case "devnet":
-        this.rpcEndpoint = SOLANA_DEVNET_RPC_ENDPOINT;
-        break;
-      case "mainnet-beta":
-        this.rpcEndpoint = SOLANA_MAINNET_RPC_RPC_ENDPOINT;
-        break;
-      default:
-        throw new Error("RPC not supported");
-    }
+    this.connection = new Connection(rpcUrl, "finalized");
 
     /**
      * @dev Binding program id
      */
-    this.programId = process.env.SWAP_PROGRAM_ADDRESS;
+    this.programId = programAddress;
 
     /**
      * @dev Initialize program
@@ -114,7 +98,6 @@ export class PocketProgramProvider {
     /**
      * @dev Prepares for some infra config
      */
-    this.connection = new Connection(this.rpcEndpoint, "finalized");
     const provider = new anchor.AnchorProvider(
       this.connection,
       this.walletProvider.wallet,
@@ -181,6 +164,7 @@ export class PocketProgramProvider {
       const pocketAccount = await this.instructionProvider.findPocketAccount(
         createPocketDto.id
       );
+
 
       /**
        * @dev Define @var {TransactionInstruction} @arrays instructions to process.
@@ -330,7 +314,6 @@ export class PocketProgramProvider {
      * @dev Try to create a instruction to deposit token.
      */
     const ins = await this.instructionProvider.depositAsset(
-      this.walletProvider,
       this.walletProvider.wallet.publicKey,
       pocketAccount,
       baseTokenAddress,
@@ -348,7 +331,6 @@ export class PocketProgramProvider {
 
   /**
    * @dev The function to close pocket pool and withdraw assets.
-   * @param walletProvider
    * @param pocket
    */
   public async closePocket(pocket: PocketEntity) {
@@ -357,8 +339,6 @@ export class PocketProgramProvider {
 
       /** @dev Get pocket state. */
       const [pocketAccount, pocketState] = await this.getPocketState(pocket.id);
-
-      console.log(pocketState);
 
       /**
        * @dev Define @var {TransactionInstruction} @arrays instructions to process.

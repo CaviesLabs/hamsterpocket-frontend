@@ -38,7 +38,6 @@ import { getAssociatedTokenAddress } from "@solana/spl-token";
  */
 export async function getOrCreateAssociatedTokenAccount(
   connection: Connection,
-  payer: Signer,
   mint: PublicKey,
   owner: PublicKey,
   allowOwnerOffCurve = false,
@@ -47,6 +46,14 @@ export async function getOrCreateAssociatedTokenAccount(
   programId = TOKEN_PROGRAM_ID,
   associatedTokenProgramId = ASSOCIATED_TOKEN_PROGRAM_ID
 ): Promise<TransactionInstruction> {
+  console.log({
+    ownerBuffer: owner,
+    payer: owner?.toBase58(),
+    mint: mint.toBase58(),
+    owner: owner?.toBase58(),
+    programId: programId.toBase58(),
+  })
+
   const associatedToken = await getAssociatedTokenAddress(
     mint,
     owner,
@@ -56,7 +63,7 @@ export async function getOrCreateAssociatedTokenAccount(
   );
 
   try {
-    await getAccount(connection, associatedToken, commitment, programId);
+    await getAccount(connection, associatedToken, commitment, programId)
     return null;
   } catch (error: unknown) {
     if (
@@ -66,7 +73,7 @@ export async function getOrCreateAssociatedTokenAccount(
       // As this isn't atomic, it's possible others can create associated accounts meanwhile.
       try {
         const instruction = createAssociatedTokenAccountInstruction(
-          payer.publicKey,
+          owner,
           associatedToken,
           owner,
           mint,

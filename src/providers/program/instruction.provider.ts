@@ -102,7 +102,6 @@ export class InstructionProvider {
   ): Promise<TransactionInstruction> {
     return getOrCreateAssociatedTokenAccount(
       this.connection,
-      { publicKey } as any,
       mintAccount,
       publicKey
     );
@@ -161,7 +160,6 @@ export class InstructionProvider {
     /**
      * @dev Custom data to create.
      */
-    console.log({ createPocketDto });
     const data: any = {
       id: createPocketDto.id,
       quoteTokenAddress: createPocketDto.quoteTokenAddress,
@@ -191,7 +189,6 @@ export class InstructionProvider {
 
   /**
    * @dev Deposit assets to pocket pool
-   * @param walletProvider
    * @param {PublicKey} pocketOwner
    * @param {PublicKey} pocketAccount
    * @param baseTokenAccount
@@ -201,7 +198,6 @@ export class InstructionProvider {
    * @returns {TransactionInstruction}
    */
   public async depositAsset(
-    walletProvider: AugmentedProvider,
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
@@ -241,7 +237,7 @@ export class InstructionProvider {
     if (baseTokenAccount.toBase58().toString() === WSOL_ADDRESS) {
       try {
         const [ins1, ins2] = await this.wrapSol(
-          walletProvider.wallet.publicKey,
+          pocketOwner,
           depositAmount
         );
 
@@ -255,13 +251,11 @@ export class InstructionProvider {
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        walletProvider as any,
         baseTokenAccount,
         pocketOwner
       ),
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        walletProvider as any,
         targetTokenAccount,
         pocketOwner
       ),
@@ -305,6 +299,8 @@ export class InstructionProvider {
    * @dev Instuction to close pocket.
    * @param pocketOwner
    * @param pocketAccount
+   * @param baseTokenAccount
+   * @param targetTokenAccount
    * @returns
    */
   public async closePocketAccount(
@@ -415,13 +411,11 @@ export class InstructionProvider {
     return [
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        walletProvider as any,
         baseTokenAccount,
         pocketOwner
       ),
       await getOrCreateAssociatedTokenAccount(
         this.connection,
-        walletProvider as any,
         targetTokenAccount,
         pocketOwner
       ),

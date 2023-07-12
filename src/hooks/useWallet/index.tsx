@@ -12,12 +12,13 @@ import {
   useSolana as useSaberhq,
   useConnectedWallet,
 } from "@saberhq/use-solana";
-import web3 from "@solana/web3.js";
+import web3, { Connection } from "@solana/web3.js";
 import { useRouter } from "next/router";
 
 import { ProgramService } from "@/src/services";
 import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { WalletContextState } from "./types";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 /** @dev Initiize context. */
 export const WalletContext = createContext<WalletContextState>(null);
@@ -25,8 +26,11 @@ export const WalletContext = createContext<WalletContextState>(null);
 /** @dev Expose wallet provider for usage. */
 export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const router = useRouter();
+
+  const { platformConfig } = usePlatformConfig();
+
   /** @dev Get @var {walletProviderInfo} from @var {GokkiKit}. */
-  const { connection, providerMut } = useSaberhq();
+  const { providerMut } = useSaberhq();
 
   /** @dev Import wallet from Gokki library. */
   const solanaWallet = useConnectedWallet();
@@ -53,14 +57,21 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     async (address?: web3.PublicKey) => {
       if (!address && !solanaWallet?.publicKey) return;
 
+      if(!platformConfig?.rpcUrl) return;
+
+      const connection = new Connection(platformConfig?.rpcUrl, "confirmed");
+
       /**
        * @dev Get blance if whether address or signer is valid.
        */
       const balance = await connection
         .getBalance(address || solanaWallet?.publicKey)
-        .catch(() => {
+        .catch((e) => {
+          console.log(e)
           return 0;
         });
+
+      console.log("balance", balance);
 
       /**
        * @dev Check signer sol balance if address is null.
@@ -71,7 +82,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
 
       return balance;
     },
-    [solanaWallet]
+    [solanaWallet, platformConfig]
   );
 
   useEffect(() => {
@@ -89,10 +100,14 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
    * */
   useEffect(() => {
     (async () => {
-      if (solanaWallet?.publicKey?.toString()) {
+      if (!programService && solanaWallet?.publicKey?.toString() && platformConfig) {
         try {
           /** @dev Init program provider. */
-          const programProvider = new PocketProgramProvider(providerMut);
+          const programProvider = new PocketProgramProvider(
+            providerMut,
+            platformConfig.rpcUrl,
+            platformConfig.programAddress
+          );
 
           /** @dev Initlize swap program service with initlized programProvider. */
           const program = new ProgramService(programProvider);
@@ -107,7 +122,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
         }
       }
     })();
-  }, [solanaWallet, router.asPath, providerMut]);
+  }, [solanaWallet, router.asPath, providerMut, platformConfig, programService]);
 
   return (
     <WalletContext.Provider
