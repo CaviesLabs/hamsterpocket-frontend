@@ -149,7 +149,7 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
+                      href={`${dexUrl}?${platformConfig?.whitelistedRouters?.[0]?.inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters?.[0]?.outputTag}=${targetToken?.address}`}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >

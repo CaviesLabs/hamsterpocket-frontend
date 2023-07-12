@@ -2,6 +2,7 @@ import { StopConditions } from "@/src/entities/pocket.entity";
 import { DATE_TIME_FORMAT } from "@/src/utils";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { devideBigNumber } from "@/src/utils/evm.parser";
 import dayjs from "dayjs";
 
 /**
@@ -42,19 +43,19 @@ export const parseStopConditionHumanValue = (condition: StopConditions) => {
    * @dev Parse token big number to human text.
    */
   if (condition.spentBaseTokenAmountReach) {
-    return `${
-      (condition.spentBaseTokenAmountReach?.value as any)?.toNumber() /
+    return `${devideBigNumber(
+      (condition.spentBaseTokenAmountReach?.value as any)?.toNumber(),
       Math.pow(10, baseTokenAddress?.[1])
-    } ${whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+    )} ${whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
   }
 
   /**
    * @dev Parse token big number to human text.
    */
   if (condition.quoteTokenAmountReach) {
-    return `${
-      (condition.quoteTokenAmountReach?.value as any)?.toNumber() /
+    return `${devideBigNumber(
+      condition.quoteTokenAmountReach?.value as any,
       Math.pow(10, targetTokenAddress?.[1])
-    } ${whiteLists[targetTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+    )} ${whiteLists[targetTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
   }
 };
