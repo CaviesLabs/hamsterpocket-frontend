@@ -57,7 +57,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     async (address?: web3.PublicKey) => {
       if (!address && !solanaWallet?.publicKey) return;
 
-      if(!platformConfig?.rpcUrl) return;
+      if (!platformConfig?.rpcUrl) return;
 
       const connection = new Connection(platformConfig?.rpcUrl, "confirmed");
 
@@ -67,7 +67,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
       const balance = await connection
         .getBalance(address || solanaWallet?.publicKey)
         .catch((e) => {
-          console.log(e)
+          console.log(e);
           return 0;
         });
 
@@ -100,7 +100,11 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
    * */
   useEffect(() => {
     (async () => {
-      if (!programService && solanaWallet?.publicKey?.toString() && platformConfig) {
+      if (
+        !programService &&
+        solanaWallet?.publicKey?.toString() &&
+        platformConfig
+      ) {
         try {
           /** @dev Init program provider. */
           const programProvider = new PocketProgramProvider(
@@ -122,7 +126,13 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
         }
       }
     })();
-  }, [solanaWallet, router.asPath, providerMut, platformConfig, programService]);
+  }, [
+    solanaWallet,
+    router.asPath,
+    providerMut,
+    platformConfig,
+    programService,
+  ]);
 
   return (
     <WalletContext.Provider

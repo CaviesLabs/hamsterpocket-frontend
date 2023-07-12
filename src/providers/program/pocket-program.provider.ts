@@ -43,7 +43,11 @@ export class PocketProgramProvider {
   /**
    * @dev Initialize swap program provider.
    */
-  constructor(walletProvider: AugmentedProvider, rpcUrl: string, programAddress: string) {
+  constructor(
+    walletProvider: AugmentedProvider,
+    rpcUrl: string,
+    programAddress: string
+  ) {
     /**
      * @dev Initilize wallet provider context.
      */
@@ -164,7 +168,6 @@ export class PocketProgramProvider {
       const pocketAccount = await this.instructionProvider.findPocketAccount(
         createPocketDto.id
       );
-
 
       /**
        * @dev Define @var {TransactionInstruction} @arrays instructions to process.

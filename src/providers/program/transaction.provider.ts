@@ -32,7 +32,7 @@ export class TransactionProvider {
    * @param instructions
    * @param commitment
    */
-  public async  signAndSendTransaction(
+  public async signAndSendTransaction(
     walletProvider: AugmentedProvider,
     instructions: TransactionInstruction[],
     commitment: Commitment = "finalized"

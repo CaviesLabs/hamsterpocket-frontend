@@ -29,10 +29,9 @@ export class ProgramService {
    * Step 3: Sync pocket after creation.
    * @param createPocketDto
    */
-  public async createPocket(
-    createPocketDto: CreatePocketDto
-  ): Promise<any> {
-    const address = this.pocketProgramProvider.walletProvider.wallet.publicKey.toBase58();
+  public async createPocket(createPocketDto: CreatePocketDto): Promise<any> {
+    const address =
+      this.pocketProgramProvider.walletProvider.wallet.publicKey.toBase58();
 
     /** @dev Call to HamsterBox server to initialize the proposal. */
     const response = await networkProvider.request<any>(

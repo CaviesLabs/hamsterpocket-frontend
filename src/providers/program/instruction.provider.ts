@@ -236,10 +236,7 @@ export class InstructionProvider {
     const wrapSolInstructions = [];
     if (baseTokenAccount.toBase58().toString() === WSOL_ADDRESS) {
       try {
-        const [ins1, ins2] = await this.wrapSol(
-          pocketOwner,
-          depositAmount
-        );
+        const [ins1, ins2] = await this.wrapSol(pocketOwner, depositAmount);
 
         ins1 && wrapSolInstructions.push(ins1);
         ins2 && wrapSolInstructions.push(ins2);
