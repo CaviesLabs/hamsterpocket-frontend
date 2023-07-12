@@ -5,7 +5,6 @@ import {
   PublicKey,
   TransactionInstruction,
   SystemProgram,
-  // LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
 import {
@@ -16,8 +15,8 @@ import {
 } from "@solana/spl-token";
 import { getOrCreateAssociatedTokenAccount } from "./getOrCreateAssociatedTokenAccount";
 import { PocketIdl } from "./pocket.idl";
-import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import { WSOL_ADDRESS } from "@/src/utils";
+import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 export class InstructionProvider {
   /**
@@ -56,7 +55,7 @@ export class InstructionProvider {
 
   /**
    * @dev Find pocket account.
-   * @param {string} id Pocket ID.
+   * @param pocketId
    */
   public async findPocketAccount(pocketId: string): Promise<PublicKey> {
     const [pocketAccount] = PublicKey.findProgramAddressSync(
@@ -113,7 +112,7 @@ export class InstructionProvider {
    * @dev The function to find and create token vault.
    * @param {PublicKey} pocketOwner,
    * @param {PublicKey} pocketAccount,
-   * @param {PublicKey} pub.
+   * @param mintAccount
    * @returns {TransactionInstruction}
    */
   public async createTokenVaultAccount(
@@ -149,10 +148,10 @@ export class InstructionProvider {
 
   /**
    * @dev The function to create proposal instruction.
-   * @param {CreateProposalDto} createProposalDto.
-   * @param {PublicKey} proposalOwner.
-   * @param {PublicKey} swapProposal.
    * @returns {TransactionInstruction}
+   * @param createPocketDto
+   * @param pocketOwner
+   * @param pocketAccount
    */
   public async createPocket(
     createPocketDto: CreatePocketDto,
@@ -192,15 +191,17 @@ export class InstructionProvider {
 
   /**
    * @dev Deposit assets to pocket pool
+   * @param walletProvider
    * @param {PublicKey} pocketOwner
    * @param {PublicKey} pocketAccount
-   * @param {PublicKey} tokenAccount
-   * @param {PublicKey} tokenVaultAccount
+   * @param baseTokenAccount
+   * @param targetTokenAccount
    * @param {PublicKey} depositAmount
+   * @param mode
    * @returns {TransactionInstruction}
    */
   public async depositAsset(
-    walletProvider: WalletProvider,
+    walletProvider: AugmentedProvider,
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,
@@ -240,7 +241,7 @@ export class InstructionProvider {
     if (baseTokenAccount.toBase58().toString() === WSOL_ADDRESS) {
       try {
         const [ins1, ins2] = await this.wrapSol(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           depositAmount
         );
 
@@ -373,6 +374,7 @@ export class InstructionProvider {
 
   /**
    * @dev Instruction to withdraw assets.
+   * @param walletProvider
    * @param pocketOwner
    * @param pocketAccount
    * @param baseTokenAccount
@@ -380,7 +382,7 @@ export class InstructionProvider {
    * @returns
    */
   public async withdrawPocket(
-    walletProvider: WalletProvider,
+    walletProvider: AugmentedProvider,
     pocketOwner: PublicKey,
     pocketAccount: PublicKey,
     baseTokenAccount: PublicKey,

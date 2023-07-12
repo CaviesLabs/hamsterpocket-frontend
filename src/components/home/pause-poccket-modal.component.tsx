@@ -18,7 +18,7 @@ export const PausePocketModal: FC<{
   pocket: PocketEntity;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService } = useWallet();
   const { walletAddress } = useAppWallet();
   const { chainId } = usePlatformConfig();
   const { pausePocket: pausePocketEvm } = useEvmWallet();
@@ -40,7 +40,7 @@ export const PausePocketModal: FC<{
 
       /** @dev Execute transaction. */
       if (chainId === ChainId.sol) {
-        await programService.pausePocket(solanaWallet, props.pocket);
+        await programService.pausePocket(props.pocket);
       } else if (chainId.includes("aptos")) {
         await pausePocketAptos(props.pocket._id || props.pocket.id);
       } else {
@@ -54,7 +54,7 @@ export const PausePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, walletAddress, chainId]);
+  }, [programService, props.pocket, walletAddress, chainId]);
 
   return (
     <Modal

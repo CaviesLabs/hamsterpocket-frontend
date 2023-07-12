@@ -1,17 +1,10 @@
-import {
-  WalletContextState as SolanaWalletContextState,
-  ConnectionContextState,
-} from "@solana/wallet-adapter-react";
 import web3 from "@solana/web3.js";
 import { ProgramService } from "@/src/services/program.service";
+import { ConnectedWallet } from "@saberhq/use-solana";
+import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 /** @dev Define state for context. */
 export interface WalletContextState {
-  /**
-   * @dev The function to sign message in Solana network.
-   * */
-  signMessage(message: string): Promise<Uint8Array>;
-
   /**
    * @dev The function to disconnect walle & logout to Hamster server and Firebase.
    */
@@ -26,12 +19,12 @@ export interface WalletContextState {
   /**
    * @dev Expose context frrom solana-adapter.
    */
-  solanaWallet: SolanaWalletContextState;
+  solanaWallet: ConnectedWallet;
 
   /**
-   * @dev Solana chain connection.
+   * @dev Expose provider from solana-adapter.
    */
-  walletConnection: ConnectionContextState;
+  provider: AugmentedProvider;
 
   /**
    * @dev Define Program service.

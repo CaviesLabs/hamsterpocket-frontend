@@ -18,7 +18,7 @@ export const ResumePocketModal: FC<{
   pocket: PocketEntity;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService } = useWallet();
   const { walletAddress } = useAppWallet();
   const { chainId } = usePlatformConfig();
   const { resumePocket: resumePocketEvm } = useEvmWallet();
@@ -40,7 +40,7 @@ export const ResumePocketModal: FC<{
 
       /** @dev Execute transaction. */
       if (chainId === ChainId.sol) {
-        await programService.resumePocket(solanaWallet, props.pocket);
+        await programService.resumePocket(props.pocket);
       } else if (chainId.includes("aptos")) {
         await resumePocketAptos(props.pocket.id || props.pocket._id);
       } else {
@@ -54,7 +54,7 @@ export const ResumePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, walletAddress, chainId]);
+  }, [programService, props.pocket, walletAddress, chainId]);
 
   return (
     <Modal

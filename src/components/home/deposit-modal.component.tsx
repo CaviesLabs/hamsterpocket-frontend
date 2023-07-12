@@ -30,7 +30,7 @@ export const DepositModal: FC<{
   const { chainId } = usePlatformConfig();
 
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet, solBalance } = useWallet();
+  const { programService, solBalance } = useWallet();
 
   /** @dev Inject evm program service to use. */
   const {
@@ -70,11 +70,7 @@ export const DepositModal: FC<{
 
       if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
-        await programService.depositPocket(
-          solanaWallet,
-          props.pocket,
-          depositedAmount
-        );
+        await programService.depositPocket(props.pocket, depositedAmount);
       } else if (chainId.includes("aptos")) {
         console.log("deposit in aptos", depositedAmount);
         await depositPocketAptos(
@@ -106,14 +102,7 @@ export const DepositModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [
-    programService,
-    solanaWallet,
-    props.pocket,
-    depositedAmount,
-    chainId,
-    evmSigner,
-  ]);
+  }, [programService, props.pocket, depositedAmount, chainId, evmSigner]);
 
   /** @dev Define base token **/
   const baseToken =

@@ -22,7 +22,7 @@ export const ReversePocketModal: FC<{
   const { whiteLists, findEntityByAddress } = useWhiteList();
 
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService } = useWallet();
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ export const ReversePocketModal: FC<{
 
       if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
-        await programService.closePocket(solanaWallet, props.pocket);
+        await programService.closePocket(props.pocket);
       } else if (chainId.includes("aptos")) {
         await reversePocketAptos(
           props.pocket.id,
@@ -71,7 +71,7 @@ export const ReversePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, chainId]);
+  }, [programService, props.pocket, chainId]);
 
   return (
     <Modal

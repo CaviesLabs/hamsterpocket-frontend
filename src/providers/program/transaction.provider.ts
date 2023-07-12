@@ -8,8 +8,8 @@ import {
   Commitment,
 } from "@solana/web3.js";
 import { Program } from "@project-serum/anchor";
-import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import { PocketIdl } from "./pocket.idl";
+import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 export class TransactionProvider {
   constructor(
@@ -30,9 +30,10 @@ export class TransactionProvider {
    * @public
    * @param walletProvider
    * @param instructions
+   * @param commitment
    */
   public async signAndSendTransaction(
-    walletProvider: WalletProvider,
+    walletProvider: AugmentedProvider,
     instructions: TransactionInstruction[],
     commitment: Commitment = "finalized"
   ) {
@@ -41,14 +42,13 @@ export class TransactionProvider {
      */
     const tx = new Transaction().add(...instructions);
     tx.recentBlockhash = (await this.connection.getLatestBlockhash()).blockhash;
-    tx.feePayer = walletProvider.publicKey;
+    tx.feePayer = walletProvider.wallet.publicKey;
 
     /**
      * @dev Get raw transaction by signing in wallet.
      */
-    const rawTx = await walletProvider.signTransaction(tx);
+    const rawTx = await walletProvider.wallet.signTransaction(tx);
 
-    console.log({ rawTx });
     rawTx.serialize();
 
     /**
@@ -67,7 +67,7 @@ export class TransactionProvider {
    * @param commitment
    */
   public async signAndSendV0Transaction(
-    walletProvider: WalletProvider,
+    walletProvider: AugmentedProvider,
     instructions: TransactionInstruction[],
     addressLookupTableAccounts: AddressLookupTableAccount[] = [],
     commitment: Commitment = "processed"
@@ -78,7 +78,7 @@ export class TransactionProvider {
      * @dev Compile lookup message
      */
     const lookupMessage = new TransactionMessage({
-      payerKey: walletProvider.publicKey,
+      payerKey: walletProvider.wallet.publicKey,
       recentBlockhash: latestBlockHash.blockhash,
       instructions: instructions,
     }).compileToV0Message(addressLookupTableAccounts);
@@ -87,7 +87,9 @@ export class TransactionProvider {
      * @dev Sign v0 message
      */
     const lookupTransaction = new VersionedTransaction(lookupMessage);
-    const tx = await walletProvider.signTransaction(lookupTransaction);
+    const tx = await walletProvider.wallet.signTransaction(
+      lookupTransaction as any
+    );
 
     /**
      * @dev Send a raw transaction.

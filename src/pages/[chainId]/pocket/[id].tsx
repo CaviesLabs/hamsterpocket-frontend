@@ -116,8 +116,6 @@ const PocketDetailPage: NextPage = () => {
     syncAndFetch();
   }, [router, walletAddress]);
 
-  console.log(activePockets);
-
   return (
     <MainLayout>
       <div className={styles.container}>

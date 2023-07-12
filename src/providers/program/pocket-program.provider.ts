@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
 import * as anchor from "@project-serum/anchor";
 import { Program } from "@project-serum/anchor";
-import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
-import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import { PocketEntity } from "@/src/entities/pocket.entity";
 import { PocketIdl, IDL } from "./pocket.idl";
 import { InstructionProvider } from "./instruction.provider";
 import { TransactionProvider } from "./transaction.provider";
 import { WSOL_ADDRESS } from "@/src/utils/constants";
+import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 export const SOLANA_DEVNET_RPC_ENDPOINT = "https://api.devnet.solana.com";
 export const SOLANA_MAINNET_RPC_RPC_ENDPOINT = process.env.SOLANA_RPC_URL;
@@ -20,7 +19,7 @@ export class PocketProgramProvider {
   private readonly idl: PocketIdl = IDL;
   private readonly rpcEndpoint: string;
   private readonly programId: string;
-  private readonly walletProvider: WalletProvider;
+  private readonly walletProvider: AugmentedProvider;
   private connection: Connection;
 
   /**
@@ -47,7 +46,7 @@ export class PocketProgramProvider {
   /**
    * @dev Initialize swap program provider.
    */
-  constructor(walletProvider: WalletProvider) {
+  constructor(walletProvider: AugmentedProvider) {
     /**
      * @dev Initilize wallet provider context.
      */
@@ -118,7 +117,7 @@ export class PocketProgramProvider {
     this.connection = new Connection(this.rpcEndpoint, "finalized");
     const provider = new anchor.AnchorProvider(
       this.connection,
-      this.walletProvider,
+      this.walletProvider.wallet,
       {
         preflightCommitment: "finalized",
         commitment: "finalized",
@@ -134,7 +133,7 @@ export class PocketProgramProvider {
      * @dev Now find swap account.
      */
     const [pocketRegistry, pocketRegistryBump] =
-      await PublicKey.findProgramAddress(
+      PublicKey.findProgramAddressSync(
         [anchor.utils.bytes.utf8.encode("SEED::POCKET::PLATFORM")],
         this.program.programId
       );
@@ -168,14 +167,10 @@ export class PocketProgramProvider {
 
   /**
    * @dev The function to execute instructions creation then send and signn into blockchain to create new pocket on-chain.
-   * @param walletProvider
    * @param {CreatePocketDto} createPocketDto
    * @returns {any}.
    */
-  public async createPocket(
-    walletProvider: WalletProvider,
-    createPocketDto: CreatePocketDto
-  ) {
+  public async createPocket(createPocketDto: CreatePocketDto) {
     try {
       console.log("Pocket ID: ", createPocketDto.id);
       console.log("Params to create pocket: ", createPocketDto);
@@ -198,7 +193,7 @@ export class PocketProgramProvider {
       const createPocketInstruction =
         await this.instructionProvider.createPocket(
           createPocketDto,
-          walletProvider.publicKey,
+          this.walletProvider.wallet.publicKey,
           pocketAccount
         );
 
@@ -215,7 +210,6 @@ export class PocketProgramProvider {
       instructions = [
         ...instructions,
         ...(await this.depositAsset(
-          walletProvider,
           pocketAccount,
           createPocketDto.baseTokenAddress,
           createPocketDto.quoteTokenAddress,
@@ -228,7 +222,7 @@ export class PocketProgramProvider {
        * @dev Sign and confirm instructions.
        */
       const txId = await this.transactionProvider.signAndSendTransaction(
-        walletProvider,
+        this.walletProvider,
         instructions
       );
 
@@ -248,10 +242,11 @@ export class PocketProgramProvider {
   }
 
   public async depositToPocket(
-    walletProvider: WalletProvider,
     pocket: PocketEntity,
     depositedAmount: anchor.BN
   ) {
+    const walletProvider = this.walletProvider;
+
     try {
       console.log("Pocket ID: ", pocket.id);
       console.log("Params to deposit pocket: ", pocket);
@@ -266,7 +261,6 @@ export class PocketProgramProvider {
        */
       let instructions: TransactionInstruction[] = [].concat(
         await this.depositAsset(
-          walletProvider,
           pocketAccount,
           new PublicKey((pocketState as any)?.baseTokenMintAddress),
           new PublicKey((pocketState as any)?.quoteTokenMintAddress),
@@ -303,10 +297,13 @@ export class PocketProgramProvider {
 
   /**
    * @dev Deposit asset to pool.
-   * @param {PublicKey} tokenAddress
+   * @param pocketAccount
+   * @param baseTokenAddress
+   * @param targetTokenAddress
+   * @param depositedAmount
+   * @param mode
    */
   public async depositAsset(
-    walletProvider: WalletProvider,
     pocketAccount: PublicKey,
     baseTokenAddress: PublicKey,
     targetTokenAddress: PublicKey,
@@ -316,7 +313,7 @@ export class PocketProgramProvider {
     /** @dev Create token vault if not already exists .*/
     const createTokenVaultInstruction =
       await this.instructionProvider.createTokenVaultAccount(
-        walletProvider.publicKey,
+        this.walletProvider.wallet.publicKey,
         pocketAccount,
         baseTokenAddress
       );
@@ -324,7 +321,7 @@ export class PocketProgramProvider {
     /** @dev Create token vault if not already exists .*/
     const createTokenTargetVaultInstruction =
       await this.instructionProvider.createTokenVaultAccount(
-        walletProvider.publicKey,
+        this.walletProvider.wallet.publicKey,
         pocketAccount,
         targetTokenAddress
       );
@@ -333,8 +330,8 @@ export class PocketProgramProvider {
      * @dev Try to create a instruction to deposit token.
      */
     const ins = await this.instructionProvider.depositAsset(
-      walletProvider,
-      walletProvider.publicKey,
+      this.walletProvider,
+      this.walletProvider.wallet.publicKey,
       pocketAccount,
       baseTokenAddress,
       targetTokenAddress,
@@ -354,10 +351,7 @@ export class PocketProgramProvider {
    * @param walletProvider
    * @param pocket
    */
-  public async closePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ) {
+  public async closePocket(pocket: PocketEntity) {
     try {
       console.log("Pocket ID to close and withdraw: ", pocket.id);
 
@@ -375,7 +369,7 @@ export class PocketProgramProvider {
       if (!(pocketState as any)?.status?.closed) {
         instructions.push(
           await this.instructionProvider.closePocket(
-            walletProvider.publicKey,
+            this.walletProvider.wallet.publicKey,
             pocketAccount
           )
         );
@@ -391,7 +385,7 @@ export class PocketProgramProvider {
       /** @dev Create token vault if not already exists .*/
       const createTokenVaultInstruction =
         await this.instructionProvider.createTokenVaultAccount(
-          walletProvider.publicKey,
+          this.walletProvider.wallet.publicKey,
           pocketAccount,
           baseTokenMint
         );
@@ -399,15 +393,15 @@ export class PocketProgramProvider {
       /** @dev Create token vault if not already exists .*/
       const createTokenTargetVaultInstruction =
         await this.instructionProvider.createTokenVaultAccount(
-          walletProvider.publicKey,
+          this.walletProvider.wallet.publicKey,
           pocketAccount,
           qouteTokeMint
         );
 
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
-        walletProvider,
-        walletProvider.publicKey,
+        this.walletProvider,
+        this.walletProvider.wallet.publicKey,
         pocketAccount,
         baseTokenMint,
         qouteTokeMint
@@ -416,13 +410,17 @@ export class PocketProgramProvider {
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolBase =
         baseTokenMint.toBase58().toString() === WSOL_ADDRESS
-          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
+          ? await this.instructionProvider.unwrapSol(
+              this.walletProvider.wallet.publicKey
+            )
           : null;
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolQoute =
         qouteTokeMint.toBase58().toString() === WSOL_ADDRESS
-          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
+          ? await this.instructionProvider.unwrapSol(
+              this.walletProvider.wallet.publicKey
+            )
           : null;
 
       /** @dev Add to instructions if valid. */
@@ -440,7 +438,7 @@ export class PocketProgramProvider {
        * @dev Sign and confirm instructions.
        */
       const txId = await this.transactionProvider.signAndSendTransaction(
-        walletProvider,
+        this.walletProvider,
         instructions
       );
 
@@ -461,13 +459,10 @@ export class PocketProgramProvider {
 
   /**
    * @dev The function to withdraw assets.
-   * @param walletProvider
    * @param pocket
    */
-  public async withdrawPocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ) {
+  public async withdrawPocket(pocket: PocketEntity) {
+    const walletProvider = this.walletProvider;
     try {
       console.log("Pocket ID to withdraw: ", pocket.id);
 
@@ -491,7 +486,7 @@ export class PocketProgramProvider {
       /** @dev Create token vault if not already exists .*/
       const createTokenVaultInstruction =
         await this.instructionProvider.createTokenVaultAccount(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           pocketAccount,
           baseTokenMint
         );
@@ -499,7 +494,7 @@ export class PocketProgramProvider {
       /** @dev Create token vault if not already exists .*/
       const createTokenTargetVaultInstruction =
         await this.instructionProvider.createTokenVaultAccount(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           pocketAccount,
           qouteTokeMint
         );
@@ -507,7 +502,7 @@ export class PocketProgramProvider {
       /** @dev Withdraw assets from pool to wallet. */
       const withdrawIns = await this.instructionProvider.withdrawPocket(
         walletProvider,
-        walletProvider.publicKey,
+        walletProvider.wallet.publicKey,
         pocketAccount,
         baseTokenMint,
         qouteTokeMint
@@ -517,14 +512,18 @@ export class PocketProgramProvider {
       const unwrapSolBase =
         baseTokenMint.toBase58().toString() === WSOL_ADDRESS &&
         (pocketState as any).baseTokenBalance !== "00"
-          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
+          ? await this.instructionProvider.unwrapSol(
+              walletProvider.wallet.publicKey
+            )
           : null;
 
       /** @dev Unwrap sol if base token is wrap sol. */
       const unwrapSolQoute =
         qouteTokeMint.toBase58().toString() === WSOL_ADDRESS &&
         (pocketState as any).quoteTokenBalance !== "00"
-          ? await this.instructionProvider.unwrapSol(walletProvider.publicKey)
+          ? await this.instructionProvider.unwrapSol(
+              walletProvider.wallet.publicKey
+            )
           : null;
 
       console.log(unwrapSolBase, unwrapSolQoute);
@@ -565,13 +564,11 @@ export class PocketProgramProvider {
 
   /**
    * @dev The function to close pocket account.
-   * @param walletProvider
    * @param pocket
    */
-  public async closePocketAccount(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ) {
+  public async closePocketAccount(pocket: PocketEntity) {
+    const walletProvider = this.walletProvider;
+
     try {
       console.log("Pocket ID to close pocket account: ", pocket.id);
       /** @dev Get pocket state. */
@@ -590,7 +587,7 @@ export class PocketProgramProvider {
 
       const instructions: TransactionInstruction[] = [
         ...(await this.instructionProvider.closePocketAccount(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           pocketAccount,
           baseTokenMint,
           qouteTokeMint
@@ -625,10 +622,9 @@ export class PocketProgramProvider {
    * @param walletProvider
    * @param pocket
    */
-  public async pausePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ) {
+  public async pausePocket(pocket: PocketEntity) {
+    const walletProvider = this.walletProvider;
+
     try {
       console.log("Pocket ID to pause: ", pocket.id);
 
@@ -643,7 +639,7 @@ export class PocketProgramProvider {
       /** @dev Close pool. */
       instructions.push(
         await this.instructionProvider.pausePocket(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           pocketAccount
         )
       );
@@ -676,13 +672,11 @@ export class PocketProgramProvider {
 
   /**
    * @dev The function to resume.
-   * @param walletProvider
    * @param pocket
    */
-  public async resumePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ) {
+  public async resumePocket(pocket: PocketEntity) {
+    const walletProvider = this.walletProvider;
+
     try {
       console.log("Pocket ID: ", pocket.id);
       console.log("Params to create pocket: ", pocket);
@@ -700,7 +694,7 @@ export class PocketProgramProvider {
       /** @dev Close pool. */
       instructions.push(
         await this.instructionProvider.resumePocket(
-          walletProvider.publicKey,
+          walletProvider.wallet.publicKey,
           pocketAccount
         )
       );

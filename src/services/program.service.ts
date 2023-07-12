@@ -2,10 +2,10 @@ import { networkProvider } from "@/src/providers/network.provider";
 import { PocketProgramProvider } from "@/src/providers/program";
 import { Keypair } from "@solana/web3.js";
 import { BN } from "@project-serum/anchor";
-import { WalletContextState as WalletProvider } from "@solana/wallet-adapter-react";
 import { CreatePocketDto } from "@/src/dto/pocket.dto";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import UtilsProvider from "@/src/utils/utils.provider";
+import { AugmentedProvider } from "@saberhq/solana-contrib";
 
 export class ProgramService {
   /**
@@ -28,16 +28,16 @@ export class ProgramService {
    * Step 1: Create a empty pocket offchain to Hamster server.
    * Step 2: Create pocket onchain.
    * Step 3: Sync pocket after creation.
-   * @param {WalletProvider}
-   * @param {CreatePocketDto}
+   * @param walletProvider
+   * @param createPocketDto
    */
   public async createPocket(
-    walletProvider: WalletProvider,
+    walletProvider: AugmentedProvider,
     createPocketDto: CreatePocketDto
   ): Promise<any> {
     /** @dev Call to HamsterBox server to initialize the proposal. */
     const response = await networkProvider.request<any>(
-      `/pool/solana/${walletProvider.publicKey?.toBase58()?.toString()}`,
+      `/pool/solana/${walletProvider.wallet.publicKey?.toBase58()?.toString()}`,
       {
         method: "POST",
         data: {},
@@ -48,7 +48,7 @@ export class ProgramService {
     );
 
     return this.requestAndSync(response?._id, async () => {
-      return await this.pocketProgramProvider.createPocket(walletProvider, {
+      return await this.pocketProgramProvider.createPocket({
         ...createPocketDto,
         id: response?._id,
       });
@@ -57,100 +57,63 @@ export class ProgramService {
 
   /**
    * @dev The function to close pocket onchain & ofchain.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+s   * @param pocket
    */
-  public async closePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ): Promise<any> {
+  public async closePocket(pocket: PocketEntity): Promise<any> {
     return this.requestAndSync(pocket.id, async () => {
-      return await this.pocketProgramProvider.closePocket(
-        walletProvider,
-        pocket
-      );
+      return await this.pocketProgramProvider.closePocket(pocket);
     });
   }
 
   /**
    * @dev The function to close pocket onchain & ofchain.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+   * @param pocket
    */
-  public async withdrawPocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ): Promise<any> {
+  public async withdrawPocket(pocket: PocketEntity): Promise<any> {
     return this.requestAndSync(pocket.id, async () => {
-      return await this.pocketProgramProvider.withdrawPocket(
-        walletProvider,
-        pocket
-      );
+      return await this.pocketProgramProvider.withdrawPocket(pocket);
     });
   }
 
   /**
    * @dev The function to delete ended pocket and claim fee which pay for create these pocket.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+   * @param pocket
    */
-  public async claimPocketFee(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ): Promise<any> {
-    return this.pocketProgramProvider.closePocketAccount(
-      walletProvider,
-      pocket
-    );
+  public async claimPocketFee(pocket: PocketEntity): Promise<any> {
+    return this.pocketProgramProvider.closePocketAccount(pocket);
   }
 
   /**
    * @dev The function to pause pocket onchain & ofchain.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+   * @param pocket
    */
-  public async pausePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ): Promise<any> {
+  public async pausePocket(pocket: PocketEntity): Promise<any> {
     return this.requestAndSync(pocket.id, async () => {
-      return await this.pocketProgramProvider.pausePocket(
-        walletProvider,
-        pocket
-      );
+      return await this.pocketProgramProvider.pausePocket(pocket);
     });
   }
 
   /**
    * @dev The function to pause pocket onchain & ofchain.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+   * @param pocket
    */
-  public async resumePocket(
-    walletProvider: WalletProvider,
-    pocket: PocketEntity
-  ): Promise<any> {
+  public async resumePocket(pocket: PocketEntity): Promise<any> {
     return this.requestAndSync(pocket.id, async () => {
-      return await this.pocketProgramProvider.resumePocket(
-        walletProvider,
-        pocket
-      );
+      return await this.pocketProgramProvider.resumePocket(pocket);
     });
   }
 
   /**
    * @dev The function to close pocket onchain & ofchain.
-   * @param {WalletProvider}
-   * @param {PocketEntity}
+   * @param pocket
+   * @param depositedAmount
    */
   public async depositPocket(
-    walletProvider: WalletProvider,
     pocket: PocketEntity,
     depositedAmount: BN
   ): Promise<any> {
     return this.requestAndSync(pocket.id, async () => {
       return await this.pocketProgramProvider.depositToPocket(
-        walletProvider,
         pocket,
         depositedAmount
       );

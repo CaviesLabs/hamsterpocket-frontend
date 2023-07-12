@@ -1,22 +1,21 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-// import { useWalletKit } from "@gokiprotocol/walletkit";
+import { useWalletKit } from "@gokiprotocol/walletkit";
 import { Button } from "@hamsterbox/ui-kit";
-import { PURPLE_HEADER_PAGES } from "@/src/utils";
-import { HamsterboxIcon } from "@/src/components/icons";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
-import { ChainSelect } from "./chain-select";
-import { ChainId } from "@/src/entities/platform-config.entity";
 import classnames from "classnames";
-import UserProfile from "@/src/components/header/user-profile";
 import styled from "@emotion/styled";
+
+import { ChainSelect } from "./chain-select";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { HamsterboxIcon } from "@/src/components/icons";
+import { PURPLE_HEADER_PAGES } from "@/src/utils";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import UserProfile from "@/src/components/header/user-profile";
 import { useAptosWallet } from "@/src/hooks/useAptos";
 
 const Header: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [curSlug, setCurSlug] = useState<string>("#about-us");
   const [isScrolled, setIsScrolled] = useState(false);
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const router = useRouter();
@@ -31,30 +30,19 @@ const Header: FC = () => {
    * @dev Import GoGi providers.
    */
   const { connect: connectAptos } = useAptosWallet();
-  // const { connect: connectWallet } = useWalletKit();
+  const { connect: connectWallet } = useWalletKit();
   const { walletAddress } = useAppWallet();
-  // const wallet = useConnectedWallet();
 
   /**
    * @dev The function to desire which blockchain to connect.
    */
   const handleConnect = useCallback(() => {
     if (chainId === ChainId.sol) {
-      // connectWallet();
+      connectWallet();
     } else if (chainId.toLowerCase().includes("aptos")) {
-      console.log(connectAptos);
       connectAptos();
     }
-  }, [chainId]);
-  /**
-   * @description
-   * This function set current selected section based on the location user are in
-   */
-  useEffect(() => {
-    if (router.asPath.includes("#")) {
-      setCurSlug(`#${router.asPath.split("#")[1]}`);
-    }
-  }, []);
+  }, [chainId, connectWallet, connectAptos]);
 
   /**
    * @description

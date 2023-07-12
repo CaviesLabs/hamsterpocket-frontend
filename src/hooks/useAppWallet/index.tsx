@@ -7,10 +7,10 @@ import {
   FC,
 } from "react";
 import { AppWalletContextState } from "./types";
-// import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
+import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-// import { ChainId } from "@/src/entities/platform-config.entity";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
 
 /** @dev Initiize context. */
@@ -27,8 +27,7 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /**
    * @dev Inject context of solana wallet.
    */
-  // const solWallet = useSolWallet();
-  const solWallet = false;
+  const solWallet = useSolWallet();
 
   /**
    * @dev Inject context of eth wallet.
@@ -46,10 +45,10 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     (async () => {
       if (solWallet) {
-        // setWalletAddress(solWallet?.publicKey?.toString());
-        // if (chainId !== ChainId.sol) {
-        //   switchChainId(ChainId.sol);
-        // }
+        setWalletAddress(solWallet?.publicKey?.toString());
+        if (chainId !== ChainId.sol) {
+          switchChainId(ChainId.sol);
+        }
       } else if (ethWallet?.address) {
         try {
           setWalletAddress(ethWallet?.address?.toString());

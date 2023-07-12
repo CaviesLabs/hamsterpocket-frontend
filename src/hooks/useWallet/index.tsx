@@ -8,18 +8,15 @@ import {
   ReactNode,
   FC,
 } from "react";
-// import { useSolana as useSaberhq } from "@saberhq/use-solana";
 import {
-  useWallet as useSolana,
-  useConnection,
-} from "@solana/wallet-adapter-react";
+  useSolana as useSaberhq,
+  useConnectedWallet,
+} from "@saberhq/use-solana";
 import web3 from "@solana/web3.js";
-// import { useConnectedWallet } from "@saberhq/use-solana";
-import type { MessageSignerWalletAdapter } from "@solana/wallet-adapter-base";
-import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
-import { ProgramService, authService } from "@/src/services";
-import { getWalletName } from "./utils";
 import { useRouter } from "next/router";
+
+import { ProgramService } from "@/src/services";
+import { PocketProgramProvider } from "@/src/providers/program/pocket-program.provider";
 import { WalletContextState } from "./types";
 
 /** @dev Initiize context. */
@@ -29,45 +26,14 @@ export const WalletContext = createContext<WalletContextState>(null);
 export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
   const router = useRouter();
   /** @dev Get @var {walletProviderInfo} from @var {GokkiKit}. */
-  // const { walletProviderInfo } = useSaberhq();
-
-  /** @dev Import providers to use from solana. */
-  const solanaWallet = useSolana();
-  const walletConnection = useConnection();
-  // const dispatch = useDispatch();
+  const { connection, providerMut } = useSaberhq();
 
   /** @dev Import wallet from Gokki library. */
-  // const wallet = useConnectedWallet();
+  const solanaWallet = useConnectedWallet();
 
   /** @dev Program service */
   const [programService, initProgram] = useState<ProgramService>(null);
   const [solBalance, setSolBalance] = useState(0);
-
-  /**
-   * @dev The function to sign message in Solana network.
-   * */
-  const signMessage = useCallback(
-    async (message: string) => {
-      /**
-       * @dev Force to connect first.
-       */
-      await solanaWallet?.wallet?.adapter?.connect();
-
-      /**
-       * @dev Encode message to @var {Uint8Array}.
-       */
-      const data = new TextEncoder().encode(message);
-
-      /**
-       * @dev Call function to sign message from solana adapter.
-       */
-      return await (
-        solanaWallet.wallet.adapter as MessageSignerWalletAdapter
-      ).signMessage(data);
-    },
-    // [walletProviderInfo, solanaWallet.wallet]
-    []
-  );
 
   /**
    * @dev Encode message to @var {Uint8Array}.
@@ -75,12 +41,8 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
    *      Step 2. Logout user.
    */
   const disconnect = useCallback(async () => {
-    // await wallet?.disconnect();
-    // await solanaWallet?.disconnect();
-    // await authService?.logout();
-    // dispatch(setProfile(null));
-    // }, [solanaWallet, wallet]);
-  }, []);
+    await solanaWallet?.disconnect();
+  }, [solanaWallet]);
 
   /**
    * @dev Get sol balance of a wallet.
@@ -94,7 +56,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
       /**
        * @dev Get blance if whether address or signer is valid.
        */
-      const balance = await walletConnection.connection
+      const balance = await connection
         .getBalance(address || solanaWallet?.publicKey)
         .catch(() => {
           return 0;
@@ -112,71 +74,48 @@ export const WalletProvider: FC<{ children: ReactNode }> = (props) => {
     [solanaWallet]
   );
 
-  // /**
-  //  * @dev Watch changes in wallet adpater and update.
-  //  * */
-  // useEffect(() => {
-  //   if (!walletProviderInfo) return;
-  //   solanaWallet.select(getWalletName(walletProviderInfo.name));
-  // }, [walletProviderInfo, wallet, solanaWallet]);
-
-  // useEffect(() => {
-  //   if (!wallet) return;
-  //   /**
-  //    * @dev Force to connect first.
-  //    */
-  //   solanaWallet?.wallet?.adapter?.connect().catch((e) => {
-  //     console.log("connect wallet Error:", e);
-  //   });
-  // }, [wallet, solanaWallet]);
+  useEffect(() => {
+    if (!solanaWallet) return;
+    /**
+     * @dev Force to connect first.
+     */
+    solanaWallet?.connect().catch((e) => {
+      console.log("connect wallet Error:", e);
+    });
+  }, [solanaWallet]);
 
   /**
    * @dev Initilize when wallet changed.
    * */
-  // useEffect(() => {
-  //   (async () => {
-  //     if (wallet?.publicKey?.toString()) {
-  //       try {
-  //         /** @dev Init program provider. */
-  //         const programProvider = new PocketProgramProvider(solanaWallet);
+  useEffect(() => {
+    (async () => {
+      if (solanaWallet?.publicKey?.toString()) {
+        try {
+          /** @dev Init program provider. */
+          const programProvider = new PocketProgramProvider(providerMut);
 
-  //         /** ---- DEBUG ---  */
-  //         // setTimeout(async () => {
-  //         //   try {
-  //         //     const [, pocketState, root] =
-  //         //       await programProvider.getPocketState(
-  //         //         "640856ba92f54d45cd5268ad"
-  //         //       );
-  //         //     (window as any).test = root;
-  //         //     console.log({ pocketState });
-  //         //   } catch (err) {
-  //         //     console.log("Error get pocket state: ", err);
-  //         //   }
-  //         // }, 4000);
+          /** @dev Initlize swap program service with initlized programProvider. */
+          const program = new ProgramService(programProvider);
 
-  //         /** @dev Initlize swap program service with initlized programProvider. */
-  //         const program = new ProgramService(programProvider);
+          /** @dev Init program into state for usage. */
+          initProgram(program);
 
-  //         /** @dev Init program into state for usage. */
-  //         initProgram(program);
-
-  //         /** @dev update sol balance if wallet changes. */
-  //         getSolBalance();
-  //       } catch (err: any) {
-  //         console.log(err.message);
-  //       }
-  //     }
-  //   })();
-  // }, [wallet, solanaWallet, router.asPath]);
+          /** @dev update sol balance if wallet changes. */
+          await getSolBalance();
+        } catch (err: any) {
+          console.log(err.message);
+        }
+      }
+    })();
+  }, [solanaWallet, router.asPath, providerMut]);
 
   return (
     <WalletContext.Provider
       value={{
-        signMessage,
         disconnect,
         getSolBalance,
-        solanaWallet,
-        walletConnection,
+        solanaWallet: solanaWallet,
+        provider: providerMut,
         programService,
         solBalance,
       }}

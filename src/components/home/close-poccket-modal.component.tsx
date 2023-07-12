@@ -20,7 +20,7 @@ export const ClosePocketModal: FC<{
   withdrawFnc?: boolean;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService } = useWallet();
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ export const ClosePocketModal: FC<{
 
       if (chainId === ChainId.sol) {
         /** @dev Execute transaction. */
-        await programService.closePocket(solanaWallet, props.pocket);
+        await programService.closePocket(props.pocket);
       } else if (chainId.includes("aptos")) {
         if (props.pocket.status === PocketStatus.CLOSED) {
           await withdrawPocketAptos(
@@ -75,7 +75,7 @@ export const ClosePocketModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket, chainId]);
+  }, [programService, props.pocket, chainId]);
 
   return (
     <Modal

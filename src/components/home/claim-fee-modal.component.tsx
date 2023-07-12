@@ -13,7 +13,7 @@ export const ClaimFeeModal: FC<{
   pocket: PocketEntity;
 }> = (props) => {
   /** @dev Inject propgram service to use. */
-  const { programService, solanaWallet } = useWallet();
+  const { programService } = useWallet();
 
   /** @dev Process boolean. */
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ export const ClaimFeeModal: FC<{
       setLoading(true);
 
       /** @dev Execute transaction. */
-      await programService.claimPocketFee(solanaWallet, props.pocket);
+      await programService.claimPocketFee(props.pocket);
 
       /** @dev Callback function when close successfully. */
       setSuccessClosed(true);
@@ -39,7 +39,7 @@ export const ClaimFeeModal: FC<{
     } finally {
       setLoading(false);
     }
-  }, [programService, solanaWallet, props.pocket]);
+  }, [programService, props.pocket]);
 
   return (
     <Modal
