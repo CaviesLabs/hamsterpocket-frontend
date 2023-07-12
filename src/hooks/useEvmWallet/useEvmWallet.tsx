@@ -6,6 +6,7 @@ import {
   useCallback,
   useState,
   useEffect,
+  useMemo,
 } from "react";
 import { useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
@@ -20,6 +21,12 @@ import { evmProgramService } from "@/src/services/evm-program.service";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { ChainId } from "@/src/entities/platform-config.entity";
+
+function ComponentCall(props: { updateSigner(signer: any): void }) {
+  const { data: signer } = useSigner();
+  props.updateSigner(signer);
+  return <></>;
+}
 
 /** @dev Initiize context. */
 export const EvmWalletContext = createContext<{
@@ -49,13 +56,12 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   /** @dev Define state for pocket registry. */
   const [pocketRegistry, initPocketRegistry] = useState<PocketRegistry>();
+  const [count, setCount] = useState(0);
 
   /** @dev Get Signer provider from wagmi. */
   const { data: signer } = useSigner({
     async onSuccess(data) {
-      console.log("Signer got: ", data);
       const balance = await data.provider.getBalance(await data.getAddress());
-
       setBalance(ethers.utils.formatEther(balance));
     },
   });
@@ -221,6 +227,24 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     }
   }, [platformConfig, signer, chainId]);
 
+  const getCom = useMemo(
+    () => (
+      <ComponentCall
+        updateSigner={(signer) => console.log("Got signer", signer)}
+      />
+    ),
+    [count]
+  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Call the useSigner hook and get the updated value
+      setCount(count + 1);
+    }, 2000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <EvmWalletContext.Provider
       value={{
@@ -236,6 +260,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       }}
     >
       {props.children}
+      {getCom}
     </EvmWalletContext.Provider>
   );
 };

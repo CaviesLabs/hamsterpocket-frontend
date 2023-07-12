@@ -12,7 +12,10 @@ import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
-import { makeAliasForEvmWhitelist } from "@/src/utils/evm.parser";
+import {
+  makeAliasForEvmWhitelist,
+  devideBigNumber,
+} from "@/src/utils/evm.parser";
 import { makeAliasForAptosWhitelist } from "@/src/utils/aptos.parser";
 import Decimal from "decimal.js";
 import useSWR from "swr";
@@ -150,8 +153,8 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     (tokenAddress: string, source: number) => {
       const tokenEntity =
         whiteLists[tokenAddress] || findEntityByAddress(tokenAddress);
-      return (
-        source /
+      return devideBigNumber(
+        parseFloat(source?.toString() || "0"),
         Math.pow(10, tokenEntity?.realDecimals || tokenEntity?.decimals || 1)
       );
     },
