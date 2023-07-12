@@ -60,7 +60,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.targetTokenAddress] ||
       findEntityByAddress(data.targetTokenAddress),
-    [props, chainId, walletAddress]
+    [props, chainId, walletAddress, whiteLists, findEntityByAddress]
   );
 
   /** @dev Get base token database on address. */
@@ -68,7 +68,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
     () =>
       whiteLists[data.baseTokenAddress] ||
       findEntityByAddress(data.baseTokenAddress),
-    [props, chainId, walletAddress]
+    [props, chainId, walletAddress, whiteLists, findEntityByAddress]
   );
 
   /** @dev Condition whether pocket account is closed completedly  before. */

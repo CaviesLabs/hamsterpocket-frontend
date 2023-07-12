@@ -60,6 +60,8 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     },
   });
 
+  console.log("update", { signer });
+
   /**
    * @dev The function to create a pocket in evm.
    * @params depositedAmount.
