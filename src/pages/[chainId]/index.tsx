@@ -1,5 +1,5 @@
 import styles from "@/styles/Home.module.css";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useWalletKit } from "@gokiprotocol/walletkit";
 import { Button } from "@hamsterbox/ui-kit";
@@ -9,7 +9,6 @@ import { DashboardPageProvider } from "@/src/hooks/pages/dashboard";
 import { LayoutSection } from "@/src/components/layout-section";
 import { statisticService } from "@/src/services/statistic.service";
 import { StatisticEntity } from "@/src/entities/statistic.entity";
-import { useWallet } from "@/src/hooks/useWallet";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
@@ -26,18 +25,12 @@ const Layout = (props: LayoutProps) => {
   /**
    * @dev Wallet hook injected.
    */
-  const wallet = useWallet();
+  // const wallet = useWallet();
   const { walletAddress } = useAppWallet();
   const { chainId, pushRouterWithChainId } = usePlatformConfig();
   const { connect: connectWallet } = useWalletKit();
   const { connect: connectAptos } = useAptosWallet();
   const { analyzeDecimals } = useWhiteList();
-
-  useEffect(() => {
-    if (wallet.solanaWallet?.publicKey?.toString()) {
-      pushRouterWithChainId("/my-pockets");
-    }
-  }, [wallet]);
 
   const handleCreatePocket = useCallback(
     (openModalEvm: () => void) => {
