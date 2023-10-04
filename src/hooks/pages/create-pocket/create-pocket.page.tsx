@@ -278,7 +278,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
           walletAddress,
           exchange?.address,
-          exchange?.isV3 ? "0" : "1"
+          exchange?.routerVersion
         );
 
         /** @dev Process to get deposited amount in evm decimals. */

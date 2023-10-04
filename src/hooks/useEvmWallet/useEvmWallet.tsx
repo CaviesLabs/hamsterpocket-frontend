@@ -154,7 +154,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
           isV3 = exchange?.isV3;
         }
 
-        fee = await evmProgramService.getQoute({
+        fee = await evmProgramService.getQuote({
           chainId: pocket.chainId,
           baseTokenAddress: pocket.baseTokenAddress,
           targetTokenAddress: pocket.targetTokenAddress,
@@ -172,6 +172,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
             .interface.encodeFunctionData("closePosition", [
               pocket.id || pocket._id,
               fee,
+              0,
             ]),
           contract
             .connect(signer)

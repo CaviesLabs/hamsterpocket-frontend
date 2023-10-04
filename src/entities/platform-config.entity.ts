@@ -16,6 +16,7 @@ export interface PlatformConfigEntity {
     dexUrl: string;
     inputTag: string;
     outputTag: string;
+    routerVersion: string;
   }[];
 }
 

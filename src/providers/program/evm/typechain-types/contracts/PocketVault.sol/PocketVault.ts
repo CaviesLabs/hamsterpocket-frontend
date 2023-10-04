@@ -55,7 +55,7 @@ export declare namespace Params {
 
 export interface PocketVaultInterface extends utils.Interface {
   functions: {
-    "closePosition(string,uint256)": FunctionFragment;
+    "closePosition(string,uint256,uint256)": FunctionFragment;
     "deposit((address,string,uint256,address))": FunctionFragment;
     "etherman()": FunctionFragment;
     "getCurrentQuote(address,address,address,uint256,uint256)": FunctionFragment;
@@ -63,17 +63,17 @@ export interface PocketVaultInterface extends utils.Interface {
     "getCurrentQuoteV3(address,address,address,uint256,uint256)": FunctionFragment;
     "initEtherman(address)": FunctionFragment;
     "initialize()": FunctionFragment;
-    "makeDCASwap(string,uint256)": FunctionFragment;
+    "makeDCASwap(string,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
     "permit2()": FunctionFragment;
-    "quoter()": FunctionFragment;
+    "quoterMapping(address)": FunctionFragment;
     "registry()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setEtherman(address)": FunctionFragment;
     "setPermit2(address)": FunctionFragment;
-    "setQuoter(address)": FunctionFragment;
+    "setQuoter(address,address)": FunctionFragment;
     "setRegistry(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
@@ -95,7 +95,7 @@ export interface PocketVaultInterface extends utils.Interface {
       | "pause"
       | "paused"
       | "permit2"
-      | "quoter"
+      | "quoterMapping"
       | "registry"
       | "renounceOwnership"
       | "setEtherman"
@@ -109,7 +109,11 @@ export interface PocketVaultInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "closePosition",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
@@ -155,13 +159,20 @@ export interface PocketVaultInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "makeDCASwap",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "permit2", values?: undefined): string;
-  encodeFunctionData(functionFragment: "quoter", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "quoterMapping",
+    values: [PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(functionFragment: "registry", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -177,7 +188,7 @@ export interface PocketVaultInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setQuoter",
-    values: [PromiseOrValue<string>]
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setRegistry",
@@ -224,7 +235,10 @@ export interface PocketVaultInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "permit2", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "quoter", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "quoterMapping",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "registry", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -458,6 +472,7 @@ export interface PocketVault extends BaseContract {
     closePosition(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -506,6 +521,7 @@ export interface PocketVault extends BaseContract {
     makeDCASwap(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -519,7 +535,10 @@ export interface PocketVault extends BaseContract {
 
     permit2(overrides?: CallOverrides): Promise<[string]>;
 
-    quoter(overrides?: CallOverrides): Promise<[string]>;
+    quoterMapping(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     registry(overrides?: CallOverrides): Promise<[string]>;
 
@@ -538,6 +557,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setQuoter(
+      router: PromiseOrValue<string>,
       quoterAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -565,6 +585,7 @@ export interface PocketVault extends BaseContract {
   closePosition(
     pocketId: PromiseOrValue<string>,
     fee: PromiseOrValue<BigNumberish>,
+    minimumAmountOut: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -613,6 +634,7 @@ export interface PocketVault extends BaseContract {
   makeDCASwap(
     pocketId: PromiseOrValue<string>,
     fee: PromiseOrValue<BigNumberish>,
+    minimumAmountOut: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -626,7 +648,10 @@ export interface PocketVault extends BaseContract {
 
   permit2(overrides?: CallOverrides): Promise<string>;
 
-  quoter(overrides?: CallOverrides): Promise<string>;
+  quoterMapping(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   registry(overrides?: CallOverrides): Promise<string>;
 
@@ -645,6 +670,7 @@ export interface PocketVault extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setQuoter(
+    router: PromiseOrValue<string>,
     quoterAddress: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -672,6 +698,7 @@ export interface PocketVault extends BaseContract {
     closePosition(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber]>;
 
@@ -718,6 +745,7 @@ export interface PocketVault extends BaseContract {
     makeDCASwap(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber, BigNumber]>;
 
@@ -729,7 +757,10 @@ export interface PocketVault extends BaseContract {
 
     permit2(overrides?: CallOverrides): Promise<string>;
 
-    quoter(overrides?: CallOverrides): Promise<string>;
+    quoterMapping(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     registry(overrides?: CallOverrides): Promise<string>;
 
@@ -746,6 +777,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<void>;
 
     setQuoter(
+      router: PromiseOrValue<string>,
       quoterAddress: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -909,6 +941,7 @@ export interface PocketVault extends BaseContract {
     closePosition(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -957,6 +990,7 @@ export interface PocketVault extends BaseContract {
     makeDCASwap(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -970,7 +1004,10 @@ export interface PocketVault extends BaseContract {
 
     permit2(overrides?: CallOverrides): Promise<BigNumber>;
 
-    quoter(overrides?: CallOverrides): Promise<BigNumber>;
+    quoterMapping(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     registry(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -989,6 +1026,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<BigNumber>;
 
     setQuoter(
+      router: PromiseOrValue<string>,
       quoterAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -1017,6 +1055,7 @@ export interface PocketVault extends BaseContract {
     closePosition(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1065,6 +1104,7 @@ export interface PocketVault extends BaseContract {
     makeDCASwap(
       pocketId: PromiseOrValue<string>,
       fee: PromiseOrValue<BigNumberish>,
+      minimumAmountOut: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1078,7 +1118,10 @@ export interface PocketVault extends BaseContract {
 
     permit2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    quoter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    quoterMapping(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     registry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1097,6 +1140,7 @@ export interface PocketVault extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setQuoter(
+      router: PromiseOrValue<string>,
       quoterAddress: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

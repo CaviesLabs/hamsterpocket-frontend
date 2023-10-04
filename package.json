@@ -26,7 +26,6 @@
     "@hamsterbox/ui-kit": "0.6.3",
     "@manahippo/aptos-wallet-adapter": "1.0.10",
     "@metaplex-foundation/mpl-token-metadata": "2.5.2",
-    "@next-static/image": "0.0.10",
     "@openzeppelin/contracts": "4.7.3",
     "@openzeppelin/contracts-upgradeable": "4.7.3",
     "@openzeppelin/hardhat-upgrades": "1.20.0",
