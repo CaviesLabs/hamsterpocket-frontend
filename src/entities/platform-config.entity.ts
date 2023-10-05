@@ -18,6 +18,12 @@ export interface PlatformConfigEntity {
     outputTag: string;
     routerVersion: string;
   }[];
+  nativeToken: {
+    name: string;
+    logo: string;
+    symbol: string;
+    decimals: number;
+  };
 }
 
 export enum ChainId {

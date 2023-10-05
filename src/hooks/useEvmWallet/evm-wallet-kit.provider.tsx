@@ -1,39 +1,50 @@
-import {
-  FC,
-  useMemo,
-  useState,
-  ReactNode,
-  useContext,
-  createContext,
-} from "react";
+import { FC, useMemo, ReactNode, useContext, createContext } from "react";
 
 import { bsc } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig, Chain } from "wagmi";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
-import { WagmiChainConfigs } from "./wagmi-configs";
-
 /** @dev Initiize context. */
-export const WalletKitContext = createContext<any>(null);
+export const WalletKitContext = createContext<{ chain: Chain }>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
   const { chainId, platformConfig } = usePlatformConfig();
-  const [wagmiChains, setWagmiChains] = useState<any[]>([]);
 
-  const initClient = useMemo(() => {
-    const customChains = WagmiChainConfigs.find((config) => {
-      if (platformConfig?.wagmiKey === "polygonMumbai") {
-        return config.network === "maticmum";
-      }
-      return config.network === platformConfig?.wagmiKey;
-    });
+  /**
+   * @dev Define desired chain.
+   * @nnotice If platform config is not available, use BSC as default.
+   * @notice If platform config is available, generate chain from platform config.
+   */
+  const desiredChain = useMemo<Chain>(() => {
+    if (!platformConfig) return bsc;
+    return {
+      id: platformConfig.chainId,
+      name: platformConfig.chainName,
+      network: platformConfig.wagmiKey,
+      nativeCurrency: {
+        name: platformConfig.nativeToken.name,
+        symbol: platformConfig.nativeToken.symbol,
+        decimals: platformConfig.nativeToken.decimals,
+      },
+      rpcUrls: {
+        default: {
+          http: [platformConfig.rpcUrl],
+        },
+        public: {
+          http: [platformConfig.rpcUrl],
+        },
+      },
+      testnet: false,
+    };
+  }, [platformConfig]);
 
+  const wagmiConfig = useMemo(() => {
     const { chains, publicClient } = configureChains(
-      [customChains || bsc],
+      [desiredChain],
       [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
     );
 
@@ -43,19 +54,21 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       chains,
     });
 
-    /** @dev Update config here */
-    setWagmiChains(chains);
     return createConfig({
       autoConnect: true,
       connectors,
       publicClient,
     });
-  }, [chainId, platformConfig]);
+  }, [chainId, platformConfig, desiredChain]);
 
   return (
-    <WalletKitContext.Provider value={{}}>
-      <WagmiConfig config={initClient}>
-        <RainbowKitProvider chains={wagmiChains}>
+    <WalletKitContext.Provider
+      value={{
+        chain: desiredChain,
+      }}
+    >
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={[desiredChain]}>
           {props.children}
         </RainbowKitProvider>
       </WagmiConfig>

@@ -1,6 +1,6 @@
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
-import { BigNumber } from "ethers";
+import { toBigInt } from "ethers";
 import {
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
@@ -17,7 +17,7 @@ import bigDecimal from "js-big-decimal";
  */
 export const convertBigNumber = (value: number, decimals: number) => {
   // console.log(bigDecimal.multiply(parseFloat(value.toString()), decimals));
-  return BigNumber.from(
+  return toBigInt(
     `0x${parseInt(
       bigDecimal.multiply(parseFloat(value.toString()), decimals)
     ).toString(16)}`

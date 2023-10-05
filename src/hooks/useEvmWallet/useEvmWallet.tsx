@@ -29,7 +29,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { evmProgramService } from "@/src/services/evm-program.service";
 
 import { createPublicClient, formatEther, http } from "viem";
-import { mainnet } from "viem/chains";
+import { useEvmWalletKit } from "./evm-wallet-kit.provider";
 
 const walletClientToSigner = (client: WalletClient) => {
   const { account, chain, transport } = client;
@@ -62,6 +62,7 @@ export const EvmWalletContext = createContext<{
 export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const client = useWalletClient();
   const { platformConfig, chainId } = usePlatformConfig();
+  const { chain } = useEvmWalletKit();
 
   const [balance, setBalance] = useState<string>("0");
   const [signer, setSigner] = useState<JsonRpcSigner>();
@@ -69,10 +70,12 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const [pocketRegistry, initPocketRegistry] = useState<PocketRegistry>();
 
   // Initialize public client.
-  const publicClient = createPublicClient({
-    chain: mainnet,
-    transport: http(),
-  });
+  const publicClient = useMemo(() => {
+    return createPublicClient({
+      chain: chain,
+      transport: http(),
+    });
+  }, [chain]);
 
   // Get json rpc provider.
   const jsonRpcProvider = useMemo(() => {
@@ -84,8 +87,10 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     const balance = await publicClient.getBalance({
       address: signer.address as any,
     });
+
+    console.log({ balance: formatEther(balance) });
     setBalance(formatEther(balance));
-  }, [client, signer]);
+  }, [client, signer, publicClient]);
 
   // Convert wagmi client to rpc signer.
   useEffect(() => {
