@@ -1,17 +1,19 @@
 import {
-  createContext,
-  useContext,
-  ReactNode,
   FC,
-  useState,
   useMemo,
+  useState,
+  ReactNode,
+  useContext,
+  createContext,
 } from "react";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+
 import { bsc } from "wagmi/chains";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+
 import { WagmiChainConfigs } from "./wagmi-configs";
 
 /** @dev Initiize context. */
@@ -30,7 +32,7 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
       return config.network === platformConfig?.wagmiKey;
     });
 
-    const { chains, provider } = configureChains(
+    const { chains, publicClient } = configureChains(
       [customChains || bsc],
       [alchemyProvider({ apiKey: process.env.ALCHEMY_ID }), publicProvider()]
     );
@@ -43,16 +45,16 @@ export const EvmWalletKitProvider: FC<{ children: ReactNode }> = (props) => {
 
     /** @dev Update config here */
     setWagmiChains(chains);
-    return createClient({
+    return createConfig({
       autoConnect: true,
       connectors,
-      provider,
+      publicClient,
     });
   }, [chainId, platformConfig]);
 
   return (
     <WalletKitContext.Provider value={{}}>
-      <WagmiConfig client={initClient}>
+      <WagmiConfig config={initClient}>
         <RainbowKitProvider chains={wagmiChains}>
           {props.children}
         </RainbowKitProvider>

@@ -1,70 +1,127 @@
 import {
-  createContext,
-  useContext,
-  ReactNode,
   FC,
-  useCallback,
+  useMemo,
   useState,
   useEffect,
-  useMemo,
+  ReactNode,
+  useContext,
+  useCallback,
+  createContext,
 } from "react";
-import { useSigner } from "wagmi";
-import { BigNumber, ethers } from "ethers";
-import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 import {
-  PocketChef__factory,
-  PocketRegistry__factory,
+  JsonRpcSigner,
+  BrowserProvider,
+  JsonRpcProvider,
+  BigNumberish as BigNumber,
+} from "ethers";
+import { useWalletClient, type WalletClient } from "wagmi";
+import {
   PocketChef,
   PocketRegistry,
+  PocketChef__factory,
+  PocketRegistry__factory,
 } from "@/src/providers/program/evm/typechain-types";
-import { evmProgramService } from "@/src/services/evm-program.service";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
+
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { evmProgramService } from "@/src/services/evm-program.service";
 
-function ComponentCall(props: { updateSigner(signer: any): void }) {
-  const { data: signer } = useSigner();
-  props.updateSigner(signer);
-  return <></>;
-}
+import { createPublicClient, formatEther, http } from "viem";
+import { mainnet } from "viem/chains";
+
+const walletClientToSigner = (client: WalletClient) => {
+  const { account, chain, transport } = client;
+  const provider = new BrowserProvider(transport as any, {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  });
+
+  return new JsonRpcSigner(provider, account.address);
+};
 
 /** @dev Initiize context. */
 export const EvmWalletContext = createContext<{
+  signer: unknown;
   nativeBalance: string;
+  closePocket(pocketId: string): Promise<void>;
+  pausePocket(pocketId: string): Promise<void>;
+  resumePocket(pocketId: string): Promise<void>;
+  withdrawPocket(pocketId: string): Promise<void>;
+  closePositionPocket(pocket: PocketEntity): Promise<void>;
+  depositPocket(pocketId: string, depositedAmount: BigNumber): Promise<void>;
   createPocket(
     depositedAmount: BigNumber,
     createdPocketParams: Params.CreatePocketParamsStruct
   ): Promise<void>;
-  depositPocket(pocketId: string, depositedAmount: BigNumber): Promise<void>;
-  closePocket(pocketId: string): Promise<void>;
-  closePositionPocket(pocket: PocketEntity): Promise<void>;
-  pausePocket(pocketId: string): Promise<void>;
-  withdrawPocket(pocketId: string): Promise<void>;
-  resumePocket(pocketId: string): Promise<void>;
-  signer: unknown;
 }>(null);
 
 /** @dev Expose wallet provider for usage. */
 export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
-  /**
-  /* @dev Inject context of eth wallet. */
+  const client = useWalletClient();
   const { platformConfig, chainId } = usePlatformConfig();
 
-  /** @dev Define state for main contract. */
-  const [contract, initContract] = useState<PocketChef>();
   const [balance, setBalance] = useState<string>("0");
-
-  /** @dev Define state for pocket registry. */
+  const [signer, setSigner] = useState<JsonRpcSigner>();
+  const [contract, initContract] = useState<PocketChef>();
   const [pocketRegistry, initPocketRegistry] = useState<PocketRegistry>();
-  const [count, setCount] = useState(0);
 
-  /** @dev Get Signer provider from wagmi. */
-  const { data: signer } = useSigner({
-    async onSuccess(data) {
-      const balance = await data.provider.getBalance(await data.getAddress());
-      setBalance(ethers.utils.formatEther(balance));
-    },
+  // Initialize public client.
+  const publicClient = createPublicClient({
+    chain: mainnet,
+    transport: http(),
   });
+
+  // Get json rpc provider.
+  const jsonRpcProvider = useMemo(() => {
+    return new JsonRpcProvider(platformConfig?.rpcUrl);
+  }, [platformConfig]);
+
+  // Fetch native balance.
+  const fetchNativeBalance = useCallback(async () => {
+    const balance = await publicClient.getBalance({
+      address: signer.address as any,
+    });
+    setBalance(formatEther(balance));
+  }, [client, signer]);
+
+  // Convert wagmi client to rpc signer.
+  useEffect(() => {
+    if (!client?.data) return;
+    if (!signer) {
+      setSigner(walletClientToSigner(client.data));
+    }
+  }, [client]);
+
+  useEffect(() => {
+    if (!signer || !jsonRpcProvider) return;
+    fetchNativeBalance();
+  }, [client]);
+
+  useEffect(() => {
+    if (
+      !signer ||
+      !chainId ||
+      !platformConfig ||
+      chainId === ChainId.sol ||
+      chainId.includes("aptos")
+    )
+      return;
+
+    if (platformConfig?.programAddress) {
+      initContract(
+        PocketChef__factory.connect(platformConfig?.programAddress, signer)
+      );
+    }
+
+    if (platformConfig?.registryAddress) {
+      initPocketRegistry(
+        PocketRegistry__factory.connect(platformConfig?.registryAddress, signer)
+      );
+    }
+  }, [platformConfig, signer, chainId]);
 
   /**
    * @dev The function to create a pocket in evm.
@@ -79,7 +136,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Execute off-chain */
       const pocketId = await evmProgramService.createPocketOffChain(
         chainId,
-        await signer.getAddress()
+        signer.address
       );
 
       /** @dev Execute on-chain */
@@ -223,43 +280,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     [signer, contract, pocketRegistry]
   );
 
-  useEffect(() => {
-    /** @dev Not in sol. */
-    if (chainId === ChainId.sol || chainId.includes("aptos") || !signer) return;
-
-    if (platformConfig?.programAddress) {
-      console.log("init program address: ", platformConfig?.programAddress);
-      initContract(
-        PocketChef__factory.connect(platformConfig?.programAddress, signer)
-      );
-    }
-
-    if (platformConfig?.registryAddress) {
-      console.log("init program address: ", platformConfig?.registryAddress);
-      initPocketRegistry(
-        PocketRegistry__factory.connect(platformConfig?.registryAddress, signer)
-      );
-    }
-  }, [platformConfig, signer, chainId]);
-
-  const getCom = useMemo(
-    () => (
-      <ComponentCall
-        updateSigner={(signer) => console.log("Got signer", signer)}
-      />
-    ),
-    [count]
-  );
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Call the useSigner hook and get the updated value
-      setCount(count + 1);
-    }, 2000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
     <EvmWalletContext.Provider
       value={{
@@ -275,7 +295,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       }}
     >
       {props.children}
-      {getCom}
     </EvmWalletContext.Provider>
   );
 };
