@@ -94,7 +94,7 @@ export const CreatePocketStep1Desktop: FC<{
                       href={
                         chainId === ChainId.sol
                           ? `${SOL_EXPLORE}/account/${token}`
-                          : `${platformConfig?.explorerUrl}token/${token}`
+                          : `${platformConfig?.explorerUrl}token/${whiteLists[token]?.address}`
                       }
                       target="_blank"
                       className="ml-[10px]"

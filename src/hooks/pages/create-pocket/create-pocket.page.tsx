@@ -184,18 +184,18 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       ]);
 
       /** @dev Get base and qoute address in liquidity pool. */
-      let liqQoute;
+      let liqQuote;
       let marketId = "1111";
       let sideMethod: SideMethod = { sell: {} };
 
       if (chainId === ChainId.sol) {
-        const [liqBase, _liqQoute, _marketId] = findPairLiquidity(
+        const [liqBase, _liqQuote, _marketId] = findPairLiquidity(
           baseAddress,
           targetAddress
         );
 
         /** @dev Desire for global vars. */
-        liqQoute = _liqQoute;
+        liqQuote = _liqQuote;
         marketId = _marketId;
 
         /** @dev Handle to attract side method of pool.  */
@@ -215,7 +215,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(
-          chainId === ChainId.sol ? liqQoute : targetAddress
+          chainId === ChainId.sol ? liqQuote : targetAddress
         ),
         startAt: new BN(
           parseInt((startAt.getTime() / 1000).toString()).toString()
@@ -392,7 +392,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       const ppair = findPairLiquidity(baseAddress, targetAddress);
       setMintOrderSize(ppair?.[3]);
     })();
-  }, [baseTokenAddress, targetTokenAddress, chainId]);
+  }, [baseTokenAddress, targetTokenAddress, chainId, findPairLiquidity]);
 
   /**
    * @dev Update base token when chain changed.

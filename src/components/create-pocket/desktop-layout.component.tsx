@@ -87,7 +87,7 @@ export const CreatePocketDesktopLayout: FC = () => {
                   "!text-purple300": currentStep >= 2,
                 })}
               >
-                3. Deposot & Confirm
+                3. Deposit & Confirm
               </p>
               <div
                 className={classNames("progress-cap", {
@@ -113,8 +113,8 @@ export const CreatePocketDesktopLayout: FC = () => {
                 name: "Strategy",
               },
               {
-                label: "Deposot & Confirm",
-                name: "Deposot & Confirm",
+                label: "Deposit & Confirm",
+                name: "Deposit & Confirm",
               },
             ]}
           />

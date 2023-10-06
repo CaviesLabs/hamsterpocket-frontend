@@ -91,7 +91,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     if (batchVolume < mintOrderSize) {
       return modifyErrors(
         "batchVolume",
-        batchVolume <= 0
+        batchVolume < mintOrderSize
           ? `Batch volume must be greater than Mint Order Size(${mintOrderSize})`
           : ""
       );
