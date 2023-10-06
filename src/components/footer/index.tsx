@@ -25,12 +25,12 @@ const Footer: FC = () => {
         uri: "https://cavies.notion.site/About-Cavies-72e60c00426b450e8e57ca3ea5acb0d0",
       },
       {
-        name: "Docs",
-        uri: "https://cavies.notion.site/HamsterPocket-3d9c0a80b312457188f286fd523dc2f4",
-      },
-      {
         name: "Contact Us",
         uri: "mailto:contact@cavies.xyz",
+      },
+      {
+        name: "How it work",
+        uri: "https://cavies.notion.site/HamsterPocket-3d9c0a80b312457188f286fd523dc2f4",
       },
     ],
     []
