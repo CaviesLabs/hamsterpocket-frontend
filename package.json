@@ -23,7 +23,7 @@
     "@emotion/styled": "11.8.1",
     "@ethersproject/abstract-provider": "5.7.0",
     "@gokiprotocol/walletkit": "1.7.3",
-    "@hamsterbox/ui-kit": "0.6.3",
+    "@hamsterbox/ui-kit": "^1.0.0",
     "@manahippo/aptos-wallet-adapter": "1.0.10",
     "@metaplex-foundation/mpl-token-metadata": "2.5.2",
     "@openzeppelin/contracts": "4.7.3",
