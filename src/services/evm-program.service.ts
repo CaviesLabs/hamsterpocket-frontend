@@ -35,7 +35,7 @@ export class EvmProgramService {
     const response = await networkProvider.request<any>(
       `/metadata/market/quote`,
       {
-        method: "POST",
+        method: "GET",
         params: GetQuoteDto,
       }
     );

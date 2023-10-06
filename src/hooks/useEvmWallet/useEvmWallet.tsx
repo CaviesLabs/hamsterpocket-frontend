@@ -88,7 +88,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const pocketRegistry = useMemo(() => {
     if (platformConfig && signer) {
       return PocketRegistry__factory.connect(
-        platformConfig?.programAddress,
+        platformConfig?.registryAddress,
         signer
       );
     }
@@ -171,7 +171,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const closePocket = useCallback(
     async (pocketId: string) => {
-      console.log({ pocketChef, signer, platformConfig, client, chain });
       const tx = await pocketChef
         .connect(signer)
         .multicall([
@@ -195,39 +194,32 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const closePositionPocket = useCallback(
     async (pocket: PocketEntity) => {
-      let fee = "0";
-
       /**
        * @dev Call to hamster server to get fee.
        */
-      if (
-        pocket.chainId === ChainId.polygon_mumbai ||
-        pocket.chainId === ChainId.bnb
-      ) {
-        let isV3 = platformConfig?.whitelistedRouters[0]?.isV3 || false;
-        let ammRouterAddress =
-          platformConfig?.whitelistedRouters[0]?.address || "";
+      let isV3 = platformConfig?.whitelistedRouters[0]?.isV3 || false;
+      let ammRouterAddress =
+        platformConfig?.whitelistedRouters[0]?.address || "";
 
-        /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
-        if (pocket.chainId === ChainId.bnb) {
-          const exchange = platformConfig.whitelistedRouters.find(
-            (item) => item.ammTag === "uniswap"
-          );
+      /** @dev BNB chain default has two trading exchange, filter to use uniswap only. */
+      if (pocket.chainId === ChainId.bnb) {
+        const exchange = platformConfig.whitelistedRouters.find(
+          (item) => item.ammTag === "uniswap"
+        );
 
-          /** @dev Update address. */
-          ammRouterAddress = exchange?.address;
-          isV3 = exchange?.isV3;
-        }
-
-        fee = await evmProgramService.getQuote({
-          chainId: pocket.chainId,
-          baseTokenAddress: pocket.baseTokenAddress,
-          targetTokenAddress: pocket.targetTokenAddress,
-          amountIn: pocket.currentTargetTokenBalance.toString(),
-          useV3: isV3,
-          ammRouterAddress,
-        });
+        /** @dev Update address. */
+        ammRouterAddress = exchange?.address;
+        isV3 = exchange?.isV3;
       }
+
+      const { fee } = await evmProgramService.getQuote({
+        chainId: pocket.chainId,
+        baseTokenAddress: pocket.baseTokenAddress,
+        targetTokenAddress: pocket.targetTokenAddress,
+        amountIn: pocket.currentTargetTokenBalance.toString(),
+        useV3: isV3,
+        ammRouterAddress,
+      });
 
       const tx = await pocketChef
         .connect(signer)
@@ -285,14 +277,16 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
+      console.log({ pocketId });
       const pocketStatus = (await pocketRegistry.pockets(pocketId)).status;
+      console.log({ pocketStatus });
       if (Number(pocketStatus) !== 3) {
         await closePocket(pocketId);
       } else {
         await pocketChef.withdraw(pocketId);
       }
     },
-    [signer, pocketChef, pocketRegistry]
+    [signer, pocketChef, pocketRegistry, closePocket]
   );
 
   return (
