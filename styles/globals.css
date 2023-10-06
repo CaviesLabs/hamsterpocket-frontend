@@ -170,7 +170,7 @@ input[type=number] {
 
 .banner-title {
   font-weight: 500;
-  font-size: 48px;
+  font-size: 60px;
   line-height: 72px;
   background: linear-gradient(90deg, #FF3BFF 0%, #ECBFBF 38.02%, #5C24FF 75.83%, #D94FD5 100%);
   -webkit-background-clip: text;

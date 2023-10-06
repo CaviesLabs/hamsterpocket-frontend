@@ -67,13 +67,13 @@ const Layout = (props: LayoutProps) => {
             </div>
             <div className="w-full md:w-[57%]">
               <h1 className="banner-title mobile:!text-[26px] mobile:!text-center">
-                Self-Managed DCA Vault
+                Self-Managed <br className="md:block hidden" /> DCA Vault
               </h1>
-              <h2 className="text-[48px] text-white normal-text relative top-[-20px] mobile:!text-[26px] mobile:!text-center">
+              <h2 className="text-[40px] text-white normal-text relative mobile:!text-[26px] mobile:!text-center md:mt-[20px] md:top-0 top-[-20px]">
                 Hamsterpocket
               </h2>
-              <div className="max-w-[498px] text-center">
-                <p className="text-white text-[20px] mt-[15px] mobile:mt-0 normal-text leading-[33px] tracking-[0.72px] mobile:!text-[14px] mobile:!text-center">
+              <div className="max-w-[498px] md:text-left text-center md:top-[-20px] relative">
+                <p className="text-white text-[18px] mt-[15px]  normal-text mobile:!text-[14px] mobile:!text-center">
                   Hamsterpocket allows users to create and manage their own
                   dollar-cost averaging pools (“pockets”) that will
                   automatically execute the chosen strategies over time.
