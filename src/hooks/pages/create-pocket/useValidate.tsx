@@ -81,7 +81,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     modifyErrors(
       "startAt",
       startAt.getTime() < Date.now()
-        ? "Start date must be greather than now"
+        ? "Start date must be greater than now"
         : ""
     );
   }, [startAt, createdEnable]);
