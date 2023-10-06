@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
+import { Avatar } from "antd";
+
 import { LayoutSection } from "@/src/components/layout-section";
 import { LeftIcon, ShareIcon } from "@/src/components/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -138,12 +140,14 @@ const PocketDetailPage: NextPage = () => {
                 <div className="mt-[32px] w-full block pocket-top-item px-[20px] py-[10px]">
                   <div className="flow-root items-center">
                     <div className="flex items-center float-left">
-                      <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white float-left">
-                        <img
-                          src={targetToken?.image}
-                          className="rounded-[50%]"
-                        />
-                      </div>
+                      <Avatar
+                        className={
+                          "w-[30px] md:w-[44px] md:h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[16px]"
+                        }
+                        src={targetToken?.image}
+                      >
+                        {targetToken?.symbol}
+                      </Avatar>
                       <p className="text-white text-[16px] regular-text flex items-center ml-[10px]">
                         {targetToken?.symbol}/{baseToken?.symbol}
                       </p>
@@ -226,12 +230,14 @@ const PocketDetailPage: NextPage = () => {
                           }
                         >
                           <div className="float:left">
-                            <div className="w-[30px] md:w-[34px] md:h-[34px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white float-left">
-                              <img
-                                src={targetTokenPocket?.image}
-                                className="rounded-[50%]"
-                              />
-                            </div>
+                            <Avatar
+                              className={
+                                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+                              }
+                              src={targetTokenPocket?.image}
+                            >
+                              {targetTokenPocket?.symbol}
+                            </Avatar>
                           </div>
                           <div className="float-left ml-[10px]">
                             <p className="text-white text-[14px] normal-text">

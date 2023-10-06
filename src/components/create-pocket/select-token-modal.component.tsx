@@ -1,5 +1,5 @@
 import { FC, MouseEvent, useState, useMemo } from "react";
-import { Modal } from "antd";
+import { Avatar, Modal } from "antd";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { ShareIcon, SearchIcon } from "@/src/components/icons";
@@ -79,15 +79,14 @@ export const TargetSelectTokenModal: FC<{
                   }
                 >
                   <div className="flex items-center float-left">
-                    <div className="w-[44px] h-[44px] mobile:!w-[25px] mobile:!h-[25px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] mobile:border-[3px] border-dark70">
-                      {whiteLists[token]?.image && (
-                        <img
-                          src={whiteLists[token]?.image}
-                          className="rounded-[50%]"
-                          alt={"token image"}
-                        />
-                      )}
-                    </div>
+                    <Avatar
+                      className={
+                        "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+                      }
+                      src={whiteLists[token]?.image}
+                    >
+                      {whiteLists[token]?.symbol}
+                    </Avatar>
                     <div className="pl-[20px]">
                       <p className="text-white text-[18px] mobile:!text-[14px] normal-text uppercase">
                         {whiteLists[token]?.symbol}

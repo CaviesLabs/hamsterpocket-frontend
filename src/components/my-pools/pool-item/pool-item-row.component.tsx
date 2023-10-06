@@ -19,6 +19,7 @@ import { useAppWallet } from "@/src/hooks/useAppWallet";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import dayjs from "dayjs";
+import { Avatar } from "antd";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -150,15 +151,14 @@ export const PoolItemRow = (props: PoolItemProps) => {
           onClick={() => pushRouterWithChainId(`/pocket/${data.id}`)}
         >
           <div className="flex items-center mobile:float-left">
-            <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {targetToken?.image && (
-                <img
-                  src={targetToken?.image}
-                  className="rounded-[50%]"
-                  alt={data.targetTokenAddress}
-                />
-              )}
-            </div>
+            <Avatar
+              className={
+                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+              }
+              src={targetToken?.image}
+            >
+              {targetToken?.symbol}
+            </Avatar>
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a

@@ -27,6 +27,7 @@ import {
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { Avatar } from "antd";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -128,15 +129,14 @@ export const PoolItem = (props: PoolItemProps) => {
       <div className="md:flex justify-between mt-[24px]">
         <div className="md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
-            <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {targetToken?.image && (
-                <img
-                  src={targetToken?.image}
-                  className="rounded-[50%]"
-                  alt={data.targetTokenAddress}
-                />
-              )}
-            </div>
+            <Avatar
+              className={
+                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+              }
+              src={targetToken?.image}
+            >
+              {targetToken?.symbol}
+            </Avatar>
             <div className="pl-[20px]">
               <p className="text-white text-[14px] md:text-[18px] normal-text uppercase">
                 {targetToken?.symbol}
