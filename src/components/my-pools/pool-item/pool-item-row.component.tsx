@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { ShareIcon } from "@/src/components/icons";
+
+import { Avatar } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
-import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { useWallet } from "@/src/hooks/useWallet";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
+
+import { ShareIcon } from "@/src/components/icons";
 import {
   DepositModal,
   ClosePocketModal,
@@ -13,13 +21,8 @@ import {
   ClaimFeeModal,
   ReversePocketModal,
 } from "@/src/components/home";
-import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
-import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId } from "@/src/entities/platform-config.entity";
+
 import dayjs from "dayjs";
-import { Avatar } from "antd";
 
 type PoolItemProps = {
   data: PocketEntity;

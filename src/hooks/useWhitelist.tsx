@@ -1,24 +1,25 @@
 import {
   FC,
-  createContext,
+  useState,
   ReactNode,
   useEffect,
-  useState,
   useContext,
   useCallback,
+  createContext,
 } from "react";
-import { whitelistService } from "@/src/services/whitelist.service";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { whitelistService } from "@/src/services/whitelist.service";
 import {
   makeAliasForEvmWhitelist,
   devideBigNumber,
 } from "@/src/utils/evm.parser";
 import { makeAliasForAptosWhitelist } from "@/src/utils/aptos.parser";
-import Decimal from "decimal.js";
+
 import useSWR from "swr";
+import Decimal from "decimal.js";
 
 export type WhiteListConfigs = {
   [key: string]: WhitelistEntity;
@@ -80,6 +81,7 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
           result = result.filter((item) => item.chainId === chainId);
         }
 
+        /** @dev Aggregate whitelist data. */
         const aggregate = result.reduce((acc, item) => {
           const name =
             chainId === ChainId.sol ? item.address : item.aliasAddress;

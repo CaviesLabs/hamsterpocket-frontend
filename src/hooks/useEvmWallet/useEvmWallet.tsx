@@ -26,7 +26,10 @@ import { useWalletClient } from "wagmi";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { evmProgramService } from "@/src/services/evm-program.service";
+import {
+  EvmProgramService,
+  evmProgramService,
+} from "@/src/services/evm-program.service";
 
 import { createPublicClient, formatEther, http } from "viem";
 import { useEvmWalletKit } from "./evm-wallet-kit.provider";
@@ -152,6 +155,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
+
+      /** @dev Sync pocket. */
+      await new EvmProgramService().sync(pocketId);
     },
     [signer, contract, chainId]
   );

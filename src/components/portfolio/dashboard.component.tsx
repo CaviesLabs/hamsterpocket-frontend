@@ -1,12 +1,13 @@
-import { Doughnut } from "react-chartjs-2";
-import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
-import { RiQuestionnaireFill } from "react-icons/ri";
-Chart.register(ArcElement, Legend, Tooltip);
-import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";
-import { usePocketBalance } from "@/src/hooks/usePocketBalance";
-import { PocketBalance } from "./pocket-balance.component";
+import { Doughnut } from "react-chartjs-2";
+import { Tooltip as AntdTooltip } from "antd";
+import { RiQuestionnaireFill } from "react-icons/ri";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { PocketBalance } from "./pocket-balance.component";
+import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
+import { usePocketBalance } from "@/src/hooks/usePocketBalance";
+
+Chart.register(ArcElement, Legend, Tooltip);
 
 const options = {
   cutout: 70,

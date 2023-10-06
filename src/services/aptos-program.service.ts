@@ -43,12 +43,15 @@ export class AptosProgramService {
     console.log({ ...createPocketParams, id: response?._id });
     console.log({ ...depositParams, id: response?._id });
     // eslint-disable-next-line prettier/prettier
-    return this.transtractionBuilder
-      .buildCreatePocketAndDepositTransaction(
-        { ...createPocketParams, id: response?._id },
-        { ...depositParams, id: response?._id }
-      )
-      .execute();
+    return {
+      pocketId: response?._id,
+      data: await this.transtractionBuilder
+        .buildCreatePocketAndDepositTransaction(
+          { ...createPocketParams, id: response?._id },
+          { ...depositParams, id: response?._id }
+        )
+        .execute(),
+    };
   }
 
   /**

@@ -142,20 +142,16 @@ export const PoolItemBuyConditionComponent = (
 
   return (
     <div className="text-white normal-text text-center mobile:text-[14px]">
-      {data?.buyCondition ? (
-        <>
-          <div>
-            {analyzeDecimals(
-              convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)
-            )}
-            {baseToken?.symbol} {handleRenderFrequency()}
-          </div>
-          <div className="mt-[5px] text-[12px] text-dark50">
-            {humanBuyConditionType()}
-          </div>
-        </>
-      ) : (
-        "N/A"
+      <div>
+        {analyzeDecimals(
+          convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)
+        )}
+        {baseToken?.symbol} {handleRenderFrequency()}
+      </div>
+      {data?.buyCondition && (
+        <div className="mt-[5px] text-[12px] text-dark50">
+          {humanBuyConditionType()}
+        </div>
       )}
     </div>
   );

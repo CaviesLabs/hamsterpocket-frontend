@@ -1,9 +1,11 @@
 import { FC, useMemo, useRef, useState } from "react";
-import { DropdownArrowIcon } from "@/src/components/icons";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
+
 import classnames from "classnames";
 import styles from "./index.module.scss";
+
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { DropdownArrowIcon } from "@/src/components/icons";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 
 export const ChainSelect: FC = () => {

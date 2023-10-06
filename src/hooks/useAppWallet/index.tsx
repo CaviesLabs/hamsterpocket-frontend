@@ -22,6 +22,7 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
    * @dev Provider states.
    */
   const [walletAddress, setWalletAddress] = useState("");
+  const [calledPush, setCalledPush] = useState(false);
   const { switchChainId, chainId, chainInfos } = usePlatformConfig();
 
   /**
@@ -72,8 +73,9 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
           /**
            * @dev If current chain is not connected chain, will redirect to.
            */
-          if (targetChainId && chainId !== targetChainId) {
+          if (targetChainId && chainId !== targetChainId && !calledPush) {
             switchChainId(targetChainId);
+            setCalledPush(true);
           }
         } catch (e) {}
       }

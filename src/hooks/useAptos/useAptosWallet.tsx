@@ -178,12 +178,14 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
       /** @dev Execute transaction. */
       console.log({ createdParams });
-      await service.createPocket(
+      const { pocketId } = await service.createPocket(
         chainId,
         account?.address?.toString(),
         createdParams,
         depositedParams
       );
+
+      await service.sync(pocketId);
     },
     [service, platformConfig, signer, account, chainId]
   );
