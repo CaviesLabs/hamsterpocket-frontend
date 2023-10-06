@@ -14,7 +14,6 @@ import {
   JsonRpcProvider,
   BigNumberish as BigNumber,
 } from "ethers";
-import { useWalletClient, type WalletClient } from "wagmi";
 import {
   PocketChef,
   PocketRegistry,
@@ -23,6 +22,7 @@ import {
 } from "@/src/providers/program/evm/typechain-types";
 import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
 
+import { useWalletClient } from "wagmi";
 import { PocketEntity } from "@/src/entities/pocket.entity";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
@@ -31,16 +31,8 @@ import { evmProgramService } from "@/src/services/evm-program.service";
 import { createPublicClient, formatEther, http } from "viem";
 import { useEvmWalletKit } from "./evm-wallet-kit.provider";
 
-const walletClientToSigner = (client: WalletClient) => {
-  const { account, chain, transport } = client;
-  const provider = new BrowserProvider(transport as any, {
-    chainId: chain.id,
-    name: chain.name,
-    ensAddress: chain.contracts?.ensRegistry?.address,
-  });
-
-  return new JsonRpcSigner(provider, account.address);
-};
+/** @dev Define the number of confirmations which each transaction should wait for. */
+const CONFIRMATIONS = 5;
 
 /** @dev Initiize context. */
 export const EvmWalletContext = createContext<{
@@ -95,7 +87,14 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   useEffect(() => {
     if (!client?.data || chainId === ChainId.sol) return;
     if (!signer) {
-      setSigner(walletClientToSigner(client.data));
+      const { account, chain, transport } = client.data;
+      const provider = new BrowserProvider(transport as any, {
+        chainId: chain.id,
+        name: chain.name,
+        ensAddress: chain.contracts?.ensRegistry?.address,
+      });
+
+      setSigner(new JsonRpcSigner(provider, account.address));
     }
   }, [client]);
 
@@ -146,12 +145,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       );
 
       /** @dev Execute on-chain */
-      await contract.createPocketAndDepositEther(
+      const tx = await contract.createPocketAndDepositEther(
         { ...createdPocketParams, id: pocketId },
-        {
-          value: depositedAmount,
-        }
+        { value: depositedAmount }
       );
+
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract, chainId]
   );
@@ -162,7 +162,12 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const depositPocket = useCallback(
     async (pocketId: string, depositedAmount: BigNumber) => {
-      await contract.depositEther(pocketId, { value: depositedAmount });
+      const tx = await contract.depositEther(pocketId, {
+        value: depositedAmount,
+      });
+
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract]
   );
@@ -173,7 +178,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const closePocket = useCallback(
     async (pocketId: string) => {
-      await contract
+      const tx = await contract
         .connect(signer)
         .multicall([
           contract
@@ -183,6 +188,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
             .connect(signer)
             .interface.encodeFunctionData("withdraw", [pocketId]),
         ]);
+
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract]
   );
@@ -227,7 +235,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         });
       }
 
-      await contract
+      const tx = await contract
         .connect(signer)
         .multicall([
           contract
@@ -243,6 +251,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
               pocket.id || pocket._id,
             ]),
         ]);
+
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract]
   );
@@ -253,7 +264,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const pausePocket = useCallback(
     async (pocketId: string) => {
-      await contract.pausePocket(pocketId);
+      const tx = await contract.pausePocket(pocketId);
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract]
   );
@@ -265,7 +278,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const resumePocket = useCallback(
     async (pocketId: string) => {
       console.log("resume pocket", pocketId);
-      await contract.restartPocket(pocketId);
+      const tx = await contract.restartPocket(pocketId);
+      /** @dev Wait for confirmation. */
+      await (tx as any).wait(CONFIRMATIONS);
     },
     [signer, contract]
   );
