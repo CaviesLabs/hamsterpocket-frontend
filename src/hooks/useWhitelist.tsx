@@ -71,29 +71,31 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     (async () => {
       try {
         /** @dev Fetch whitelist in sol chain. */
-        const result = await whitelistService.getWhitelist();
-        if (chainId === ChainId.sol) {
-          const res: WhiteListConfigs = {};
-          result.forEach((_) => {
-            /** desc Convert Wrapped SOL to SOL */
-            if (_.name === "Wrapped SOL") {
-              _.name = "SOL";
-            }
-            res[_.address] = _;
-          });
-          setWhitelist(res);
-        } else {
-          const processedList = chainId.toLowerCase().includes("aptos")
+        let result = await whitelistService.getWhitelist();
+        if (chainId !== ChainId.sol) {
+          result = chainId.toLowerCase().includes("aptos")
             ? makeAliasForAptosWhitelist(result, chainId as ChainId)
             : makeAliasForEvmWhitelist(result, chainId as ChainId);
-          const res: WhiteListConfigs = {};
-          processedList.forEach((_) => {
-            res[_.aliasAddress] = _;
-          });
-          setWhitelist(res);
+        } else {
+          result = result.filter((item) => item.chainId === chainId);
         }
+
+        const aggregate = result.reduce((acc, item) => {
+          const name =
+            chainId === ChainId.sol ? item.address : item.aliasAddress;
+
+          return {
+            ...acc,
+            [name]: {
+              ...item,
+              name: item.name === "Wrapped SOL" ? "SOL" : item.name, // desc Convert Wrapped SOL to SOL.
+            },
+          };
+        }, {});
+
+        setWhitelist(aggregate);
       } catch (err) {
-        console.log(err);
+        console.warn(err);
       }
     })();
   }, [chainId]);

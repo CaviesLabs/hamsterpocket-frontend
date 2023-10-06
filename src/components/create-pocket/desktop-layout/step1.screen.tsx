@@ -1,11 +1,11 @@
 import { FC, MouseEvent, useState, useMemo } from "react";
-import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { ShareIcon, SearchIcon } from "@/src/components/icons";
-import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId } from "@/src/entities/platform-config.entity";
 import { Input } from "@hamsterbox/ui-kit";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
+import { ShareIcon, SearchIcon } from "@/src/components/icons";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { Avatar } from "antd";
 
 export const CreatePocketStep1Desktop: FC<{
@@ -33,10 +33,10 @@ export const CreatePocketStep1Desktop: FC<{
     return availableTargetTokens.filter(
       (token) =>
         whiteLists[token]?.name.toLowerCase().includes(search.toLowerCase()) ||
-        whiteLists[token]?.symbol
+        whiteLists[token]?.address
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        whiteLists[token]?.address.toLowerCase().includes(search.toLowerCase())
+        whiteLists[token]?.symbol.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, availableTargetTokens]);
 
