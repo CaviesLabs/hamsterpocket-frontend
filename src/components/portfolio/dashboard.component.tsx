@@ -9,6 +9,7 @@ import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 
 Chart.register(ArcElement, Legend, Tooltip);
 
+/** @dev Define options for chart. */
 const options = {
   cutout: 70,
   border: {
@@ -20,6 +21,17 @@ const options = {
     },
   },
 };
+
+/** @dev Define colors for chart. */
+const COLORS = [
+  "#C85469",
+  "#3393D9",
+  "#B2B539",
+  "#EAF4F4",
+  "#f62d92",
+  "#94e9d2",
+  "#60b84e",
+];
 
 export default function DashboardComponentMobile() {
   /** @dev Handle to get total estimate sol in total pockets. */
@@ -34,24 +46,8 @@ export default function DashboardComponentMobile() {
       datasets: [
         {
           data: mapData.map((item) => (item.percent * 100)?.toFixed(2)),
-          backgroundColor: [
-            "#C85469",
-            "#3393D9",
-            "#B2B539",
-            "#EAF4F4",
-            "#f62d92",
-            "#94e9d2",
-            "#60b84e",
-          ],
-          hoverBackgroundColor: [
-            "#C85469",
-            "#3393D9",
-            "#B2B539",
-            "#EAF4F4",
-            "#f62d92",
-            "#94e9d2",
-            "#60b84e",
-          ],
+          backgroundColor: COLORS,
+          hoverBackgroundColor: COLORS,
           borderWidth: 0,
         },
       ],
