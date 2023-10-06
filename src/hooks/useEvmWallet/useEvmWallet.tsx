@@ -11,7 +11,6 @@ import {
 import {
   JsonRpcSigner,
   BrowserProvider,
-  JsonRpcProvider,
   BigNumberish as BigNumber,
 } from "ethers";
 import {
@@ -75,11 +74,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     });
   }, [chain]);
 
-  // Get json rpc provider.
-  const jsonRpcProvider = useMemo(() => {
-    return new JsonRpcProvider(platformConfig?.rpcUrl);
-  }, [platformConfig]);
-
   // Fetch native balance.
   const fetchNativeBalance = useCallback(async () => {
     const balance = await publicClient.getBalance({
@@ -95,6 +89,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   ) => {
     const { account, chain, transport } = client.data;
 
+    if (!platformConfig) {
+      return;
+    }
     if (chain.id !== platformConfig?.chainId) {
       const provider = new BrowserProvider(transport as any, {
         chainId: chain.id,
@@ -114,9 +111,9 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   // Fetch native balance.
   useEffect(() => {
-    if (!signer || !jsonRpcProvider || chainId === ChainId.sol) return;
+    if (!signer || chainId === ChainId.sol) return;
     fetchNativeBalance();
-  }, [client]);
+  }, [signer]);
 
   // Initialize contract.
   useEffect(() => {
