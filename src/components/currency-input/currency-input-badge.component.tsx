@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect } from "react";
-import { Input } from "antd";
+import { Avatar, Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
 import { WSOL_ADDRESS } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
@@ -87,7 +87,7 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
         prefix={
           addressSelected === "BATCH" ? null : (
             <div className="flex items-center relative">
-              <img
+              <Avatar
                 className={classNames(
                   "rounded-full",
                   addressSelected
@@ -95,7 +95,9 @@ export const CurrencyInputBadge: FC<CurrencyInputProps> = (props) => {
                     : "invisible"
                 )}
                 src={allowCurrencies?.[addressSelected]?.image}
-              />
+              >
+                {allowCurrencies?.[addressSelected]?.symbol}
+              </Avatar>
               <p
                 className={classNames(
                   "cursor-pointer semi-bold text-white mobile:!text-[14px]",

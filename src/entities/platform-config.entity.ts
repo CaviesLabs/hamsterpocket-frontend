@@ -13,6 +13,7 @@ export interface PlatformConfigEntity {
     address: string;
     isV3: boolean;
     ammTag: string;
+    ammName: string;
     dexUrl: string;
     inputTag: string;
     outputTag: string;

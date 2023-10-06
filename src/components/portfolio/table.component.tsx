@@ -6,6 +6,7 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { Avatar } from "antd";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
@@ -26,13 +27,15 @@ export default function TableComponent() {
               key={Math.random()}
               className="!border-[0px] bg-[#121320] rounded-[12px] grid grid-cols-3 mobile:grid-cols-5 gap-3 mt-[5px] mobile:mt-[12px] px-[15px] py-[10px]"
             >
-              <div className="col-span-1 mobile:col-span-2 flex">
-                <div className="bg-gray-600 p-2 rounded-full h-[48px]">
-                  <img
-                    src={h.tokenImage}
-                    className="max-w-[32px] rounded-full h-[32px] w-[32px]"
-                  />
-                </div>
+              <div className="col-span-1 mobile:col-span-2 flex row items-center">
+                <Avatar
+                  className={
+                    "w-[44px] h-[44px] flex items-center bg-dark70 border-solid border-[3px] border-white text-[8px]"
+                  }
+                  src={h?.tokenImage}
+                >
+                  {h?.tokenSymbol}
+                </Avatar>
                 <div className="ml-4">
                   <div className="truncate mobile:text-[14px]">
                     {h.tokenSymbol}

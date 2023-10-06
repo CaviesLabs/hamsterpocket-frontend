@@ -153,7 +153,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
           <div className="flex items-center mobile:float-left">
             <Avatar
               className={
-                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
               }
               src={targetToken?.image}
             >
