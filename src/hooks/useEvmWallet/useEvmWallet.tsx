@@ -93,7 +93,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   // Convert wagmi client to rpc signer.
   useEffect(() => {
-    if (!client?.data) return;
+    if (!client?.data || chainId === ChainId.sol) return;
     if (!signer) {
       setSigner(walletClientToSigner(client.data));
     }
@@ -101,7 +101,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
   // Fetch native balance.
   useEffect(() => {
-    if (!signer || !jsonRpcProvider) return;
+    if (!signer || !jsonRpcProvider || chainId === ChainId.sol) return;
     fetchNativeBalance();
   }, [client]);
 

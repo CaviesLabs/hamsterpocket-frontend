@@ -16,11 +16,11 @@ import classNames from "classnames";
 export const CreatePocketDesktopLayout: FC = () => {
   /** @dev Injected context to use. */
   const {
-    handleCreatePocket,
-    setErrorMsgs,
-    setTargetTokenAddress,
-    targetTokenAddress,
     processing,
+    targetTokenAddress,
+    setErrorMsgs,
+    handleCreatePocket,
+    setTargetTokenAddress,
   } = useCreatePocketPage();
 
   /** @dev Define current step layout. */
