@@ -67,7 +67,7 @@ const Header: FC = () => {
   return (
     <StyledHeader
       className={classnames(
-        "app-header md:fixed md:z-50 w-full px-[12px] md:px-0 mobile:block mobile:shadow-lg mobile:bg-[#060710]",
+        "app-header md:fixed md:z-50 w-full px-[12px] md:px-0 mobile:block mobile:shadow-lg mobile:bg-[#060710] md:px-[30px]",
         {
           /**
            * @dev Restrict fill purple background & clear border for specific pages.

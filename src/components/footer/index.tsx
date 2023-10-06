@@ -46,9 +46,14 @@ const Footer: FC = () => {
     []
   );
 
-  return router.asPath === `/${chainId}` || router.asPath === `/${chainId}/` ? (
-    <div className="footer pb-9 mobile:hidden">
-      <div className="lg:max-w-[1440px] lg:mx-auto">
+  console.log(router.asPath);
+
+  return router.asPath === `/${chainId}` ||
+    router.asPath === `/${chainId}/` ||
+    router.asPath === `` ||
+    router.asPath === `/` ? (
+    <div className="footer pb-9 mobile:hidden md:px-[30px]">
+      <div className="md:max-w-[1440px] lg:mx-auto">
         <div className="md:flex justify-between items-end">
           <div className="menu-wrapper md:pt-0">
             <ul className="footer-menu w-[100%] hidden md:flex justify-center flex-wrap md:justify-start">
@@ -68,7 +73,7 @@ const Footer: FC = () => {
               ))}
             </ul>
           </div>
-          <div className="relative left-[120px]">
+          <div className="relative">
             <a onClick={() => pushRouterWithChainId("/")}>
               <HamsterboxIcon
                 className="w-[155px] h-auto  mx-auto cursor-pointer"
@@ -85,8 +90,8 @@ const Footer: FC = () => {
             </div>
           </div>
 
-          <div className="menu-wrapper md:pt-0 pt-[20px]">
-            <ul className="footer-menu w-[100%] flex md:hidden justify-center flex-wrap md:justify-start">
+          <div className="menu-wrapper md:pt-0 pt-[20px] md:hidden">
+            <ul className="footer-menu w-[100%] flex justify-center flex-wrap md:justify-start">
               {footers.map((item, index) => (
                 <li
                   key={`footer-item-${index}`}
