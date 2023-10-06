@@ -11,7 +11,6 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
-import { BigNumber } from "ethers";
 import { useAptosWallet } from "@/src/hooks/useAptos";
 import { convertBigNumber as convertAptosNumber } from "@/src/utils/aptos.parser";
 
@@ -86,7 +85,7 @@ export const DepositModal: FC<{
         /** @dev Execute transaction. */
         await depositPocketEvm(
           props.pocket.id || props.pocket._id,
-          BigNumber.from(
+          BigInt(
             (
               (depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals)) *
               Math.pow(10, baseToken?.realDecimals)

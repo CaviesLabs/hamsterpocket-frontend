@@ -27,7 +27,11 @@ export const RefreshButton = (props: RefreshButtonProps) => {
         className="relative ml-4 border-solid border-[2px] border-purple300 text-purple300 hover:text-white rounded-full px-4 py-2 flex items-center"
         onClick={props.handleClick}
       >
-        <SyncOutlined spin={props.loading} style={{ fontSize: 18 }} />
+        <SyncOutlined
+          spin={props.loading}
+          style={{ fontSize: 18 }}
+          rev={undefined}
+        />
         <p className="regular-text ml-4">Sync</p>
       </button>
     </AntdTooltip>

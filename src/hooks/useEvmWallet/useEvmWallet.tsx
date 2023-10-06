@@ -24,7 +24,10 @@ import { Params } from "@/src/providers/program/evm/typechain-types/contracts/Po
 
 import { useWalletClient } from "wagmi";
 import { PocketEntity } from "@/src/entities/pocket.entity";
-import { ChainId } from "@/src/entities/platform-config.entity";
+import {
+  ChainId,
+  PlatformConfigEntity,
+} from "@/src/entities/platform-config.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import {
   EvmProgramService,
@@ -86,11 +89,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     setBalance(formatEther(balance));
   }, [client, signer, publicClient]);
 
-  // Convert wagmi client to rpc signer.
-  useEffect(() => {
-    if (!client?.data || chainId === ChainId.sol) return;
-    if (!signer) {
-      const { account, chain, transport } = client.data;
+  const handleSetupNewClient = async (
+    client: ReturnType<typeof useWalletClient>,
+    platformConfig?: PlatformConfigEntity
+  ) => {
+    const { account, chain, transport } = client.data;
+
+    if (chain.id !== platformConfig?.chainId) {
       const provider = new BrowserProvider(transport as any, {
         chainId: chain.id,
         name: chain.name,
@@ -99,7 +104,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
 
       setSigner(new JsonRpcSigner(provider, account.address));
     }
-  }, [client]);
+  };
+
+  // Convert wagmi client to rpc signer.
+  useEffect(() => {
+    if (!client?.data || chainId === ChainId.sol) return;
+    handleSetupNewClient(client, platformConfig);
+  }, [client, platformConfig]);
 
   // Fetch native balance.
   useEffect(() => {
