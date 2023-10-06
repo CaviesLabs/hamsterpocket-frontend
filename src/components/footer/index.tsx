@@ -46,8 +46,6 @@ const Footer: FC = () => {
     []
   );
 
-  console.log(router.asPath);
-
   return router.asPath === `/${chainId}` ||
     router.asPath === `/${chainId}/` ||
     router.asPath === `` ||

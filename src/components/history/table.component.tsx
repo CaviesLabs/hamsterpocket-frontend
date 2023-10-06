@@ -23,7 +23,7 @@ export default function TableComponent() {
         return "PAUSE";
       case PoolType.CONTINUE:
       case PoolType.RESTARTED:
-        return "CONTINUE";
+        return "Resume";
       case PoolType.DEPOSITED:
         return "DEPOSIT";
       case PoolType.CLOSED:
