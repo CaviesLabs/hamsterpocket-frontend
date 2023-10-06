@@ -277,13 +277,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
-      console.log({ pocketId });
       const pocketStatus = (await pocketRegistry.pockets(pocketId)).status;
-      console.log({ pocketStatus });
       if (Number(pocketStatus) !== 3) {
         await closePocket(pocketId);
       } else {
-        await pocketChef.withdraw(pocketId);
+        const tx = await pocketChef.withdraw(pocketId);
+        /** @dev Wait for confirmation. */
+        await (tx as any).wait(CONFIRMATIONS);
       }
     },
     [signer, pocketChef, pocketRegistry, closePocket]
