@@ -34,8 +34,24 @@ export default function DashboardComponentMobile() {
       datasets: [
         {
           data: mapData.map((item) => (item.percent * 100)?.toFixed(2)),
-          backgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
-          hoverBackgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
+          backgroundColor: [
+            "#C85469",
+            "#3393D9",
+            "#B2B539",
+            "#EAF4F4",
+            "#f62d92",
+            "#94e9d2",
+            "#60b84e",
+          ],
+          hoverBackgroundColor: [
+            "#C85469",
+            "#3393D9",
+            "#B2B539",
+            "#EAF4F4",
+            "#f62d92",
+            "#94e9d2",
+            "#60b84e",
+          ],
           borderWidth: 0,
         },
       ],
