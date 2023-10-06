@@ -142,7 +142,7 @@ const PocketDetailPage: NextPage = () => {
                     <div className="flex items-center float-left">
                       <Avatar
                         className={
-                          "w-[30px] md:w-[44px] md:h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[16px]"
+                          "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[16px]"
                         }
                         src={targetToken?.image}
                       >
@@ -153,7 +153,12 @@ const PocketDetailPage: NextPage = () => {
                       </p>
                     </div>
                     <a
-                      href={`${dexUrl}?${platformConfig?.whitelistedRouters?.[0]?.inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters?.[0]?.outputTag}=${targetToken?.address}`}
+                      href={utilsProvider.getUrl(dexUrl, {
+                        [platformConfig?.whitelistedRouters?.[0]?.inputTag]:
+                          baseToken?.address,
+                        [platformConfig?.whitelistedRouters?.[0]?.outputTag]:
+                          targetToken?.address,
+                      })}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >

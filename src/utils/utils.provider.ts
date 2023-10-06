@@ -1,4 +1,6 @@
 import { encode } from "bs58";
+import qs from "query-string";
+
 class UtilsProvider {
   /**
    * Will gracefuly scroll the page
@@ -162,6 +164,12 @@ class UtilsProvider {
       );
     }
     return arr.splice(0, size).join("");
+  }
+
+  public getUrl(currentUrl: string, query: Record<string, string>) {
+    const current = qs.parseUrl(currentUrl, { parseFragmentIdentifier: true });
+    Object.assign(current.query, query);
+    return qs.stringifyUrl(current);
   }
 
   /**
