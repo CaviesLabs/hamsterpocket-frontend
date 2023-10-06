@@ -218,6 +218,7 @@ const PocketDetailPage: NextPage = () => {
                       return (
                         <div
                           className="md:w-full mobile:max-w-[200px] flex px-[10px] py-[10px] border-solid border-[3px] border-dark80 rounded-[12px] md:mb-[20px] cursor-pointer hover:bg-dark80"
+                          key={Math.random()}
                           onClick={() =>
                             pushRouterWithChainId(
                               `/pocket/${pocket.id || pocket._id}`

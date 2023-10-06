@@ -173,7 +173,6 @@ export const createdPocketPramsParserEvm = (
   ammRouterAddress: string,
   ammRouterVersion: string
 ): Params.CreatePocketParamsStruct => {
-  console.log({ realTargetTokenDecimals, realBaseTokenDecimals });
   return {
     id: solCreatedPocketDto.id,
     owner: walletAddress,
@@ -270,6 +269,7 @@ export const makeAliasForEvmWhitelist = (
       decimals: 9,
     };
   });
-  console.log(evmFilerted);
+
+  console.debug({ evmFilerted });
   return evmFilerted;
 };

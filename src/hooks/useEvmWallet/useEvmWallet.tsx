@@ -88,7 +88,6 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       address: signer.address as any,
     });
 
-    console.log({ balance: formatEther(balance) });
     setBalance(formatEther(balance));
   }, [client, signer, publicClient]);
 
@@ -100,11 +99,13 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     }
   }, [client]);
 
+  // Fetch native balance.
   useEffect(() => {
     if (!signer || !jsonRpcProvider) return;
     fetchNativeBalance();
   }, [client]);
 
+  // Initialize contract.
   useEffect(() => {
     if (
       !signer ||

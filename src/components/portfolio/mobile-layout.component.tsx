@@ -1,14 +1,17 @@
 import { FC, useState, useEffect, useMemo } from "react";
-import { ToolTip } from "@/src/components/tooltip";
-import { LayoutSection } from "@/src/components/layout-section";
-import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
-import { CopyIcon } from "@/src/components/icons";
-import { PocketBalance } from "./pocket-balance.component";
-import PortfolioController from "@/src/components/portfolio/controller.component";
-import TableComponent from "@/src/components/portfolio/table.component";
-import DashboardComponentMobile from "@/src/components/portfolio/dashboard-mobile.component";
+
 import classnames from "classnames";
+import TableComponent from "@/src/components/portfolio/table.component";
+import PortfolioController from "@/src/components/portfolio/controller.component";
+import DashboardComponentMobile from "@/src/components/portfolio/dashboard-mobile.component";
+
+import { CopyIcon } from "@/src/components/icons";
+import { ToolTip } from "@/src/components/tooltip";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { PocketBalance } from "./pocket-balance.component";
+import { AVATAR_ENDPOINT, utilsProvider } from "@/src/utils";
+import { LayoutSection } from "@/src/components/layout-section";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export const PortfolioMobileLayout: FC = () => {
   const [tab, setTab] = useState(0);
@@ -17,7 +20,8 @@ export const PortfolioMobileLayout: FC = () => {
    * @description Define state of showing profile menu
    */
   const [show, setShow] = useState(false);
-  const { walletAddress, chain } = useAppWallet();
+  const { walletAddress } = useAppWallet();
+  const { platformConfig } = usePlatformConfig();
 
   /** @dev Auto hide tooltip. */
   useEffect(() => {
@@ -80,7 +84,10 @@ export const PortfolioMobileLayout: FC = () => {
         </div>
         <div>
           {tab === 0
-            ? useMemo(() => <TableComponent />, [walletAddress, tab, chain])
+            ? useMemo(
+                () => <TableComponent />,
+                [walletAddress, tab, platformConfig]
+              )
             : useMemo(
                 () => (
                   <>
@@ -88,7 +95,7 @@ export const PortfolioMobileLayout: FC = () => {
                     <DashboardComponentMobile />
                   </>
                 ),
-                [walletAddress, tab, chain]
+                [walletAddress, tab, platformConfig]
               )}
         </div>
       </div>

@@ -96,7 +96,7 @@ export const PoolItemBuyConditionComponent = (
           </div>
         );
       default:
-        return "";
+        return null;
     }
   };
 
@@ -142,15 +142,21 @@ export const PoolItemBuyConditionComponent = (
 
   return (
     <div className="text-white normal-text text-center mobile:text-[14px]">
-      <p>
-        {analyzeDecimals(
-          convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)
-        )}
-        {baseToken?.symbol} {handleRenderFrequency()}
-      </p>
-      <p className="mt-[5px] text-[12px] text-dark50">
-        {humanBuyConditionType()}
-      </p>
+      {data?.buyCondition ? (
+        <>
+          <div>
+            {analyzeDecimals(
+              convertDecimalAmount(data?.baseTokenAddress, data?.batchVolume)
+            )}
+            {baseToken?.symbol} {handleRenderFrequency()}
+          </div>
+          <div className="mt-[5px] text-[12px] text-dark50">
+            {humanBuyConditionType()}
+          </div>
+        </>
+      ) : (
+        "N/A"
+      )}
     </div>
   );
 };

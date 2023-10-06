@@ -78,7 +78,7 @@ export default function DashboardComponentMobile() {
             <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
               {chartData.labels.map((label, i) => (
                 <div
-                  key={label}
+                  key={Math.random()}
                   className="flex justify-between items-center text-white regular-text"
                 >
                   <div className="flex items-center">

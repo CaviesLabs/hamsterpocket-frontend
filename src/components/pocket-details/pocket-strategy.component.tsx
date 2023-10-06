@@ -28,13 +28,13 @@ export const PocketStrategy: FC<{ pocket: PocketEntity }> = (props) => {
   return (
     <div className="flow-root">
       <p className="float-left text-dark45 normal-text text-[20px]">Strategy</p>
-      <p className="text-white normal-text float-right relative top-[3px]">
+      <div className="text-white normal-text float-right relative top-[3px]">
         <PoolItemBuyConditionComponent
           data={pocket}
           baseToken={baseToken}
           targetToken={targetToken}
         />
-      </p>
+      </div>
     </div>
   );
 };
