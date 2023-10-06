@@ -3,344 +3,292 @@
 /* eslint-disable */
 import type {
   BaseContract,
-  BigNumber,
   BigNumberish,
   BytesLike,
-  CallOverrides,
-  ContractTransaction,
-  Overrides,
-  PopulatedTransaction,
-  Signer,
-  utils,
-} from "ethers";
-import type {
   FunctionFragment,
   Result,
+  Interface,
   EventFragment,
-} from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
+  AddressLike,
+  ContractRunner,
+  ContractMethod,
+  Listener,
+} from "ethers";
 import type {
-  TypedEventFilter,
-  TypedEvent,
+  TypedContractEvent,
+  TypedDeferredTopicFilter,
+  TypedEventLog,
+  TypedLogDescription,
   TypedListener,
-  OnEvent,
-  PromiseOrValue,
+  TypedContractMethod,
 } from "../common";
 
 export declare namespace Types {
   export type ValueComparisonStruct = {
-    value0: PromiseOrValue<BigNumberish>;
-    value1: PromiseOrValue<BigNumberish>;
-    operator: PromiseOrValue<BigNumberish>;
+    value0: BigNumberish;
+    value1: BigNumberish;
+    operator: BigNumberish;
   };
 
-  export type ValueComparisonStructOutput = [BigNumber, BigNumber, number] & {
-    value0: BigNumber;
-    value1: BigNumber;
-    operator: number;
-  };
+  export type ValueComparisonStructOutput = [
+    value0: bigint,
+    value1: bigint,
+    operator: bigint
+  ] & { value0: bigint; value1: bigint; operator: bigint };
 
   export type StopConditionStruct = {
-    value: PromiseOrValue<BigNumberish>;
-    operator: PromiseOrValue<BigNumberish>;
+    value: BigNumberish;
+    operator: BigNumberish;
   };
 
-  export type StopConditionStructOutput = [BigNumber, number] & {
-    value: BigNumber;
-    operator: number;
+  export type StopConditionStructOutput = [value: bigint, operator: bigint] & {
+    value: bigint;
+    operator: bigint;
   };
 
   export type TradingStopConditionStruct = {
-    stopType: PromiseOrValue<BigNumberish>;
-    value: PromiseOrValue<BigNumberish>;
+    stopType: BigNumberish;
+    value: BigNumberish;
   };
 
-  export type TradingStopConditionStructOutput = [number, BigNumber] & {
-    stopType: number;
-    value: BigNumber;
-  };
+  export type TradingStopConditionStructOutput = [
+    stopType: bigint,
+    value: bigint
+  ] & { stopType: bigint; value: bigint };
 
   export type PocketStruct = {
-    id: PromiseOrValue<string>;
-    totalDepositedBaseAmount: PromiseOrValue<BigNumberish>;
-    totalSwappedBaseAmount: PromiseOrValue<BigNumberish>;
-    totalReceivedTargetAmount: PromiseOrValue<BigNumberish>;
-    totalClosedPositionInTargetTokenAmount: PromiseOrValue<BigNumberish>;
-    totalReceivedFundInBaseTokenAmount: PromiseOrValue<BigNumberish>;
-    baseTokenBalance: PromiseOrValue<BigNumberish>;
-    targetTokenBalance: PromiseOrValue<BigNumberish>;
-    executedBatchAmount: PromiseOrValue<BigNumberish>;
-    nextScheduledExecutionAt: PromiseOrValue<BigNumberish>;
-    status: PromiseOrValue<BigNumberish>;
-    owner: PromiseOrValue<string>;
-    ammRouterAddress: PromiseOrValue<string>;
-    baseTokenAddress: PromiseOrValue<string>;
-    targetTokenAddress: PromiseOrValue<string>;
-    startAt: PromiseOrValue<BigNumberish>;
-    batchVolume: PromiseOrValue<BigNumberish>;
-    frequency: PromiseOrValue<BigNumberish>;
+    id: string;
+    totalDepositedBaseAmount: BigNumberish;
+    totalSwappedBaseAmount: BigNumberish;
+    totalReceivedTargetAmount: BigNumberish;
+    totalClosedPositionInTargetTokenAmount: BigNumberish;
+    totalReceivedFundInBaseTokenAmount: BigNumberish;
+    baseTokenBalance: BigNumberish;
+    targetTokenBalance: BigNumberish;
+    executedBatchAmount: BigNumberish;
+    nextScheduledExecutionAt: BigNumberish;
+    status: BigNumberish;
+    owner: AddressLike;
+    ammRouterAddress: AddressLike;
+    baseTokenAddress: AddressLike;
+    targetTokenAddress: AddressLike;
+    startAt: BigNumberish;
+    batchVolume: BigNumberish;
+    frequency: BigNumberish;
     openingPositionCondition: Types.ValueComparisonStruct;
     stopConditions: Types.StopConditionStruct[];
     takeProfitCondition: Types.TradingStopConditionStruct;
     stopLossCondition: Types.TradingStopConditionStruct;
-    ammRouterVersion: PromiseOrValue<BigNumberish>;
+    ammRouterVersion: BigNumberish;
   };
 
   export type PocketStructOutput = [
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    number,
-    string,
-    string,
-    string,
-    string,
-    BigNumber,
-    BigNumber,
-    BigNumber,
-    Types.ValueComparisonStructOutput,
-    Types.StopConditionStructOutput[],
-    Types.TradingStopConditionStructOutput,
-    Types.TradingStopConditionStructOutput,
-    number
+    id: string,
+    totalDepositedBaseAmount: bigint,
+    totalSwappedBaseAmount: bigint,
+    totalReceivedTargetAmount: bigint,
+    totalClosedPositionInTargetTokenAmount: bigint,
+    totalReceivedFundInBaseTokenAmount: bigint,
+    baseTokenBalance: bigint,
+    targetTokenBalance: bigint,
+    executedBatchAmount: bigint,
+    nextScheduledExecutionAt: bigint,
+    status: bigint,
+    owner: string,
+    ammRouterAddress: string,
+    baseTokenAddress: string,
+    targetTokenAddress: string,
+    startAt: bigint,
+    batchVolume: bigint,
+    frequency: bigint,
+    openingPositionCondition: Types.ValueComparisonStructOutput,
+    stopConditions: Types.StopConditionStructOutput[],
+    takeProfitCondition: Types.TradingStopConditionStructOutput,
+    stopLossCondition: Types.TradingStopConditionStructOutput,
+    ammRouterVersion: bigint
   ] & {
     id: string;
-    totalDepositedBaseAmount: BigNumber;
-    totalSwappedBaseAmount: BigNumber;
-    totalReceivedTargetAmount: BigNumber;
-    totalClosedPositionInTargetTokenAmount: BigNumber;
-    totalReceivedFundInBaseTokenAmount: BigNumber;
-    baseTokenBalance: BigNumber;
-    targetTokenBalance: BigNumber;
-    executedBatchAmount: BigNumber;
-    nextScheduledExecutionAt: BigNumber;
-    status: number;
+    totalDepositedBaseAmount: bigint;
+    totalSwappedBaseAmount: bigint;
+    totalReceivedTargetAmount: bigint;
+    totalClosedPositionInTargetTokenAmount: bigint;
+    totalReceivedFundInBaseTokenAmount: bigint;
+    baseTokenBalance: bigint;
+    targetTokenBalance: bigint;
+    executedBatchAmount: bigint;
+    nextScheduledExecutionAt: bigint;
+    status: bigint;
     owner: string;
     ammRouterAddress: string;
     baseTokenAddress: string;
     targetTokenAddress: string;
-    startAt: BigNumber;
-    batchVolume: BigNumber;
-    frequency: BigNumber;
+    startAt: bigint;
+    batchVolume: bigint;
+    frequency: bigint;
     openingPositionCondition: Types.ValueComparisonStructOutput;
     stopConditions: Types.StopConditionStructOutput[];
     takeProfitCondition: Types.TradingStopConditionStructOutput;
     stopLossCondition: Types.TradingStopConditionStructOutput;
-    ammRouterVersion: number;
+    ammRouterVersion: bigint;
   };
 }
 
 export declare namespace Params {
   export type CreatePocketParamsStruct = {
-    id: PromiseOrValue<string>;
-    owner: PromiseOrValue<string>;
-    ammRouterAddress: PromiseOrValue<string>;
-    baseTokenAddress: PromiseOrValue<string>;
-    targetTokenAddress: PromiseOrValue<string>;
-    ammRouterVersion: PromiseOrValue<BigNumberish>;
-    startAt: PromiseOrValue<BigNumberish>;
-    batchVolume: PromiseOrValue<BigNumberish>;
+    id: string;
+    owner: AddressLike;
+    ammRouterAddress: AddressLike;
+    baseTokenAddress: AddressLike;
+    targetTokenAddress: AddressLike;
+    ammRouterVersion: BigNumberish;
+    startAt: BigNumberish;
+    batchVolume: BigNumberish;
     stopConditions: Types.StopConditionStruct[];
-    frequency: PromiseOrValue<BigNumberish>;
+    frequency: BigNumberish;
     openingPositionCondition: Types.ValueComparisonStruct;
     takeProfitCondition: Types.TradingStopConditionStruct;
     stopLossCondition: Types.TradingStopConditionStruct;
   };
 
   export type CreatePocketParamsStructOutput = [
-    string,
-    string,
-    string,
-    string,
-    string,
-    number,
-    BigNumber,
-    BigNumber,
-    Types.StopConditionStructOutput[],
-    BigNumber,
-    Types.ValueComparisonStructOutput,
-    Types.TradingStopConditionStructOutput,
-    Types.TradingStopConditionStructOutput
+    id: string,
+    owner: string,
+    ammRouterAddress: string,
+    baseTokenAddress: string,
+    targetTokenAddress: string,
+    ammRouterVersion: bigint,
+    startAt: bigint,
+    batchVolume: bigint,
+    stopConditions: Types.StopConditionStructOutput[],
+    frequency: bigint,
+    openingPositionCondition: Types.ValueComparisonStructOutput,
+    takeProfitCondition: Types.TradingStopConditionStructOutput,
+    stopLossCondition: Types.TradingStopConditionStructOutput
   ] & {
     id: string;
     owner: string;
     ammRouterAddress: string;
     baseTokenAddress: string;
     targetTokenAddress: string;
-    ammRouterVersion: number;
-    startAt: BigNumber;
-    batchVolume: BigNumber;
+    ammRouterVersion: bigint;
+    startAt: bigint;
+    batchVolume: bigint;
     stopConditions: Types.StopConditionStructOutput[];
-    frequency: BigNumber;
+    frequency: bigint;
     openingPositionCondition: Types.ValueComparisonStructOutput;
     takeProfitCondition: Types.TradingStopConditionStructOutput;
     stopLossCondition: Types.TradingStopConditionStructOutput;
   };
 
   export type UpdatePocketParamsStruct = {
-    id: PromiseOrValue<string>;
-    startAt: PromiseOrValue<BigNumberish>;
-    batchVolume: PromiseOrValue<BigNumberish>;
+    id: string;
+    startAt: BigNumberish;
+    batchVolume: BigNumberish;
     stopConditions: Types.StopConditionStruct[];
-    frequency: PromiseOrValue<BigNumberish>;
+    frequency: BigNumberish;
     openingPositionCondition: Types.ValueComparisonStruct;
     takeProfitCondition: Types.TradingStopConditionStruct;
     stopLossCondition: Types.TradingStopConditionStruct;
   };
 
   export type UpdatePocketParamsStructOutput = [
-    string,
-    BigNumber,
-    BigNumber,
-    Types.StopConditionStructOutput[],
-    BigNumber,
-    Types.ValueComparisonStructOutput,
-    Types.TradingStopConditionStructOutput,
-    Types.TradingStopConditionStructOutput
+    id: string,
+    startAt: bigint,
+    batchVolume: bigint,
+    stopConditions: Types.StopConditionStructOutput[],
+    frequency: bigint,
+    openingPositionCondition: Types.ValueComparisonStructOutput,
+    takeProfitCondition: Types.TradingStopConditionStructOutput,
+    stopLossCondition: Types.TradingStopConditionStructOutput
   ] & {
     id: string;
-    startAt: BigNumber;
-    batchVolume: BigNumber;
+    startAt: bigint;
+    batchVolume: bigint;
     stopConditions: Types.StopConditionStructOutput[];
-    frequency: BigNumber;
+    frequency: bigint;
     openingPositionCondition: Types.ValueComparisonStructOutput;
     takeProfitCondition: Types.TradingStopConditionStructOutput;
     stopLossCondition: Types.TradingStopConditionStructOutput;
   };
 
   export type UpdatePocketClosingPositionStatsParamsStruct = {
-    id: PromiseOrValue<string>;
-    actor: PromiseOrValue<string>;
-    swappedTargetTokenAmount: PromiseOrValue<BigNumberish>;
-    receivedBaseTokenAmount: PromiseOrValue<BigNumberish>;
+    id: string;
+    actor: AddressLike;
+    swappedTargetTokenAmount: BigNumberish;
+    receivedBaseTokenAmount: BigNumberish;
   };
 
   export type UpdatePocketClosingPositionStatsParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    BigNumber
+    id: string,
+    actor: string,
+    swappedTargetTokenAmount: bigint,
+    receivedBaseTokenAmount: bigint
   ] & {
     id: string;
     actor: string;
-    swappedTargetTokenAmount: BigNumber;
-    receivedBaseTokenAmount: BigNumber;
+    swappedTargetTokenAmount: bigint;
+    receivedBaseTokenAmount: bigint;
   };
 
   export type UpdatePocketDepositParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    tokenAddress: PromiseOrValue<string>;
+    actor: AddressLike;
+    id: string;
+    amount: BigNumberish;
+    tokenAddress: AddressLike;
   };
 
   export type UpdatePocketDepositParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    string
-  ] & { actor: string; id: string; amount: BigNumber; tokenAddress: string };
+    actor: string,
+    id: string,
+    amount: bigint,
+    tokenAddress: string
+  ] & { actor: string; id: string; amount: bigint; tokenAddress: string };
 
   export type UpdatePocketStatusParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-    status: PromiseOrValue<BigNumberish>;
+    actor: AddressLike;
+    id: string;
+    status: BigNumberish;
   };
 
   export type UpdatePocketStatusParamsStructOutput = [
-    string,
-    string,
-    number
-  ] & { actor: string; id: string; status: number };
+    actor: string,
+    id: string,
+    status: bigint
+  ] & { actor: string; id: string; status: bigint };
 
   export type UpdatePocketTradingStatsParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-    swappedBaseTokenAmount: PromiseOrValue<BigNumberish>;
-    receivedTargetTokenAmount: PromiseOrValue<BigNumberish>;
+    actor: AddressLike;
+    id: string;
+    swappedBaseTokenAmount: BigNumberish;
+    receivedTargetTokenAmount: BigNumberish;
   };
 
   export type UpdatePocketTradingStatsParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    BigNumber
+    actor: string,
+    id: string,
+    swappedBaseTokenAmount: bigint,
+    receivedTargetTokenAmount: bigint
   ] & {
     actor: string;
     id: string;
-    swappedBaseTokenAmount: BigNumber;
-    receivedTargetTokenAmount: BigNumber;
+    swappedBaseTokenAmount: bigint;
+    receivedTargetTokenAmount: bigint;
   };
 
   export type UpdatePocketWithdrawalParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-  };
-
-  export type UpdatePocketWithdrawalParamsStructOutput = [string, string] & {
-    actor: string;
+    actor: AddressLike;
     id: string;
   };
+
+  export type UpdatePocketWithdrawalParamsStructOutput = [
+    actor: string,
+    id: string
+  ] & { actor: string; id: string };
 }
 
-export interface PocketRegistryInterface extends utils.Interface {
-  functions: {
-    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "OPERATOR()": FunctionFragment;
-    "PERCENTAGE_PRECISION()": FunctionFragment;
-    "RELAYER()": FunctionFragment;
-    "allowedInteractiveAddresses(address)": FunctionFragment;
-    "blacklistedIdMap(string)": FunctionFragment;
-    "getBalanceInfoOf(string)": FunctionFragment;
-    "getOwnerOf(string)": FunctionFragment;
-    "getRoleAdmin(bytes32)": FunctionFragment;
-    "getStopConditionsOf(string)": FunctionFragment;
-    "getTradingInfoOf(string)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "hasRole(bytes32,address)": FunctionFragment;
-    "initialize()": FunctionFragment;
-    "initializeUserPocket((string,address,address,address,address,uint8,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)))": FunctionFragment;
-    "isAbleToClose(string,address)": FunctionFragment;
-    "isAbleToDeposit(string,address)": FunctionFragment;
-    "isAbleToPause(string,address)": FunctionFragment;
-    "isAbleToRestart(string,address)": FunctionFragment;
-    "isAbleToUpdate(string,address)": FunctionFragment;
-    "isAbleToWithdraw(string,address)": FunctionFragment;
-    "isOwnerOf(string,address)": FunctionFragment;
-    "isReadyToClosePosition(string)": FunctionFragment;
-    "isReadyToSwap(string)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "pause()": FunctionFragment;
-    "paused()": FunctionFragment;
-    "pockets(string)": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
-    "shouldClosePocket(string)": FunctionFragment;
-    "shouldOpenPosition(string,uint256,uint256)": FunctionFragment;
-    "shouldStopLoss(string,uint256,uint256)": FunctionFragment;
-    "shouldTakeProfit(string,uint256,uint256)": FunctionFragment;
-    "supportsInterface(bytes4)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "unpause()": FunctionFragment;
-    "updatePocket((string,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)),string)": FunctionFragment;
-    "updatePocketClosingPositionStats((string,address,uint256,uint256),string)": FunctionFragment;
-    "updatePocketDepositStats((address,string,uint256,address),string)": FunctionFragment;
-    "updatePocketStatus((address,string,uint8),string)": FunctionFragment;
-    "updatePocketTradingStats((address,string,uint256,uint256),string)": FunctionFragment;
-    "updatePocketWithdrawalStats((address,string),string)": FunctionFragment;
-    "whitelistAddress(address,bool)": FunctionFragment;
-  };
-
+export interface PocketRegistryInterface extends Interface {
   getFunction(
-    nameOrSignatureOrTopic:
+    nameOrSignature:
       | "DEFAULT_ADMIN_ROLE"
       | "OPERATOR"
       | "PERCENTAGE_PRECISION"
@@ -388,6 +336,20 @@ export interface PocketRegistryInterface extends utils.Interface {
       | "whitelistAddress"
   ): FunctionFragment;
 
+  getEvent(
+    nameOrSignatureOrTopic:
+      | "AddressWhitelisted"
+      | "Initialized"
+      | "OwnershipTransferred"
+      | "Paused"
+      | "PocketInitialized"
+      | "PocketUpdated"
+      | "RoleAdminChanged"
+      | "RoleGranted"
+      | "RoleRevoked"
+      | "Unpaused"
+  ): EventFragment;
+
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
     values?: undefined
@@ -400,39 +362,36 @@ export interface PocketRegistryInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "RELAYER", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "allowedInteractiveAddresses",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "blacklistedIdMap",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getBalanceInfoOf",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
-  encodeFunctionData(
-    functionFragment: "getOwnerOf",
-    values: [PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "getOwnerOf", values: [string]): string;
   encodeFunctionData(
     functionFragment: "getRoleAdmin",
-    values: [PromiseOrValue<BytesLike>]
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getStopConditionsOf",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getTradingInfoOf",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "grantRole",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "hasRole",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -444,129 +403,108 @@ export interface PocketRegistryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToClose",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToDeposit",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToPause",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToRestart",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToUpdate",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isAbleToWithdraw",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isOwnerOf",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    values: [string, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "isReadyToClosePosition",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "isReadyToSwap",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "pockets",
-    values: [PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "pockets", values: [string]): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "renounceRole",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "revokeRole",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+    values: [BytesLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "shouldClosePocket",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "shouldOpenPosition",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "shouldStopLoss",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "shouldTakeProfit",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
-    values: [PromiseOrValue<BytesLike>]
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "updatePocket",
-    values: [Params.UpdatePocketParamsStruct, PromiseOrValue<string>]
+    values: [Params.UpdatePocketParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePocketClosingPositionStats",
-    values: [
-      Params.UpdatePocketClosingPositionStatsParamsStruct,
-      PromiseOrValue<string>
-    ]
+    values: [Params.UpdatePocketClosingPositionStatsParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePocketDepositStats",
-    values: [Params.UpdatePocketDepositParamsStruct, PromiseOrValue<string>]
+    values: [Params.UpdatePocketDepositParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePocketStatus",
-    values: [Params.UpdatePocketStatusParamsStruct, PromiseOrValue<string>]
+    values: [Params.UpdatePocketStatusParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePocketTradingStats",
-    values: [
-      Params.UpdatePocketTradingStatsParamsStruct,
-      PromiseOrValue<string>
-    ]
+    values: [Params.UpdatePocketTradingStatsParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "updatePocketWithdrawalStats",
-    values: [Params.UpdatePocketWithdrawalParamsStruct, PromiseOrValue<string>]
+    values: [Params.UpdatePocketWithdrawalParamsStruct, string]
   ): string;
   encodeFunctionData(
     functionFragment: "whitelistAddress",
-    values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
+    values: [AddressLike, boolean]
   ): string;
 
   decodeFunctionResult(
@@ -710,1589 +648,1023 @@ export interface PocketRegistryInterface extends utils.Interface {
     functionFragment: "whitelistAddress",
     data: BytesLike
   ): Result;
-
-  events: {
-    "AddressWhitelisted(address,address,bool)": EventFragment;
-    "Initialized(uint8)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
-    "PocketInitialized(address,string,address,tuple,uint256)": EventFragment;
-    "PocketUpdated(address,string,address,string,tuple,uint256)": EventFragment;
-    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
-    "RoleGranted(bytes32,address,address)": EventFragment;
-    "RoleRevoked(bytes32,address,address)": EventFragment;
-    "Unpaused(address)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "AddressWhitelisted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PocketInitialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PocketUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
-export interface AddressWhitelistedEventObject {
-  actor: string;
-  mintAddress: string;
-  value: boolean;
+export namespace AddressWhitelistedEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    mintAddress: AddressLike,
+    value: boolean
+  ];
+  export type OutputTuple = [
+    actor: string,
+    mintAddress: string,
+    value: boolean
+  ];
+  export interface OutputObject {
+    actor: string;
+    mintAddress: string;
+    value: boolean;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type AddressWhitelistedEvent = TypedEvent<
-  [string, string, boolean],
-  AddressWhitelistedEventObject
->;
 
-export type AddressWhitelistedEventFilter =
-  TypedEventFilter<AddressWhitelistedEvent>;
-
-export interface InitializedEventObject {
-  version: number;
+export namespace InitializedEvent {
+  export type InputTuple = [version: BigNumberish];
+  export type OutputTuple = [version: bigint];
+  export interface OutputObject {
+    version: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
-export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
-
-export interface OwnershipTransferredEventObject {
-  previousOwner: string;
-  newOwner: string;
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type OwnershipTransferredEvent = TypedEvent<
-  [string, string],
-  OwnershipTransferredEventObject
->;
 
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
-
-export interface PausedEventObject {
-  account: string;
+export namespace PausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type PausedEvent = TypedEvent<[string], PausedEventObject>;
 
-export type PausedEventFilter = TypedEventFilter<PausedEvent>;
-
-export interface PocketInitializedEventObject {
-  actor: string;
-  pocketId: string;
-  owner: string;
-  pocketData: Types.PocketStructOutput;
-  timestamp: BigNumber;
+export namespace PocketInitializedEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    owner: AddressLike,
+    pocketData: Types.PocketStruct,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    owner: string,
+    pocketData: Types.PocketStructOutput,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    owner: string;
+    pocketData: Types.PocketStructOutput;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type PocketInitializedEvent = TypedEvent<
-  [string, string, string, Types.PocketStructOutput, BigNumber],
-  PocketInitializedEventObject
->;
 
-export type PocketInitializedEventFilter =
-  TypedEventFilter<PocketInitializedEvent>;
-
-export interface PocketUpdatedEventObject {
-  actor: string;
-  pocketId: string;
-  owner: string;
-  reason: string;
-  pocketData: Types.PocketStructOutput;
-  timestamp: BigNumber;
+export namespace PocketUpdatedEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    owner: AddressLike,
+    reason: string,
+    pocketData: Types.PocketStruct,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    owner: string,
+    reason: string,
+    pocketData: Types.PocketStructOutput,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    owner: string;
+    reason: string;
+    pocketData: Types.PocketStructOutput;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type PocketUpdatedEvent = TypedEvent<
-  [string, string, string, string, Types.PocketStructOutput, BigNumber],
-  PocketUpdatedEventObject
->;
 
-export type PocketUpdatedEventFilter = TypedEventFilter<PocketUpdatedEvent>;
-
-export interface RoleAdminChangedEventObject {
-  role: string;
-  previousAdminRole: string;
-  newAdminRole: string;
+export namespace RoleAdminChangedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    previousAdminRole: BytesLike,
+    newAdminRole: BytesLike
+  ];
+  export type OutputTuple = [
+    role: string,
+    previousAdminRole: string,
+    newAdminRole: string
+  ];
+  export interface OutputObject {
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type RoleAdminChangedEvent = TypedEvent<
-  [string, string, string],
-  RoleAdminChangedEventObject
->;
 
-export type RoleAdminChangedEventFilter =
-  TypedEventFilter<RoleAdminChangedEvent>;
-
-export interface RoleGrantedEventObject {
-  role: string;
-  account: string;
-  sender: string;
+export namespace RoleGrantedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type RoleGrantedEvent = TypedEvent<
-  [string, string, string],
-  RoleGrantedEventObject
->;
 
-export type RoleGrantedEventFilter = TypedEventFilter<RoleGrantedEvent>;
-
-export interface RoleRevokedEventObject {
-  role: string;
-  account: string;
-  sender: string;
+export namespace RoleRevokedEvent {
+  export type InputTuple = [
+    role: BytesLike,
+    account: AddressLike,
+    sender: AddressLike
+  ];
+  export type OutputTuple = [role: string, account: string, sender: string];
+  export interface OutputObject {
+    role: string;
+    account: string;
+    sender: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type RoleRevokedEvent = TypedEvent<
-  [string, string, string],
-  RoleRevokedEventObject
->;
 
-export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
-
-export interface UnpausedEventObject {
-  account: string;
+export namespace UnpausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
-
-export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
 
 export interface PocketRegistry extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+  connect(runner?: ContractRunner | null): PocketRegistry;
+  waitForDeployment(): Promise<this>;
 
   interface: PocketRegistryInterface;
 
-  queryFilter<TEvent extends TypedEvent>(
-    event: TypedEventFilter<TEvent>,
+  queryFilter<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  queryFilter<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    fromBlockOrBlockhash?: string | number | undefined,
+    toBlock?: string | number | undefined
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
 
-  listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
+  on<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  on<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
 
-  functions: {
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+  once<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  once<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
 
-    OPERATOR(overrides?: CallOverrides): Promise<[string]>;
+  listeners<TCEvent extends TypedContractEvent>(
+    event: TCEvent
+  ): Promise<Array<TypedListener<TCEvent>>>;
+  listeners(eventName?: string): Promise<Array<Listener>>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-    PERCENTAGE_PRECISION(overrides?: CallOverrides): Promise<[BigNumber]>;
+  DEFAULT_ADMIN_ROLE: TypedContractMethod<[], [string], "view">;
 
-    RELAYER(overrides?: CallOverrides): Promise<[string]>;
+  OPERATOR: TypedContractMethod<[], [string], "view">;
 
-    allowedInteractiveAddresses(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  PERCENTAGE_PRECISION: TypedContractMethod<[], [bigint], "view">;
 
-    blacklistedIdMap(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  RELAYER: TypedContractMethod<[], [string], "view">;
 
-    getBalanceInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
+  allowedInteractiveAddresses: TypedContractMethod<
+    [arg0: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    getOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+  blacklistedIdMap: TypedContractMethod<[arg0: string], [boolean], "view">;
 
-    getRoleAdmin(
-      role: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+  getBalanceInfoOf: TypedContractMethod<
+    [pocketId: string],
+    [[bigint, bigint]],
+    "view"
+  >;
 
-    getStopConditionsOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[Types.StopConditionStructOutput[]]>;
+  getOwnerOf: TypedContractMethod<[pocketId: string], [string], "view">;
 
-    getTradingInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
+  getRoleAdmin: TypedContractMethod<[role: BytesLike], [string], "view">;
+
+  getStopConditionsOf: TypedContractMethod<
+    [pocketId: string],
+    [Types.StopConditionStructOutput[]],
+    "view"
+  >;
+
+  getTradingInfoOf: TypedContractMethod<
+    [pocketId: string],
+    [
       [
         string,
         string,
         string,
-        number,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
         Types.ValueComparisonStructOutput,
         Types.TradingStopConditionStructOutput,
         Types.TradingStopConditionStructOutput
       ]
-    >;
+    ],
+    "view"
+  >;
 
-    grantRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  grantRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-    hasRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  hasRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  initialize: TypedContractMethod<[], [void], "nonpayable">;
 
-    initializeUserPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  initializeUserPocket: TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
 
-    isAbleToClose(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToClose: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isAbleToDeposit(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToDeposit: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isAbleToPause(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToPause: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isAbleToRestart(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToRestart: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isAbleToUpdate(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToUpdate: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isAbleToWithdraw(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isAbleToWithdraw: TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      target: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isOwnerOf: TypedContractMethod<
+    [pocketId: string, target: AddressLike],
+    [boolean],
+    "view"
+  >;
 
-    isReadyToClosePosition(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isReadyToClosePosition: TypedContractMethod<
+    [pocketId: string],
+    [boolean],
+    "view"
+  >;
 
-    isReadyToSwap(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  isReadyToSwap: TypedContractMethod<[pocketId: string], [boolean], "view">;
 
-    owner(overrides?: CallOverrides): Promise<[string]>;
+  owner: TypedContractMethod<[], [string], "view">;
 
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  pause: TypedContractMethod<[], [void], "nonpayable">;
 
-    paused(overrides?: CallOverrides): Promise<[boolean]>;
+  paused: TypedContractMethod<[], [boolean], "view">;
 
-    pockets(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
+  pockets: TypedContractMethod<
+    [arg0: string],
+    [
       [
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        number,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
         string,
         string,
         string,
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
+        bigint,
+        bigint,
+        bigint,
         Types.ValueComparisonStructOutput,
         Types.TradingStopConditionStructOutput,
         Types.TradingStopConditionStructOutput,
-        number
+        bigint
       ] & {
         id: string;
-        totalDepositedBaseAmount: BigNumber;
-        totalSwappedBaseAmount: BigNumber;
-        totalReceivedTargetAmount: BigNumber;
-        totalClosedPositionInTargetTokenAmount: BigNumber;
-        totalReceivedFundInBaseTokenAmount: BigNumber;
-        baseTokenBalance: BigNumber;
-        targetTokenBalance: BigNumber;
-        executedBatchAmount: BigNumber;
-        nextScheduledExecutionAt: BigNumber;
-        status: number;
+        totalDepositedBaseAmount: bigint;
+        totalSwappedBaseAmount: bigint;
+        totalReceivedTargetAmount: bigint;
+        totalClosedPositionInTargetTokenAmount: bigint;
+        totalReceivedFundInBaseTokenAmount: bigint;
+        baseTokenBalance: bigint;
+        targetTokenBalance: bigint;
+        executedBatchAmount: bigint;
+        nextScheduledExecutionAt: bigint;
+        status: bigint;
         owner: string;
         ammRouterAddress: string;
         baseTokenAddress: string;
         targetTokenAddress: string;
-        startAt: BigNumber;
-        batchVolume: BigNumber;
-        frequency: BigNumber;
+        startAt: bigint;
+        batchVolume: bigint;
+        frequency: bigint;
         openingPositionCondition: Types.ValueComparisonStructOutput;
         takeProfitCondition: Types.TradingStopConditionStructOutput;
         stopLossCondition: Types.TradingStopConditionStructOutput;
-        ammRouterVersion: number;
+        ammRouterVersion: bigint;
       }
-    >;
+    ],
+    "view"
+  >;
 
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
-    renounceRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  renounceRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-    revokeRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  revokeRole: TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-    shouldClosePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  shouldClosePocket: TypedContractMethod<[pocketId: string], [boolean], "view">;
 
-    shouldOpenPosition(
-      pocketId: PromiseOrValue<string>,
-      swappedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  shouldOpenPosition: TypedContractMethod<
+    [
+      pocketId: string,
+      swappedBaseTokenAmount: BigNumberish,
+      receivedTargetTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
 
-    shouldStopLoss(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  shouldStopLoss: TypedContractMethod<
+    [
+      pocketId: string,
+      swappedTargetTokenAmount: BigNumberish,
+      receivedBaseTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
 
-    shouldTakeProfit(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  shouldTakeProfit: TypedContractMethod<
+    [
+      pocketId: string,
+      swappedTargetTokenAmount: BigNumberish,
+      receivedBaseTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
 
-    supportsInterface(
-      interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+  supportsInterface: TypedContractMethod<
+    [interfaceId: BytesLike],
+    [boolean],
+    "view"
+  >;
 
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  transferOwnership: TypedContractMethod<
+    [newOwner: AddressLike],
+    [void],
+    "nonpayable"
+  >;
 
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  unpause: TypedContractMethod<[], [void], "nonpayable">;
 
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  updatePocket: TypedContractMethod<
+    [params: Params.UpdatePocketParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
 
-    updatePocketClosingPositionStats(
+  updatePocketClosingPositionStats: TypedContractMethod<
+    [
       params: Params.UpdatePocketClosingPositionStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePocketDepositStats(
-      params: Params.UpdatePocketDepositParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePocketStatus(
-      params: Params.UpdatePocketStatusParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePocketTradingStats(
-      params: Params.UpdatePocketTradingStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePocketWithdrawalStats(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    whitelistAddress(
-      interactiveAddress: PromiseOrValue<string>,
-      value: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-  };
-
-  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  OPERATOR(overrides?: CallOverrides): Promise<string>;
-
-  PERCENTAGE_PRECISION(overrides?: CallOverrides): Promise<BigNumber>;
-
-  RELAYER(overrides?: CallOverrides): Promise<string>;
-
-  allowedInteractiveAddresses(
-    arg0: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  blacklistedIdMap(
-    arg0: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  getBalanceInfoOf(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
-
-  getOwnerOf(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getRoleAdmin(
-    role: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getStopConditionsOf(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<Types.StopConditionStructOutput[]>;
-
-  getTradingInfoOf(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      string,
-      string,
-      string,
-      number,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      Types.ValueComparisonStructOutput,
-      Types.TradingStopConditionStructOutput,
-      Types.TradingStopConditionStructOutput
-    ]
+      reason: string
+    ],
+    [void],
+    "nonpayable"
   >;
 
-  grantRole(
-    role: PromiseOrValue<BytesLike>,
-    account: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  hasRole(
-    role: PromiseOrValue<BytesLike>,
-    account: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  initialize(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  initializeUserPocket(
-    params: Params.CreatePocketParamsStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  isAbleToClose(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isAbleToDeposit(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isAbleToPause(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isAbleToRestart(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isAbleToUpdate(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isAbleToWithdraw(
-    pocketId: PromiseOrValue<string>,
-    owner: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isOwnerOf(
-    pocketId: PromiseOrValue<string>,
-    target: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isReadyToClosePosition(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  isReadyToSwap(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  owner(overrides?: CallOverrides): Promise<string>;
-
-  pause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  paused(overrides?: CallOverrides): Promise<boolean>;
-
-  pockets(
-    arg0: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<
-    [
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      number,
-      string,
-      string,
-      string,
-      string,
-      BigNumber,
-      BigNumber,
-      BigNumber,
-      Types.ValueComparisonStructOutput,
-      Types.TradingStopConditionStructOutput,
-      Types.TradingStopConditionStructOutput,
-      number
-    ] & {
-      id: string;
-      totalDepositedBaseAmount: BigNumber;
-      totalSwappedBaseAmount: BigNumber;
-      totalReceivedTargetAmount: BigNumber;
-      totalClosedPositionInTargetTokenAmount: BigNumber;
-      totalReceivedFundInBaseTokenAmount: BigNumber;
-      baseTokenBalance: BigNumber;
-      targetTokenBalance: BigNumber;
-      executedBatchAmount: BigNumber;
-      nextScheduledExecutionAt: BigNumber;
-      status: number;
-      owner: string;
-      ammRouterAddress: string;
-      baseTokenAddress: string;
-      targetTokenAddress: string;
-      startAt: BigNumber;
-      batchVolume: BigNumber;
-      frequency: BigNumber;
-      openingPositionCondition: Types.ValueComparisonStructOutput;
-      takeProfitCondition: Types.TradingStopConditionStructOutput;
-      stopLossCondition: Types.TradingStopConditionStructOutput;
-      ammRouterVersion: number;
-    }
+  updatePocketDepositStats: TypedContractMethod<
+    [params: Params.UpdatePocketDepositParamsStruct, reason: string],
+    [void],
+    "nonpayable"
   >;
 
-  renounceOwnership(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  updatePocketStatus: TypedContractMethod<
+    [params: Params.UpdatePocketStatusParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
 
-  renounceRole(
-    role: PromiseOrValue<BytesLike>,
-    account: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  updatePocketTradingStats: TypedContractMethod<
+    [params: Params.UpdatePocketTradingStatsParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
 
-  revokeRole(
-    role: PromiseOrValue<BytesLike>,
-    account: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  updatePocketWithdrawalStats: TypedContractMethod<
+    [params: Params.UpdatePocketWithdrawalParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
 
-  shouldClosePocket(
-    pocketId: PromiseOrValue<string>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  whitelistAddress: TypedContractMethod<
+    [interactiveAddress: AddressLike, value: boolean],
+    [void],
+    "nonpayable"
+  >;
 
-  shouldOpenPosition(
-    pocketId: PromiseOrValue<string>,
-    swappedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-    receivedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-  shouldStopLoss(
-    pocketId: PromiseOrValue<string>,
-    swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-    receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  shouldTakeProfit(
-    pocketId: PromiseOrValue<string>,
-    swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-    receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  supportsInterface(
-    interfaceId: PromiseOrValue<BytesLike>,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  transferOwnership(
-    newOwner: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  unpause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocket(
-    params: Params.UpdatePocketParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocketClosingPositionStats(
-    params: Params.UpdatePocketClosingPositionStatsParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocketDepositStats(
-    params: Params.UpdatePocketDepositParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocketStatus(
-    params: Params.UpdatePocketStatusParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocketTradingStats(
-    params: Params.UpdatePocketTradingStatsParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocketWithdrawalStats(
-    params: Params.UpdatePocketWithdrawalParamsStruct,
-    reason: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  whitelistAddress(
-    interactiveAddress: PromiseOrValue<string>,
-    value: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  callStatic: {
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<string>;
-
-    PERCENTAGE_PRECISION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    RELAYER(overrides?: CallOverrides): Promise<string>;
-
-    allowedInteractiveAddresses(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    blacklistedIdMap(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    getBalanceInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    getOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getRoleAdmin(
-      role: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getStopConditionsOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<Types.StopConditionStructOutput[]>;
-
-    getTradingInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
+  getFunction(
+    nameOrSignature: "DEFAULT_ADMIN_ROLE"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "OPERATOR"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "PERCENTAGE_PRECISION"
+  ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "RELAYER"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "allowedInteractiveAddresses"
+  ): TypedContractMethod<[arg0: AddressLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "blacklistedIdMap"
+  ): TypedContractMethod<[arg0: string], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "getBalanceInfoOf"
+  ): TypedContractMethod<[pocketId: string], [[bigint, bigint]], "view">;
+  getFunction(
+    nameOrSignature: "getOwnerOf"
+  ): TypedContractMethod<[pocketId: string], [string], "view">;
+  getFunction(
+    nameOrSignature: "getRoleAdmin"
+  ): TypedContractMethod<[role: BytesLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "getStopConditionsOf"
+  ): TypedContractMethod<
+    [pocketId: string],
+    [Types.StopConditionStructOutput[]],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getTradingInfoOf"
+  ): TypedContractMethod<
+    [pocketId: string],
+    [
       [
         string,
         string,
         string,
-        number,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
         Types.ValueComparisonStructOutput,
         Types.TradingStopConditionStructOutput,
         Types.TradingStopConditionStructOutput
       ]
-    >;
-
-    grantRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    hasRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    initialize(overrides?: CallOverrides): Promise<void>;
-
-    initializeUserPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    isAbleToClose(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAbleToDeposit(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAbleToPause(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAbleToRestart(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAbleToUpdate(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isAbleToWithdraw(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      target: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isReadyToClosePosition(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    isReadyToSwap(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
-
-    pause(overrides?: CallOverrides): Promise<void>;
-
-    paused(overrides?: CallOverrides): Promise<boolean>;
-
-    pockets(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<
+    ],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "grantRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "hasRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "initialize"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "initializeUserPocket"
+  ): TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToClose"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToDeposit"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToPause"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToRestart"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToUpdate"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isAbleToWithdraw"
+  ): TypedContractMethod<
+    [pocketId: string, owner: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isOwnerOf"
+  ): TypedContractMethod<
+    [pocketId: string, target: AddressLike],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "isReadyToClosePosition"
+  ): TypedContractMethod<[pocketId: string], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "isReadyToSwap"
+  ): TypedContractMethod<[pocketId: string], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "pause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "paused"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "pockets"
+  ): TypedContractMethod<
+    [arg0: string],
+    [
       [
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        BigNumber,
-        number,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
+        bigint,
         string,
         string,
         string,
         string,
-        BigNumber,
-        BigNumber,
-        BigNumber,
+        bigint,
+        bigint,
+        bigint,
         Types.ValueComparisonStructOutput,
         Types.TradingStopConditionStructOutput,
         Types.TradingStopConditionStructOutput,
-        number
+        bigint
       ] & {
         id: string;
-        totalDepositedBaseAmount: BigNumber;
-        totalSwappedBaseAmount: BigNumber;
-        totalReceivedTargetAmount: BigNumber;
-        totalClosedPositionInTargetTokenAmount: BigNumber;
-        totalReceivedFundInBaseTokenAmount: BigNumber;
-        baseTokenBalance: BigNumber;
-        targetTokenBalance: BigNumber;
-        executedBatchAmount: BigNumber;
-        nextScheduledExecutionAt: BigNumber;
-        status: number;
+        totalDepositedBaseAmount: bigint;
+        totalSwappedBaseAmount: bigint;
+        totalReceivedTargetAmount: bigint;
+        totalClosedPositionInTargetTokenAmount: bigint;
+        totalReceivedFundInBaseTokenAmount: bigint;
+        baseTokenBalance: bigint;
+        targetTokenBalance: bigint;
+        executedBatchAmount: bigint;
+        nextScheduledExecutionAt: bigint;
+        status: bigint;
         owner: string;
         ammRouterAddress: string;
         baseTokenAddress: string;
         targetTokenAddress: string;
-        startAt: BigNumber;
-        batchVolume: BigNumber;
-        frequency: BigNumber;
+        startAt: bigint;
+        batchVolume: bigint;
+        frequency: bigint;
         openingPositionCondition: Types.ValueComparisonStructOutput;
         takeProfitCondition: Types.TradingStopConditionStructOutput;
         stopLossCondition: Types.TradingStopConditionStructOutput;
-        ammRouterVersion: number;
+        ammRouterVersion: bigint;
       }
-    >;
-
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    renounceRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    revokeRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    shouldClosePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    shouldOpenPosition(
-      pocketId: PromiseOrValue<string>,
-      swappedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    shouldStopLoss(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    shouldTakeProfit(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    supportsInterface(
-      interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    unpause(overrides?: CallOverrides): Promise<void>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePocketClosingPositionStats(
+    ],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "renounceOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "renounceRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "revokeRole"
+  ): TypedContractMethod<
+    [role: BytesLike, account: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "shouldClosePocket"
+  ): TypedContractMethod<[pocketId: string], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "shouldOpenPosition"
+  ): TypedContractMethod<
+    [
+      pocketId: string,
+      swappedBaseTokenAmount: BigNumberish,
+      receivedTargetTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "shouldStopLoss"
+  ): TypedContractMethod<
+    [
+      pocketId: string,
+      swappedTargetTokenAmount: BigNumberish,
+      receivedBaseTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "shouldTakeProfit"
+  ): TypedContractMethod<
+    [
+      pocketId: string,
+      swappedTargetTokenAmount: BigNumberish,
+      receivedBaseTokenAmount: BigNumberish
+    ],
+    [boolean],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "supportsInterface"
+  ): TypedContractMethod<[interfaceId: BytesLike], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "unpause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "updatePocket"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "updatePocketClosingPositionStats"
+  ): TypedContractMethod<
+    [
       params: Params.UpdatePocketClosingPositionStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
+      reason: string
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "updatePocketDepositStats"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketDepositParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "updatePocketStatus"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketStatusParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "updatePocketTradingStats"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketTradingStatsParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "updatePocketWithdrawalStats"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketWithdrawalParamsStruct, reason: string],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "whitelistAddress"
+  ): TypedContractMethod<
+    [interactiveAddress: AddressLike, value: boolean],
+    [void],
+    "nonpayable"
+  >;
 
-    updatePocketDepositStats(
-      params: Params.UpdatePocketDepositParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePocketStatus(
-      params: Params.UpdatePocketStatusParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePocketTradingStats(
-      params: Params.UpdatePocketTradingStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    updatePocketWithdrawalStats(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    whitelistAddress(
-      interactiveAddress: PromiseOrValue<string>,
-      value: PromiseOrValue<boolean>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-  };
+  getEvent(
+    key: "AddressWhitelisted"
+  ): TypedContractEvent<
+    AddressWhitelistedEvent.InputTuple,
+    AddressWhitelistedEvent.OutputTuple,
+    AddressWhitelistedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Initialized"
+  ): TypedContractEvent<
+    InitializedEvent.InputTuple,
+    InitializedEvent.OutputTuple,
+    InitializedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferred"
+  ): TypedContractEvent<
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
+  >;
+  getEvent(
+    key: "Paused"
+  ): TypedContractEvent<
+    PausedEvent.InputTuple,
+    PausedEvent.OutputTuple,
+    PausedEvent.OutputObject
+  >;
+  getEvent(
+    key: "PocketInitialized"
+  ): TypedContractEvent<
+    PocketInitializedEvent.InputTuple,
+    PocketInitializedEvent.OutputTuple,
+    PocketInitializedEvent.OutputObject
+  >;
+  getEvent(
+    key: "PocketUpdated"
+  ): TypedContractEvent<
+    PocketUpdatedEvent.InputTuple,
+    PocketUpdatedEvent.OutputTuple,
+    PocketUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleAdminChanged"
+  ): TypedContractEvent<
+    RoleAdminChangedEvent.InputTuple,
+    RoleAdminChangedEvent.OutputTuple,
+    RoleAdminChangedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleGranted"
+  ): TypedContractEvent<
+    RoleGrantedEvent.InputTuple,
+    RoleGrantedEvent.OutputTuple,
+    RoleGrantedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RoleRevoked"
+  ): TypedContractEvent<
+    RoleRevokedEvent.InputTuple,
+    RoleRevokedEvent.OutputTuple,
+    RoleRevokedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Unpaused"
+  ): TypedContractEvent<
+    UnpausedEvent.InputTuple,
+    UnpausedEvent.OutputTuple,
+    UnpausedEvent.OutputObject
+  >;
 
   filters: {
-    "AddressWhitelisted(address,address,bool)"(
-      actor?: PromiseOrValue<string> | null,
-      mintAddress?: PromiseOrValue<string> | null,
-      value?: null
-    ): AddressWhitelistedEventFilter;
-    AddressWhitelisted(
-      actor?: PromiseOrValue<string> | null,
-      mintAddress?: PromiseOrValue<string> | null,
-      value?: null
-    ): AddressWhitelistedEventFilter;
-
-    "Initialized(uint8)"(version?: null): InitializedEventFilter;
-    Initialized(version?: null): InitializedEventFilter;
-
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
-    OwnershipTransferred(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
-
-    "Paused(address)"(account?: null): PausedEventFilter;
-    Paused(account?: null): PausedEventFilter;
-
-    "PocketInitialized(address,string,address,tuple,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      owner?: PromiseOrValue<string> | null,
-      pocketData?: null,
-      timestamp?: null
-    ): PocketInitializedEventFilter;
-    PocketInitialized(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      owner?: PromiseOrValue<string> | null,
-      pocketData?: null,
-      timestamp?: null
-    ): PocketInitializedEventFilter;
-
-    "PocketUpdated(address,string,address,string,tuple,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      owner?: PromiseOrValue<string> | null,
-      reason?: null,
-      pocketData?: null,
-      timestamp?: null
-    ): PocketUpdatedEventFilter;
-    PocketUpdated(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      owner?: PromiseOrValue<string> | null,
-      reason?: null,
-      pocketData?: null,
-      timestamp?: null
-    ): PocketUpdatedEventFilter;
-
-    "RoleAdminChanged(bytes32,bytes32,bytes32)"(
-      role?: PromiseOrValue<BytesLike> | null,
-      previousAdminRole?: PromiseOrValue<BytesLike> | null,
-      newAdminRole?: PromiseOrValue<BytesLike> | null
-    ): RoleAdminChangedEventFilter;
-    RoleAdminChanged(
-      role?: PromiseOrValue<BytesLike> | null,
-      previousAdminRole?: PromiseOrValue<BytesLike> | null,
-      newAdminRole?: PromiseOrValue<BytesLike> | null
-    ): RoleAdminChangedEventFilter;
-
-    "RoleGranted(bytes32,address,address)"(
-      role?: PromiseOrValue<BytesLike> | null,
-      account?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null
-    ): RoleGrantedEventFilter;
-    RoleGranted(
-      role?: PromiseOrValue<BytesLike> | null,
-      account?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null
-    ): RoleGrantedEventFilter;
-
-    "RoleRevoked(bytes32,address,address)"(
-      role?: PromiseOrValue<BytesLike> | null,
-      account?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null
-    ): RoleRevokedEventFilter;
-    RoleRevoked(
-      role?: PromiseOrValue<BytesLike> | null,
-      account?: PromiseOrValue<string> | null,
-      sender?: PromiseOrValue<string> | null
-    ): RoleRevokedEventFilter;
-
-    "Unpaused(address)"(account?: null): UnpausedEventFilter;
-    Unpaused(account?: null): UnpausedEventFilter;
-  };
-
-  estimateGas: {
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PERCENTAGE_PRECISION(overrides?: CallOverrides): Promise<BigNumber>;
-
-    RELAYER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    allowedInteractiveAddresses(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    blacklistedIdMap(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getBalanceInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getRoleAdmin(
-      role: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getStopConditionsOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTradingInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    grantRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    hasRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    initializeUserPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    isAbleToClose(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAbleToDeposit(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAbleToPause(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAbleToRestart(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAbleToUpdate(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isAbleToWithdraw(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      target: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isReadyToClosePosition(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isReadyToSwap(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pockets(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    renounceRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    revokeRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    shouldClosePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    shouldOpenPosition(
-      pocketId: PromiseOrValue<string>,
-      swappedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    shouldStopLoss(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    shouldTakeProfit(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    supportsInterface(
-      interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocketClosingPositionStats(
-      params: Params.UpdatePocketClosingPositionStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocketDepositStats(
-      params: Params.UpdatePocketDepositParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocketStatus(
-      params: Params.UpdatePocketStatusParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocketTradingStats(
-      params: Params.UpdatePocketTradingStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocketWithdrawalStats(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    whitelistAddress(
-      interactiveAddress: PromiseOrValue<string>,
-      value: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-  };
-
-  populateTransaction: {
-    DEFAULT_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PERCENTAGE_PRECISION(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    RELAYER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    allowedInteractiveAddresses(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    blacklistedIdMap(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getBalanceInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRoleAdmin(
-      role: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getStopConditionsOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getTradingInfoOf(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    grantRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    hasRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initializeUserPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToClose(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToDeposit(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToPause(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToRestart(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToUpdate(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isAbleToWithdraw(
-      pocketId: PromiseOrValue<string>,
-      owner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isOwnerOf(
-      pocketId: PromiseOrValue<string>,
-      target: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isReadyToClosePosition(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isReadyToSwap(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    pockets(
-      arg0: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    renounceRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    revokeRole(
-      role: PromiseOrValue<BytesLike>,
-      account: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    shouldClosePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    shouldOpenPosition(
-      pocketId: PromiseOrValue<string>,
-      swappedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    shouldStopLoss(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    shouldTakeProfit(
-      pocketId: PromiseOrValue<string>,
-      swappedTargetTokenAmount: PromiseOrValue<BigNumberish>,
-      receivedBaseTokenAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    supportsInterface(
-      interfaceId: PromiseOrValue<BytesLike>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocketClosingPositionStats(
-      params: Params.UpdatePocketClosingPositionStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocketDepositStats(
-      params: Params.UpdatePocketDepositParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocketStatus(
-      params: Params.UpdatePocketStatusParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocketTradingStats(
-      params: Params.UpdatePocketTradingStatsParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocketWithdrawalStats(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      reason: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    whitelistAddress(
-      interactiveAddress: PromiseOrValue<string>,
-      value: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    "AddressWhitelisted(address,address,bool)": TypedContractEvent<
+      AddressWhitelistedEvent.InputTuple,
+      AddressWhitelistedEvent.OutputTuple,
+      AddressWhitelistedEvent.OutputObject
+    >;
+    AddressWhitelisted: TypedContractEvent<
+      AddressWhitelistedEvent.InputTuple,
+      AddressWhitelistedEvent.OutputTuple,
+      AddressWhitelistedEvent.OutputObject
+    >;
+
+    "Initialized(uint8)": TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
+    Initialized: TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
+
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+
+    "Paused(address)": TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
+    Paused: TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
+
+    "PocketInitialized(address,string,address,tuple,uint256)": TypedContractEvent<
+      PocketInitializedEvent.InputTuple,
+      PocketInitializedEvent.OutputTuple,
+      PocketInitializedEvent.OutputObject
+    >;
+    PocketInitialized: TypedContractEvent<
+      PocketInitializedEvent.InputTuple,
+      PocketInitializedEvent.OutputTuple,
+      PocketInitializedEvent.OutputObject
+    >;
+
+    "PocketUpdated(address,string,address,string,tuple,uint256)": TypedContractEvent<
+      PocketUpdatedEvent.InputTuple,
+      PocketUpdatedEvent.OutputTuple,
+      PocketUpdatedEvent.OutputObject
+    >;
+    PocketUpdated: TypedContractEvent<
+      PocketUpdatedEvent.InputTuple,
+      PocketUpdatedEvent.OutputTuple,
+      PocketUpdatedEvent.OutputObject
+    >;
+
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+    RoleAdminChanged: TypedContractEvent<
+      RoleAdminChangedEvent.InputTuple,
+      RoleAdminChangedEvent.OutputTuple,
+      RoleAdminChangedEvent.OutputObject
+    >;
+
+    "RoleGranted(bytes32,address,address)": TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+    RoleGranted: TypedContractEvent<
+      RoleGrantedEvent.InputTuple,
+      RoleGrantedEvent.OutputTuple,
+      RoleGrantedEvent.OutputObject
+    >;
+
+    "RoleRevoked(bytes32,address,address)": TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+    RoleRevoked: TypedContractEvent<
+      RoleRevokedEvent.InputTuple,
+      RoleRevokedEvent.OutputTuple,
+      RoleRevokedEvent.OutputObject
+    >;
+
+    "Unpaused(address)": TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
+    Unpaused: TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
   };
 }

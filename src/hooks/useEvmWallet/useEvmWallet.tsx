@@ -306,7 +306,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const withdrawPocket = useCallback(
     async (pocketId: string) => {
       const pocketStatus = (await pocketRegistry.pockets(pocketId)).status;
-      if (pocketStatus !== 3) {
+      if (Number(pocketStatus) !== 3) {
         await closePocket(pocketId);
       } else {
         await contract.withdraw(pocketId);

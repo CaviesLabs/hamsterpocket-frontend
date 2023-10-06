@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import type { Provider } from "@ethersproject/providers";
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   OwnableUpgradeable,
   OwnableUpgradeableInterface,
@@ -75,17 +74,17 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class OwnableUpgradeable__factory {
   static readonly abi = _abi;
   static createInterface(): OwnableUpgradeableInterface {
-    return new utils.Interface(_abi) as OwnableUpgradeableInterface;
+    return new Interface(_abi) as OwnableUpgradeableInterface;
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider
+    runner?: ContractRunner | null
   ): OwnableUpgradeable {
-    return new Contract(address, _abi, signerOrProvider) as OwnableUpgradeable;
+    return new Contract(address, _abi, runner) as unknown as OwnableUpgradeable;
   }
 }

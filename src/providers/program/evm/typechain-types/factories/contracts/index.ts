@@ -4,7 +4,6 @@
 export * as iQuoterSol from "./IQuoter.sol";
 export * as iRouterV2Sol from "./IRouterV2.sol";
 export * as pocketVaultSol from "./PocketVault.sol";
-export * as quoterSol from "./Quoter.sol";
 export * as mock from "./mock";
 export { Etherman__factory } from "./Etherman__factory";
 export { IRouterV3__factory } from "./IRouterV3__factory";

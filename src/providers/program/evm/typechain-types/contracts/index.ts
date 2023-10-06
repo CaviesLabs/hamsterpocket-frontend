@@ -7,8 +7,6 @@ import type * as iRouterV2Sol from "./IRouterV2.sol";
 export type { iRouterV2Sol };
 import type * as pocketVaultSol from "./PocketVault.sol";
 export type { pocketVaultSol };
-import type * as quoterSol from "./Quoter.sol";
-export type { quoterSol };
 import type * as mock from "./mock";
 export type { mock };
 export type { Etherman } from "./Etherman";

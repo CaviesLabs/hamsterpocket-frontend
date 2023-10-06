@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import type { Provider } from "@ethersproject/providers";
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type {
   IQuoter,
   IQuoterInterface,
@@ -162,17 +161,14 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IQuoter__factory {
   static readonly abi = _abi;
   static createInterface(): IQuoterInterface {
-    return new utils.Interface(_abi) as IQuoterInterface;
+    return new Interface(_abi) as IQuoterInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): IQuoter {
-    return new Contract(address, _abi, signerOrProvider) as IQuoter;
+  static connect(address: string, runner?: ContractRunner | null): IQuoter {
+    return new Contract(address, _abi, runner) as unknown as IQuoter;
   }
 }

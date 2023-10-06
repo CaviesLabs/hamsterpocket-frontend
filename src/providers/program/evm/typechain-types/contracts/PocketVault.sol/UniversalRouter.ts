@@ -3,49 +3,35 @@
 /* eslint-disable */
 import type {
   BaseContract,
-  BigNumber,
   BigNumberish,
   BytesLike,
-  CallOverrides,
-  ContractTransaction,
-  PayableOverrides,
-  PopulatedTransaction,
-  Signer,
-  utils,
+  FunctionFragment,
+  Result,
+  Interface,
+  ContractRunner,
+  ContractMethod,
+  Listener,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
 import type {
-  TypedEventFilter,
-  TypedEvent,
+  TypedContractEvent,
+  TypedDeferredTopicFilter,
+  TypedEventLog,
   TypedListener,
-  OnEvent,
-  PromiseOrValue,
+  TypedContractMethod,
 } from "../../common";
 
-export interface UniversalRouterInterface extends utils.Interface {
-  functions: {
-    "execute(bytes,bytes[])": FunctionFragment;
-    "execute(bytes,bytes[],uint256)": FunctionFragment;
-  };
-
+export interface UniversalRouterInterface extends Interface {
   getFunction(
-    nameOrSignatureOrTopic:
-      | "execute(bytes,bytes[])"
-      | "execute(bytes,bytes[],uint256)"
+    nameOrSignature: "execute(bytes,bytes[])" | "execute(bytes,bytes[],uint256)"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "execute(bytes,bytes[])",
-    values: [PromiseOrValue<BytesLike>, PromiseOrValue<BytesLike>[]]
+    values: [BytesLike, BytesLike[]]
   ): string;
   encodeFunctionData(
     functionFragment: "execute(bytes,bytes[],uint256)",
-    values: [
-      PromiseOrValue<BytesLike>,
-      PromiseOrValue<BytesLike>[],
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [BytesLike, BytesLike[], BigNumberish]
   ): string;
 
   decodeFunctionResult(
@@ -56,108 +42,81 @@ export interface UniversalRouterInterface extends utils.Interface {
     functionFragment: "execute(bytes,bytes[],uint256)",
     data: BytesLike
   ): Result;
-
-  events: {};
 }
 
 export interface UniversalRouter extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+  connect(runner?: ContractRunner | null): UniversalRouter;
+  waitForDeployment(): Promise<this>;
 
   interface: UniversalRouterInterface;
 
-  queryFilter<TEvent extends TypedEvent>(
-    event: TypedEventFilter<TEvent>,
+  queryFilter<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  queryFilter<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    fromBlockOrBlockhash?: string | number | undefined,
+    toBlock?: string | number | undefined
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
 
-  listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
+  on<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  on<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
 
-  functions: {
-    "execute(bytes,bytes[])"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+  once<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  once<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
 
-    "execute(bytes,bytes[],uint256)"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-  };
+  listeners<TCEvent extends TypedContractEvent>(
+    event: TCEvent
+  ): Promise<Array<TypedListener<TCEvent>>>;
+  listeners(eventName?: string): Promise<Array<Listener>>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
 
-  "execute(bytes,bytes[])"(
-    commands: PromiseOrValue<BytesLike>,
-    inputs: PromiseOrValue<BytesLike>[],
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  "execute(bytes,bytes[])": TypedContractMethod<
+    [commands: BytesLike, inputs: BytesLike[]],
+    [void],
+    "payable"
+  >;
 
-  "execute(bytes,bytes[],uint256)"(
-    commands: PromiseOrValue<BytesLike>,
-    inputs: PromiseOrValue<BytesLike>[],
-    deadline: PromiseOrValue<BigNumberish>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  "execute(bytes,bytes[],uint256)": TypedContractMethod<
+    [commands: BytesLike, inputs: BytesLike[], deadline: BigNumberish],
+    [void],
+    "payable"
+  >;
 
-  callStatic: {
-    "execute(bytes,bytes[])"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<void>;
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
 
-    "execute(bytes,bytes[],uint256)"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-  };
+  getFunction(
+    nameOrSignature: "execute(bytes,bytes[])"
+  ): TypedContractMethod<
+    [commands: BytesLike, inputs: BytesLike[]],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "execute(bytes,bytes[],uint256)"
+  ): TypedContractMethod<
+    [commands: BytesLike, inputs: BytesLike[], deadline: BigNumberish],
+    [void],
+    "payable"
+  >;
 
   filters: {};
-
-  estimateGas: {
-    "execute(bytes,bytes[])"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    "execute(bytes,bytes[],uint256)"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-  };
-
-  populateTransaction: {
-    "execute(bytes,bytes[])"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    "execute(bytes,bytes[],uint256)"(
-      commands: PromiseOrValue<BytesLike>,
-      inputs: PromiseOrValue<BytesLike>[],
-      deadline: PromiseOrValue<BigNumberish>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-  };
 }
