@@ -20,7 +20,7 @@ import { WalletContextState } from "./types";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const WalletContext = createContext<WalletContextState>(null);
 
 /** @dev Expose wallet provider for usage. */

@@ -25,7 +25,7 @@ export type WhiteListConfigs = {
   [key: string]: WhitelistEntity;
 };
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
   liquidities: LiquidityEntity[];

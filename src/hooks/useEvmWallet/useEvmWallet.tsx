@@ -14,8 +14,6 @@ import {
   BigNumberish as BigNumber,
 } from "ethers";
 import {
-  PocketChef,
-  PocketRegistry,
   PocketChef__factory,
   PocketRegistry__factory,
 } from "@/src/providers/program/evm/typechain-types";
@@ -23,10 +21,7 @@ import { Params } from "@/src/providers/program/evm/typechain-types/contracts/Po
 
 import { useWalletClient } from "wagmi";
 import { PocketEntity } from "@/src/entities/pocket.entity";
-import {
-  ChainId,
-  PlatformConfigEntity,
-} from "@/src/entities/platform-config.entity";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import {
   EvmProgramService,
@@ -39,7 +34,7 @@ import { useEvmWalletKit } from "./evm-wallet-kit.provider";
 /** @dev Define the number of confirmations which each transaction should wait for. */
 const CONFIRMATIONS = 5;
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const EvmWalletContext = createContext<{
   signer: unknown;
   nativeBalance: string;
@@ -60,11 +55,45 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const client = useWalletClient();
   const { platformConfig, chainId } = usePlatformConfig();
   const { chain } = useEvmWalletKit();
-
   const [balance, setBalance] = useState<string>("0");
-  const [signer, setSigner] = useState<JsonRpcSigner>();
-  const [contract, initContract] = useState<PocketChef>();
-  const [pocketRegistry, initPocketRegistry] = useState<PocketRegistry>();
+
+  const signer = useMemo(() => {
+    if (client?.data && chain && platformConfig) {
+      const { account, chain, transport } = client.data;
+
+      if (chain.id === platformConfig?.chainId) {
+        const provider = new BrowserProvider(transport as any, {
+          chainId: chain.id,
+          name: chain.name,
+          ensAddress: chain.contracts?.ensRegistry?.address,
+        });
+
+        return new JsonRpcSigner(provider, account.address);
+      }
+    }
+
+    return null;
+  }, [client, chain, platformConfig]);
+
+  const pocketChef = useMemo(() => {
+    if (platformConfig && signer) {
+      return PocketChef__factory.connect(
+        platformConfig?.programAddress,
+        signer
+      );
+    }
+    return null;
+  }, [platformConfig, signer]);
+
+  const pocketRegistry = useMemo(() => {
+    if (platformConfig && signer) {
+      return PocketRegistry__factory.connect(
+        platformConfig?.programAddress,
+        signer
+      );
+    }
+    return null;
+  }, [platformConfig, signer]);
 
   // Initialize public client.
   const publicClient = useMemo(() => {
@@ -83,61 +112,11 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
     setBalance(formatEther(balance));
   }, [client, signer, publicClient]);
 
-  const handleSetupNewClient = async (
-    client: ReturnType<typeof useWalletClient>,
-    platformConfig?: PlatformConfigEntity
-  ) => {
-    const { account, chain, transport } = client.data;
-
-    if (!platformConfig) {
-      return;
-    }
-    if (chain.id !== platformConfig?.chainId) {
-      const provider = new BrowserProvider(transport as any, {
-        chainId: chain.id,
-        name: chain.name,
-        ensAddress: chain.contracts?.ensRegistry?.address,
-      });
-
-      setSigner(new JsonRpcSigner(provider, account.address));
-    }
-  };
-
-  // Convert wagmi client to rpc signer.
-  useEffect(() => {
-    if (!client?.data || chainId === ChainId.sol) return;
-    handleSetupNewClient(client, platformConfig);
-  }, [client, platformConfig]);
-
   // Fetch native balance.
   useEffect(() => {
     if (!signer || chainId === ChainId.sol) return;
     fetchNativeBalance();
   }, [signer]);
-
-  // Initialize contract.
-  useEffect(() => {
-    if (
-      !signer ||
-      !chainId ||
-      !platformConfig ||
-      chainId === ChainId.sol ||
-      chainId.includes("aptos")
-    )
-      return;
-
-    if (platformConfig?.programAddress) {
-      initContract(
-        PocketChef__factory.connect(platformConfig?.programAddress, signer)
-      );
-    }
-
-    if (platformConfig?.registryAddress) {
-      initPocketRegistry(
-        PocketRegistry__factory.connect(platformConfig?.registryAddress, signer)
-      );
-    }
-  }, [platformConfig, signer, chainId]);
 
   /**
    * @dev The function to create a pocket in evm.
@@ -156,7 +135,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       );
 
       /** @dev Execute on-chain */
-      const tx = await contract.createPocketAndDepositEther(
+      const tx = await pocketChef.createPocketAndDepositEther(
         { ...createdPocketParams, id: pocketId },
         { value: depositedAmount }
       );
@@ -167,7 +146,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Sync pocket. */
       await new EvmProgramService().sync(pocketId);
     },
-    [signer, contract, chainId]
+    [signer, pocketChef, chainId]
   );
 
   /**
@@ -176,14 +155,14 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const depositPocket = useCallback(
     async (pocketId: string, depositedAmount: BigNumber) => {
-      const tx = await contract.depositEther(pocketId, {
+      const tx = await pocketChef.depositEther(pocketId, {
         value: depositedAmount,
       });
 
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
     },
-    [signer, contract]
+    [signer, pocketChef]
   );
 
   /**
@@ -192,13 +171,14 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const closePocket = useCallback(
     async (pocketId: string) => {
-      const tx = await contract
+      console.log({ pocketChef, signer, platformConfig, client, chain });
+      const tx = await pocketChef
         .connect(signer)
         .multicall([
-          contract
+          pocketChef
             .connect(signer)
             .interface.encodeFunctionData("closePocket", [pocketId]),
-          contract
+          pocketChef
             .connect(signer)
             .interface.encodeFunctionData("withdraw", [pocketId]),
         ]);
@@ -206,7 +186,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
     },
-    [signer, contract]
+    [signer, pocketChef, platformConfig, client, chain]
   );
 
   /**
@@ -249,17 +229,17 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
         });
       }
 
-      const tx = await contract
+      const tx = await pocketChef
         .connect(signer)
         .multicall([
-          contract
+          pocketChef
             .connect(signer)
             .interface.encodeFunctionData("closePosition", [
               pocket.id || pocket._id,
               fee,
               0,
             ]),
-          contract
+          pocketChef
             .connect(signer)
             .interface.encodeFunctionData("withdraw", [
               pocket.id || pocket._id,
@@ -269,7 +249,7 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
     },
-    [signer, contract]
+    [signer, pocketChef]
   );
 
   /**
@@ -278,11 +258,11 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
    */
   const pausePocket = useCallback(
     async (pocketId: string) => {
-      const tx = await contract.pausePocket(pocketId);
+      const tx = await pocketChef.pausePocket(pocketId);
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
     },
-    [signer, contract]
+    [signer, pocketChef]
   );
 
   /**
@@ -292,11 +272,11 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
   const resumePocket = useCallback(
     async (pocketId: string) => {
       console.log("resume pocket", pocketId);
-      const tx = await contract.restartPocket(pocketId);
+      const tx = await pocketChef.restartPocket(pocketId);
       /** @dev Wait for confirmation. */
       await (tx as any).wait(CONFIRMATIONS);
     },
-    [signer, contract]
+    [signer, pocketChef]
   );
 
   /**
@@ -309,10 +289,10 @@ export const EvmWalletProvider: FC<{ children: ReactNode }> = (props) => {
       if (Number(pocketStatus) !== 3) {
         await closePocket(pocketId);
       } else {
-        await contract.withdraw(pocketId);
+        await pocketChef.withdraw(pocketId);
       }
     },
-    [signer, contract, pocketRegistry]
+    [signer, pocketChef, pocketRegistry]
   );
 
   return (

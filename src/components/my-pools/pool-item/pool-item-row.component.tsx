@@ -165,7 +165,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
+                href={`${dexUrl}?${platformConfig?.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >
@@ -173,7 +173,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
               </a>
             </p>
           </div>
-          <p className="text-dark50 text-[12px] regular-text relative top-[3px] md:top-[6px] flex items-center mt-[5px] mobile:float-right mobile:text-right relative">
+          <p className="text-dark50 text-[12px] regular-text top-[3px] md:top-[6px] flex items-center mt-[5px] mobile:float-right mobile:text-right relative">
             #{utilsProvider.makeShort(data.id)}
           </p>
         </div>

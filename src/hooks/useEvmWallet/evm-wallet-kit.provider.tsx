@@ -7,7 +7,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { configureChains, createConfig, WagmiConfig, Chain } from "wagmi";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const WalletKitContext = createContext<{ chain: Chain }>(null);
 
 /** @dev Expose wallet provider for usage. */

@@ -17,7 +17,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { AptosConnector } from "@/src/components/aptos-connector";
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const AptosWalletContext = createContext<{
   walletAddress: string;
   balance: number;
@@ -27,12 +27,15 @@ export const AptosWalletContext = createContext<{
 
   /**
    * @dev The function to create pocket.
+   * @param aptosWhiteLists
    * @param solCreatePocketDto
    * @param baseTokenDecimals
    * @param targetTokenDecimals
    * @param realBaseTokenDecimals
    * @param realTargetTokenDecimals
    * @param depositedAmount
+   * @param stopLossAmount
+   * @param takeProfitAmount
    */
   createPocket(
     aptosWhiteLists: { [key: string]: WhitelistEntity },
@@ -60,10 +63,10 @@ export const AptosWalletContext = createContext<{
 
   /**
    * @dev The function to withraw auto-closed pocket.
-   * @param @var {string} pocketId.
-   * @param @var {string} baseTokenAddress.
-   * @param @var {string} targetTokenAddress.
    * @returns {void}.
+   * @param pocketId
+   * @param baseTokenAddress
+   * @param targetTokenAddress
    */
   withdrawPocket(
     pocketId: string,
@@ -73,10 +76,10 @@ export const AptosWalletContext = createContext<{
 
   /**
    * @dev The function to close pocket and withdraw assets into owner's wallet.
-   * @param @var {string} pocketId.
-   * @param @var {string} baseTokenAddress.
-   * @param @var {string} targetTokenAddress.
    * @returns {void}.
+   * @param pocketId
+   * @param baseTokenAddress
+   * @param targetTokenAddress
    */
   closePocket(
     pocketId: string,
@@ -86,10 +89,10 @@ export const AptosWalletContext = createContext<{
 
   /**
    * @dev Deposit base token amount into pocket.
-   * @param @var {string} pocketId.
-   * @param @var {string} baseTokenAddress.
-   * @param @var {bigint} depositedAmount.
    * @returns {void}.
+   * @param pocketId
+   * @param baseTokenAddress
+   * @param depositedAmount
    */
   depositPocket(
     pocketId: string,
@@ -99,10 +102,10 @@ export const AptosWalletContext = createContext<{
 
   /**
    * @dev Deposit base token amount into pocket.
-   * @param @var {string} pocketId.
-   * @param @var {string} baseTokenAddress.
-   * @param @var {string} targetTokenAddress.
    * @returns {void}.
+   * @param pocketId
+   * @param baseTokenAddress
+   * @param targetTokenAddress
    */
   reversePocket(
     pocketId: string,

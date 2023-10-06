@@ -13,7 +13,7 @@ import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
 import { ChainId } from "@/src/entities/platform-config.entity";
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const AppWalletContext = createContext<AppWalletContextState>(null);
 
 /** @dev Expose wallet provider for usage. */
