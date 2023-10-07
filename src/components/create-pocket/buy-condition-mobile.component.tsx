@@ -1,14 +1,18 @@
 import { FC, useEffect, useMemo, useState } from "react";
+
 import { Input } from "@hamsterbox/ui-kit";
-import { UnCollapseArrowIcon } from "@/src/components/icons";
+import { Collapse } from "react-collapse";
+import { Avatar } from "antd";
+
+import { BN } from "@project-serum/anchor";
 import { PRICE_CONDITIONS } from "@/src/utils";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { DropdownSelect } from "@/src/components/select";
+import { ErrorLabel } from "@/src/components/error-label";
+import { UnCollapseArrowIcon } from "@/src/components/icons";
 import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { BN } from "@project-serum/anchor";
-import { ErrorLabel } from "@/src/components/error-label";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { Collapse } from "react-collapse";
+
 import UtilsProvider from "@/src/utils/utils.provider";
 
 export const BuyConditionMobile: FC<{
@@ -271,14 +275,19 @@ export const BuyConditionMobile: FC<{
                 />
               )}
               <div className="h-full flex items-center relative ml-[3px]">
-                <img
+                <Avatar
+                  alt="Image"
+                  className="!w-[24px] !h-[24px] flex justify-center items-center border-solid border-[2px] border-white text-[8px]"
                   src={
                     whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
                       ?.image
                   }
-                  alt="Image"
-                  className="!w-[24px] !h-[24px]"
-                />
+                >
+                  {
+                    whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                      ?.symbol
+                  }
+                </Avatar>
                 <p className="text-[16px] text-white ml-[5px]">
                   {
                     whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]

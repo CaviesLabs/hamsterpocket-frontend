@@ -11,11 +11,12 @@ import { Keypair } from "@solana/web3.js";
 import { WSOL_ADDRESS } from "@/src/utils";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import bigDecimal from "js-big-decimal";
+import { BN } from "@project-serum/anchor";
 
 /**
  * @dev The function to convert number to big ether number.
  */
-export const convertBigNumber = (value: number, decimals: number) => {
+export const convertBigNumber = (value: number | BN, decimals: number) => {
   // console.log(bigDecimal.multiply(parseFloat(value.toString()), decimals));
   return toBigInt(
     `0x${parseInt(
@@ -30,7 +31,7 @@ export const convertBigNumber = (value: number, decimals: number) => {
  * @param decimals
  * @returns
  */
-export const devideBigNumber = (value: number, decimals: number) => {
+export const devideBigNumber = (value: number | BN, decimals: number) => {
   return parseFloat(
     bigDecimal.divide(parseFloat(value.toString()), decimals, 8)
   );
@@ -62,7 +63,7 @@ export const convertToEtherStopCondition = (
       case "spentBaseTokenAmountReach":
         conditionOperator = "2";
         const solReverd = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, baseTokenDecimals)
         );
         ethValue = convertBigNumber(solReverd, 10 ** realBaseTokenDecimals);
@@ -70,7 +71,7 @@ export const convertToEtherStopCondition = (
       case "quoteTokenAmountReach":
         conditionOperator = "3";
         const solReverd1 = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, targetTokenDecimals)
         );
         ethValue = convertBigNumber(solReverd1, 10 ** realTargetTokenDecimals);

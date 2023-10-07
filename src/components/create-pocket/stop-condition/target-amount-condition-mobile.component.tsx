@@ -40,7 +40,7 @@ export const TargetAmountConditionMobile: FC<{
     (isPrimary: boolean) => {
       handleModifyStopConditions(
         "quoteTokenAmountReach",
-        new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
+        new BN((currentValue * Math.pow(10, targetTokenAddress[1])).toFixed(0)),
         isPrimary
       );
     },

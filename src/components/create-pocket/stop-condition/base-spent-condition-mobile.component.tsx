@@ -55,7 +55,7 @@ export const BaseAmountSpendConditionMobile: FC<{
     (isPrimary: boolean) => {
       handleModifyStopConditions(
         "spentBaseTokenAmountReach",
-        new BN(currentValue * Math.pow(10, baseTokenAddress[1])),
+        new BN((currentValue * Math.pow(10, baseTokenAddress[1])).toFixed(0)),
         isPrimary
       );
     },
