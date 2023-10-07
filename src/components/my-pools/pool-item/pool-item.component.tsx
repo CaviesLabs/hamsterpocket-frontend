@@ -41,20 +41,11 @@ export const PoolItem = (props: PoolItemProps) => {
   /** @dev Inject wallet account info. */
   const { chainId, platformConfig } = usePlatformConfig();
 
-  /** @dev Condition to show modal to deposit. */
-  const [depositedDisplayed, setDepositedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to close pocket. */
   const [closedDisplayed, setClosedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to pause pocket. */
   const [pausedDisplayed, setPausedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to resume pocket. */
   const [resumedDisplayed, setResumedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to claim fee create pocket. */
   const [claimFeeDisplayed, setClaimFeeDisplayed] = useState(false);
+  const [depositedDisplayed, setDepositedDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
