@@ -14,6 +14,7 @@ import { PriceConditionType } from "@/src/entities/pocket.entity";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 
 import UtilsProvider from "@/src/utils/utils.provider";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const BuyConditionMobile: FC<{
   buyConditionDisplayed: boolean;
@@ -56,7 +57,9 @@ export const BuyConditionMobile: FC<{
     setBuyCondition({
       tokenAddress: targetTokenAddress[0]?.toBase58()?.toString(),
       type: PriceConditionType.GT,
-      value: new BN(0 * Math.pow(10, targetTokenAddress?.[1])),
+      value: new BN(
+        multipleBigNumber(0, Math.pow(10, targetTokenAddress?.[1]))
+      ),
     });
   }, [props.buyConditionDisplayed]);
 
@@ -159,8 +162,10 @@ export const BuyConditionMobile: FC<{
                         return setBuyCondition({
                           ...buyCondition,
                           value: new BN(
-                            (parseFloat(val) || 0) *
+                            multipleBigNumber(
+                              parseFloat(val) || 0,
                               Math.pow(10, targetTokenAddress?.[1])
+                            )
                           ),
                         });
                       }
@@ -186,8 +191,10 @@ export const BuyConditionMobile: FC<{
                       setBuyCondition({
                         ...buyCondition,
                         fromValue: new BN(
-                          (parseFloat(val) || 0) *
+                          multipleBigNumber(
+                            parseFloat(val) || 0,
                             Math.pow(10, targetTokenAddress?.[1])
+                          )
                         ),
                       });
                     }}
@@ -222,8 +229,10 @@ export const BuyConditionMobile: FC<{
                       setBuyCondition({
                         ...buyCondition,
                         toValue: new BN(
-                          (parseFloat(val) || 0) *
+                          multipleBigNumber(
+                            parseFloat(val) || 0,
                             Math.pow(10, targetTokenAddress?.[1])
+                          )
                         ),
                       });
                     }}
@@ -240,8 +249,10 @@ export const BuyConditionMobile: FC<{
                       return setBuyCondition({
                         ...buyCondition,
                         value: new BN(
-                          (parseFloat(val) || 0) *
+                          multipleBigNumber(
+                            parseFloat(val) || 0,
                             Math.pow(10, targetTokenAddress?.[1])
+                          )
                         ),
                       });
                     }
@@ -267,8 +278,10 @@ export const BuyConditionMobile: FC<{
                     setBuyCondition({
                       ...buyCondition,
                       fromValue: new BN(
-                        (parseFloat(val) || 0) *
+                        multipleBigNumber(
+                          parseFloat(val) || 0,
                           Math.pow(10, targetTokenAddress?.[1])
+                        )
                       ),
                     });
                   }}

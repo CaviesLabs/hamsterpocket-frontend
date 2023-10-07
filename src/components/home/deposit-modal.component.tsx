@@ -13,6 +13,7 @@ import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
 import { useAptosWallet } from "@/src/hooks/useAptos";
 import { convertBigNumber as convertAptosNumber } from "@/src/utils/aptos.parser";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const DepositModal: FC<{
   isModalOpen: boolean;
@@ -126,7 +127,9 @@ export const DepositModal: FC<{
       setButtonText("Deposit");
     }
     setIsAmountSet(!isNaN(val));
-    setDepositedAmount(new BN(val * Math.pow(10, baseToken?.decimals || 0)));
+    setDepositedAmount(
+      new BN(multipleBigNumber(val, Math.pow(10, baseToken?.decimals || 0)))
+    );
   };
 
   const isDisabled = !isAmountSet || buttonText !== "Deposit";

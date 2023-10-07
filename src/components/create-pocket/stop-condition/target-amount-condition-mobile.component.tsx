@@ -5,6 +5,7 @@ import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { BN } from "@project-serum/anchor";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { Collapse } from "react-collapse";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const TargetAmountConditionMobile: FC<{
   displyed: boolean;
@@ -40,7 +41,9 @@ export const TargetAmountConditionMobile: FC<{
     (isPrimary: boolean) => {
       handleModifyStopConditions(
         "quoteTokenAmountReach",
-        new BN((currentValue * Math.pow(10, targetTokenAddress[1])).toFixed(0)),
+        new BN(
+          multipleBigNumber(currentValue, Math.pow(10, targetTokenAddress[1]))
+        ),
         isPrimary
       );
     },

@@ -38,6 +38,19 @@ export const devideBigNumber = (value: number | BN, decimals: number) => {
 };
 
 /**
+ * @dev The function to multiple big number.
+ * @param value
+ * @param decimals
+ * @returns
+ */
+export const multipleBigNumber = (value: number | BN, decimals: number) => {
+  return new bigDecimal(value.toString())
+    .multiply(new bigDecimal(decimals))
+    .getValue()
+    .toString();
+};
+
+/**
  * @param solStopConditions
  * @returns
  */
@@ -125,11 +138,11 @@ export const convertToEtherBuyCondition = (
 
   if (solBuyCondition[type].fromValue) {
     const fromValueReverted = devideBigNumber(
-      solBuyCondition[type].fromValue.toNumber(),
+      solBuyCondition[type].fromValue,
       Math.pow(10, targetTokenDecimals)
     );
     const toValueReverted = devideBigNumber(
-      solBuyCondition[type].toValue.toNumber(),
+      solBuyCondition[type].toValue,
       Math.pow(10, targetTokenDecimals)
     );
     return {
@@ -142,7 +155,7 @@ export const convertToEtherBuyCondition = (
     };
   } else {
     const valueReverted = devideBigNumber(
-      solBuyCondition[type].value.toNumber(),
+      solBuyCondition[type].value,
       Math.pow(10, targetTokenDecimals)
     );
     return {
@@ -205,7 +218,7 @@ export const createdPocketPramsParserEvm = (
      */
     batchVolume: convertBigNumber(
       devideBigNumber(
-        solCreatedPocketDto.batchVolume.toNumber(),
+        solCreatedPocketDto.batchVolume,
         Math.pow(10, baseTokenDecimals)
       ),
       Math.pow(10, realBaseTokenDecimals)

@@ -25,6 +25,7 @@ import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import {
   createdPocketPramsParserEvm,
   convertBigNumber,
+  multipleBigNumber,
 } from "@/src/utils/evm.parser";
 import { useAptosWallet } from "@/src/hooks/useAptos";
 
@@ -221,9 +222,11 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           parseInt((startAt.getTime() / 1000).toString()).toString()
         ),
         frequency: convertDurationsTimeToHours(frequency),
-        batchVolume: new BN(batchVolume * Math.pow(10, baseTokenAddress[1])),
+        batchVolume: new BN(
+          multipleBigNumber(batchVolume, Math.pow(10, baseTokenAddress[1]))
+        ),
         depositedAmount: new BN(
-          depositedAmount * Math.pow(10, baseTokenAddress[1])
+          multipleBigNumber(depositedAmount, Math.pow(10, baseTokenAddress[1]))
         ),
         side: sideMethod,
         marketId,
