@@ -211,7 +211,7 @@ const PocketDetailPage: NextPage = () => {
                 </div>
                 <BoughtTransaction pocket={pocket} />
               </div>
-              <div className="md:float-left mobile:hidden w-[20%] pt-[80px] pl-[20px]">
+              <div className="md:float-left mobile:hidden w-[25%] pt-[80px] pl-[20px]">
                 {activePockets?.length ? (
                   <div>
                     <p className="text-dark45 text-[20px] normal-text mb-[10px]">
