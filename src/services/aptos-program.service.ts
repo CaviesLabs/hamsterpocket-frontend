@@ -14,10 +14,13 @@ export class AptosProgramService {
 
   /**
    * @dev Create pocket.
-   * @param @var {string} chainName.
    * @params @var {string} walletAddress.
    * @params @var {CreatePocketParams} createPocketParams.
    * @params @var {DepositParams} depositParams.
+   * @param chainId
+   * @param walletAddress
+   * @param createPocketParams
+   * @param depositParams
    */
   public async createPocket(
     chainId: string,

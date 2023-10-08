@@ -53,7 +53,7 @@ export default function TableComponent() {
                       chainId === ChainId.sol
                         ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
                         : chainId.includes("aptos")
-                        ? `${platformConfig?.explorerUrl}coin/${h.tokenAddress}`
+                        ? `${platformConfig?.explorerUrl}coins/${h.tokenAddress}`
                         : `${platformConfig?.explorerUrl}token/${h.tokenAddress}`
                     )
                   }

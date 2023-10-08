@@ -161,7 +161,7 @@ export default function TableComponent() {
                             <a
                               href={
                                 chainId.includes("aptos")
-                                  ? `${platformConfig?.explorerUrl}version/${h.transactionId}`
+                                  ? `${platformConfig?.explorerUrl}transactions/${h.transactionId}`
                                   : `${platformConfig?.explorerUrl}tx/${h.transactionId}`
                               }
                               target="_blank"

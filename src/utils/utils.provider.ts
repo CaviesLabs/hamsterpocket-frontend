@@ -2,6 +2,11 @@ import { encode } from "bs58";
 import qs from "query-string";
 
 class UtilsProvider {
+  public pause(sec: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, sec * 1000);
+    });
+  }
   /**
    * Will gracefuly scroll the page
    * This function will scroll the page using

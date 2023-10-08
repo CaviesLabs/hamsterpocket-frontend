@@ -16,6 +16,7 @@ import { createdPocketPramsParserAptos } from "@/src/utils/aptos.parser";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { AptosConnector } from "@/src/components/aptos-connector";
+import UtilsProvider from "@/src/utils/utils.provider";
 
 /** @dev Initialize context. */
 export const AptosWalletContext = createContext<{
@@ -180,13 +181,14 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
       );
 
       /** @dev Execute transaction. */
-      console.log({ createdParams });
       const { pocketId } = await service.createPocket(
         chainId,
         account?.address?.toString(),
         createdParams,
         depositedParams
       );
+
+      await new UtilsProvider().pause(2);
 
       await service.sync(pocketId);
     },
@@ -283,7 +285,6 @@ export const AptosWalletProvider: FC<{ children: ReactNode }> = (props) => {
     ) => {
       if (!service || !platformConfig || !signer || !account) return;
       /** @dev Execute transaction. */
-      console.log({ depositedAmount });
       await service.depositPocket(pocketId, baseTokenAddress, depositedAmount);
     },
     [service, platformConfig, signer, account]
