@@ -4,6 +4,7 @@ import { CurrencyInput } from "@/src/components/currency-input";
 import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { BN } from "@project-serum/anchor";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const TargetAmountCondition: FC<{
   displyed: boolean;
@@ -34,7 +35,9 @@ export const TargetAmountCondition: FC<{
     (isPrimary: boolean) => {
       handleModifyStopConditions(
         "quoteTokenAmountReach",
-        new BN(currentValue * Math.pow(10, targetTokenAddress[1])),
+        new BN(
+          multipleBigNumber(currentValue, Math.pow(10, targetTokenAddress[1]))
+        ),
         isPrimary
       );
     },

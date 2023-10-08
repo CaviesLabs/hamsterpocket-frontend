@@ -9,6 +9,7 @@ import { BN } from "@project-serum/anchor";
 import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import UtilsProvider from "@/src/utils/utils.provider";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -46,7 +47,9 @@ export const BuyCondition: FC<{
     setBuyCondition({
       tokenAddress: targetTokenAddress[0]?.toBase58()?.toString(),
       type: PriceConditionType.GT,
-      value: new BN(0 * Math.pow(10, targetTokenAddress?.[1])),
+      value: new BN(
+        multipleBigNumber(0, Math.pow(10, targetTokenAddress?.[1]))
+      ),
     });
   }, [props.buyConditionDisplayed]);
 

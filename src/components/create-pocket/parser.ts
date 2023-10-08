@@ -44,7 +44,7 @@ export const parseStopConditionHumanValue = (condition: StopConditions) => {
    */
   if (condition.spentBaseTokenAmountReach) {
     return `${devideBigNumber(
-      (condition.spentBaseTokenAmountReach?.value as any)?.toNumber(),
+      condition.spentBaseTokenAmountReach?.value as any,
       Math.pow(10, baseTokenAddress?.[1])
     )} ${whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
   }
