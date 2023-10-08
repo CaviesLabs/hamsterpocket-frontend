@@ -10,6 +10,7 @@ import { ErrorLabel } from "@/src/components/error-label";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import UtilsProvider from "@/src/utils/utils.provider";
 import { multipleBigNumber } from "@/src/utils/evm.parser";
+import { Avatar } from "antd";
 
 export const BuyCondition: FC<{
   buyConditionDisplayed: boolean;
@@ -109,20 +110,13 @@ export const BuyCondition: FC<{
               className="md:hidden float-left mr-[5px] relative top-[3px]"
               size="34"
             />
-            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text">
+            <p className="text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text">
               Each batch {`(${UtilsProvider.formatLongNumber(batchVolume)}`}
             </p>
-            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+            <p className="text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               {whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.symbol}
             </p>
-            {/* <img
-              src={
-                whiteLists[baseTokenAddress[0]?.toBase58()?.toString()]?.image
-              }
-              alt="Image"
-              className="w-[13px] h-[13px] md:w-[24px] md:h-[24px] ml-[7px] relative top-[4px]"
-            /> */}
-            <p className="text-dark10 text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
+            <p className="text-[14px] md:text-[16px] normal-text mt-[10px] text-white bold-text ml-[3px]">
               ) can buy
             </p>
           </div>
@@ -221,14 +215,20 @@ export const BuyCondition: FC<{
               </>
             )}
             <div className="h-full flex items-center relative md:hidden top-[-10px] ml-[3px]">
-              <img
+              <Avatar
+                className={
+                  "w-[24px] h-[24px] flex items-center bg-dark70 border-solid border-[3px] border-white text-[8px]"
+                }
                 src={
                   whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
                     ?.image
                 }
-                alt="Image"
-                className="w-[24px] h-[24px]"
-              />
+              >
+                {
+                  whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                    ?.symbol
+                }
+              </Avatar>
               <p className="text-[16px] text-white ml-[5px]">
                 {
                   whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
@@ -238,13 +238,19 @@ export const BuyCondition: FC<{
             </div>
           </div>
           <div className="h-full flex items-center relative mobile:hidden">
-            <img
+            <Avatar
+              className={
+                "w-[24px] h-[24px] flex items-center bg-dark70 border-solid border-[3px] border-white text-[8px]"
+              }
               src={
                 whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]?.image
               }
-              alt="Image"
-              className="w-[24px] h-[24px]"
-            />
+            >
+              {
+                whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]
+                  ?.symbol
+              }
+            </Avatar>
             <p className="text-[16px] text-white ml-[5px]">
               {
                 whiteLists[targetTokenAddress[0]?.toBase58()?.toString()]

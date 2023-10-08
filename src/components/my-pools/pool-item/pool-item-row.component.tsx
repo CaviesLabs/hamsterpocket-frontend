@@ -310,7 +310,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       backgroundColor: "#735CF7",
                       color: "#FFFFFF",
                     }}
-                    text="Continue"
+                    text="Resume"
                     width="100%"
                     onClick={() => setResumedDisplayed(true)}
                   />
