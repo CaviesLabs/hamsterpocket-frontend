@@ -112,7 +112,12 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={`${dexUrl}?${platformConfig?.whitelistedRouters?.[0]?.inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters?.[0]?.outputTag}=${targetToken?.address}`}
+                                href={utilsProvider.getUrl(dexUrl, {
+                                  [platformConfig?.whitelistedRouters?.[0]
+                                    ?.inputTag]: baseToken?.address,
+                                  [platformConfig?.whitelistedRouters?.[0]
+                                    ?.outputTag]: targetToken?.address,
+                                })}
                                 target="_blank"
                                 className="ml-[10px]"
                               >
@@ -130,25 +135,8 @@ export default function TableComponent() {
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
-                          {/* {h.type === PoolType.DEPOSITED ||
-                          h.type === PoolType.WITHDRAWN ||
-                          h.type === PoolType.SWAPPED ? (
-                            <>
-                              <div>{h?.baseTokenAmount}</div>
-                            </>
-                          ) : (
-                            <div className="text-dark40">--</div>
-                          )} */}
                         </div>
                         <div className="col-span-2 text-center">
-                          {/* {h.type === PoolType.WITHDRAWN ||
-                          h.type === PoolType.SWAPPED ? (
-                            <>
-                              <div>{h?.targetTokenAmount}</div>
-                            </>
-                          ) : (
-                            <div className="text-dark40">--</div>
-                          )} */}
                           {h?.targetTokenAmount ? (
                             <div>{analyzeDecimals(h?.targetTokenAmount)}</div>
                           ) : (
@@ -217,7 +205,12 @@ export default function TableComponent() {
                                 {baseToken?.symbol}/{targetToken?.symbol}
                                 {baseToken?.address && targetToken?.address && (
                                   <a
-                                    href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
+                                    href={utilsProvider.getUrl(dexUrl, {
+                                      [platformConfig?.whitelistedRouters?.[0]
+                                        ?.inputTag]: baseToken?.address,
+                                      [platformConfig?.whitelistedRouters?.[0]
+                                        ?.outputTag]: targetToken?.address,
+                                    })}
                                     target="_blank"
                                     className="ml-[10px]"
                                   >

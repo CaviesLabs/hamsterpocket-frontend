@@ -165,7 +165,12 @@ export const PoolItemRow = (props: PoolItemProps) => {
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`${dexUrl}?${platformConfig?.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
+                href={utilsProvider.getUrl(dexUrl, {
+                  [platformConfig?.whitelistedRouters?.[0]?.inputTag]:
+                    baseToken?.address,
+                  [platformConfig?.whitelistedRouters?.[0]?.outputTag]:
+                    targetToken?.address,
+                })}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >
