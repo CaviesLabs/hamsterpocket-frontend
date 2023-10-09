@@ -1,24 +1,26 @@
+import bigDecimal from "js-big-decimal";
+import { Keypair } from "@solana/web3.js";
+import { WSOL_ADDRESS } from "@/src/utils";
+import { BN } from "@project-serum/anchor";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { ChainId } from "@/src/entities/platform-config.entity";
 import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+
 import {
+  PriceConditionType,
   BuyConditionOnChain as SolBuyConditionOnChain,
   StopConditionsOnChain as SolStopConditionsOnChain,
-  PriceConditionType,
 } from "@/src/entities/pocket.entity";
 import {
-  CreatePocketParams as CreatePocketParamsAptos,
   DepositParams,
+  CreatePocketParams as CreatePocketParamsAptos,
 } from "@/src/providers/program/aptos/params.type";
 import {
   AMM,
-  AutoCloseConditionClosedWith as AutoCloseConditionClosedWithAptos,
   OpenPositionOperator as OpenPositionOperatorAptos,
   StopConditionStoppedWith as StopConditionStoppedWithAptos,
+  AutoCloseConditionClosedWith as AutoCloseConditionClosedWithAptos,
 } from "@/src/providers/program/aptos/entities/pocket.entity";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
-import { Keypair } from "@solana/web3.js";
-import { WSOL_ADDRESS } from "@/src/utils";
-import { ChainId } from "@/src/entities/platform-config.entity";
-import bigDecimal from "js-big-decimal";
 
 /**
  * @dev The function to convert number to big aptos number.
@@ -35,9 +37,12 @@ export const convertBigNumber = (value: number, decimals: number) => {
  * @param decimals
  * @returns
  */
-export const devideBigNumber = (value: number, decimals: number) => {
-  return parseFloat(
-    bigDecimal.divide(parseFloat(value.toString()), decimals, 8)
+export const devideBigNumber = (value: number | BN, decimals: number) => {
+  return Number.parseFloat(
+    new bigDecimal(value.toString())
+      .divide(new bigDecimal(decimals), 8)
+      .getValue()
+      .toString()
   );
 };
 
@@ -60,7 +65,7 @@ export const convertToAptosStopCondition = (
       case "endTimeReach":
         conditionOperator =
           AutoCloseConditionClosedWithAptos.CLOSED_WITH_END_TIME;
-        aptosValue = (condition as any)[type]?.value?.toNumber()?.toString();
+        aptosValue = (condition as any)[type]?.value?.toString();
         break;
       case "batchAmountReach":
         conditionOperator =
@@ -70,7 +75,7 @@ export const convertToAptosStopCondition = (
         conditionOperator =
           AutoCloseConditionClosedWithAptos.CLOSED_WITH_SPENT_BASE_AMOUNT;
         const solReverd = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, baseTokenDecimals)
         );
         aptosValue = convertBigNumber(solReverd, 10 ** realBaseTokenDecimals);
@@ -79,7 +84,7 @@ export const convertToAptosStopCondition = (
         conditionOperator =
           AutoCloseConditionClosedWithAptos.CLOSED_WITH_RECEIVED_TARGET_AMOUNT;
         const solReverd1 = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, targetTokenDecimals)
         );
         aptosValue = convertBigNumber(
@@ -135,11 +140,11 @@ export const convertToAptosBuyCondition = (
 
   if (solBuyCondition[type].fromValue) {
     const fromValueReverted = devideBigNumber(
-      solBuyCondition[type].fromValue.toNumber(),
+      solBuyCondition[type].fromValue,
       Math.pow(10, targetTokenDecimals)
     );
     const toValueReverted = devideBigNumber(
-      solBuyCondition[type].toValue.toNumber(),
+      solBuyCondition[type].toValue,
       Math.pow(10, targetTokenDecimals)
     );
     return [
@@ -149,7 +154,7 @@ export const convertToAptosBuyCondition = (
     ];
   } else {
     const valueReverted = devideBigNumber(
-      solBuyCondition[type].value.toNumber(),
+      solBuyCondition[type].value,
       Math.pow(10, targetTokenDecimals)
     );
     return [
@@ -209,7 +214,7 @@ export const createdPocketPramsParserAptos = (
       /**
        * @dev Convert big number which already convert before to default.
        */
-      startAt: BigInt(solCreatedPocketDto.startAt.toNumber().toString()),
+      startAt: BigInt(solCreatedPocketDto.startAt.toString()),
       frequency: BigInt(
         solCreatedPocketDto.frequency?.hours?.toNumber()?.toString() * 3600
       ),
@@ -219,7 +224,7 @@ export const createdPocketPramsParserAptos = (
        */
       batchVolume: convertBigNumber(
         devideBigNumber(
-          solCreatedPocketDto.batchVolume.toNumber(),
+          solCreatedPocketDto.batchVolume,
           Math.pow(10, baseTokenDecimals)
         ),
         Math.pow(10, realBaseTokenDecimals)

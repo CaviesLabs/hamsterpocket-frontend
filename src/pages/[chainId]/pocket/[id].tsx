@@ -245,7 +245,7 @@ const PocketDetailPage: NextPage = () => {
                             </Avatar>
                           </div>
                           <div className="float-left ml-[10px]">
-                            <p className="text-white text-[14px] normal-text">
+                            <p className="text-white text-[14px] normal-text break-all">
                               {targetTokenPocket?.symbol}/
                               {baseTokenPocket?.symbol}
                             </p>

@@ -34,9 +34,9 @@ export const DepositModal: FC<{
 
   /** @dev Inject evm program service to use. */
   const {
+    signer: evmSigner,
     nativeBalance: ethSolBalance,
     depositPocket: depositPocketEvm,
-    signer: evmSigner,
   } = useEvmWallet();
 
   /** @dev Inject aptos program service to use. */

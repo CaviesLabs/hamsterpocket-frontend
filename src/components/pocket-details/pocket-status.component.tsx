@@ -100,8 +100,8 @@ export const PocketStatusComponent: FC<{
             <label className="switch ml-[10px]">
               <input
                 type="checkbox"
-                defaultChecked={isActive}
-                onClick={() =>
+                checked={isActive}
+                onChange={() =>
                   isActive
                     ? setPausedDisplayed(true)
                     : setResumedDisplayed(true)

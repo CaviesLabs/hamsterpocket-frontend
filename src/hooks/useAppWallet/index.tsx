@@ -5,13 +5,18 @@ import {
   useState,
   useEffect,
   FC,
+  useMemo,
 } from "react";
-import { AppWalletContextState } from "./types";
-import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
 import { useAccount } from "wagmi";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { useWallet as useAptosWallet } from "@pontem/aptos-wallet-adapter";
+import { AppWalletContextState } from "./types";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { useConnectedWallet as useSolWallet } from "@saberhq/use-solana";
+import { useWallet as usePontem } from "@pontem/aptos-wallet-adapter";
+
+import { useWallet } from "@/src/hooks/useWallet";
+import { useAptosWallet } from "@/src/hooks/useAptos";
+import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 
 /** @dev Initialize context. */
 export const AppWalletContext = createContext<AppWalletContextState>(null);
@@ -21,9 +26,13 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /**
    * @dev Provider states.
    */
-  const [walletAddress, setWalletAddress] = useState("");
   const [calledPush, setCalledPush] = useState(false);
+  const [walletAddress, setWalletAddress] = useState("");
   const { switchChainId, chainId, chainInfos } = usePlatformConfig();
+
+  const { solBalance } = useWallet();
+  const { nativeBalance: evmBalance } = useEvmWallet();
+  const { balance: aptosBalance } = useAptosWallet();
 
   /**
    * @dev Inject context of solana wallet.
@@ -38,7 +47,20 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   /**
    * @dev Inject context of aptos wallet.
    */
-  const aptosWallet = useAptosWallet();
+  const aptosWallet = usePontem();
+
+  /**
+   * @dev Get balance base on chain id.
+   */
+  const balance = useMemo(() => {
+    if (chainId === ChainId.sol) {
+      return solBalance;
+    } else if (chainId.includes("aptos")) {
+      return aptosBalance;
+    } else {
+      return evmBalance;
+    }
+  }, [chainId, solBalance, evmBalance, aptosBalance]);
 
   /**
    * @dev Watch changes in solana wallet and eth wallet.
@@ -83,7 +105,7 @@ export const AppWalletProvider: FC<{ children: ReactNode }> = (props) => {
   }, [solWallet, ethWallet, chainId, chainInfos]);
 
   return (
-    <AppWalletContext.Provider value={{ walletAddress }}>
+    <AppWalletContext.Provider value={{ walletAddress, balance }}>
       {props.children}
     </AppWalletContext.Provider>
   );

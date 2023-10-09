@@ -32,8 +32,11 @@ export const convertBigNumber = (value: number | BN, decimals: number) => {
  * @returns
  */
 export const devideBigNumber = (value: number | BN, decimals: number) => {
-  return parseFloat(
-    bigDecimal.divide(parseFloat(value.toString()), decimals, 8)
+  return Number.parseFloat(
+    new bigDecimal(value.toString())
+      .divide(new bigDecimal(decimals), 8)
+      .getValue()
+      .toString()
   );
 };
 

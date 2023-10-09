@@ -92,24 +92,24 @@ export const BoughtTransaction: FC<{ pocket: PocketEntity }> = (props) => {
                 </div>
                 <div className="col-span-4 text-center flex items-center justify-center mobile:col-span-5">
                   {item.type === PoolType.SWAPPED ? (
-                    <p>
+                    <p className="break-all">
                       {analyzeDecimals(item.baseTokenAmount)}
                       {`${baseToken?.symbol}`}
                     </p>
                   ) : (
-                    <p>
+                    <p className="break-all">
                       {analyzeDecimals(item.targetTokenAmount)}
                       {`${targetToken?.symbol}`}
                     </p>
                   )}
                   <RightArrowIcon className="md:mx-[20px]" />
                   {item.type === PoolType.SWAPPED ? (
-                    <p>
+                    <p className="break-all">
                       {analyzeDecimals(item.targetTokenAmount)}
                       {`${targetToken?.symbol}`}
                     </p>
                   ) : (
-                    <p>
+                    <p className="break-all">
                       {analyzeDecimals(item.baseTokenAmount)}
                       {`${baseToken?.symbol}`}
                     </p>

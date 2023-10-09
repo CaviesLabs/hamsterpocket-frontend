@@ -28,7 +28,7 @@ export const parseStopConditionHumanValue = (condition: StopConditions) => {
    * @dev Injected context.
    */
   const { baseTokenAddress, targetTokenAddress } = useCreatePocketPage();
-  const { whiteLists } = useWhiteList();
+  const { whiteLists, analyzeDecimals } = useWhiteList();
 
   /**
    * @dev Parse date value to human text.
@@ -43,19 +43,33 @@ export const parseStopConditionHumanValue = (condition: StopConditions) => {
    * @dev Parse token big number to human text.
    */
   if (condition.spentBaseTokenAmountReach) {
-    return `${devideBigNumber(
-      condition.spentBaseTokenAmountReach?.value as any,
-      Math.pow(10, baseTokenAddress?.[1])
-    )} ${whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+    return (
+      <>
+        {analyzeDecimals(
+          devideBigNumber(
+            condition.spentBaseTokenAmountReach?.value as any,
+            Math.pow(10, baseTokenAddress?.[1])
+          )
+        )}
+        {whiteLists[baseTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}
+      </>
+    );
   }
 
   /**
    * @dev Parse token big number to human text.
    */
   if (condition.quoteTokenAmountReach) {
-    return `${devideBigNumber(
-      condition.quoteTokenAmountReach?.value as any,
-      Math.pow(10, targetTokenAddress?.[1])
-    )} ${whiteLists[targetTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}`;
+    return (
+      <>
+        {analyzeDecimals(
+          devideBigNumber(
+            condition.quoteTokenAmountReach?.value as any,
+            Math.pow(10, targetTokenAddress?.[1])
+          )
+        )}
+        {whiteLists[targetTokenAddress?.[0]?.toBase58()?.toString()]?.symbol}
+      </>
+    );
   }
 };
