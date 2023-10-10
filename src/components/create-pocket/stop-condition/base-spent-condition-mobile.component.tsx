@@ -54,11 +54,12 @@ export const BaseAmountSpendConditionMobile: FC<{
 
   const handleChange = useCallback(
     (isPrimary: boolean) => {
-      console.log({ currentValue });
       handleModifyStopConditions(
         "spentBaseTokenAmountReach",
         new BN(
-          multipleBigNumber(currentValue, Math.pow(10, baseTokenAddress[1]))
+          Number(
+            multipleBigNumber(currentValue, Math.pow(10, baseTokenAddress[1]))
+          ).toFixed(0)
         ),
         isPrimary
       );

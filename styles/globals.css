@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+#__next {
+  min-height: 100vh;
+}
 
 @font-face {
   font-family: poppins;

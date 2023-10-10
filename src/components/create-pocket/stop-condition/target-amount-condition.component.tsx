@@ -36,7 +36,9 @@ export const TargetAmountCondition: FC<{
       handleModifyStopConditions(
         "quoteTokenAmountReach",
         new BN(
-          multipleBigNumber(currentValue, Math.pow(10, targetTokenAddress[1]))
+          Number(
+            multipleBigNumber(currentValue, Math.pow(10, targetTokenAddress[1]))
+          ).toFixed(0)
         ),
         isPrimary
       );
