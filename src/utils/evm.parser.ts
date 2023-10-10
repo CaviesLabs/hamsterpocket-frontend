@@ -1,17 +1,19 @@
-import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
-import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+import bigDecimal from "js-big-decimal";
+
 import { toBigInt } from "ethers";
-import {
-  BuyConditionOnChain as SolBuyConditionOnChain,
-  StopConditionsOnChain as SolStopConditionsOnChain,
-  PriceConditionType,
-} from "@/src/entities/pocket.entity";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { Keypair } from "@solana/web3.js";
+import { BN } from "@project-serum/anchor";
 import { WSOL_ADDRESS } from "@/src/utils";
 import { ChainId } from "@/src/entities/platform-config.entity";
-import bigDecimal from "js-big-decimal";
-import { BN } from "@project-serum/anchor";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
+
+import {
+  PriceConditionType,
+  BuyConditionOnChain as SolBuyConditionOnChain,
+  StopConditionsOnChain as SolStopConditionsOnChain,
+} from "@/src/entities/pocket.entity";
 
 /**
  * @dev The function to convert number to big ether number.
@@ -32,9 +34,19 @@ export const convertBigNumber = (value: number | BN, decimals: number) => {
  * @returns
  */
 export const devideBigNumber = (value: number | BN, decimals: number) => {
+  console.log(
+    value,
+    value?.toString(16),
+    decimals,
+    new bigDecimal(value.toString())
+      .divide(new bigDecimal(decimals), 20)
+      .getValue()
+      .toString()
+  );
+
   return Number.parseFloat(
     new bigDecimal(value.toString())
-      .divide(new bigDecimal(decimals), 8)
+      .divide(new bigDecimal(decimals), 20)
       .getValue()
       .toString()
   );
