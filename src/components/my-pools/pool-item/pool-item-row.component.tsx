@@ -471,13 +471,13 @@ export const PoolItemRow = (props: PoolItemProps) => {
       )}
       {claimFeeDisplayed && (
         <ClaimFeeModal
+          pocket={data}
           isModalOpen={claimFeeDisplayed}
+          handleCancel={() => setClaimFeeDisplayed(false)}
           handleOk={() => {
             setClaimFeeDisplayed(false);
             props.handleFetch();
           }}
-          handleCancel={() => setClaimFeeDisplayed(false)}
-          pocket={data}
         />
       )}
     </div>

@@ -136,6 +136,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
           const value = e.target.value;
           const validator = /^[+]?([.]\d+|\d+[.]?\d*)$/;
           if (value !== "" && !validator.exec(value)) return;
+          if (value?.toString()?.split(".")[1]?.length > 8) return; // 8 is max decimal
           props.onAmountChange && props.onAmountChange(parseFloat(value));
           setValue(e.target.value);
         }}

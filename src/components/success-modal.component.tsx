@@ -1,14 +1,14 @@
-import { FC, MouseEvent } from "react";
+import { FC, MouseEvent, ReactNode } from "react";
 import { Modal } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
 
 export const SuccessTransactionModal: FC<{
+  okMessage: string;
+  message: ReactNode;
+  isLoading?: boolean;
   isModalOpen: boolean;
   handleOk(e?: MouseEvent<HTMLElement>): void;
   handleCancel(e?: MouseEvent<HTMLElement>): void;
-  isLoading?: boolean;
-  message: string;
-  okMessage: string;
 }> = (props) => {
   return (
     <Modal
