@@ -1,6 +1,6 @@
 import { networkProvider } from "@/src/providers/network.provider";
 import { Keypair } from "@solana/web3.js";
-import { GetQouteDto } from "@/src/dto/pocket.dto";
+import { GetQuoteDto } from "@/src/dto/pocket.dto";
 
 export class EvmProgramService {
   /**
@@ -30,13 +30,13 @@ export class EvmProgramService {
     return response?._id;
   }
 
-  public async getQoute(getQouteDto: GetQouteDto): Promise<any> {
+  public async getQuote(GetQuoteDto: GetQuoteDto): Promise<any> {
     /** @dev Call to HamsterBox server to get qoute. */
     const response = await networkProvider.request<any>(
       `/metadata/market/quote`,
       {
-        method: "POST",
-        params: getQouteDto,
+        method: "GET",
+        params: GetQuoteDto,
       }
     );
 

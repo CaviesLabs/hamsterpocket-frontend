@@ -17,7 +17,7 @@ export const DCAPPair: FC = () => {
   /**
    * @dev Injected context.
    */
-  const { chainId } = usePlatformConfig();
+  const { chainId, platformConfig } = usePlatformConfig();
   const { whiteLists, analyzeDecimals } = useWhiteList();
   const {
     baseTokenAddress,
@@ -133,6 +133,21 @@ export const DCAPPair: FC = () => {
                 </div>
               </div>
             </div>
+            <div className="flow-root mt-[16px]">
+              <p className="text-[14px] regular-text float-left text-white">
+                Provider
+              </p>
+              <div className="regular-text flex items-center float-right">
+                <p className="text-white text-[14px] md:text-[16px] ml-[6px]">
+                  <a
+                    href={platformConfig?.whitelistedRouters[0].dexUrl}
+                    target={"_blank"}
+                  >
+                    {platformConfig?.whitelistedRouters[0].ammName}
+                  </a>
+                </p>
+              </div>
+            </div>
             <TargetSelectTokenModal
               isModalOpen={tokenSelectDisplayed}
               handleCancel={() => setTokenSelectDisplayed(false)}
@@ -184,12 +199,13 @@ export const DCAPPair: FC = () => {
                   Provider
                 </p>
                 <div className="regular-text flex items-center float-right">
-                  <img
-                    src="/assets/images/raydium.png"
-                    className="w-[20px] h-[20px]"
-                  />
                   <p className="text-white text-[14px] md:text-[16px] ml-[6px]">
-                    Raydium
+                    <a
+                      href={platformConfig?.whitelistedRouters[0].dexUrl}
+                      target={"_blank"}
+                    >
+                      {platformConfig?.whitelistedRouters[0].ammName}
+                    </a>
                   </p>
                 </div>
               </div>

@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/router";
+import { Avatar } from "antd";
+
 import { LayoutSection } from "@/src/components/layout-section";
 import { LeftIcon, ShareIcon } from "@/src/components/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -138,18 +140,25 @@ const PocketDetailPage: NextPage = () => {
                 <div className="mt-[32px] w-full block pocket-top-item px-[20px] py-[10px]">
                   <div className="flow-root items-center">
                     <div className="flex items-center float-left">
-                      <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white float-left">
-                        <img
-                          src={targetToken?.image}
-                          className="rounded-[50%]"
-                        />
-                      </div>
+                      <Avatar
+                        className={
+                          "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
+                        }
+                        src={targetToken?.image}
+                      >
+                        {targetToken?.symbol}
+                      </Avatar>
                       <p className="text-white text-[16px] regular-text flex items-center ml-[10px]">
                         {targetToken?.symbol}/{baseToken?.symbol}
                       </p>
                     </div>
                     <a
-                      href={`${dexUrl}?${platformConfig?.whitelistedRouters?.[0]?.inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters?.[0]?.outputTag}=${targetToken?.address}`}
+                      href={utilsProvider.getUrl(dexUrl, {
+                        [platformConfig?.whitelistedRouters?.[0]?.inputTag]:
+                          baseToken?.address,
+                        [platformConfig?.whitelistedRouters?.[0]?.outputTag]:
+                          targetToken?.address,
+                      })}
                       target="_blank"
                       className="ml-[10px] relative top-[4px] float-right"
                     >
@@ -202,7 +211,7 @@ const PocketDetailPage: NextPage = () => {
                 </div>
                 <BoughtTransaction pocket={pocket} />
               </div>
-              <div className="md:float-left mobile:hidden w-[20%] pt-[80px] pl-[20px]">
+              <div className="md:float-left mobile:hidden w-[25%] pt-[80px] pl-[20px]">
                 {activePockets?.length ? (
                   <div>
                     <p className="text-dark45 text-[20px] normal-text mb-[10px]">
@@ -218,6 +227,7 @@ const PocketDetailPage: NextPage = () => {
                       return (
                         <div
                           className="md:w-full mobile:max-w-[200px] flex px-[10px] py-[10px] border-solid border-[3px] border-dark80 rounded-[12px] md:mb-[20px] cursor-pointer hover:bg-dark80"
+                          key={Math.random()}
                           onClick={() =>
                             pushRouterWithChainId(
                               `/pocket/${pocket.id || pocket._id}`
@@ -225,15 +235,17 @@ const PocketDetailPage: NextPage = () => {
                           }
                         >
                           <div className="float:left">
-                            <div className="w-[30px] md:w-[34px] md:h-[34px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white float-left">
-                              <img
-                                src={targetTokenPocket?.image}
-                                className="rounded-[50%]"
-                              />
-                            </div>
+                            <Avatar
+                              className={
+                                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
+                              }
+                              src={targetTokenPocket?.image}
+                            >
+                              {targetTokenPocket?.symbol}
+                            </Avatar>
                           </div>
                           <div className="float-left ml-[10px]">
-                            <p className="text-white text-[14px] normal-text">
+                            <p className="text-white text-[14px] normal-text break-all">
                               {targetTokenPocket?.symbol}/
                               {baseTokenPocket?.symbol}
                             </p>

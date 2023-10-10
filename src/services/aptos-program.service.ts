@@ -14,10 +14,13 @@ export class AptosProgramService {
 
   /**
    * @dev Create pocket.
-   * @param @var {string} chainName.
    * @params @var {string} walletAddress.
    * @params @var {CreatePocketParams} createPocketParams.
    * @params @var {DepositParams} depositParams.
+   * @param chainId
+   * @param walletAddress
+   * @param createPocketParams
+   * @param depositParams
    */
   public async createPocket(
     chainId: string,
@@ -43,12 +46,15 @@ export class AptosProgramService {
     console.log({ ...createPocketParams, id: response?._id });
     console.log({ ...depositParams, id: response?._id });
     // eslint-disable-next-line prettier/prettier
-    return this.transtractionBuilder
-      .buildCreatePocketAndDepositTransaction(
-        { ...createPocketParams, id: response?._id },
-        { ...depositParams, id: response?._id }
-      )
-      .execute();
+    return {
+      pocketId: response?._id,
+      data: await this.transtractionBuilder
+        .buildCreatePocketAndDepositTransaction(
+          { ...createPocketParams, id: response?._id },
+          { ...depositParams, id: response?._id }
+        )
+        .execute(),
+    };
   }
 
   /**

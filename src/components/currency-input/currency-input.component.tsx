@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect } from "react";
-import { Input } from "antd";
+import { Avatar, Input } from "antd";
 import { DropdownIcon } from "@/src/components/icons";
 import { TokenItem } from "./token-select-item.component";
 import { WSOL_ADDRESS } from "@/src/utils";
@@ -109,7 +109,7 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
         }
         prefix={
           addressSelected === "BATCH" ? null : (
-            <img
+            <Avatar
               className={classNames(
                 "rounded-full",
                 addressSelected
@@ -122,13 +122,21 @@ export const CurrencyInput: FC<CurrencyInputProps> = (props) => {
                   findEntityByAddress(addressSelected)
                 )?.image
               }
-            />
+            >
+              {
+                (
+                  allowCurrencies?.[addressSelected] ||
+                  findEntityByAddress(addressSelected)
+                )?.symbol
+              }
+            </Avatar>
           )
         }
         onChange={(e) => {
           const value = e.target.value;
           const validator = /^[+]?([.]\d+|\d+[.]?\d*)$/;
           if (value !== "" && !validator.exec(value)) return;
+          if (value?.toString()?.split(".")[1]?.length > 8) return; // 8 is max decimal
           props.onAmountChange && props.onAmountChange(parseFloat(value));
           setValue(e.target.value);
         }}

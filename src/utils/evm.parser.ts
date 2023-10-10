@@ -1,23 +1,26 @@
-import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
-import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
-import { BigNumber } from "ethers";
-import {
-  BuyConditionOnChain as SolBuyConditionOnChain,
-  StopConditionsOnChain as SolStopConditionsOnChain,
-  PriceConditionType,
-} from "@/src/entities/pocket.entity";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import bigDecimal from "js-big-decimal";
+
+import { toBigInt } from "ethers";
 import { Keypair } from "@solana/web3.js";
+import { BN } from "@project-serum/anchor";
 import { WSOL_ADDRESS } from "@/src/utils";
 import { ChainId } from "@/src/entities/platform-config.entity";
-import bigDecimal from "js-big-decimal";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { CreatePocketDto as SolCreatePocketDto } from "@/src/dto/pocket.dto";
+import { Params } from "@/src/providers/program/evm/typechain-types/contracts/PocketChef";
+
+import {
+  PriceConditionType,
+  BuyConditionOnChain as SolBuyConditionOnChain,
+  StopConditionsOnChain as SolStopConditionsOnChain,
+} from "@/src/entities/pocket.entity";
 
 /**
  * @dev The function to convert number to big ether number.
  */
-export const convertBigNumber = (value: number, decimals: number) => {
+export const convertBigNumber = (value: number | BN, decimals: number) => {
   // console.log(bigDecimal.multiply(parseFloat(value.toString()), decimals));
-  return BigNumber.from(
+  return toBigInt(
     `0x${parseInt(
       bigDecimal.multiply(parseFloat(value.toString()), decimals)
     ).toString(16)}`
@@ -30,10 +33,36 @@ export const convertBigNumber = (value: number, decimals: number) => {
  * @param decimals
  * @returns
  */
-export const devideBigNumber = (value: number, decimals: number) => {
-  return parseFloat(
-    bigDecimal.divide(parseFloat(value.toString()), decimals, 8)
+export const devideBigNumber = (value: number | BN, decimals: number) => {
+  console.log(
+    value,
+    value?.toString(16),
+    decimals,
+    new bigDecimal(value.toString())
+      .divide(new bigDecimal(decimals), 20)
+      .getValue()
+      .toString()
   );
+
+  return Number.parseFloat(
+    new bigDecimal(value.toString())
+      .divide(new bigDecimal(decimals), 20)
+      .getValue()
+      .toString()
+  );
+};
+
+/**
+ * @dev The function to multiple big number.
+ * @param value
+ * @param decimals
+ * @returns
+ */
+export const multipleBigNumber = (value: number | BN, decimals: number) => {
+  return new bigDecimal(value.toString())
+    .multiply(new bigDecimal(decimals))
+    .getValue()
+    .toString();
 };
 
 /**
@@ -62,7 +91,7 @@ export const convertToEtherStopCondition = (
       case "spentBaseTokenAmountReach":
         conditionOperator = "2";
         const solReverd = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, baseTokenDecimals)
         );
         ethValue = convertBigNumber(solReverd, 10 ** realBaseTokenDecimals);
@@ -70,7 +99,7 @@ export const convertToEtherStopCondition = (
       case "quoteTokenAmountReach":
         conditionOperator = "3";
         const solReverd1 = devideBigNumber(
-          condition[type].value.toNumber(),
+          condition[type].value,
           Math.pow(10, targetTokenDecimals)
         );
         ethValue = convertBigNumber(solReverd1, 10 ** realTargetTokenDecimals);
@@ -124,11 +153,11 @@ export const convertToEtherBuyCondition = (
 
   if (solBuyCondition[type].fromValue) {
     const fromValueReverted = devideBigNumber(
-      solBuyCondition[type].fromValue.toNumber(),
+      solBuyCondition[type].fromValue,
       Math.pow(10, targetTokenDecimals)
     );
     const toValueReverted = devideBigNumber(
-      solBuyCondition[type].toValue.toNumber(),
+      solBuyCondition[type].toValue,
       Math.pow(10, targetTokenDecimals)
     );
     return {
@@ -141,7 +170,7 @@ export const convertToEtherBuyCondition = (
     };
   } else {
     const valueReverted = devideBigNumber(
-      solBuyCondition[type].value.toNumber(),
+      solBuyCondition[type].value,
       Math.pow(10, targetTokenDecimals)
     );
     return {
@@ -173,7 +202,6 @@ export const createdPocketPramsParserEvm = (
   ammRouterAddress: string,
   ammRouterVersion: string
 ): Params.CreatePocketParamsStruct => {
-  console.log({ realTargetTokenDecimals, realBaseTokenDecimals });
   return {
     id: solCreatedPocketDto.id,
     owner: walletAddress,
@@ -205,7 +233,7 @@ export const createdPocketPramsParserEvm = (
      */
     batchVolume: convertBigNumber(
       devideBigNumber(
-        solCreatedPocketDto.batchVolume.toNumber(),
+        solCreatedPocketDto.batchVolume,
         Math.pow(10, baseTokenDecimals)
       ),
       Math.pow(10, realBaseTokenDecimals)
@@ -270,6 +298,7 @@ export const makeAliasForEvmWhitelist = (
       decimals: 9,
     };
   });
-  console.log(evmFilerted);
+
+  console.debug({ evmFilerted });
   return evmFilerted;
 };

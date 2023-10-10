@@ -13,10 +13,18 @@ export interface PlatformConfigEntity {
     address: string;
     isV3: boolean;
     ammTag: string;
+    ammName: string;
     dexUrl: string;
     inputTag: string;
     outputTag: string;
+    routerVersion: string;
   }[];
+  nativeToken: {
+    name: string;
+    logo: string;
+    symbol: string;
+    decimals: number;
+  };
 }
 
 export enum ChainId {

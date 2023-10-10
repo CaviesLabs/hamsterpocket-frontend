@@ -1,5 +1,12 @@
 import { encode } from "bs58";
+import qs from "query-string";
+
 class UtilsProvider {
+  public pause(sec: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, sec * 1000);
+    });
+  }
   /**
    * Will gracefuly scroll the page
    * This function will scroll the page using
@@ -162,6 +169,12 @@ class UtilsProvider {
       );
     }
     return arr.splice(0, size).join("");
+  }
+
+  public getUrl(currentUrl: string, query: Record<string, string>) {
+    const current = qs.parseUrl(currentUrl, { parseFragmentIdentifier: true });
+    Object.assign(current.query, query);
+    return qs.stringifyUrl(current);
   }
 
   /**

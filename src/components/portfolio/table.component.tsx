@@ -1,10 +1,12 @@
-import { MdOpenInNew } from "react-icons/md";
-import { useSelector } from "react-redux";
-import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import State from "@/src/redux/entities/state";
+
+import { useSelector } from "react-redux";
+import { MdOpenInNew } from "react-icons/md";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { Avatar } from "antd";
 
 export default function TableComponent() {
   const portfoliosData = useSelector((state: State) => state.portfolios);
@@ -22,16 +24,18 @@ export default function TableComponent() {
         {portfoliosData.map((h) => {
           return (
             <div
-              key={h.tokenName}
+              key={Math.random()}
               className="!border-[0px] bg-[#121320] rounded-[12px] grid grid-cols-3 mobile:grid-cols-5 gap-3 mt-[5px] mobile:mt-[12px] px-[15px] py-[10px]"
             >
-              <div className="col-span-1 mobile:col-span-2 flex">
-                <div className="bg-gray-600 p-2 rounded-full h-[48px]">
-                  <img
-                    src={h.tokenImage}
-                    className="max-w-[32px] rounded-full h-[32px] w-[32px]"
-                  />
-                </div>
+              <div className="col-span-1 mobile:col-span-2 flex row items-center">
+                <Avatar
+                  className={
+                    "w-[44px] h-[44px] flex items-center bg-dark70 border-solid border-[3px] border-white text-[8px]"
+                  }
+                  src={h?.tokenImage}
+                >
+                  {h?.tokenSymbol}
+                </Avatar>
                 <div className="ml-4">
                   <div className="truncate mobile:text-[14px]">
                     {h.tokenSymbol}
@@ -42,16 +46,17 @@ export default function TableComponent() {
                 </div>
               </div>
               <div className="col-span-1 mobile:col-span-2 mobile:pt-[10px]">
-                <a
-                  href={
-                    chainId === ChainId.sol
-                      ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
-                      : chainId.includes("aptos")
-                      ? `${platformConfig?.explorerUrl}coin/${h.tokenAddress}`
-                      : `${platformConfig?.explorerUrl}token/${h.tokenAddress}`
-                  }
-                  target="_blank"
+                <div
                   className="flex justify-center items-center"
+                  onClick={() =>
+                    window.open(
+                      chainId === ChainId.sol
+                        ? `${SOL_EXPLORE}/account/${h.tokenAddress}`
+                        : chainId.includes("aptos")
+                        ? `${platformConfig?.explorerUrl}coins/${h.tokenAddress}`
+                        : `${platformConfig?.explorerUrl}token/${h.tokenAddress}`
+                    )
+                  }
                 >
                   <div className="border border-gray-700 rounded text-center py-1 w-[160px] mobile:text-[12px] mobile:w-[120px] px-[3px]">
                     {utilsProvider.makeShort(h.tokenAddress)}
@@ -59,7 +64,7 @@ export default function TableComponent() {
                   <div className="ml-2">
                     <MdOpenInNew className="text-gray-500 text-xl" />
                   </div>
-                </a>
+                </div>
               </div>
               <div className="text-right col-span-1">
                 <div className="mobile:text-[14px]">

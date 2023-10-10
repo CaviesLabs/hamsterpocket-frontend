@@ -5,6 +5,7 @@ import { WSOL_ADDRESS } from "@/src/utils";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import useOnClickOutside from "@/src/hooks/useOnClickOutside";
 import classNames from "classnames";
+import { Avatar } from "antd";
 
 export type CurrencyPage = {
   onAddressSelect?: (address: string, decimals?: number) => void;
@@ -86,20 +87,24 @@ export const CurrencyBage: FC<CurrencyPage> = (props) => {
 
   return (
     <div className="relative max-w-[170px]" ref={ref} onClick={props.onClick}>
-      <img
-        className={classNames(
-          "rounded-full",
-          addressSelected
-            ? "!w-[64px] !h-[64px] mobile:!w-[24px] mobile:!h-[24px] mx-auto !block"
-            : "invisible"
-        )}
+      <Avatar
+        className={
+          "mx-auto w-[64px] h-[64px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white"
+        }
         src={
           (
             allowCurrencies?.[addressSelected] ||
             findEntityByAddress(addressSelected)
           )?.image
         }
-      />
+      >
+        {
+          (
+            allowCurrencies?.[addressSelected] ||
+            findEntityByAddress(addressSelected)
+          )?.symbol
+        }
+      </Avatar>
       <div
         className="max-w-[200px] mx-auto mt-[20px] flow-root border-solid border-[2px] border-dark50 px-[10px] py-[10px] rounded-[12px] cursor-pointer"
         onClick={() => setDropdown(!dropDown)}

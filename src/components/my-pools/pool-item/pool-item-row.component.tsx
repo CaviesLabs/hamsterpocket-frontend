@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
-import { ShareIcon } from "@/src/components/icons";
+
+import { Avatar } from "antd";
 import { Button } from "@hamsterbox/ui-kit";
-import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { useWallet } from "@/src/hooks/useWallet";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { useAppWallet } from "@/src/hooks/useAppWallet";
+import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { PocketEntity, PocketStatus } from "@/src/entities/pocket.entity";
+import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
+
+import { ShareIcon } from "@/src/components/icons";
 import {
   DepositModal,
   ClosePocketModal,
@@ -13,11 +21,7 @@ import {
   ClaimFeeModal,
   ReversePocketModal,
 } from "@/src/components/home";
-import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
-import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
-import { useAppWallet } from "@/src/hooks/useAppWallet";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId } from "@/src/entities/platform-config.entity";
+
 import dayjs from "dayjs";
 
 type PoolItemProps = {
@@ -150,19 +154,23 @@ export const PoolItemRow = (props: PoolItemProps) => {
           onClick={() => pushRouterWithChainId(`/pocket/${data.id}`)}
         >
           <div className="flex items-center mobile:float-left">
-            <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {targetToken?.image && (
-                <img
-                  src={targetToken?.image}
-                  className="rounded-[50%]"
-                  alt={data.targetTokenAddress}
-                />
-              )}
-            </div>
+            <Avatar
+              className={
+                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
+              }
+              src={targetToken?.image}
+            >
+              {targetToken?.symbol}
+            </Avatar>
             <p className="text-white text-[16px] regular-text flex items-center ml-[10px] mobile:text-[14px]">
               {targetToken?.symbol}/{baseToken?.symbol}
               <a
-                href={`${dexUrl}?${platformConfig.whitelistedRouters[0].inputTag}=${baseToken?.address}&${platformConfig.whitelistedRouters[0].outputTag}=${targetToken?.address}`}
+                href={utilsProvider.getUrl(dexUrl, {
+                  [platformConfig?.whitelistedRouters?.[0]?.inputTag]:
+                    baseToken?.address,
+                  [platformConfig?.whitelistedRouters?.[0]?.outputTag]:
+                    targetToken?.address,
+                })}
                 target="_blank"
                 className="ml-[10px] relative top-[-3px]"
               >
@@ -170,7 +178,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
               </a>
             </p>
           </div>
-          <p className="text-dark50 text-[12px] regular-text relative top-[3px] md:top-[6px] flex items-center mt-[5px] mobile:float-right mobile:text-right relative">
+          <p className="text-dark50 text-[12px] regular-text top-[3px] md:top-[6px] flex items-center mt-[5px] mobile:float-right mobile:text-right relative">
             #{utilsProvider.makeShort(data.id)}
           </p>
         </div>
@@ -307,7 +315,7 @@ export const PoolItemRow = (props: PoolItemProps) => {
                       backgroundColor: "#735CF7",
                       color: "#FFFFFF",
                     }}
-                    text="Continue"
+                    text="Resume"
                     width="100%"
                     onClick={() => setResumedDisplayed(true)}
                   />
@@ -463,13 +471,13 @@ export const PoolItemRow = (props: PoolItemProps) => {
       )}
       {claimFeeDisplayed && (
         <ClaimFeeModal
+          pocket={data}
           isModalOpen={claimFeeDisplayed}
+          handleCancel={() => setClaimFeeDisplayed(false)}
           handleOk={() => {
             setClaimFeeDisplayed(false);
             props.handleFetch();
           }}
-          handleCancel={() => setClaimFeeDisplayed(false)}
-          pocket={data}
         />
       )}
     </div>

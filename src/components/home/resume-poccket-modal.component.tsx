@@ -74,7 +74,7 @@ export const ResumePocketModal: FC<{
           />
 
           <h2 className="mt-4 mb-2 font-bold text-white text-2xl text-center">
-            Continue
+            Resume
           </h2>
           <p className="mb-2 regular-text text-white text-[16px] text-center">
             Confirm the transaction to resume Pocket{" "}

@@ -1,15 +1,15 @@
 export type WhitelistEntity = {
   _id: string;
+  name: string;
+  image: string;
+  symbol: string;
   address: string;
-  coinGeckoId: string;
+  chainId: string;
   decimals: number;
   entityType: string;
-  image: string;
-  name: string;
-  symbol: string;
+  coinGeckoId: string;
   estimatedValue: number;
   realDecimals?: number;
-  chainId: string;
   aliasAddress?: string;
   isNativeCoin: boolean;
 };

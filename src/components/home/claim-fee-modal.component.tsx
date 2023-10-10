@@ -43,11 +43,11 @@ export const ClaimFeeModal: FC<{
 
   return (
     <Modal
-      open={props.isModalOpen}
-      onOk={props.handleOk}
-      onCancel={props.handleCancel}
       width={600}
       footer={null}
+      onOk={props.handleOk}
+      open={props.isModalOpen}
+      onCancel={props.handleCancel}
       className="hamster-modal"
     >
       <div className="py-6">
@@ -99,7 +99,19 @@ export const ClaimFeeModal: FC<{
         isModalOpen={succcessClose}
         handleOk={() => props.handleOk()}
         handleCancel={() => props.handleOk()}
-        message={`You have withdrawn your funds from Pocket ${props.pocket.id}`}
+        message={
+          <>
+            You have claimed{" "}
+            <a
+              target="_blank"
+              className="text-purple300"
+              href="https://docs.solana.com/developing/intro/rent"
+            >
+              the rent
+            </a>{" "}
+            for pocket {props.pocket.id}
+          </>
+        }
         okMessage="Done"
       />
     </Modal>

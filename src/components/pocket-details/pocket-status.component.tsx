@@ -9,8 +9,8 @@ import {
 } from "@/src/components/home";
 import { Button } from "@hamsterbox/ui-kit";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 
 export const PocketStatusComponent: FC<{
   pocket: PocketEntity;
@@ -100,12 +100,12 @@ export const PocketStatusComponent: FC<{
             <label className="switch ml-[10px]">
               <input
                 type="checkbox"
-                onClick={() =>
+                checked={isActive}
+                onChange={() =>
                   isActive
                     ? setPausedDisplayed(true)
                     : setResumedDisplayed(true)
                 }
-                checked={isActive}
               />
               <span className="slider round"></span>
             </label>

@@ -90,7 +90,7 @@ export const NextBatch: FC<{ pocket: PocketEntity; handleFetch(): void }> = (
               : analyzeDecimals(
                   convertDecimalAmount(
                     baseToken?.address,
-                    pocket?.batchVolume - pocket?.remainingBaseTokenBalance
+                    pocket?.batchVolume - pocket?.remainingBaseTokenBalance || 0
                   )
                 )}{" "}
             {baseToken?.symbol}

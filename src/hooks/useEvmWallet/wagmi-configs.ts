@@ -90,6 +90,8 @@ import {
   zhejiang,
   zkSync,
   zkSyncTestnet,
+  mantle,
+  mantleTestnet,
 } from "@wagmi/core/chains";
 
 export const WagmiChainConfigs = [
@@ -184,4 +186,6 @@ export const WagmiChainConfigs = [
   zhejiang,
   zkSync,
   zkSyncTestnet,
+  mantle,
+  mantleTestnet,
 ];

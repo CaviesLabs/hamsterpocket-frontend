@@ -16,7 +16,7 @@ const aptosWalletAdapters = [
   new MSafeWalletAdapter(),
 ];
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const AptosWalletKitContext = createContext<any>(null);
 
 /** @dev Expose wallet provider for usage. */

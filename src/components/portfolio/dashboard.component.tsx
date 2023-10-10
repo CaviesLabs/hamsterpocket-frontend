@@ -1,13 +1,15 @@
-import { Doughnut } from "react-chartjs-2";
-import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
-import { RiQuestionnaireFill } from "react-icons/ri";
-Chart.register(ArcElement, Legend, Tooltip);
-import { Tooltip as AntdTooltip } from "antd";
 import { useMemo } from "react";
-import { usePocketBalance } from "@/src/hooks/usePocketBalance";
-import { PocketBalance } from "./pocket-balance.component";
+import { Doughnut } from "react-chartjs-2";
+import { Tooltip as AntdTooltip } from "antd";
+import { RiQuestionnaireFill } from "react-icons/ri";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { PocketBalance } from "./pocket-balance.component";
+import { Chart, ArcElement, Legend, Tooltip } from "chart.js";
+import { usePocketBalance } from "@/src/hooks/usePocketBalance";
 
+Chart.register(ArcElement, Legend, Tooltip);
+
+/** @dev Define options for chart. */
 const options = {
   cutout: 70,
   border: {
@@ -19,6 +21,17 @@ const options = {
     },
   },
 };
+
+/** @dev Define colors for chart. */
+const COLORS = [
+  "#C85469",
+  "#3393D9",
+  "#B2B539",
+  "#EAF4F4",
+  "#f62d92",
+  "#94e9d2",
+  "#60b84e",
+];
 
 export default function DashboardComponentMobile() {
   /** @dev Handle to get total estimate sol in total pockets. */
@@ -33,8 +46,8 @@ export default function DashboardComponentMobile() {
       datasets: [
         {
           data: mapData.map((item) => (item.percent * 100)?.toFixed(2)),
-          backgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
-          hoverBackgroundColor: ["#C85469", "#3393D9", "#B2B539", "#EAF4F4"],
+          backgroundColor: COLORS,
+          hoverBackgroundColor: COLORS,
           borderWidth: 0,
         },
       ],
@@ -78,7 +91,7 @@ export default function DashboardComponentMobile() {
             <div className="ml-12 flex flex-col justify-between w-40 h-[160px]">
               {chartData.labels.map((label, i) => (
                 <div
-                  key={label}
+                  key={Math.random()}
                   className="flex justify-between items-center text-white regular-text"
                 >
                   <div className="flex items-center">

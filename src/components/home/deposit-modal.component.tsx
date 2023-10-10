@@ -11,9 +11,9 @@ import { ChainId } from "@/src/entities/platform-config.entity";
 import { SuccessTransactionModal } from "@/src/components/success-modal.component";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
 import { BN } from "@project-serum/anchor";
-import { BigNumber } from "ethers";
 import { useAptosWallet } from "@/src/hooks/useAptos";
 import { convertBigNumber as convertAptosNumber } from "@/src/utils/aptos.parser";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const DepositModal: FC<{
   isModalOpen: boolean;
@@ -34,9 +34,9 @@ export const DepositModal: FC<{
 
   /** @dev Inject evm program service to use. */
   const {
+    signer: evmSigner,
     nativeBalance: ethSolBalance,
     depositPocket: depositPocketEvm,
-    signer: evmSigner,
   } = useEvmWallet();
 
   /** @dev Inject aptos program service to use. */
@@ -86,7 +86,7 @@ export const DepositModal: FC<{
         /** @dev Execute transaction. */
         await depositPocketEvm(
           props.pocket.id || props.pocket._id,
-          BigNumber.from(
+          BigInt(
             (
               (depositedAmount.toNumber() / Math.pow(10, baseToken?.decimals)) *
               Math.pow(10, baseToken?.realDecimals)
@@ -127,7 +127,9 @@ export const DepositModal: FC<{
       setButtonText("Deposit");
     }
     setIsAmountSet(!isNaN(val));
-    setDepositedAmount(new BN(val * Math.pow(10, baseToken?.decimals || 0)));
+    setDepositedAmount(
+      new BN(multipleBigNumber(val, Math.pow(10, baseToken?.decimals || 0)))
+    );
   };
 
   const isDisabled = !isAmountSet || buttonText !== "Deposit";

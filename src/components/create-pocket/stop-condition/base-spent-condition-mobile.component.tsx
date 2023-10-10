@@ -6,6 +6,7 @@ import { BN } from "@project-serum/anchor";
 import { TooltipPrimaryComponent } from "./tooltip-primary.component";
 import { Collapse } from "react-collapse";
 import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { multipleBigNumber } from "@/src/utils/evm.parser";
 
 export const BaseAmountSpendConditionMobile: FC<{
   displyed: boolean;
@@ -55,7 +56,11 @@ export const BaseAmountSpendConditionMobile: FC<{
     (isPrimary: boolean) => {
       handleModifyStopConditions(
         "spentBaseTokenAmountReach",
-        new BN(currentValue * Math.pow(10, baseTokenAddress[1])),
+        new BN(
+          Number(
+            multipleBigNumber(currentValue, Math.pow(10, baseTokenAddress[1]))
+          ).toFixed(0)
+        ),
         isPrimary
       );
     },

@@ -1,30 +1,31 @@
 import {
   FC,
-  createContext,
+  useState,
   ReactNode,
   useEffect,
-  useState,
   useContext,
   useCallback,
+  createContext,
 } from "react";
-import { whitelistService } from "@/src/services/whitelist.service";
-import { WhitelistEntity } from "@/src/entities/whitelist.entity";
 import { LiquidityEntity } from "@/src/entities/radyum.entity";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { WhitelistEntity } from "@/src/entities/whitelist.entity";
+import { whitelistService } from "@/src/services/whitelist.service";
 import {
   makeAliasForEvmWhitelist,
   devideBigNumber,
 } from "@/src/utils/evm.parser";
 import { makeAliasForAptosWhitelist } from "@/src/utils/aptos.parser";
-import Decimal from "decimal.js";
+
 import useSWR from "swr";
+import Decimal from "decimal.js";
 
 export type WhiteListConfigs = {
   [key: string]: WhitelistEntity;
 };
 
-/** @dev Initiize context. */
+/** @dev Initialize context. */
 export const WhitelistContext = createContext<{
   whiteLists: WhiteListConfigs;
   liquidities: LiquidityEntity[];
@@ -71,29 +72,32 @@ export const WhitelistProvider: FC<{ children: ReactNode }> = (props) => {
     (async () => {
       try {
         /** @dev Fetch whitelist in sol chain. */
-        const result = await whitelistService.getWhitelist();
-        if (chainId === ChainId.sol) {
-          const res: WhiteListConfigs = {};
-          result.forEach((_) => {
-            /** desc Convert Wrapped SOL to SOL */
-            if (_.name === "Wrapped SOL") {
-              _.name = "SOL";
-            }
-            res[_.address] = _;
-          });
-          setWhitelist(res);
-        } else {
-          const processedList = chainId.toLowerCase().includes("aptos")
+        let result = await whitelistService.getWhitelist();
+        if (chainId !== ChainId.sol) {
+          result = chainId.toLowerCase().includes("aptos")
             ? makeAliasForAptosWhitelist(result, chainId as ChainId)
             : makeAliasForEvmWhitelist(result, chainId as ChainId);
-          const res: WhiteListConfigs = {};
-          processedList.forEach((_) => {
-            res[_.aliasAddress] = _;
-          });
-          setWhitelist(res);
+        } else {
+          result = result.filter((item) => item.chainId === chainId);
         }
+
+        /** @dev Aggregate whitelist data. */
+        const aggregate = result.reduce((acc, item) => {
+          const name =
+            chainId === ChainId.sol ? item.address : item.aliasAddress;
+
+          return {
+            ...acc,
+            [name]: {
+              ...item,
+              name: item.name === "Wrapped SOL" ? "SOL" : item.name, // desc Convert Wrapped SOL to SOL.
+            },
+          };
+        }, {});
+
+        setWhitelist(aggregate);
       } catch (err) {
-        console.log(err);
+        console.warn(err);
       }
     })();
   }, [chainId]);

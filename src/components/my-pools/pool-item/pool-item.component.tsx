@@ -27,6 +27,7 @@ import {
 import { PoolItemBuyConditionComponent } from "@/src/components/my-pools/pool-item/pool-item-buy-condition.component";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
 import { ChainId } from "@/src/entities/platform-config.entity";
+import { Avatar } from "antd";
 
 type PoolItemProps = {
   data: PocketEntity;
@@ -40,20 +41,11 @@ export const PoolItem = (props: PoolItemProps) => {
   /** @dev Inject wallet account info. */
   const { chainId, platformConfig } = usePlatformConfig();
 
-  /** @dev Condition to show modal to deposit. */
-  const [depositedDisplayed, setDepositedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to close pocket. */
   const [closedDisplayed, setClosedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to pause pocket. */
   const [pausedDisplayed, setPausedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to resume pocket. */
   const [resumedDisplayed, setResumedDisplayed] = useState(false);
-
-  /** @dev Condition to show modal to claim fee create pocket. */
   const [claimFeeDisplayed, setClaimFeeDisplayed] = useState(false);
+  const [depositedDisplayed, setDepositedDisplayed] = useState(false);
 
   /** @dev Get target token database on address. */
   const targetToken = useMemo<WhitelistEntity>(
@@ -128,15 +120,14 @@ export const PoolItem = (props: PoolItemProps) => {
       <div className="md:flex justify-between mt-[24px]">
         <div className="md:w-[430px] w-full bg-dark80 rounded-[8px] px-[22px] py-[20px] flow-root">
           <div className="flex items-center float-left">
-            <div className="w-[30px] md:w-[44px] md:h-[44px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] border-dark70">
-              {targetToken?.image && (
-                <img
-                  src={targetToken?.image}
-                  className="rounded-[50%]"
-                  alt={data.targetTokenAddress}
-                />
-              )}
-            </div>
+            <Avatar
+              className={
+                "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
+              }
+              src={targetToken?.image}
+            >
+              {targetToken?.symbol}
+            </Avatar>
             <div className="pl-[20px]">
               <p className="text-white text-[14px] md:text-[18px] normal-text uppercase">
                 {targetToken?.symbol}
@@ -333,7 +324,7 @@ export const PoolItem = (props: PoolItemProps) => {
                       backgroundColor: "#735CF7",
                       color: "#FFFFFF",
                     }}
-                    text="Continue"
+                    text="Resume"
                     width="100%"
                     onClick={() => setResumedDisplayed(true)}
                   />
@@ -460,13 +451,13 @@ export const PoolItem = (props: PoolItemProps) => {
       )}
       {claimFeeDisplayed && (
         <ClaimFeeModal
+          pocket={data}
           isModalOpen={claimFeeDisplayed}
+          handleCancel={() => setClaimFeeDisplayed(false)}
           handleOk={() => {
             setClaimFeeDisplayed(false);
             props.handleFetch();
           }}
-          handleCancel={() => setClaimFeeDisplayed(false)}
-          pocket={data}
         />
       )}
     </div>

@@ -3,175 +3,142 @@
 /* eslint-disable */
 import type {
   BaseContract,
-  BigNumber,
   BigNumberish,
   BytesLike,
-  CallOverrides,
-  ContractTransaction,
-  Overrides,
-  PayableOverrides,
-  PopulatedTransaction,
-  Signer,
-  utils,
-} from "ethers";
-import type {
   FunctionFragment,
   Result,
+  Interface,
   EventFragment,
-} from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
+  AddressLike,
+  ContractRunner,
+  ContractMethod,
+  Listener,
+} from "ethers";
 import type {
-  TypedEventFilter,
-  TypedEvent,
+  TypedContractEvent,
+  TypedDeferredTopicFilter,
+  TypedEventLog,
+  TypedLogDescription,
   TypedListener,
-  OnEvent,
-  PromiseOrValue,
+  TypedContractMethod,
 } from "../common";
 
 export declare namespace Types {
   export type StopConditionStruct = {
-    value: PromiseOrValue<BigNumberish>;
-    operator: PromiseOrValue<BigNumberish>;
+    value: BigNumberish;
+    operator: BigNumberish;
   };
 
-  export type StopConditionStructOutput = [BigNumber, number] & {
-    value: BigNumber;
-    operator: number;
+  export type StopConditionStructOutput = [value: bigint, operator: bigint] & {
+    value: bigint;
+    operator: bigint;
   };
 
   export type ValueComparisonStruct = {
-    value0: PromiseOrValue<BigNumberish>;
-    value1: PromiseOrValue<BigNumberish>;
-    operator: PromiseOrValue<BigNumberish>;
+    value0: BigNumberish;
+    value1: BigNumberish;
+    operator: BigNumberish;
   };
 
-  export type ValueComparisonStructOutput = [BigNumber, BigNumber, number] & {
-    value0: BigNumber;
-    value1: BigNumber;
-    operator: number;
-  };
+  export type ValueComparisonStructOutput = [
+    value0: bigint,
+    value1: bigint,
+    operator: bigint
+  ] & { value0: bigint; value1: bigint; operator: bigint };
 
   export type TradingStopConditionStruct = {
-    stopType: PromiseOrValue<BigNumberish>;
-    value: PromiseOrValue<BigNumberish>;
+    stopType: BigNumberish;
+    value: BigNumberish;
   };
 
-  export type TradingStopConditionStructOutput = [number, BigNumber] & {
-    stopType: number;
-    value: BigNumber;
-  };
+  export type TradingStopConditionStructOutput = [
+    stopType: bigint,
+    value: bigint
+  ] & { stopType: bigint; value: bigint };
 }
 
 export declare namespace Params {
   export type CreatePocketParamsStruct = {
-    id: PromiseOrValue<string>;
-    owner: PromiseOrValue<string>;
-    ammRouterAddress: PromiseOrValue<string>;
-    baseTokenAddress: PromiseOrValue<string>;
-    targetTokenAddress: PromiseOrValue<string>;
-    ammRouterVersion: PromiseOrValue<BigNumberish>;
-    startAt: PromiseOrValue<BigNumberish>;
-    batchVolume: PromiseOrValue<BigNumberish>;
+    id: string;
+    owner: AddressLike;
+    ammRouterAddress: AddressLike;
+    baseTokenAddress: AddressLike;
+    targetTokenAddress: AddressLike;
+    ammRouterVersion: BigNumberish;
+    startAt: BigNumberish;
+    batchVolume: BigNumberish;
     stopConditions: Types.StopConditionStruct[];
-    frequency: PromiseOrValue<BigNumberish>;
+    frequency: BigNumberish;
     openingPositionCondition: Types.ValueComparisonStruct;
     takeProfitCondition: Types.TradingStopConditionStruct;
     stopLossCondition: Types.TradingStopConditionStruct;
   };
 
   export type CreatePocketParamsStructOutput = [
-    string,
-    string,
-    string,
-    string,
-    string,
-    number,
-    BigNumber,
-    BigNumber,
-    Types.StopConditionStructOutput[],
-    BigNumber,
-    Types.ValueComparisonStructOutput,
-    Types.TradingStopConditionStructOutput,
-    Types.TradingStopConditionStructOutput
+    id: string,
+    owner: string,
+    ammRouterAddress: string,
+    baseTokenAddress: string,
+    targetTokenAddress: string,
+    ammRouterVersion: bigint,
+    startAt: bigint,
+    batchVolume: bigint,
+    stopConditions: Types.StopConditionStructOutput[],
+    frequency: bigint,
+    openingPositionCondition: Types.ValueComparisonStructOutput,
+    takeProfitCondition: Types.TradingStopConditionStructOutput,
+    stopLossCondition: Types.TradingStopConditionStructOutput
   ] & {
     id: string;
     owner: string;
     ammRouterAddress: string;
     baseTokenAddress: string;
     targetTokenAddress: string;
-    ammRouterVersion: number;
-    startAt: BigNumber;
-    batchVolume: BigNumber;
+    ammRouterVersion: bigint;
+    startAt: bigint;
+    batchVolume: bigint;
     stopConditions: Types.StopConditionStructOutput[];
-    frequency: BigNumber;
+    frequency: bigint;
     openingPositionCondition: Types.ValueComparisonStructOutput;
     takeProfitCondition: Types.TradingStopConditionStructOutput;
     stopLossCondition: Types.TradingStopConditionStructOutput;
   };
 
   export type UpdatePocketParamsStruct = {
-    id: PromiseOrValue<string>;
-    startAt: PromiseOrValue<BigNumberish>;
-    batchVolume: PromiseOrValue<BigNumberish>;
+    id: string;
+    startAt: BigNumberish;
+    batchVolume: BigNumberish;
     stopConditions: Types.StopConditionStruct[];
-    frequency: PromiseOrValue<BigNumberish>;
+    frequency: BigNumberish;
     openingPositionCondition: Types.ValueComparisonStruct;
     takeProfitCondition: Types.TradingStopConditionStruct;
     stopLossCondition: Types.TradingStopConditionStruct;
   };
 
   export type UpdatePocketParamsStructOutput = [
-    string,
-    BigNumber,
-    BigNumber,
-    Types.StopConditionStructOutput[],
-    BigNumber,
-    Types.ValueComparisonStructOutput,
-    Types.TradingStopConditionStructOutput,
-    Types.TradingStopConditionStructOutput
+    id: string,
+    startAt: bigint,
+    batchVolume: bigint,
+    stopConditions: Types.StopConditionStructOutput[],
+    frequency: bigint,
+    openingPositionCondition: Types.ValueComparisonStructOutput,
+    takeProfitCondition: Types.TradingStopConditionStructOutput,
+    stopLossCondition: Types.TradingStopConditionStructOutput
   ] & {
     id: string;
-    startAt: BigNumber;
-    batchVolume: BigNumber;
+    startAt: bigint;
+    batchVolume: bigint;
     stopConditions: Types.StopConditionStructOutput[];
-    frequency: BigNumber;
+    frequency: bigint;
     openingPositionCondition: Types.ValueComparisonStructOutput;
     takeProfitCondition: Types.TradingStopConditionStructOutput;
     stopLossCondition: Types.TradingStopConditionStructOutput;
   };
 }
 
-export interface PocketChefInterface extends utils.Interface {
-  functions: {
-    "closePocket(string)": FunctionFragment;
-    "closePosition(string,uint256)": FunctionFragment;
-    "createPocket((string,address,address,address,address,uint8,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)))": FunctionFragment;
-    "createPocketAndDepositEther((string,address,address,address,address,uint8,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)))": FunctionFragment;
-    "createPocketAndDepositToken((string,address,address,address,address,uint8,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)),uint256)": FunctionFragment;
-    "depositEther(string)": FunctionFragment;
-    "depositToken(string,uint256)": FunctionFragment;
-    "initialize()": FunctionFragment;
-    "multicall(bytes[])": FunctionFragment;
-    "owner()": FunctionFragment;
-    "pause()": FunctionFragment;
-    "pausePocket(string)": FunctionFragment;
-    "paused()": FunctionFragment;
-    "registry()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "restartPocket(string)": FunctionFragment;
-    "setRegistry(address)": FunctionFragment;
-    "setVault(address)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "tryClosingPosition(string,uint256)": FunctionFragment;
-    "tryMakingDCASwap(string,uint256)": FunctionFragment;
-    "unpause()": FunctionFragment;
-    "updatePocket((string,uint256,uint256,(uint256,uint8)[],uint256,(uint256,uint256,uint8),(uint8,uint256),(uint8,uint256)))": FunctionFragment;
-    "vault()": FunctionFragment;
-    "withdraw(string)": FunctionFragment;
-  };
-
+export interface PocketChefInterface extends Interface {
   getFunction(
-    nameOrSignatureOrTopic:
+    nameOrSignature:
       | "closePocket"
       | "closePosition"
       | "createPocket"
@@ -199,13 +166,20 @@ export interface PocketChefInterface extends utils.Interface {
       | "withdraw"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "closePocket",
-    values: [PromiseOrValue<string>]
-  ): string;
+  getEvent(
+    nameOrSignatureOrTopic:
+      | "Initialized"
+      | "OwnershipTransferred"
+      | "Paused"
+      | "RegistryUpdated"
+      | "Unpaused"
+      | "VaultUpdated"
+  ): EventFragment;
+
+  encodeFunctionData(functionFragment: "closePocket", values: [string]): string;
   encodeFunctionData(
     functionFragment: "closePosition",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "createPocket",
@@ -217,15 +191,15 @@ export interface PocketChefInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createPocketAndDepositToken",
-    values: [Params.CreatePocketParamsStruct, PromiseOrValue<BigNumberish>]
+    values: [Params.CreatePocketParamsStruct, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "depositEther",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "depositToken",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -233,14 +207,11 @@ export interface PocketChefInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "multicall",
-    values: [PromiseOrValue<BytesLike>[]]
+    values: [BytesLike[]]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "pausePocket",
-    values: [PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "pausePocket", values: [string]): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "registry", values?: undefined): string;
   encodeFunctionData(
@@ -249,27 +220,27 @@ export interface PocketChefInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "restartPocket",
-    values: [PromiseOrValue<string>]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "setRegistry",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setVault",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "tryClosingPosition",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "tryMakingDCASwap",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
@@ -277,10 +248,7 @@ export interface PocketChefInterface extends utils.Interface {
     values: [Params.UpdatePocketParamsStruct]
   ): string;
   encodeFunctionData(functionFragment: "vault", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "withdraw",
-    values: [PromiseOrValue<string>]
-  ): string;
+  encodeFunctionData(functionFragment: "withdraw", values: [string]): string;
 
   decodeFunctionResult(
     functionFragment: "closePocket",
@@ -352,710 +320,440 @@ export interface PocketChefInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "vault", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
-
-  events: {
-    "Initialized(uint8)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
-    "RegistryUpdated(address,address)": EventFragment;
-    "Unpaused(address)": EventFragment;
-    "VaultUpdated(address,address)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RegistryUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "VaultUpdated"): EventFragment;
 }
 
-export interface InitializedEventObject {
-  version: number;
+export namespace InitializedEvent {
+  export type InputTuple = [version: BigNumberish];
+  export type OutputTuple = [version: bigint];
+  export interface OutputObject {
+    version: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
-export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
-
-export interface OwnershipTransferredEventObject {
-  previousOwner: string;
-  newOwner: string;
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type OwnershipTransferredEvent = TypedEvent<
-  [string, string],
-  OwnershipTransferredEventObject
->;
 
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
-
-export interface PausedEventObject {
-  account: string;
+export namespace PausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type PausedEvent = TypedEvent<[string], PausedEventObject>;
 
-export type PausedEventFilter = TypedEventFilter<PausedEvent>;
-
-export interface RegistryUpdatedEventObject {
-  actor: string;
-  updatedAddress: string;
+export namespace RegistryUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, updatedAddress: AddressLike];
+  export type OutputTuple = [actor: string, updatedAddress: string];
+  export interface OutputObject {
+    actor: string;
+    updatedAddress: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type RegistryUpdatedEvent = TypedEvent<
-  [string, string],
-  RegistryUpdatedEventObject
->;
 
-export type RegistryUpdatedEventFilter = TypedEventFilter<RegistryUpdatedEvent>;
-
-export interface UnpausedEventObject {
-  account: string;
+export namespace UnpausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
-export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
-
-export interface VaultUpdatedEventObject {
-  actor: string;
-  updatedAddress: string;
+export namespace VaultUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, updatedAddress: AddressLike];
+  export type OutputTuple = [actor: string, updatedAddress: string];
+  export interface OutputObject {
+    actor: string;
+    updatedAddress: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type VaultUpdatedEvent = TypedEvent<
-  [string, string],
-  VaultUpdatedEventObject
->;
-
-export type VaultUpdatedEventFilter = TypedEventFilter<VaultUpdatedEvent>;
 
 export interface PocketChef extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+  connect(runner?: ContractRunner | null): PocketChef;
+  waitForDeployment(): Promise<this>;
 
   interface: PocketChefInterface;
 
-  queryFilter<TEvent extends TypedEvent>(
-    event: TypedEventFilter<TEvent>,
+  queryFilter<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
-
-  listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
-
-  functions: {
-    closePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    createPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    createPocketAndDepositEther(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    createPocketAndDepositToken(
-      params: Params.CreatePocketParamsStruct,
-      depositAmount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    depositEther(
-      pocketId: PromiseOrValue<string>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    depositToken(
-      pocketId: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    pausePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    paused(overrides?: CallOverrides): Promise<[boolean]>;
-
-    registry(overrides?: CallOverrides): Promise<[string]>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    restartPocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setVault(
-      vaultAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    tryClosingPosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    tryMakingDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    vault(overrides?: CallOverrides): Promise<[string]>;
-
-    withdraw(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-  };
-
-  closePocket(
-    pocketId: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  closePosition(
-    pocketId: PromiseOrValue<string>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  createPocket(
-    params: Params.CreatePocketParamsStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  createPocketAndDepositEther(
-    params: Params.CreatePocketParamsStruct,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  createPocketAndDepositToken(
-    params: Params.CreatePocketParamsStruct,
-    depositAmount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  depositEther(
-    pocketId: PromiseOrValue<string>,
-    overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  depositToken(
-    pocketId: PromiseOrValue<string>,
-    amount: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  initialize(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  multicall(
-    data: PromiseOrValue<BytesLike>[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  owner(overrides?: CallOverrides): Promise<string>;
-
-  pause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  pausePocket(
-    pocketId: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  paused(overrides?: CallOverrides): Promise<boolean>;
-
-  registry(overrides?: CallOverrides): Promise<string>;
-
-  renounceOwnership(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  restartPocket(
-    pocketId: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setRegistry(
-    registryAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setVault(
-    vaultAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    newOwner: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  tryClosingPosition(
-    pocketId: PromiseOrValue<string>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  tryMakingDCASwap(
-    pocketId: PromiseOrValue<string>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  unpause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  updatePocket(
-    params: Params.UpdatePocketParamsStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  vault(overrides?: CallOverrides): Promise<string>;
-
-  withdraw(
-    pocketId: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  callStatic: {
-    closePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createPocketAndDepositEther(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createPocketAndDepositToken(
-      params: Params.CreatePocketParamsStruct,
-      depositAmount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    depositEther(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    depositToken(
-      pocketId: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    initialize(overrides?: CallOverrides): Promise<void>;
-
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: CallOverrides
-    ): Promise<string[]>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
-
-    pause(overrides?: CallOverrides): Promise<void>;
-
-    pausePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    paused(overrides?: CallOverrides): Promise<boolean>;
-
-    registry(overrides?: CallOverrides): Promise<string>;
-
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    restartPocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setVault(
-      vaultAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    tryClosingPosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    tryMakingDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    unpause(overrides?: CallOverrides): Promise<void>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    vault(overrides?: CallOverrides): Promise<string>;
-
-    withdraw(
-      pocketId: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-  };
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  queryFilter<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    fromBlockOrBlockhash?: string | number | undefined,
+    toBlock?: string | number | undefined
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+
+  on<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  on<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+
+  once<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  once<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+
+  listeners<TCEvent extends TypedContractEvent>(
+    event: TCEvent
+  ): Promise<Array<TypedListener<TCEvent>>>;
+  listeners(eventName?: string): Promise<Array<Listener>>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
+
+  closePocket: TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+
+  closePosition: TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  createPocket: TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+
+  createPocketAndDepositEther: TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "payable"
+  >;
+
+  createPocketAndDepositToken: TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct, depositAmount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  depositEther: TypedContractMethod<[pocketId: string], [void], "payable">;
+
+  depositToken: TypedContractMethod<
+    [pocketId: string, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  initialize: TypedContractMethod<[], [void], "nonpayable">;
+
+  multicall: TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+
+  owner: TypedContractMethod<[], [string], "view">;
+
+  pause: TypedContractMethod<[], [void], "nonpayable">;
+
+  pausePocket: TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+
+  paused: TypedContractMethod<[], [boolean], "view">;
+
+  registry: TypedContractMethod<[], [string], "view">;
+
+  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  restartPocket: TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+
+  setRegistry: TypedContractMethod<
+    [registryAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setVault: TypedContractMethod<
+    [vaultAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  transferOwnership: TypedContractMethod<
+    [newOwner: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  tryClosingPosition: TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  tryMakingDCASwap: TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+
+  unpause: TypedContractMethod<[], [void], "nonpayable">;
+
+  updatePocket: TypedContractMethod<
+    [params: Params.UpdatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+
+  vault: TypedContractMethod<[], [string], "view">;
+
+  withdraw: TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
+
+  getFunction(
+    nameOrSignature: "closePocket"
+  ): TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "closePosition"
+  ): TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "createPocket"
+  ): TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "createPocketAndDepositEther"
+  ): TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct],
+    [void],
+    "payable"
+  >;
+  getFunction(
+    nameOrSignature: "createPocketAndDepositToken"
+  ): TypedContractMethod<
+    [params: Params.CreatePocketParamsStruct, depositAmount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "depositEther"
+  ): TypedContractMethod<[pocketId: string], [void], "payable">;
+  getFunction(
+    nameOrSignature: "depositToken"
+  ): TypedContractMethod<
+    [pocketId: string, amount: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "initialize"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "multicall"
+  ): TypedContractMethod<[data: BytesLike[]], [string[]], "nonpayable">;
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "pause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "pausePocket"
+  ): TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "paused"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "registry"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "renounceOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "restartPocket"
+  ): TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setRegistry"
+  ): TypedContractMethod<[registryAddress: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setVault"
+  ): TypedContractMethod<[vaultAddress: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "tryClosingPosition"
+  ): TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "tryMakingDCASwap"
+  ): TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minOut: BigNumberish],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "unpause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "updatePocket"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "vault"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "withdraw"
+  ): TypedContractMethod<[pocketId: string], [void], "nonpayable">;
+
+  getEvent(
+    key: "Initialized"
+  ): TypedContractEvent<
+    InitializedEvent.InputTuple,
+    InitializedEvent.OutputTuple,
+    InitializedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferred"
+  ): TypedContractEvent<
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
+  >;
+  getEvent(
+    key: "Paused"
+  ): TypedContractEvent<
+    PausedEvent.InputTuple,
+    PausedEvent.OutputTuple,
+    PausedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RegistryUpdated"
+  ): TypedContractEvent<
+    RegistryUpdatedEvent.InputTuple,
+    RegistryUpdatedEvent.OutputTuple,
+    RegistryUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Unpaused"
+  ): TypedContractEvent<
+    UnpausedEvent.InputTuple,
+    UnpausedEvent.OutputTuple,
+    UnpausedEvent.OutputObject
+  >;
+  getEvent(
+    key: "VaultUpdated"
+  ): TypedContractEvent<
+    VaultUpdatedEvent.InputTuple,
+    VaultUpdatedEvent.OutputTuple,
+    VaultUpdatedEvent.OutputObject
+  >;
 
   filters: {
-    "Initialized(uint8)"(version?: null): InitializedEventFilter;
-    Initialized(version?: null): InitializedEventFilter;
+    "Initialized(uint8)": TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
+    Initialized: TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
 
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
-    OwnershipTransferred(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
 
-    "Paused(address)"(account?: null): PausedEventFilter;
-    Paused(account?: null): PausedEventFilter;
+    "Paused(address)": TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
+    Paused: TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
 
-    "RegistryUpdated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      updatedAddress?: null
-    ): RegistryUpdatedEventFilter;
-    RegistryUpdated(
-      actor?: PromiseOrValue<string> | null,
-      updatedAddress?: null
-    ): RegistryUpdatedEventFilter;
+    "RegistryUpdated(address,address)": TypedContractEvent<
+      RegistryUpdatedEvent.InputTuple,
+      RegistryUpdatedEvent.OutputTuple,
+      RegistryUpdatedEvent.OutputObject
+    >;
+    RegistryUpdated: TypedContractEvent<
+      RegistryUpdatedEvent.InputTuple,
+      RegistryUpdatedEvent.OutputTuple,
+      RegistryUpdatedEvent.OutputObject
+    >;
 
-    "Unpaused(address)"(account?: null): UnpausedEventFilter;
-    Unpaused(account?: null): UnpausedEventFilter;
+    "Unpaused(address)": TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
+    Unpaused: TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
 
-    "VaultUpdated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      updatedAddress?: null
-    ): VaultUpdatedEventFilter;
-    VaultUpdated(
-      actor?: PromiseOrValue<string> | null,
-      updatedAddress?: null
-    ): VaultUpdatedEventFilter;
-  };
-
-  estimateGas: {
-    closePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createPocketAndDepositEther(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createPocketAndDepositToken(
-      params: Params.CreatePocketParamsStruct,
-      depositAmount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    depositEther(
-      pocketId: PromiseOrValue<string>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    depositToken(
-      pocketId: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    pausePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    registry(overrides?: CallOverrides): Promise<BigNumber>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    restartPocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setVault(
-      vaultAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    tryClosingPosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    tryMakingDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    vault(overrides?: CallOverrides): Promise<BigNumber>;
-
-    withdraw(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-  };
-
-  populateTransaction: {
-    closePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createPocket(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createPocketAndDepositEther(
-      params: Params.CreatePocketParamsStruct,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createPocketAndDepositToken(
-      params: Params.CreatePocketParamsStruct,
-      depositAmount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    depositEther(
-      pocketId: PromiseOrValue<string>,
-      overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    depositToken(
-      pocketId: PromiseOrValue<string>,
-      amount: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    multicall(
-      data: PromiseOrValue<BytesLike>[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    pausePocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    registry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    restartPocket(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setVault(
-      vaultAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    tryClosingPosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    tryMakingDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    updatePocket(
-      params: Params.UpdatePocketParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    vault(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    withdraw(
-      pocketId: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    "VaultUpdated(address,address)": TypedContractEvent<
+      VaultUpdatedEvent.InputTuple,
+      VaultUpdatedEvent.OutputTuple,
+      VaultUpdatedEvent.OutputObject
+    >;
+    VaultUpdated: TypedContractEvent<
+      VaultUpdatedEvent.InputTuple,
+      VaultUpdatedEvent.OutputTuple,
+      VaultUpdatedEvent.OutputObject
+    >;
   };
 }

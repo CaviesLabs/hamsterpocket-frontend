@@ -1,13 +1,14 @@
-import { PoolType } from "@/src/entities/history.entity";
-import dayjs from "dayjs";
 import { useSelector } from "react-redux";
-import State from "@/src/redux/entities/state";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { ShareIcon } from "@/src/components/icons";
-import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { groupHistoryByDate } from "./parser";
+import { ShareIcon } from "@/src/components/icons";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { PoolType } from "@/src/entities/history.entity";
 import { utilsProvider, DATE_TIME_FORMAT } from "@/src/utils";
+import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+
+import dayjs from "dayjs";
+import State from "@/src/redux/entities/state";
 
 export default function TableComponent() {
   const { whiteLists, findEntityByAddress, analyzeDecimals } = useWhiteList();
@@ -22,7 +23,7 @@ export default function TableComponent() {
         return "PAUSE";
       case PoolType.CONTINUE:
       case PoolType.RESTARTED:
-        return "CONTINUE";
+        return "Resume";
       case PoolType.DEPOSITED:
         return "DEPOSIT";
       case PoolType.CLOSED:
@@ -57,18 +58,24 @@ export default function TableComponent() {
             <>
               <div className="table-fixed w-full mobile:!hidden">
                 <div className="grid grid-cols-12">
-                  <th className="max-w-xl pb-4 mobile:text-[12px] col-span-2">
+                  <div className="max-w-xl pb-4 mobile:text-[12px] col-span-2 text-center">
                     Pocket
-                  </th>
-                  <th className="mobile:text-[12px] col-span-2">Pair</th>
-                  <th className="mobile:text-[12px] col-span-2">Type</th>
-                  <th className="mobile:text-[12px] col-span-2">Base amount</th>
-                  <th className="mobile:text-[12px] col-span-2">
+                  </div>
+                  <div className="mobile:text-[12px] col-span-2 text-center">
+                    Pair
+                  </div>
+                  <div className="mobile:text-[12px] col-span-2 text-center">
+                    Type
+                  </div>
+                  <div className="mobile:text-[12px] col-span-2 text-center">
+                    Base amount
+                  </div>
+                  <div className="mobile:text-[12px] col-span-2 text-center">
                     Target amount
-                  </th>
-                  <th className="max-w-[160px] mobile:text-[12px] col-span-1">
+                  </div>
+                  <div className="max-w-[160px] mobile:text-[12px] col-span-1 text-center">
                     Time
-                  </th>
+                  </div>
                 </div>
                 <div className="normal-text bg-dark100 rounded-[12px] px-[10px] md:max-h-[650px] md:overflow-y-auto boardslist">
                   {historiesData.map((h) => {
@@ -82,7 +89,7 @@ export default function TableComponent() {
 
                     return (
                       <div
-                        key={h._id}
+                        key={Math.random()}
                         className="grid grid-cols-12 px-[5px] py-[30px]"
                       >
                         <div className="col-span-2">
@@ -105,7 +112,12 @@ export default function TableComponent() {
                             {baseToken?.symbol}/{targetToken?.symbol}
                             {baseToken?.address && targetToken?.address && (
                               <a
-                                href={`${dexUrl}?${platformConfig?.whitelistedRouters?.[0]?.inputTag}=${baseToken?.address}&${platformConfig?.whitelistedRouters?.[0]?.outputTag}=${targetToken?.address}`}
+                                href={utilsProvider.getUrl(dexUrl, {
+                                  [platformConfig?.whitelistedRouters?.[0]
+                                    ?.inputTag]: baseToken?.address,
+                                  [platformConfig?.whitelistedRouters?.[0]
+                                    ?.outputTag]: targetToken?.address,
+                                })}
                                 target="_blank"
                                 className="ml-[10px]"
                               >
@@ -123,25 +135,8 @@ export default function TableComponent() {
                           ) : (
                             <div className="text-dark40">--</div>
                           )}
-                          {/* {h.type === PoolType.DEPOSITED ||
-                          h.type === PoolType.WITHDRAWN ||
-                          h.type === PoolType.SWAPPED ? (
-                            <>
-                              <div>{h?.baseTokenAmount}</div>
-                            </>
-                          ) : (
-                            <div className="text-dark40">--</div>
-                          )} */}
                         </div>
                         <div className="col-span-2 text-center">
-                          {/* {h.type === PoolType.WITHDRAWN ||
-                          h.type === PoolType.SWAPPED ? (
-                            <>
-                              <div>{h?.targetTokenAmount}</div>
-                            </>
-                          ) : (
-                            <div className="text-dark40">--</div>
-                          )} */}
                           {h?.targetTokenAmount ? (
                             <div>{analyzeDecimals(h?.targetTokenAmount)}</div>
                           ) : (
@@ -154,7 +149,7 @@ export default function TableComponent() {
                             <a
                               href={
                                 chainId.includes("aptos")
-                                  ? `${platformConfig?.explorerUrl}version/${h.transactionId}`
+                                  ? `${platformConfig?.explorerUrl}transactions/${h.transactionId}`
                                   : `${platformConfig?.explorerUrl}tx/${h.transactionId}`
                               }
                               target="_blank"
@@ -175,7 +170,7 @@ export default function TableComponent() {
             <div className="mt-0">
               {groupHistoryByDate(historiesData).map((rangeBundle) => {
                 return (
-                  <div className="mb-[20px]">
+                  <div className="mb-[20px]" key={Math.random()}>
                     {rangeBundle.data.map((h) => {
                       const poolDoc = h.pool_docs[0];
                       const baseToken =
@@ -186,7 +181,10 @@ export default function TableComponent() {
                         findEntityByAddress(poolDoc.targetTokenAddress);
 
                       return (
-                        <div className="mb-[20px] !text-[14px]">
+                        <div
+                          className="mb-[20px] !text-[14px]"
+                          key={Math.random()}
+                        >
                           <div className="flow-root">
                             <p className="text-white text-[14px] normal-text float-left">
                               {dayjs(h.createdAt).format(DATE_TIME_FORMAT)}
@@ -207,7 +205,12 @@ export default function TableComponent() {
                                 {baseToken?.symbol}/{targetToken?.symbol}
                                 {baseToken?.address && targetToken?.address && (
                                   <a
-                                    href={`${dexUrl}?inputCurrency=${baseToken?.address}&outputCurrency=${targetToken?.address}`}
+                                    href={utilsProvider.getUrl(dexUrl, {
+                                      [platformConfig?.whitelistedRouters?.[0]
+                                        ?.inputTag]: baseToken?.address,
+                                      [platformConfig?.whitelistedRouters?.[0]
+                                        ?.outputTag]: targetToken?.address,
+                                    })}
                                     target="_blank"
                                     className="ml-[10px]"
                                   >

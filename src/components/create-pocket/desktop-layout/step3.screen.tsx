@@ -1,14 +1,14 @@
 import { FC } from "react";
-import {
-  DepositAmount,
-  stopConditionHumanLabelParser,
-  PocketTpSlSumary,
-  parseStopConditionHumanValue,
-} from "@/src/components/create-pocket";
-import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { DCAPPair } from "@/src/components/create-pocket";
 import { ChainId } from "@/src/entities/platform-config.entity";
 import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { DCAPPair } from "@/src/components/create-pocket";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import {
+  DepositAmount,
+  PocketTpSlSumary,
+  parseStopConditionHumanValue,
+  stopConditionHumanLabelParser,
+} from "@/src/components/create-pocket";
 
 export const CreatePocketStep3Desktop: FC = () => {
   /**

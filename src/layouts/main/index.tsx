@@ -6,10 +6,15 @@ import { TabBar } from "@/src/components/tabbar";
 import { LayoutWrapper } from "@/src/layouts/main/layout-wrapper";
 import { SideBar } from "@/src/components/sidebar";
 import Footer from "@/src/components/footer";
-import Header from "@/src/components/header";
 import AuthMiddleware from "@/src/components/middlewares/auth";
 import animationData from "@/src/components/icons/animation-loading.json";
 import Lottie from "react-lottie";
+
+import dynamic from "next/dynamic";
+const Header = dynamic(() => import("@/src/components/header"), {
+  ssr: false,
+  loading: () => <div>Loading...</div>,
+});
 
 export interface MainLayoutProps {
   children?: ReactNode;

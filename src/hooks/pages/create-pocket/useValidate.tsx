@@ -81,7 +81,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     modifyErrors(
       "startAt",
       startAt.getTime() < Date.now()
-        ? "Start date must be greather than now"
+        ? "Start date must be greater than now"
         : ""
     );
   }, [startAt, createdEnable]);
@@ -91,7 +91,7 @@ export const useValidate = (): { errors: ErrorValidateContext } => {
     if (batchVolume < mintOrderSize) {
       return modifyErrors(
         "batchVolume",
-        batchVolume <= 0
+        batchVolume < mintOrderSize
           ? `Batch volume must be greater than Mint Order Size(${mintOrderSize})`
           : ""
       );

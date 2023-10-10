@@ -1,11 +1,12 @@
 import { FC, MouseEvent, useState, useMemo } from "react";
-import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
-import { useWhiteList } from "@/src/hooks/useWhitelist";
-import { ShareIcon, SearchIcon } from "@/src/components/icons";
-import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
-import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
-import { ChainId } from "@/src/entities/platform-config.entity";
 import { Input } from "@hamsterbox/ui-kit";
+import { useWhiteList } from "@/src/hooks/useWhitelist";
+import { utilsProvider, SOL_EXPLORE } from "@/src/utils";
+import { ShareIcon, SearchIcon } from "@/src/components/icons";
+import { ChainId } from "@/src/entities/platform-config.entity";
+import { usePlatformConfig } from "@/src/hooks/usePlatformConfig";
+import { useCreatePocketPage } from "@/src/hooks/pages/create-pocket";
+import { Avatar } from "antd";
 
 export const CreatePocketStep1Desktop: FC<{
   handleSelectToken(
@@ -32,10 +33,10 @@ export const CreatePocketStep1Desktop: FC<{
     return availableTargetTokens.filter(
       (token) =>
         whiteLists[token]?.name.toLowerCase().includes(search.toLowerCase()) ||
-        whiteLists[token]?.symbol
+        whiteLists[token]?.address
           .toLowerCase()
           .includes(search.toLowerCase()) ||
-        whiteLists[token]?.address.toLowerCase().includes(search.toLowerCase())
+        whiteLists[token]?.symbol.toLowerCase().includes(search.toLowerCase())
     );
   }, [search, availableTargetTokens]);
 
@@ -66,15 +67,14 @@ export const CreatePocketStep1Desktop: FC<{
                   }
                 >
                   <div className="flex items-center float-left">
-                    <div className="w-[44px] h-[44px] mobile:!w-[25px] mobile:!h-[25px] rounded-[100%] bg-dark70 flex justify-center items-center border-solid border-[5px] mobile:border-[3px] border-dark70">
-                      {whiteLists[token]?.image && (
-                        <img
-                          src={whiteLists[token]?.image}
-                          className="rounded-[50%]"
-                          alt={"token image"}
-                        />
-                      )}
-                    </div>
+                    <Avatar
+                      className={
+                        "w-[44px] h-[44px] bg-dark70 flex justify-center items-center border-solid border-[3px] border-white text-[8px]"
+                      }
+                      src={whiteLists[token]?.image}
+                    >
+                      {whiteLists[token]?.symbol}
+                    </Avatar>
                     <div className="pl-[20px]">
                       <p className="text-white text-[18px] mobile:!text-[14px] normal-text uppercase">
                         {whiteLists[token]?.symbol}
@@ -94,7 +94,7 @@ export const CreatePocketStep1Desktop: FC<{
                       href={
                         chainId === ChainId.sol
                           ? `${SOL_EXPLORE}/account/${token}`
-                          : `${platformConfig?.explorerUrl}token/${token}`
+                          : `${platformConfig?.explorerUrl}token/${whiteLists[token]?.address}`
                       }
                       target="_blank"
                       className="ml-[10px]"

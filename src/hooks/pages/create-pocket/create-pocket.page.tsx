@@ -25,15 +25,18 @@ import { useEvmWallet } from "@/src/hooks/useEvmWallet";
 import {
   createdPocketPramsParserEvm,
   convertBigNumber,
+  multipleBigNumber,
 } from "@/src/utils/evm.parser";
 import { useAptosWallet } from "@/src/hooks/useAptos";
+import bigDecimal from "js-big-decimal";
+import { toast } from "@hamsterbox/ui-kit";
 
 export const CreatePocketProvider = (props: { children: ReactNode }) => {
   /** @dev Inject wallet provider. */
   const { solanaWallet, programService } = useWallet();
 
   /** @dev Inject app wallet to get both sol & eth account info. */
-  const { walletAddress } = useAppWallet();
+  const { walletAddress, balance } = useAppWallet();
   const { chainId, pushRouterWithChainId, platformConfig } =
     usePlatformConfig();
 
@@ -177,6 +180,17 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         throw new Error("NOT::VALIDATION");
       }
 
+      /** @dev Check if sufficient funds to create or not. */
+      if (
+        new bigDecimal(balance).compareTo(new bigDecimal(depositedAmount)) < 0
+      ) {
+        toast.error(
+          "Insufficient funds to create pocket, transfer more funds to your wallet and try again.",
+          { theme: "dark" }
+        );
+        throw new Error("INSUFFICIENT_FUNDS");
+      }
+
       /** @dev Convert address to string. */
       const [baseAddress, targetAddress] = await Promise.all([
         baseTokenAddress[0]?.toBase58().toString(),
@@ -184,18 +198,18 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       ]);
 
       /** @dev Get base and qoute address in liquidity pool. */
-      let liqQoute;
+      let liqQuote;
       let marketId = "1111";
       let sideMethod: SideMethod = { sell: {} };
 
       if (chainId === ChainId.sol) {
-        const [liqBase, _liqQoute, _marketId] = findPairLiquidity(
+        const [liqBase, _liqQuote, _marketId] = findPairLiquidity(
           baseAddress,
           targetAddress
         );
 
         /** @dev Desire for global vars. */
-        liqQoute = _liqQoute;
+        liqQuote = _liqQuote;
         marketId = _marketId;
 
         /** @dev Handle to attract side method of pool.  */
@@ -215,15 +229,17 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         name: pocketName,
         baseTokenAddress: new PublicKey(baseAddress),
         quoteTokenAddress: new PublicKey(
-          chainId === ChainId.sol ? liqQoute : targetAddress
+          chainId === ChainId.sol ? liqQuote : targetAddress
         ),
         startAt: new BN(
           parseInt((startAt.getTime() / 1000).toString()).toString()
         ),
         frequency: convertDurationsTimeToHours(frequency),
-        batchVolume: new BN(batchVolume * Math.pow(10, baseTokenAddress[1])),
+        batchVolume: new BN(
+          multipleBigNumber(batchVolume, Math.pow(10, baseTokenAddress[1]))
+        ),
         depositedAmount: new BN(
-          depositedAmount * Math.pow(10, baseTokenAddress[1])
+          multipleBigNumber(depositedAmount, Math.pow(10, baseTokenAddress[1]))
         ),
         side: sideMethod,
         marketId,
@@ -278,7 +294,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
           whiteLists[targetTokenAddress[0].toBase58().toString()]?.realDecimals,
           walletAddress,
           exchange?.address,
-          exchange?.isV3 ? "0" : "1"
+          exchange?.routerVersion
         );
 
         /** @dev Process to get deposited amount in evm decimals. */
@@ -344,32 +360,32 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
         console.log({ response });
       }
       setSuccessCreated(true);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      console.warn(err);
     } finally {
       /** @dev Disable UX after processing. */
       setProcessing(false);
     }
   }, [
-    solanaWallet,
-    pocketName,
-    baseTokenAddress,
-    targetTokenAddress,
-    batchVolume,
     startAt,
+    chainId,
+    balance,
     frequency,
+    evmSigner,
+    pocketName,
+    whiteLists,
+    batchVolume,
+    solanaWallet,
     buyCondition,
+    createdEnable,
+    walletAddress,
+    stopLossAmount,
     stopConditions,
+    platformConfig,
     depositedAmount,
     takeProfitAmount,
-    stopLossAmount,
-    createdEnable,
-    chainId,
-    walletAddress,
-    evmSigner,
-    whiteLists,
-    platformConfig,
-    chainId,
+    baseTokenAddress,
+    targetTokenAddress,
     validateForms,
   ]);
 
@@ -392,7 +408,7 @@ export const CreatePocketProvider = (props: { children: ReactNode }) => {
       const ppair = findPairLiquidity(baseAddress, targetAddress);
       setMintOrderSize(ppair?.[3]);
     })();
-  }, [baseTokenAddress, targetTokenAddress, chainId]);
+  }, [baseTokenAddress, targetTokenAddress, chainId, findPairLiquidity]);
 
   /**
    * @dev Update base token when chain changed.

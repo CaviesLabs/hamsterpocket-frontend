@@ -128,7 +128,7 @@ export class CreatePocketDto {
 /**
  * @dev Dto to get qoute of trading info for solana.
  */
-export class GetQouteDto {
+export class GetQuoteDto {
   chainId: string;
   baseTokenAddress: string;
   targetTokenAddress: string;

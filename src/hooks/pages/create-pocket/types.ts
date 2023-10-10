@@ -167,7 +167,9 @@ export interface CreatePocketContextState {
 
   /**
    * @dev The function to modify arrays of conditions that the pool will pause if the market siutuation match one in conditions.
-   * @param {StopConditions[]}
+   * @param key
+   * @param value
+   * @param primary
    */
   handleModifyStopConditions(
     key: keyof StopConditions,

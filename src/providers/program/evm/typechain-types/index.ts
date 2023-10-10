@@ -52,10 +52,14 @@ export type { IWETH9 } from "./@uniswap/universal-router/contracts/interfaces/ex
 export { IWETH9__factory } from "./factories/@uniswap/universal-router/contracts/interfaces/external/IWETH9__factory";
 export type { Etherman } from "./contracts/Etherman";
 export { Etherman__factory } from "./factories/contracts/Etherman__factory";
-export type { IQuoter } from "./contracts/IQuoter";
-export { IQuoter__factory } from "./factories/contracts/IQuoter__factory";
+export type { IPeripheryImmutableState } from "./contracts/IQuoter.sol/IPeripheryImmutableState";
+export { IPeripheryImmutableState__factory } from "./factories/contracts/IQuoter.sol/IPeripheryImmutableState__factory";
+export type { IQuoter } from "./contracts/IQuoter.sol/IQuoter";
+export { IQuoter__factory } from "./factories/contracts/IQuoter.sol/IQuoter__factory";
 export type { IUniswapV2Router } from "./contracts/IRouterV2.sol/IUniswapV2Router";
 export { IUniswapV2Router__factory } from "./factories/contracts/IRouterV2.sol/IUniswapV2Router__factory";
+export type { IRouterV3 } from "./contracts/IRouterV3";
+export { IRouterV3__factory } from "./factories/contracts/IRouterV3__factory";
 export type { MockedERC20 } from "./contracts/mock/MockedERC20";
 export { MockedERC20__factory } from "./factories/contracts/mock/MockedERC20__factory";
 export type { MockedERC721 } from "./contracts/mock/MockedERC721";

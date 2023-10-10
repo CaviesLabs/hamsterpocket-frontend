@@ -3,85 +3,55 @@
 /* eslint-disable */
 import type {
   BaseContract,
-  BigNumber,
   BigNumberish,
   BytesLike,
-  CallOverrides,
-  ContractTransaction,
-  Overrides,
-  PopulatedTransaction,
-  Signer,
-  utils,
-} from "ethers";
-import type {
   FunctionFragment,
   Result,
+  Interface,
   EventFragment,
-} from "@ethersproject/abi";
-import type { Listener, Provider } from "@ethersproject/providers";
+  AddressLike,
+  ContractRunner,
+  ContractMethod,
+  Listener,
+} from "ethers";
 import type {
-  TypedEventFilter,
-  TypedEvent,
+  TypedContractEvent,
+  TypedDeferredTopicFilter,
+  TypedEventLog,
+  TypedLogDescription,
   TypedListener,
-  OnEvent,
-  PromiseOrValue,
+  TypedContractMethod,
 } from "../../common";
 
 export declare namespace Params {
   export type UpdatePocketDepositParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    tokenAddress: PromiseOrValue<string>;
+    actor: AddressLike;
+    id: string;
+    amount: BigNumberish;
+    tokenAddress: AddressLike;
   };
 
   export type UpdatePocketDepositParamsStructOutput = [
-    string,
-    string,
-    BigNumber,
-    string
-  ] & { actor: string; id: string; amount: BigNumber; tokenAddress: string };
+    actor: string,
+    id: string,
+    amount: bigint,
+    tokenAddress: string
+  ] & { actor: string; id: string; amount: bigint; tokenAddress: string };
 
   export type UpdatePocketWithdrawalParamsStruct = {
-    actor: PromiseOrValue<string>;
-    id: PromiseOrValue<string>;
-  };
-
-  export type UpdatePocketWithdrawalParamsStructOutput = [string, string] & {
-    actor: string;
+    actor: AddressLike;
     id: string;
   };
+
+  export type UpdatePocketWithdrawalParamsStructOutput = [
+    actor: string,
+    id: string
+  ] & { actor: string; id: string };
 }
 
-export interface PocketVaultInterface extends utils.Interface {
-  functions: {
-    "closePosition(string,uint256)": FunctionFragment;
-    "deposit((address,string,uint256,address))": FunctionFragment;
-    "etherman()": FunctionFragment;
-    "getCurrentQuote(address,address,address,uint256,uint256)": FunctionFragment;
-    "getCurrentQuoteV2(address,address,address,uint256)": FunctionFragment;
-    "getCurrentQuoteV3(address,address,address,uint256,uint256)": FunctionFragment;
-    "initEtherman(address)": FunctionFragment;
-    "initialize()": FunctionFragment;
-    "makeDCASwap(string,uint256)": FunctionFragment;
-    "owner()": FunctionFragment;
-    "pause()": FunctionFragment;
-    "paused()": FunctionFragment;
-    "permit2()": FunctionFragment;
-    "quoter()": FunctionFragment;
-    "registry()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
-    "setEtherman(address)": FunctionFragment;
-    "setPermit2(address)": FunctionFragment;
-    "setQuoter(address)": FunctionFragment;
-    "setRegistry(address)": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
-    "unpause()": FunctionFragment;
-    "withdraw((address,string))": FunctionFragment;
-  };
-
+export interface PocketVaultInterface extends Interface {
   getFunction(
-    nameOrSignatureOrTopic:
+    nameOrSignature:
       | "closePosition"
       | "deposit"
       | "etherman"
@@ -95,7 +65,7 @@ export interface PocketVaultInterface extends utils.Interface {
       | "pause"
       | "paused"
       | "permit2"
-      | "quoter"
+      | "quoterMapping"
       | "registry"
       | "renounceOwnership"
       | "setEtherman"
@@ -107,9 +77,26 @@ export interface PocketVaultInterface extends utils.Interface {
       | "withdraw"
   ): FunctionFragment;
 
+  getEvent(
+    nameOrSignatureOrTopic:
+      | "ClosedPosition"
+      | "Deposited"
+      | "EthermanUpdated"
+      | "Initialized"
+      | "OwnershipTransferred"
+      | "Paused"
+      | "Permit2Updated"
+      | "QuoterUpdated"
+      | "RegistryUpdated"
+      | "SwapFeeUpdated"
+      | "Swapped"
+      | "Unpaused"
+      | "Withdrawn"
+  ): EventFragment;
+
   encodeFunctionData(
     functionFragment: "closePosition",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
@@ -118,36 +105,19 @@ export interface PocketVaultInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "etherman", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getCurrentQuote",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [AddressLike, AddressLike, AddressLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentQuoteV2",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [AddressLike, AddressLike, AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getCurrentQuoteV3",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
+    values: [AddressLike, AddressLike, AddressLike, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "initEtherman",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -155,13 +125,16 @@ export interface PocketVaultInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "makeDCASwap",
-    values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pause", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(functionFragment: "permit2", values?: undefined): string;
-  encodeFunctionData(functionFragment: "quoter", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "quoterMapping",
+    values: [AddressLike]
+  ): string;
   encodeFunctionData(functionFragment: "registry", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -169,23 +142,23 @@ export interface PocketVaultInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setEtherman",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setPermit2",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setQuoter",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike, AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "setRegistry",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
-    values: [PromiseOrValue<string>]
+    values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
@@ -224,7 +197,10 @@ export interface PocketVaultInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "permit2", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "quoter", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "quoterMapping",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "registry", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -246,878 +222,763 @@ export interface PocketVaultInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
-
-  events: {
-    "ClosedPosition(address,string,address,uint256,address,uint256,uint256)": EventFragment;
-    "Deposited(address,string,address,uint256,uint256)": EventFragment;
-    "EthermanUpdated(address,address)": EventFragment;
-    "Initialized(uint8)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
-    "Paused(address)": EventFragment;
-    "Permit2Updated(address,address)": EventFragment;
-    "QuoterUpdated(address,address)": EventFragment;
-    "RegistryUpdated(address,address)": EventFragment;
-    "SwapFeeUpdated(address,uint256)": EventFragment;
-    "Swapped(address,string,address,uint256,address,uint256,uint256)": EventFragment;
-    "Unpaused(address)": EventFragment;
-    "Withdrawn(address,string,address,uint256,address,uint256,uint256)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "ClosedPosition"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Deposited"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "EthermanUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Permit2Updated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "QuoterUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RegistryUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SwapFeeUpdated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Swapped"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Withdrawn"): EventFragment;
 }
 
-export interface ClosedPositionEventObject {
-  actor: string;
-  pocketId: string;
-  baseTokenAddress: string;
-  baseTokenAmount: BigNumber;
-  targetTokenAddress: string;
-  targetTokenAmount: BigNumber;
-  timestamp: BigNumber;
+export namespace ClosedPositionEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    baseTokenAddress: AddressLike,
+    baseTokenAmount: BigNumberish,
+    targetTokenAddress: AddressLike,
+    targetTokenAmount: BigNumberish,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    baseTokenAddress: string,
+    baseTokenAmount: bigint,
+    targetTokenAddress: string,
+    targetTokenAmount: bigint,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    baseTokenAddress: string;
+    baseTokenAmount: bigint;
+    targetTokenAddress: string;
+    targetTokenAmount: bigint;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type ClosedPositionEvent = TypedEvent<
-  [string, string, string, BigNumber, string, BigNumber, BigNumber],
-  ClosedPositionEventObject
->;
 
-export type ClosedPositionEventFilter = TypedEventFilter<ClosedPositionEvent>;
-
-export interface DepositedEventObject {
-  actor: string;
-  pocketId: string;
-  tokenAddress: string;
-  amount: BigNumber;
-  timestamp: BigNumber;
+export namespace DepositedEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    tokenAddress: AddressLike,
+    amount: BigNumberish,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    tokenAddress: string,
+    amount: bigint,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    tokenAddress: string;
+    amount: bigint;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type DepositedEvent = TypedEvent<
-  [string, string, string, BigNumber, BigNumber],
-  DepositedEventObject
->;
 
-export type DepositedEventFilter = TypedEventFilter<DepositedEvent>;
-
-export interface EthermanUpdatedEventObject {
-  actor: string;
-  ethermanAddress: string;
+export namespace EthermanUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, ethermanAddress: AddressLike];
+  export type OutputTuple = [actor: string, ethermanAddress: string];
+  export interface OutputObject {
+    actor: string;
+    ethermanAddress: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type EthermanUpdatedEvent = TypedEvent<
-  [string, string],
-  EthermanUpdatedEventObject
->;
 
-export type EthermanUpdatedEventFilter = TypedEventFilter<EthermanUpdatedEvent>;
-
-export interface InitializedEventObject {
-  version: number;
+export namespace InitializedEvent {
+  export type InputTuple = [version: BigNumberish];
+  export type OutputTuple = [version: bigint];
+  export interface OutputObject {
+    version: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
 
-export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
-
-export interface OwnershipTransferredEventObject {
-  previousOwner: string;
-  newOwner: string;
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
+  export interface OutputObject {
+    previousOwner: string;
+    newOwner: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type OwnershipTransferredEvent = TypedEvent<
-  [string, string],
-  OwnershipTransferredEventObject
->;
 
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
-
-export interface PausedEventObject {
-  account: string;
+export namespace PausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type PausedEvent = TypedEvent<[string], PausedEventObject>;
 
-export type PausedEventFilter = TypedEventFilter<PausedEvent>;
-
-export interface Permit2UpdatedEventObject {
-  actor: string;
-  permit2: string;
+export namespace Permit2UpdatedEvent {
+  export type InputTuple = [actor: AddressLike, permit2: AddressLike];
+  export type OutputTuple = [actor: string, permit2: string];
+  export interface OutputObject {
+    actor: string;
+    permit2: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type Permit2UpdatedEvent = TypedEvent<
-  [string, string],
-  Permit2UpdatedEventObject
->;
 
-export type Permit2UpdatedEventFilter = TypedEventFilter<Permit2UpdatedEvent>;
-
-export interface QuoterUpdatedEventObject {
-  actor: string;
-  quoter: string;
+export namespace QuoterUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, quoter: AddressLike];
+  export type OutputTuple = [actor: string, quoter: string];
+  export interface OutputObject {
+    actor: string;
+    quoter: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type QuoterUpdatedEvent = TypedEvent<
-  [string, string],
-  QuoterUpdatedEventObject
->;
 
-export type QuoterUpdatedEventFilter = TypedEventFilter<QuoterUpdatedEvent>;
-
-export interface RegistryUpdatedEventObject {
-  actor: string;
-  registry: string;
+export namespace RegistryUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, registry: AddressLike];
+  export type OutputTuple = [actor: string, registry: string];
+  export interface OutputObject {
+    actor: string;
+    registry: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type RegistryUpdatedEvent = TypedEvent<
-  [string, string],
-  RegistryUpdatedEventObject
->;
 
-export type RegistryUpdatedEventFilter = TypedEventFilter<RegistryUpdatedEvent>;
-
-export interface SwapFeeUpdatedEventObject {
-  actor: string;
-  value: BigNumber;
+export namespace SwapFeeUpdatedEvent {
+  export type InputTuple = [actor: AddressLike, value: BigNumberish];
+  export type OutputTuple = [actor: string, value: bigint];
+  export interface OutputObject {
+    actor: string;
+    value: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type SwapFeeUpdatedEvent = TypedEvent<
-  [string, BigNumber],
-  SwapFeeUpdatedEventObject
->;
 
-export type SwapFeeUpdatedEventFilter = TypedEventFilter<SwapFeeUpdatedEvent>;
-
-export interface SwappedEventObject {
-  actor: string;
-  pocketId: string;
-  baseTokenAddress: string;
-  baseTokenAmount: BigNumber;
-  targetTokenAddress: string;
-  targetTokenAmount: BigNumber;
-  timestamp: BigNumber;
+export namespace SwappedEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    baseTokenAddress: AddressLike,
+    baseTokenAmount: BigNumberish,
+    targetTokenAddress: AddressLike,
+    targetTokenAmount: BigNumberish,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    baseTokenAddress: string,
+    baseTokenAmount: bigint,
+    targetTokenAddress: string,
+    targetTokenAmount: bigint,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    baseTokenAddress: string;
+    baseTokenAmount: bigint;
+    targetTokenAddress: string;
+    targetTokenAmount: bigint;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type SwappedEvent = TypedEvent<
-  [string, string, string, BigNumber, string, BigNumber, BigNumber],
-  SwappedEventObject
->;
 
-export type SwappedEventFilter = TypedEventFilter<SwappedEvent>;
-
-export interface UnpausedEventObject {
-  account: string;
+export namespace UnpausedEvent {
+  export type InputTuple = [account: AddressLike];
+  export type OutputTuple = [account: string];
+  export interface OutputObject {
+    account: string;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type UnpausedEvent = TypedEvent<[string], UnpausedEventObject>;
 
-export type UnpausedEventFilter = TypedEventFilter<UnpausedEvent>;
-
-export interface WithdrawnEventObject {
-  actor: string;
-  pocketId: string;
-  baseTokenAddress: string;
-  baseTokenAmount: BigNumber;
-  targetTokenAddress: string;
-  targetTokenAmount: BigNumber;
-  timestamp: BigNumber;
+export namespace WithdrawnEvent {
+  export type InputTuple = [
+    actor: AddressLike,
+    pocketId: string,
+    baseTokenAddress: AddressLike,
+    baseTokenAmount: BigNumberish,
+    targetTokenAddress: AddressLike,
+    targetTokenAmount: BigNumberish,
+    timestamp: BigNumberish
+  ];
+  export type OutputTuple = [
+    actor: string,
+    pocketId: string,
+    baseTokenAddress: string,
+    baseTokenAmount: bigint,
+    targetTokenAddress: string,
+    targetTokenAmount: bigint,
+    timestamp: bigint
+  ];
+  export interface OutputObject {
+    actor: string;
+    pocketId: string;
+    baseTokenAddress: string;
+    baseTokenAmount: bigint;
+    targetTokenAddress: string;
+    targetTokenAmount: bigint;
+    timestamp: bigint;
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
 }
-export type WithdrawnEvent = TypedEvent<
-  [string, string, string, BigNumber, string, BigNumber, BigNumber],
-  WithdrawnEventObject
->;
-
-export type WithdrawnEventFilter = TypedEventFilter<WithdrawnEvent>;
 
 export interface PocketVault extends BaseContract {
-  connect(signerOrProvider: Signer | Provider | string): this;
-  attach(addressOrName: string): this;
-  deployed(): Promise<this>;
+  connect(runner?: ContractRunner | null): PocketVault;
+  waitForDeployment(): Promise<this>;
 
   interface: PocketVaultInterface;
 
-  queryFilter<TEvent extends TypedEvent>(
-    event: TypedEventFilter<TEvent>,
+  queryFilter<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
     fromBlockOrBlockhash?: string | number | undefined,
     toBlock?: string | number | undefined
-  ): Promise<Array<TEvent>>;
-
-  listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>
-  ): Array<TypedListener<TEvent>>;
-  listeners(eventName?: string): Array<Listener>;
-  removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>
-  ): this;
-  removeAllListeners(eventName?: string): this;
-  off: OnEvent<this>;
-  on: OnEvent<this>;
-  once: OnEvent<this>;
-  removeListener: OnEvent<this>;
-
-  functions: {
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    deposit(
-      params: Params.UpdatePocketDepositParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    etherman(overrides?: CallOverrides): Promise<[string]>;
-
-    getCurrentQuote(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterAddress: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    getCurrentQuoteV2(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV2Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    getCurrentQuoteV3(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV3Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    initEtherman(
-      _weth: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    makeDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<[string]>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    paused(overrides?: CallOverrides): Promise<[boolean]>;
-
-    permit2(overrides?: CallOverrides): Promise<[string]>;
-
-    quoter(overrides?: CallOverrides): Promise<[string]>;
-
-    registry(overrides?: CallOverrides): Promise<[string]>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setEtherman(
-      ethermanAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setPermit2(
-      permit2Address: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setQuoter(
-      quoterAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    withdraw(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-  };
-
-  closePosition(
-    pocketId: PromiseOrValue<string>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  deposit(
-    params: Params.UpdatePocketDepositParamsStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  etherman(overrides?: CallOverrides): Promise<string>;
-
-  getCurrentQuote(
-    baseTokenAddress: PromiseOrValue<string>,
-    targetTokenAddress: PromiseOrValue<string>,
-    ammRouterAddress: PromiseOrValue<string>,
-    amountIn: PromiseOrValue<BigNumberish>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  getCurrentQuoteV2(
-    baseTokenAddress: PromiseOrValue<string>,
-    targetTokenAddress: PromiseOrValue<string>,
-    ammRouterV2Address: PromiseOrValue<string>,
-    amountIn: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
-
-  getCurrentQuoteV3(
-    baseTokenAddress: PromiseOrValue<string>,
-    targetTokenAddress: PromiseOrValue<string>,
-    ammRouterV3Address: PromiseOrValue<string>,
-    amountIn: PromiseOrValue<BigNumberish>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  initEtherman(
-    _weth: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  initialize(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  makeDCASwap(
-    pocketId: PromiseOrValue<string>,
-    fee: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  owner(overrides?: CallOverrides): Promise<string>;
-
-  pause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  paused(overrides?: CallOverrides): Promise<boolean>;
-
-  permit2(overrides?: CallOverrides): Promise<string>;
-
-  quoter(overrides?: CallOverrides): Promise<string>;
-
-  registry(overrides?: CallOverrides): Promise<string>;
-
-  renounceOwnership(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setEtherman(
-    ethermanAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setPermit2(
-    permit2Address: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setQuoter(
-    quoterAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setRegistry(
-    registryAddress: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  transferOwnership(
-    newOwner: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  unpause(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  withdraw(
-    params: Params.UpdatePocketWithdrawalParamsStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  callStatic: {
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    deposit(
-      params: Params.UpdatePocketDepositParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    etherman(overrides?: CallOverrides): Promise<string>;
-
-    getCurrentQuote(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterAddress: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    getCurrentQuoteV2(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV2Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    getCurrentQuoteV3(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV3Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    initEtherman(
-      _weth: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    initialize(overrides?: CallOverrides): Promise<void>;
-
-    makeDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
-
-    pause(overrides?: CallOverrides): Promise<void>;
-
-    paused(overrides?: CallOverrides): Promise<boolean>;
-
-    permit2(overrides?: CallOverrides): Promise<string>;
-
-    quoter(overrides?: CallOverrides): Promise<string>;
-
-    registry(overrides?: CallOverrides): Promise<string>;
-
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    setEtherman(
-      ethermanAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setPermit2(
-      permit2Address: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setQuoter(
-      quoterAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    unpause(overrides?: CallOverrides): Promise<void>;
-
-    withdraw(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-  };
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+  queryFilter<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    fromBlockOrBlockhash?: string | number | undefined,
+    toBlock?: string | number | undefined
+  ): Promise<Array<TypedEventLog<TCEvent>>>;
+
+  on<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  on<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+
+  once<TCEvent extends TypedContractEvent>(
+    event: TCEvent,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+  once<TCEvent extends TypedContractEvent>(
+    filter: TypedDeferredTopicFilter<TCEvent>,
+    listener: TypedListener<TCEvent>
+  ): Promise<this>;
+
+  listeners<TCEvent extends TypedContractEvent>(
+    event: TCEvent
+  ): Promise<Array<TypedListener<TCEvent>>>;
+  listeners(eventName?: string): Promise<Array<Listener>>;
+  removeAllListeners<TCEvent extends TypedContractEvent>(
+    event?: TCEvent
+  ): Promise<this>;
+
+  closePosition: TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minimumAmountOut: BigNumberish],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+
+  deposit: TypedContractMethod<
+    [params: Params.UpdatePocketDepositParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+
+  etherman: TypedContractMethod<[], [string], "view">;
+
+  getCurrentQuote: TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterAddress: AddressLike,
+      amountIn: BigNumberish,
+      fee: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+
+  getCurrentQuoteV2: TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterV2Address: AddressLike,
+      amountIn: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "view"
+  >;
+
+  getCurrentQuoteV3: TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterV3Address: AddressLike,
+      amountIn: BigNumberish,
+      fee: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+
+  initEtherman: TypedContractMethod<[_weth: AddressLike], [void], "nonpayable">;
+
+  initialize: TypedContractMethod<[], [void], "nonpayable">;
+
+  makeDCASwap: TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minimumAmountOut: BigNumberish],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+
+  owner: TypedContractMethod<[], [string], "view">;
+
+  pause: TypedContractMethod<[], [void], "nonpayable">;
+
+  paused: TypedContractMethod<[], [boolean], "view">;
+
+  permit2: TypedContractMethod<[], [string], "view">;
+
+  quoterMapping: TypedContractMethod<[arg0: AddressLike], [string], "view">;
+
+  registry: TypedContractMethod<[], [string], "view">;
+
+  renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
+
+  setEtherman: TypedContractMethod<
+    [ethermanAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setPermit2: TypedContractMethod<
+    [permit2Address: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setQuoter: TypedContractMethod<
+    [router: AddressLike, quoterAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  setRegistry: TypedContractMethod<
+    [registryAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  transferOwnership: TypedContractMethod<
+    [newOwner: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+
+  unpause: TypedContractMethod<[], [void], "nonpayable">;
+
+  withdraw: TypedContractMethod<
+    [params: Params.UpdatePocketWithdrawalParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+
+  getFunction<T extends ContractMethod = ContractMethod>(
+    key: string | FunctionFragment
+  ): T;
+
+  getFunction(
+    nameOrSignature: "closePosition"
+  ): TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minimumAmountOut: BigNumberish],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "deposit"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketDepositParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "etherman"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "getCurrentQuote"
+  ): TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterAddress: AddressLike,
+      amountIn: BigNumberish,
+      fee: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "getCurrentQuoteV2"
+  ): TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterV2Address: AddressLike,
+      amountIn: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getCurrentQuoteV3"
+  ): TypedContractMethod<
+    [
+      baseTokenAddress: AddressLike,
+      targetTokenAddress: AddressLike,
+      ammRouterV3Address: AddressLike,
+      amountIn: BigNumberish,
+      fee: BigNumberish
+    ],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "initEtherman"
+  ): TypedContractMethod<[_weth: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "initialize"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "makeDCASwap"
+  ): TypedContractMethod<
+    [pocketId: string, fee: BigNumberish, minimumAmountOut: BigNumberish],
+    [[bigint, bigint]],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "owner"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "pause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "paused"
+  ): TypedContractMethod<[], [boolean], "view">;
+  getFunction(
+    nameOrSignature: "permit2"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "quoterMapping"
+  ): TypedContractMethod<[arg0: AddressLike], [string], "view">;
+  getFunction(
+    nameOrSignature: "registry"
+  ): TypedContractMethod<[], [string], "view">;
+  getFunction(
+    nameOrSignature: "renounceOwnership"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setEtherman"
+  ): TypedContractMethod<[ethermanAddress: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setPermit2"
+  ): TypedContractMethod<[permit2Address: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "setQuoter"
+  ): TypedContractMethod<
+    [router: AddressLike, quoterAddress: AddressLike],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
+    nameOrSignature: "setRegistry"
+  ): TypedContractMethod<[registryAddress: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "transferOwnership"
+  ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "unpause"
+  ): TypedContractMethod<[], [void], "nonpayable">;
+  getFunction(
+    nameOrSignature: "withdraw"
+  ): TypedContractMethod<
+    [params: Params.UpdatePocketWithdrawalParamsStruct],
+    [void],
+    "nonpayable"
+  >;
+
+  getEvent(
+    key: "ClosedPosition"
+  ): TypedContractEvent<
+    ClosedPositionEvent.InputTuple,
+    ClosedPositionEvent.OutputTuple,
+    ClosedPositionEvent.OutputObject
+  >;
+  getEvent(
+    key: "Deposited"
+  ): TypedContractEvent<
+    DepositedEvent.InputTuple,
+    DepositedEvent.OutputTuple,
+    DepositedEvent.OutputObject
+  >;
+  getEvent(
+    key: "EthermanUpdated"
+  ): TypedContractEvent<
+    EthermanUpdatedEvent.InputTuple,
+    EthermanUpdatedEvent.OutputTuple,
+    EthermanUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Initialized"
+  ): TypedContractEvent<
+    InitializedEvent.InputTuple,
+    InitializedEvent.OutputTuple,
+    InitializedEvent.OutputObject
+  >;
+  getEvent(
+    key: "OwnershipTransferred"
+  ): TypedContractEvent<
+    OwnershipTransferredEvent.InputTuple,
+    OwnershipTransferredEvent.OutputTuple,
+    OwnershipTransferredEvent.OutputObject
+  >;
+  getEvent(
+    key: "Paused"
+  ): TypedContractEvent<
+    PausedEvent.InputTuple,
+    PausedEvent.OutputTuple,
+    PausedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Permit2Updated"
+  ): TypedContractEvent<
+    Permit2UpdatedEvent.InputTuple,
+    Permit2UpdatedEvent.OutputTuple,
+    Permit2UpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "QuoterUpdated"
+  ): TypedContractEvent<
+    QuoterUpdatedEvent.InputTuple,
+    QuoterUpdatedEvent.OutputTuple,
+    QuoterUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "RegistryUpdated"
+  ): TypedContractEvent<
+    RegistryUpdatedEvent.InputTuple,
+    RegistryUpdatedEvent.OutputTuple,
+    RegistryUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "SwapFeeUpdated"
+  ): TypedContractEvent<
+    SwapFeeUpdatedEvent.InputTuple,
+    SwapFeeUpdatedEvent.OutputTuple,
+    SwapFeeUpdatedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Swapped"
+  ): TypedContractEvent<
+    SwappedEvent.InputTuple,
+    SwappedEvent.OutputTuple,
+    SwappedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Unpaused"
+  ): TypedContractEvent<
+    UnpausedEvent.InputTuple,
+    UnpausedEvent.OutputTuple,
+    UnpausedEvent.OutputObject
+  >;
+  getEvent(
+    key: "Withdrawn"
+  ): TypedContractEvent<
+    WithdrawnEvent.InputTuple,
+    WithdrawnEvent.OutputTuple,
+    WithdrawnEvent.OutputObject
+  >;
 
   filters: {
-    "ClosedPosition(address,string,address,uint256,address,uint256,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): ClosedPositionEventFilter;
-    ClosedPosition(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): ClosedPositionEventFilter;
+    "ClosedPosition(address,string,address,uint256,address,uint256,uint256)": TypedContractEvent<
+      ClosedPositionEvent.InputTuple,
+      ClosedPositionEvent.OutputTuple,
+      ClosedPositionEvent.OutputObject
+    >;
+    ClosedPosition: TypedContractEvent<
+      ClosedPositionEvent.InputTuple,
+      ClosedPositionEvent.OutputTuple,
+      ClosedPositionEvent.OutputObject
+    >;
 
-    "Deposited(address,string,address,uint256,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      tokenAddress?: PromiseOrValue<string> | null,
-      amount?: null,
-      timestamp?: null
-    ): DepositedEventFilter;
-    Deposited(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      tokenAddress?: PromiseOrValue<string> | null,
-      amount?: null,
-      timestamp?: null
-    ): DepositedEventFilter;
+    "Deposited(address,string,address,uint256,uint256)": TypedContractEvent<
+      DepositedEvent.InputTuple,
+      DepositedEvent.OutputTuple,
+      DepositedEvent.OutputObject
+    >;
+    Deposited: TypedContractEvent<
+      DepositedEvent.InputTuple,
+      DepositedEvent.OutputTuple,
+      DepositedEvent.OutputObject
+    >;
 
-    "EthermanUpdated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      ethermanAddress?: PromiseOrValue<string> | null
-    ): EthermanUpdatedEventFilter;
-    EthermanUpdated(
-      actor?: PromiseOrValue<string> | null,
-      ethermanAddress?: PromiseOrValue<string> | null
-    ): EthermanUpdatedEventFilter;
+    "EthermanUpdated(address,address)": TypedContractEvent<
+      EthermanUpdatedEvent.InputTuple,
+      EthermanUpdatedEvent.OutputTuple,
+      EthermanUpdatedEvent.OutputObject
+    >;
+    EthermanUpdated: TypedContractEvent<
+      EthermanUpdatedEvent.InputTuple,
+      EthermanUpdatedEvent.OutputTuple,
+      EthermanUpdatedEvent.OutputObject
+    >;
 
-    "Initialized(uint8)"(version?: null): InitializedEventFilter;
-    Initialized(version?: null): InitializedEventFilter;
+    "Initialized(uint8)": TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
+    Initialized: TypedContractEvent<
+      InitializedEvent.InputTuple,
+      InitializedEvent.OutputTuple,
+      InitializedEvent.OutputObject
+    >;
 
-    "OwnershipTransferred(address,address)"(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
-    OwnershipTransferred(
-      previousOwner?: PromiseOrValue<string> | null,
-      newOwner?: PromiseOrValue<string> | null
-    ): OwnershipTransferredEventFilter;
+    "OwnershipTransferred(address,address)": TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
+    OwnershipTransferred: TypedContractEvent<
+      OwnershipTransferredEvent.InputTuple,
+      OwnershipTransferredEvent.OutputTuple,
+      OwnershipTransferredEvent.OutputObject
+    >;
 
-    "Paused(address)"(account?: null): PausedEventFilter;
-    Paused(account?: null): PausedEventFilter;
+    "Paused(address)": TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
+    Paused: TypedContractEvent<
+      PausedEvent.InputTuple,
+      PausedEvent.OutputTuple,
+      PausedEvent.OutputObject
+    >;
 
-    "Permit2Updated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      permit2?: PromiseOrValue<string> | null
-    ): Permit2UpdatedEventFilter;
-    Permit2Updated(
-      actor?: PromiseOrValue<string> | null,
-      permit2?: PromiseOrValue<string> | null
-    ): Permit2UpdatedEventFilter;
+    "Permit2Updated(address,address)": TypedContractEvent<
+      Permit2UpdatedEvent.InputTuple,
+      Permit2UpdatedEvent.OutputTuple,
+      Permit2UpdatedEvent.OutputObject
+    >;
+    Permit2Updated: TypedContractEvent<
+      Permit2UpdatedEvent.InputTuple,
+      Permit2UpdatedEvent.OutputTuple,
+      Permit2UpdatedEvent.OutputObject
+    >;
 
-    "QuoterUpdated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      quoter?: PromiseOrValue<string> | null
-    ): QuoterUpdatedEventFilter;
-    QuoterUpdated(
-      actor?: PromiseOrValue<string> | null,
-      quoter?: PromiseOrValue<string> | null
-    ): QuoterUpdatedEventFilter;
+    "QuoterUpdated(address,address)": TypedContractEvent<
+      QuoterUpdatedEvent.InputTuple,
+      QuoterUpdatedEvent.OutputTuple,
+      QuoterUpdatedEvent.OutputObject
+    >;
+    QuoterUpdated: TypedContractEvent<
+      QuoterUpdatedEvent.InputTuple,
+      QuoterUpdatedEvent.OutputTuple,
+      QuoterUpdatedEvent.OutputObject
+    >;
 
-    "RegistryUpdated(address,address)"(
-      actor?: PromiseOrValue<string> | null,
-      registry?: PromiseOrValue<string> | null
-    ): RegistryUpdatedEventFilter;
-    RegistryUpdated(
-      actor?: PromiseOrValue<string> | null,
-      registry?: PromiseOrValue<string> | null
-    ): RegistryUpdatedEventFilter;
+    "RegistryUpdated(address,address)": TypedContractEvent<
+      RegistryUpdatedEvent.InputTuple,
+      RegistryUpdatedEvent.OutputTuple,
+      RegistryUpdatedEvent.OutputObject
+    >;
+    RegistryUpdated: TypedContractEvent<
+      RegistryUpdatedEvent.InputTuple,
+      RegistryUpdatedEvent.OutputTuple,
+      RegistryUpdatedEvent.OutputObject
+    >;
 
-    "SwapFeeUpdated(address,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      value?: null
-    ): SwapFeeUpdatedEventFilter;
-    SwapFeeUpdated(
-      actor?: PromiseOrValue<string> | null,
-      value?: null
-    ): SwapFeeUpdatedEventFilter;
+    "SwapFeeUpdated(address,uint256)": TypedContractEvent<
+      SwapFeeUpdatedEvent.InputTuple,
+      SwapFeeUpdatedEvent.OutputTuple,
+      SwapFeeUpdatedEvent.OutputObject
+    >;
+    SwapFeeUpdated: TypedContractEvent<
+      SwapFeeUpdatedEvent.InputTuple,
+      SwapFeeUpdatedEvent.OutputTuple,
+      SwapFeeUpdatedEvent.OutputObject
+    >;
 
-    "Swapped(address,string,address,uint256,address,uint256,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): SwappedEventFilter;
-    Swapped(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): SwappedEventFilter;
+    "Swapped(address,string,address,uint256,address,uint256,uint256)": TypedContractEvent<
+      SwappedEvent.InputTuple,
+      SwappedEvent.OutputTuple,
+      SwappedEvent.OutputObject
+    >;
+    Swapped: TypedContractEvent<
+      SwappedEvent.InputTuple,
+      SwappedEvent.OutputTuple,
+      SwappedEvent.OutputObject
+    >;
 
-    "Unpaused(address)"(account?: null): UnpausedEventFilter;
-    Unpaused(account?: null): UnpausedEventFilter;
+    "Unpaused(address)": TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
+    Unpaused: TypedContractEvent<
+      UnpausedEvent.InputTuple,
+      UnpausedEvent.OutputTuple,
+      UnpausedEvent.OutputObject
+    >;
 
-    "Withdrawn(address,string,address,uint256,address,uint256,uint256)"(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): WithdrawnEventFilter;
-    Withdrawn(
-      actor?: PromiseOrValue<string> | null,
-      pocketId?: null,
-      baseTokenAddress?: null,
-      baseTokenAmount?: null,
-      targetTokenAddress?: null,
-      targetTokenAmount?: null,
-      timestamp?: null
-    ): WithdrawnEventFilter;
-  };
-
-  estimateGas: {
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    deposit(
-      params: Params.UpdatePocketDepositParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    etherman(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getCurrentQuote(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterAddress: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    getCurrentQuoteV2(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV2Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getCurrentQuoteV3(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV3Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    initEtherman(
-      _weth: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    makeDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    paused(overrides?: CallOverrides): Promise<BigNumber>;
-
-    permit2(overrides?: CallOverrides): Promise<BigNumber>;
-
-    quoter(overrides?: CallOverrides): Promise<BigNumber>;
-
-    registry(overrides?: CallOverrides): Promise<BigNumber>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setEtherman(
-      ethermanAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setPermit2(
-      permit2Address: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setQuoter(
-      quoterAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    withdraw(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-  };
-
-  populateTransaction: {
-    closePosition(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    deposit(
-      params: Params.UpdatePocketDepositParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    etherman(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getCurrentQuote(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterAddress: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    getCurrentQuoteV2(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV2Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getCurrentQuoteV3(
-      baseTokenAddress: PromiseOrValue<string>,
-      targetTokenAddress: PromiseOrValue<string>,
-      ammRouterV3Address: PromiseOrValue<string>,
-      amountIn: PromiseOrValue<BigNumberish>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initEtherman(
-      _weth: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initialize(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    makeDCASwap(
-      pocketId: PromiseOrValue<string>,
-      fee: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    pause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    permit2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    quoter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    registry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    renounceOwnership(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setEtherman(
-      ethermanAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setPermit2(
-      permit2Address: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setQuoter(
-      quoterAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setRegistry(
-      registryAddress: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    unpause(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    withdraw(
-      params: Params.UpdatePocketWithdrawalParamsStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
+    "Withdrawn(address,string,address,uint256,address,uint256,uint256)": TypedContractEvent<
+      WithdrawnEvent.InputTuple,
+      WithdrawnEvent.OutputTuple,
+      WithdrawnEvent.OutputObject
+    >;
+    Withdrawn: TypedContractEvent<
+      WithdrawnEvent.InputTuple,
+      WithdrawnEvent.OutputTuple,
+      WithdrawnEvent.OutputObject
+    >;
   };
 }
