@@ -19,7 +19,6 @@ import {
  * @dev The function to convert number to big ether number.
  */
 export const convertBigNumber = (value: number | BN, decimals: number) => {
-  // console.log(bigDecimal.multiply(parseFloat(value.toString()), decimals));
   return toBigInt(
     `0x${parseInt(
       bigDecimal.multiply(parseFloat(value.toString()), decimals)
@@ -34,16 +33,6 @@ export const convertBigNumber = (value: number | BN, decimals: number) => {
  * @returns
  */
 export const devideBigNumber = (value: number | BN, decimals: number) => {
-  console.log(
-    value,
-    value?.toString(16),
-    decimals,
-    new bigDecimal(value.toString())
-      .divide(new bigDecimal(decimals), 20)
-      .getValue()
-      .toString()
-  );
-
   return Number.parseFloat(
     new bigDecimal(value.toString())
       .divide(new bigDecimal(decimals), 20)
