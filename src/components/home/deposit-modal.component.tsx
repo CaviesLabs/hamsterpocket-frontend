@@ -126,6 +126,7 @@ export const DepositModal: FC<{
     } else {
       setButtonText("Deposit");
     }
+
     setIsAmountSet(!isNaN(val));
     setDepositedAmount(
       new BN(multipleBigNumber(val, Math.pow(10, baseToken?.decimals || 0)))
@@ -206,10 +207,10 @@ export const DepositModal: FC<{
         message={`You have deposited ${convertDecimalAmount(
           pocket.baseTokenAddress,
           chainId === ChainId.sol
-            ? depositedAmount?.toNumber()
+            ? depositedAmount?.toNumber() || 0
             : (depositedAmount?.toNumber() /
                 Math.pow(10, baseToken?.decimals)) *
-                Math.pow(10, baseToken?.realDecimals)
+                Math.pow(10, baseToken?.realDecimals) || 0
         )} ${baseToken?.symbol}`}
         okMessage="Done"
       />
